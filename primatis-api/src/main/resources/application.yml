@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: primatis-api
+
+  datasource:
+    # L'URL n'est pas un secret : elle est fixée par profil et n'est pas
+    # surchargeable par variable d'environnement (celles-ci priment sur les
+    # fichiers application*.yml, y compris sur une valeur en dur d'un profil).
+    url: jdbc:postgresql://localhost:5432/primatis_dev
+    username: ${SPRING_DATASOURCE_USERNAME:primatis}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration

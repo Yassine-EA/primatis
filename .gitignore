@@ -1,0 +1,36 @@
+# Backend (Maven / Spring Boot)
+primatis-api/target/
+
+# Frontend (Angular / Node)
+primatis-web/dist/
+primatis-web/node_modules/
+primatis-web/.angular/
+
+# Data seeding (Python)
+data-seeding/.venv/
+data-seeding/__pycache__/
+data-seeding/**/__pycache__/
+data-seeding/data/raw/
+data-seeding/data/normalized/
+data-seeding/data/validated/
+data-seeding/output/
+data-seeding/logs/
+
+# Local secrets / environment
+.env
+.env.local
+*.local.properties
+application-local.yml
+application-local.properties
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

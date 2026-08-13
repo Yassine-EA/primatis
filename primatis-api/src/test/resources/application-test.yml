@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: primatis-api
+
+  datasource:
+    # URL fixe et non surchargeable par SPRING_DATASOURCE_URL : les tests
+    # d'intégration ne doivent jamais cibler accidentellement primatis_dev.
+    url: jdbc:postgresql://localhost:5432/primatis_test
+    username: ${SPRING_DATASOURCE_USERNAME:primatis}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
