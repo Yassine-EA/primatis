@@ -1,0 +1,47 @@
+<section class="login-page">
+  <h1>Connexion</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="field">
+      <label for="login-email">Adresse e-mail</label>
+      <input
+        id="login-email"
+        type="email"
+        pInputText
+        formControlName="email"
+        autocomplete="username"
+        [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
+        aria-describedby="login-email-error"
+      />
+      @if (form.controls.email.invalid && form.controls.email.touched) {
+        <small id="login-email-error" class="field-error" role="alert">
+          Adresse e-mail requise et valide.
+        </small>
+      }
+    </div>
+
+    <div class="field">
+      <label for="login-password">Mot de passe</label>
+      <p-password
+        inputId="login-password"
+        formControlName="password"
+        [feedback]="false"
+        [toggleMask]="true"
+        autocomplete="current-password"
+        [attr.aria-invalid]="form.controls.password.invalid && form.controls.password.touched"
+        aria-describedby="login-password-error"
+      />
+      @if (form.controls.password.invalid && form.controls.password.touched) {
+        <small id="login-password-error" class="field-error" role="alert">
+          Mot de passe requis.
+        </small>
+      }
+    </div>
+
+    @if (errorMessage(); as message) {
+      <p-message severity="error">{{ message }}</p-message>
+    }
+
+    <p-button type="submit" label="Se connecter" [loading]="submitting()" [disabled]="submitting()" />
+  </form>
+</section>

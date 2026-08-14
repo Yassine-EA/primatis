@@ -17,6 +17,14 @@ export const routes: Routes = [
         path: '',
         component: Home,
       },
+      {
+        // Route publique (DEV-04.7) : aucun guard, aucune protection —
+        // l'autorité de sécurité reste le backend Spring Security.
+        // Lazy loading : évite d'embarquer Login et ses modules PrimeNG
+        // (Password/Message/InputText) dans le bundle initial.
+        path: 'login',
+        loadComponent: () => import('./auth/pages/login/login').then((m) => m.Login),
+      },
     ],
   },
   {
