@@ -1,12 +1,9 @@
 package be.primatis.exception;
 
-import be.primatis.config.SecurityConfig;
-import be.primatis.security.PrimatisUserDetailsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -17,25 +14,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Vérifie contre un contexte web isolé (pas de PostgreSQL nécessaire, aucun
  * rapport avec la persistance) que {@link GlobalExceptionHandler} traduit
- * correctement chaque catégorie d'exception en {@link ApiErrorResponse},
- * avec la configuration Spring Security réelle importée (permitAll DEV-03.2)
- * pour ne pas être bloqué par un 401 avant d'atteindre les handlers.
+ * correctement chaque catégorie d'exception en {@link ApiErrorResponse}.
  *
- * {@link PrimatisUserDetailsService} est mocké (@MockitoBean, remplaçant non
- * déprécié de @MockBean) : depuis DEV-03.6, SecurityConfig déclare un
- * DaoAuthenticationProvider qui en dépend, mais ce bean @Service (et son
- * AppUserRepository JPA) n'existe pas dans la tranche @WebMvcTest — hors
- * sujet ici, cette classe ne teste que la traduction exception → HTTP.
+ * {@code addFilters = false} désactive tous les filtres servlet, y compris
+ * la SecurityFilterChain (DEV-03.8, plus de permitAll global) : l'objet de
+ * cette classe est la traduction exception → HTTP, pas l'autorisation —
+ * inutile de charger {@code SecurityConfig} ou de fournir un JWT valide
+ * pour chaque scénario d'erreur (mocks/désactivation ciblés, la sécurité
+ * elle-même n'est pas testée ici).
  */
 @WebMvcTest(controllers = GlobalExceptionHandlerTestController.class)
-@Import(SecurityConfig.class)
+@AutoConfigureMockMvc(addFilters = false)
 class GlobalExceptionHandlerTests {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @MockitoBean
-    private PrimatisUserDetailsService primatisUserDetailsService;
 
     @Test
     void resourceNotFoundReturns404WithEmptyFieldErrors() throws Exception {

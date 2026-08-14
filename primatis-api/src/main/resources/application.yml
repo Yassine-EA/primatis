@@ -33,3 +33,9 @@ primatis:
       access-token-ttl: PT1H
       private-key-location: ${PRIMATIS_JWT_PRIVATE_KEY_PATH}
       public-key-location: ${PRIMATIS_JWT_PUBLIC_KEY_PATH}
+    # Origines CORS autorisées (DEV-03.8), configuration technique — pas
+    # application_setting. Défaut : port standard du serveur de
+    # développement Angular local, surchargeable par variable
+    # d'environnement (liste séparée par des virgules).
+    cors:
+      allowed-origins: ${PRIMATIS_CORS_ALLOWED_ORIGINS:http://localhost:4200}
