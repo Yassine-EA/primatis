@@ -5,10 +5,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Socle Spring Security minimal (DEV-03.2).
+ * Socle Spring Security minimal (DEV-03.2) et encodage des mots de passe
+ * (DEV-03.4).
  *
  * Baseline stateless / JWT Bearer RS256 (architecture.md §5.3) : aucune
  * session HTTP d'authentification n'est maintenue, donc CSRF est désactivé
@@ -33,5 +36,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 
         return http.build();
+    }
+
+    /**
+     * DelegatingPasswordEncoder avec BCrypt comme encodage courant
+     * (architecture.md §5.14) : format stocké préfixé {@code {bcrypt}},
+     * strength par défaut non modifiée (aucun besoin démontré).
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
