@@ -4,6 +4,7 @@ import { AdminLayout } from './core/layouts/admin-layout/admin-layout';
 import { MemberLayout } from './core/layouts/member-layout/member-layout';
 import { PublicLayout } from './core/layouts/public-layout/public-layout';
 import { StaffLayout } from './core/layouts/staff-layout/staff-layout';
+import { authGuard } from './core/guards/auth.guard';
 import { Forbidden } from './shared/pages/forbidden/forbidden';
 import { Home } from './shared/pages/home/home';
 import { NotFound } from './shared/pages/not-found/not-found';
@@ -28,18 +29,24 @@ export const routes: Routes = [
     ],
   },
   {
+    // AuthGuard uniquement (DEV-04.9) : aucune route métier n'existe encore
+    // sous ces layouts, donc aucune permission ne serait légitime à y
+    // brancher pour l'instant (voir PermissionGuard, testé isolément).
     path: 'member',
     component: MemberLayout,
+    canActivate: [authGuard],
     children: [],
   },
   {
     path: 'staff',
     component: StaffLayout,
+    canActivate: [authGuard],
     children: [],
   },
   {
     path: 'admin',
     component: AdminLayout,
+    canActivate: [authGuard],
     children: [],
   },
   {
