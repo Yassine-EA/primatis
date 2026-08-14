@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -59,6 +60,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleAccountTemporarilyLocked(
             AccountTemporarilyLockedException ex, HttpServletRequest request) {
         return build(HttpStatus.UNAUTHORIZED, ex.getCode(), ex.getMessage(), request, List.of());
+    }
+
+    /**
+     * Refus d'autorisation provenant de Method Security ({@code @PreAuthorize},
+     * DEV-03.9) : contrairement à un refus de la {@code SecurityFilterChain}
+     * (filtre {@code AuthorizationFilter}, intercepté en amont par
+     * {@code be.primatis.security.PrimatisAccessDeniedHandler}, DEV-03.10),
+     * cette exception est levée depuis l'intérieur d'un appel Service invoqué
+     * pendant le dispatch Spring MVC — {@code ExceptionTranslationFilter} ne
+     * la voit jamais, elle doit donc être traduite ici pour respecter le même
+     * contrat public {@code 403 / ACCESS_DENIED}.
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
+        return build(HttpStatus.FORBIDDEN, "ACCESS_DENIED",
+                "Vous n'êtes pas autorisé à effectuer cette action.", request, List.of());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,5 +1,6 @@
 package be.primatis.config;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +12,10 @@ import java.util.List;
 
 /**
  * Controller strictement réservé aux tests de {@code SecurityFilterChain}
- * (scope src/test, DEV-03.8). Expose des routes correspondant exactement
- * aux patterns configurés (login/titles/articles/protected) pour prouver
- * concrètement le comportement des matchers — jamais un Controller métier
- * de production.
+ * (scope src/test, DEV-03.8/DEV-03.10). Expose des routes correspondant
+ * exactement aux patterns configurés (login/titles/articles/protected) pour
+ * prouver concrètement le comportement des matchers — jamais un Controller
+ * métier de production.
  */
 @RestController
 class SecurityFilterChainTestController {
@@ -58,5 +59,20 @@ class SecurityFilterChainTestController {
     @GetMapping("/api/v1/protected/authorities")
     public List<String> authorities(Authentication authentication) {
         return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+    }
+
+    /**
+     * Route protégée par Method Security (DEV-03.9/03.10) — permet de
+     * prouver que le refus {@code @PreAuthorize} (levé après l'entrée dans
+     * Spring MVC, jamais vu par {@code ExceptionTranslationFilter}) produit
+     * bien le même contrat public {@code 403 / ACCESS_DENIED} qu'un refus
+     * de la SecurityFilterChain, via le
+     * {@code @ExceptionHandler(AccessDeniedException.class)} dédié de
+     * {@code GlobalExceptionHandler}.
+     */
+    @PreAuthorize("hasAuthority('LOAN_MANAGE')")
+    @GetMapping("/api/v1/protected/loan-manage-only")
+    public String loanManageOnly() {
+        return "loan-manage-ok";
     }
 }

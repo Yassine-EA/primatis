@@ -1,6 +1,10 @@
 package be.primatis.config;
 
+import be.primatis.security.PrimatisAccessDeniedHandler;
+import be.primatis.security.PrimatisAuthenticationEntryPoint;
+import be.primatis.security.PrimatisInvalidTokenAuthenticationEntryPoint;
 import be.primatis.security.PrimatisUserDetailsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +27,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.time.Clock;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -32,7 +37,11 @@ import java.util.List;
  * strictement définie, tout le reste authentifié. Complète le socle
  * DEV-03.2, l'encodage des mots de passe DEV-03.4, la chaîne
  * d'authentification username/password DEV-03.6 et l'infrastructure JWT
- * RS256 DEV-03.7.
+ * RS256 DEV-03.7. Les rejets 401/403 (DEV-03.10) utilisent le contrat
+ * {@code ApiErrorResponse} commun via des
+ * {@link org.springframework.security.web.AuthenticationEntryPoint}/
+ * {@link org.springframework.security.web.access.AccessDeniedHandler}
+ * dédiés — jamais la page HTML ou le corps par défaut de Spring Security.
  *
  * Baseline stateless / JWT Bearer RS256 (architecture.md §5.3) : aucune
  * session HTTP d'authentification n'est maintenue, donc CSRF est désactivé
@@ -55,7 +64,19 @@ public class SecurityConfig {
             HttpSecurity http,
             JwtDecoder jwtDecoder,
             JwtAuthenticationConverter jwtAuthenticationConverter,
-            CorsConfigurationSource corsConfigurationSource) throws Exception {
+            CorsConfigurationSource corsConfigurationSource,
+            ObjectMapper objectMapper,
+            Clock clock) throws Exception {
+        // DEV-03.10 : deux AuthenticationEntryPoint distincts (401), voir
+        // leur javadoc respective — aucune Authentication du tout vs Bearer
+        // présent mais rejeté par le Resource Server — plus un
+        // AccessDeniedHandler (403) pour un refus d'autorisation HTTP.
+        PrimatisAuthenticationEntryPoint authenticationEntryPoint =
+                new PrimatisAuthenticationEntryPoint(objectMapper, clock);
+        PrimatisInvalidTokenAuthenticationEntryPoint invalidTokenAuthenticationEntryPoint =
+                new PrimatisInvalidTokenAuthenticationEntryPoint(objectMapper, clock);
+        PrimatisAccessDeniedHandler accessDeniedHandler = new PrimatisAccessDeniedHandler(objectMapper, clock);
+
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
@@ -67,9 +88,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/titles/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/articles/**").permitAll()
                         .anyRequest().authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
-                        .decoder(jwtDecoder)
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter)));
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .authenticationEntryPoint(invalidTokenAuthenticationEntryPoint)
+                        .jwt(jwt -> jwt
+                                .decoder(jwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter)));
 
         return http.build();
     }
