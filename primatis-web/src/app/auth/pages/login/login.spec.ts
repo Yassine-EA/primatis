@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { Subject, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -115,6 +115,66 @@ describe('Login', () => {
     component.submit();
 
     expect(component.errorMessage()).toBe('Une erreur est survenue. Veuillez réessayer.');
+  });
+});
+
+describe('Login returnUrl handling', () => {
+  function setup(returnUrl: string | null): { component: Login; router: Router } {
+    const authServiceMock = { login: vi.fn().mockReturnValue(of(undefined)) };
+    const activatedRouteStub = {
+      snapshot: { queryParamMap: convertToParamMap(returnUrl !== null ? { returnUrl } : {}) },
+    };
+
+    TestBed.configureTestingModule({
+      imports: [Login],
+      providers: [
+        provideRouter([]),
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: ActivatedRoute, useValue: activatedRouteStub },
+      ],
+    });
+
+    const fixture = TestBed.createComponent(Login);
+    const component = fixture.componentInstance;
+    const router = TestBed.inject(Router);
+    vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
+    fixture.detectChanges();
+
+    component.form.setValue({ email: 'librarian@primatis.test', password: 'Correct-Password-2026!' });
+
+    return { component, router };
+  }
+
+  it('should navigate to the internal returnUrl after a successful login', () => {
+    const { component, router } = setup('/member/loans');
+
+    component.submit();
+
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/member/loans');
+  });
+
+  it('should fall back to "/" when returnUrl is absent', () => {
+    const { component, router } = setup(null);
+
+    component.submit();
+
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/');
+  });
+
+  it('should fall back to "/" and reject a protocol-relative/external returnUrl', () => {
+    const { component, router } = setup('//evil.example');
+
+    component.submit();
+
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/');
+  });
+
+  it('should fall back to "/" and reject an absolute external returnUrl', () => {
+    const { component, router } = setup('https://evil.example/steal');
+
+    component.submit();
+
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/');
   });
 });
 

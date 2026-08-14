@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
@@ -27,6 +27,7 @@ const GENERIC_ERROR_MESSAGE = 'Une erreur est survenue. Veuillez réessayer.';
 export class Login {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly form = this.formBuilder.group({
@@ -54,7 +55,8 @@ export class Login {
     this.authService.login(email, password).subscribe({
       next: () => {
         this.submitting.set(false);
-        void this.router.navigateByUrl('/');
+        const returnUrl = sanitizeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl'));
+        void this.router.navigateByUrl(returnUrl);
       },
       error: (error: unknown) => {
         this.submitting.set(false);
@@ -77,4 +79,17 @@ function resolveErrorMessage(error: unknown): string {
     }
   }
   return GENERIC_ERROR_MESSAGE;
+}
+
+/**
+ * N'accepte qu'une URL Angular interne commençant par un seul `/`
+ * (DEV-04.9/04.10) — refuse explicitement toute forme pouvant devenir
+ * externe (URL absolue, protocole-relative `//evil.example`), jamais
+ * d'open redirect. Absence/valeur invalide => repli sur `/`.
+ */
+function sanitizeReturnUrl(rawReturnUrl: string | null): string {
+  if (rawReturnUrl && rawReturnUrl.startsWith('/') && !rawReturnUrl.startsWith('//')) {
+    return rawReturnUrl;
+  }
+  return '/';
 }

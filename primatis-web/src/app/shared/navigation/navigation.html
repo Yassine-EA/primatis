@@ -1,0 +1,19 @@
+<nav class="app-navigation" aria-label="Navigation principale">
+  <ul class="nav-list">
+    @for (item of visibleItems(); track item.routerLink) {
+      <li>
+        <a [routerLink]="item.routerLink">
+          {{ item.label }}
+        </a>
+      </li>
+    }
+  </ul>
+
+  <div class="nav-auth">
+    @if (authenticated()) {
+      <button type="button" class="nav-logout" (click)="logout()">Déconnexion</button>
+    } @else {
+      <a routerLink="/login">Connexion</a>
+    }
+  </div>
+</nav>

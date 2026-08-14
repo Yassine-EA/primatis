@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { Navigation } from '../../../shared/navigation/navigation';
+
 @Component({
   selector: 'app-member-layout',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Navigation],
   template: `
     <div class="layout-shell">
       <header class="layout-header">
         <strong>Espace membre</strong>
+        <app-navigation />
       </header>
 
       <main class="layout-content">
