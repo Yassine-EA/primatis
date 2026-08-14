@@ -58,6 +58,26 @@ export SPRING_DATASOURCE_PASSWORD=ton-mot-de-passe-choisi
 set -a && source .env.local && set +a
 ```
 
+## Infrastructure JWT (DEV-03.7)
+
+L'authentification PRIMATIS signe des access tokens JWT en RS256. Aucune clé réelle n'est versionnée dans le repository ; deux variables d'environnement supplémentaires pointent vers des fichiers PEM externes :
+
+```text
+PRIMATIS_JWT_PRIVATE_KEY_PATH   # ex. file:/home/toi/.primatis/jwt-private.pem
+PRIMATIS_JWT_PUBLIC_KEY_PATH    # ex. file:/home/toi/.primatis/jwt-public.pem
+```
+
+Génération d'une paire de clés RSA locale (2048 bits, format attendu : PKCS#8 pour la clé privée) :
+
+```bash
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out jwt-private.pem
+openssl pkey -in jwt-private.pem -pubout -out jwt-public.pem
+```
+
+Les tests génèrent leur propre paire RSA **en mémoire** (`JwtTestKeysConfig`, `java.security.KeyPairGenerator`) : aucun fichier de clé, même de test, n'est versionné dans le repository (aucune exception à cette règle — contexte maître §7.27).
+
+`issuer` (`PRIMATIS_JWT_ISSUER`, défaut `primatis-api`) et `audience` (`PRIMATIS_JWT_AUDIENCE`, défaut `primatis-api`) restent surchargeables ; la durée de l'access token (1 heure) est une configuration technique fixée dans `application.yml`, elle n'appartient pas à `application_setting`.
+
 ## Commandes utiles
 
 ```bash

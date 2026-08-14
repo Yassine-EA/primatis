@@ -17,3 +17,15 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+
+# Infrastructure JWT RS256 (DEV-03.7) : issuer/audience/durée seulement.
+# Aucun chemin de clé ici — la paire RSA de test est générée EN MÉMOIRE par
+# JwtTestKeysConfig (src/test/java/be/primatis/config), jamais un fichier.
+# JwtConfig (chargement PEM production) est désactivé sous le profil "test"
+# (@Profile("!test")).
+primatis:
+  security:
+    jwt:
+      issuer: primatis-api
+      audience: primatis-api
+      access-token-ttl: PT1H

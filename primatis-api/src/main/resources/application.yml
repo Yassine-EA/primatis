@@ -18,3 +18,18 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+
+# Infrastructure JWT RS256 (DEV-03.7). Aucune valeur ici n'est un secret :
+# accessTokenTtl est une configuration technique (n'appartient pas à
+# application_setting) ; privateKeyLocation/publicKeyLocation ne sont que
+# des CHEMINS, jamais un contenu de clé. Les fichiers réels sont fournis par
+# l'environnement (PRIMATIS_JWT_PRIVATE_KEY_PATH / _PUBLIC_KEY_PATH),
+# jamais commités.
+primatis:
+  security:
+    jwt:
+      issuer: ${PRIMATIS_JWT_ISSUER:primatis-api}
+      audience: ${PRIMATIS_JWT_AUDIENCE:primatis-api}
+      access-token-ttl: PT1H
+      private-key-location: ${PRIMATIS_JWT_PRIVATE_KEY_PATH}
+      public-key-location: ${PRIMATIS_JWT_PUBLIC_KEY_PATH}

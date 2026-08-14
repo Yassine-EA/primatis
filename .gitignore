@@ -23,6 +23,12 @@ data-seeding/logs/
 application-local.yml
 application-local.properties
 
+# Clés RSA JWT (DEV-03.7) : aucune clé privée, réelle ou de test, n'est
+# versionnée (contexte maître §7.27). Les tests génèrent leur paire RSA en
+# mémoire (JwtTestKeysConfig) ; aucune exception à cette règle.
+*.pem
+*.key
+
 # IDE
 .idea/
 *.iml
