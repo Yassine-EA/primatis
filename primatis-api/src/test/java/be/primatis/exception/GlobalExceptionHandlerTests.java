@@ -1,10 +1,12 @@
 package be.primatis.exception;
 
 import be.primatis.config.SecurityConfig;
+import be.primatis.security.PrimatisUserDetailsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -18,6 +20,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * correctement chaque catégorie d'exception en {@link ApiErrorResponse},
  * avec la configuration Spring Security réelle importée (permitAll DEV-03.2)
  * pour ne pas être bloqué par un 401 avant d'atteindre les handlers.
+ *
+ * {@link PrimatisUserDetailsService} est mocké (@MockitoBean, remplaçant non
+ * déprécié de @MockBean) : depuis DEV-03.6, SecurityConfig déclare un
+ * DaoAuthenticationProvider qui en dépend, mais ce bean @Service (et son
+ * AppUserRepository JPA) n'existe pas dans la tranche @WebMvcTest — hors
+ * sujet ici, cette classe ne teste que la traduction exception → HTTP.
  */
 @WebMvcTest(controllers = GlobalExceptionHandlerTestController.class)
 @Import(SecurityConfig.class)
@@ -25,6 +33,9 @@ class GlobalExceptionHandlerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private PrimatisUserDetailsService primatisUserDetailsService;
 
     @Test
     void resourceNotFoundReturns404WithEmptyFieldErrors() throws Exception {

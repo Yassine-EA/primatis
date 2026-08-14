@@ -1,7 +1,11 @@
 package be.primatis.config;
 
+import be.primatis.security.PrimatisUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -10,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Socle Spring Security minimal (DEV-03.2) et encodage des mots de passe
- * (DEV-03.4).
+ * Socle Spring Security minimal (DEV-03.2), encodage des mots de passe
+ * (DEV-03.4) et chaîne d'authentification standard (DEV-03.6).
  *
  * Baseline stateless / JWT Bearer RS256 (architecture.md §5.3) : aucune
  * session HTTP d'authentification n'est maintenue, donc CSRF est désactivé
@@ -46,5 +50,31 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    /**
+     * DaoAuthenticationProvider explicite (API Spring Security 6.5, pas de
+     * méthode dépréciée : constructeur prenant directement le
+     * UserDetailsService, plutôt que le setter setUserDetailsService
+     * déprécié) — délègue le chargement du compte à
+     * {@link PrimatisUserDetailsService} et la vérification du mot de passe
+     * au {@link PasswordEncoder} ci-dessus.
+     */
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(
+            PrimatisUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
+    }
+
+    /**
+     * AuthenticationManager exposé explicitement pour être injectable dans
+     * AuthService (DEV-03.6), construit à partir du seul
+     * DaoAuthenticationProvider PRIMATIS ci-dessus.
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(DaoAuthenticationProvider daoAuthenticationProvider) {
+        return new ProviderManager(daoAuthenticationProvider);
     }
 }

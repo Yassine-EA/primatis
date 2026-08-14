@@ -19,10 +19,13 @@ import java.util.Set;
  * dimensions strictement distinctes (architecture.md, DEV-03 DO NOT
  * CONTRADICT).
  *
- * Le verrouillage temporaire ({@code lockedUntil}, 3 échecs → 15 minutes)
- * n'est pas encore implémenté (DEV-03.6) : {@code isAccountNonLocked()}
- * renvoie {@code true} sans condition à ce stade, volontairement, pour ne
- * pas introduire de logique temporelle prématurée.
+ * Le verrouillage temporaire ({@code lockedUntil}, 3 échecs → 15 minutes,
+ * DEV-03.6) est délibérément vérifié en amont, dans {@link AuthService},
+ * AVANT tout appel à l'AuthenticationManager — pas via le contrat
+ * UserDetails. {@code isAccountNonLocked()} renvoie donc {@code true} sans
+ * condition en permanence : ce n'est pas une étape intermédiaire, c'est le
+ * choix architectural retenu, pour garder la décision temporelle centralisée
+ * dans un seul Service explicite plutôt que dispersée dans le principal.
  */
 public class PrimatisUserPrincipal implements UserDetails {
 

@@ -49,6 +49,18 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.FORBIDDEN, ex.getCode(), ex.getMessage(), request, List.of());
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidCredentials(
+            InvalidCredentialsException ex, HttpServletRequest request) {
+        return build(HttpStatus.UNAUTHORIZED, ex.getCode(), ex.getMessage(), request, List.of());
+    }
+
+    @ExceptionHandler(AccountTemporarilyLockedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccountTemporarilyLocked(
+            AccountTemporarilyLockedException ex, HttpServletRequest request) {
+        return build(HttpStatus.UNAUTHORIZED, ex.getCode(), ex.getMessage(), request, List.of());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
