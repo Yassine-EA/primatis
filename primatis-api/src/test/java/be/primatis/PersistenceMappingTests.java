@@ -23,6 +23,8 @@ import be.primatis.catalogue.TitleAuthorId;
 import be.primatis.catalogue.TitleGenre;
 import be.primatis.catalogue.TitleGenreId;
 import be.primatis.catalogue.TitleStatus;
+import be.primatis.loan.Loan;
+import be.primatis.loan.LoanStatus;
 import be.primatis.user.AccountStatus;
 import be.primatis.user.AppUser;
 import be.primatis.user.MemberStatus;
@@ -34,6 +36,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -215,6 +218,44 @@ class PersistenceMappingTests {
 
         assertThat(row[0]).isEqualTo("DAMAGED");
         assertThat(row[1]).isEqualTo("AVAILABLE");
+    }
+
+    // ---------------------------------------------------------------
+    // Types temporels — DATE (date métier) vs TIMESTAMPTZ (instant précis)
+    // ---------------------------------------------------------------
+
+    @Test
+    void loanTemporalColumnsUseExpectedPostgresTypes() {
+        AppUser user = persistUser("temporal-check@primatis.test");
+        Title title = persistTitle();
+        Copy copy = new Copy();
+        copy.setTitle(title);
+        copy.setInventoryCode("COPY-TEMPORAL-CHECK-1");
+        copy.setCopyCondition(CopyCondition.GOOD);
+        copy.setAvailabilityStatus(AvailabilityStatus.AVAILABLE);
+        copy.setCreatedAt(Instant.now());
+        copy.setUpdatedAt(Instant.now());
+        entityManager.persist(copy);
+
+        Loan loan = new Loan();
+        loan.setUser(user);
+        loan.setCopy(copy);
+        loan.setLoanDate(Instant.now());
+        loan.setDueDate(LocalDate.now().plusDays(21));
+        loan.setLoanStatus(LoanStatus.ACTIVE);
+        loan.setCreatedAt(Instant.now());
+        loan.setUpdatedAt(Instant.now());
+        entityManager.persist(loan);
+        entityManager.flush();
+        entityManager.clear();
+
+        Object[] row = (Object[]) entityManager
+                .createNativeQuery("SELECT pg_typeof(due_date)::text, pg_typeof(loan_date)::text FROM loan WHERE id = :id")
+                .setParameter("id", loan.getId())
+                .getSingleResult();
+
+        assertThat(row[0]).isEqualTo("date");
+        assertThat(row[1]).isEqualTo("timestamp with time zone");
     }
 
     // ---------------------------------------------------------------

@@ -123,6 +123,18 @@ class RepositoryQueryTests {
     }
 
     @Test
+    void allFourMandatoryApplicationSettingsAreBootstrappedWithCorrectValues() {
+        assertThat(applicationSettingRepository.findBySettingKey("LOAN_DURATION_DAYS"))
+                .isPresent().get().extracting(ApplicationSetting::getSettingValue).isEqualTo("21");
+        assertThat(applicationSettingRepository.findBySettingKey("MAX_ACTIVE_RESERVATIONS_PER_MEMBER"))
+                .isPresent().get().extracting(ApplicationSetting::getSettingValue).isEqualTo("10");
+        assertThat(applicationSettingRepository.findBySettingKey("RESERVATION_READY_HOLD_HOURS"))
+                .isPresent().get().extracting(ApplicationSetting::getSettingValue).isEqualTo("48");
+        assertThat(applicationSettingRepository.findBySettingKey("LOAN_DUE_SOON_DAYS"))
+                .isPresent().get().extracting(ApplicationSetting::getSettingValue).isEqualTo("3");
+    }
+
+    @Test
     void findsFineByLoanId() {
         AppUser user = persistUser("repo-fine-user@primatis.test");
         Title title = persistTitle();
