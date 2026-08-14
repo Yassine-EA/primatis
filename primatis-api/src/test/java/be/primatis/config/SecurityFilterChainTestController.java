@@ -75,4 +75,18 @@ class SecurityFilterChainTestController {
     public String loanManageOnly() {
         return "loan-manage-ok";
     }
+
+    /**
+     * Réservée aux permissions d'administration (DEV-03.11 : seul
+     * ROLE_ADMIN possède ROLE_MANAGE) — utilisée par DEV-03.13 pour prouver
+     * qu'un ROLE_LIBRARIAN/ROLE_MEMBER réellement authentifié via un JWT
+     * bootstrapé se voit refuser cette opération, tandis qu'un ROLE_ADMIN
+     * y est autorisé grâce à la permission réellement présente dans son
+     * JWT (jamais un contournement codé).
+     */
+    @PreAuthorize("hasAuthority('ROLE_MANAGE')")
+    @GetMapping("/api/v1/protected/role-manage-only")
+    public String roleManageOnly() {
+        return "role-manage-ok";
+    }
 }
