@@ -48,6 +48,16 @@
     </dependency>
 
     <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <!-- Dernière version de la ligne 2.x (compatible Spring Boot 3.x) :
+           la ligne 3.x cible Spring Boot 4, non applicable ici. Non gérée
+           par le BOM spring-boot-starter-parent, version déclarée
+           explicitement (vérifiée sur repo1.maven.org, DEV-03.12). -->
+      <version>2.9.0</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
