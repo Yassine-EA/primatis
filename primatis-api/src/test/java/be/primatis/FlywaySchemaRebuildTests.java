@@ -44,8 +44,8 @@ class FlywaySchemaRebuildTests {
         MigrateResult result = flyway.migrate();
 
         assertThat(result.success).isTrue();
-        assertThat(result.migrationsExecuted).isEqualTo(1);
-        assertThat(result.targetSchemaVersion).isEqualTo("001");
+        assertThat(result.migrationsExecuted).isEqualTo(2);
+        assertThat(result.targetSchemaVersion).isEqualTo("002");
 
         long tableCount = ((Number) entityManager
                 .createNativeQuery("SELECT count(*) FROM information_schema.tables "

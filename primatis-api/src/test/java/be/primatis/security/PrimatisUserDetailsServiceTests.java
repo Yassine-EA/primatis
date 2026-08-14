@@ -46,6 +46,15 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * hibernate.generate_statistics est activé uniquement pour cette classe
  * (contexte Spring dédié, comme FlywaySchemaRebuildTests en DEV-02.7) afin
  * de prouver l'absence de N+1 sur le chargement des authorities.
+ *
+ * Depuis DEV-03.11, {@code role}/{@code permission} contiennent le bootstrap
+ * RBAC obligatoire (migration V002, codes canoniques {@code ROLE_MEMBER}/
+ * {@code CATALOGUE_READ}/etc., contraintes {@code UNIQUE} sur {@code code}).
+ * Les fixtures de cette classe testent le mécanisme JPQL/authorities de
+ * façon isolée et utilisent donc des codes délibérément non-canoniques
+ * (suffixe {@code _TEST}) pour ne jamais entrer en collision avec les
+ * lignes réellement bootstrapées — la cohérence avec le bootstrap réel est
+ * couverte séparément par {@code be.primatis.RbacBootstrapTests}.
  */
 @SpringBootTest
 @ActiveProfiles("test")
@@ -142,36 +151,36 @@ class PrimatisUserDetailsServiceTests {
     @Test
     void roleIsPresentInAuthorities() {
         AppUser user = persistUser("role-only@primatis.test", AccountStatus.ACTIVE, null, "hash");
-        Role role = persistRole("ROLE_MEMBER");
+        Role role = persistRole("ROLE_MEMBER_TEST");
         persistUserRole(user, role);
         entityManager.flush();
 
         UserDetails principal = userDetailsService.loadUserByUsername("role-only@primatis.test");
 
-        assertThat(authorityStrings(principal)).containsExactly("ROLE_MEMBER");
+        assertThat(authorityStrings(principal)).containsExactly("ROLE_MEMBER_TEST");
     }
 
     @Test
     void permissionsOfRoleArePresentInAuthorities() {
         AppUser user = persistUser("role-with-permission@primatis.test", AccountStatus.ACTIVE, null, "hash");
-        Role role = persistRole("ROLE_LIBRARIAN");
-        Permission permission = persistPermission("CATALOGUE_READ");
+        Role role = persistRole("ROLE_LIBRARIAN_TEST");
+        Permission permission = persistPermission("CATALOGUE_READ_TEST");
         persistUserRole(user, role);
         persistRolePermission(role, permission);
         entityManager.flush();
 
         UserDetails principal = userDetailsService.loadUserByUsername("role-with-permission@primatis.test");
 
-        assertThat(authorityStrings(principal)).containsExactlyInAnyOrder("ROLE_LIBRARIAN", "CATALOGUE_READ");
+        assertThat(authorityStrings(principal)).containsExactlyInAnyOrder("ROLE_LIBRARIAN_TEST", "CATALOGUE_READ_TEST");
     }
 
     @Test
     void multipleRolesProduceUnionOfPermissions() {
         AppUser user = persistUser("multi-role@primatis.test", AccountStatus.ACTIVE, null, "hash");
-        Role librarian = persistRole("ROLE_LIBRARIAN");
-        Role admin = persistRole("ROLE_ADMIN");
-        Permission catalogueRead = persistPermission("CATALOGUE_READ");
-        Permission articlePublish = persistPermission("ARTICLE_PUBLISH");
+        Role librarian = persistRole("ROLE_LIBRARIAN_TEST");
+        Role admin = persistRole("ROLE_ADMIN_TEST");
+        Permission catalogueRead = persistPermission("CATALOGUE_READ_TEST");
+        Permission articlePublish = persistPermission("ARTICLE_PUBLISH_TEST");
         persistUserRole(user, librarian);
         persistUserRole(user, admin);
         persistRolePermission(librarian, catalogueRead);
@@ -181,15 +190,15 @@ class PrimatisUserDetailsServiceTests {
         UserDetails principal = userDetailsService.loadUserByUsername("multi-role@primatis.test");
 
         assertThat(authorityStrings(principal)).containsExactlyInAnyOrder(
-                "ROLE_LIBRARIAN", "ROLE_ADMIN", "CATALOGUE_READ", "ARTICLE_PUBLISH");
+                "ROLE_LIBRARIAN_TEST", "ROLE_ADMIN_TEST", "CATALOGUE_READ_TEST", "ARTICLE_PUBLISH_TEST");
     }
 
     @Test
     void permissionGrantedByMultipleRolesIsDeduplicated() {
         AppUser user = persistUser("dedup-permission@primatis.test", AccountStatus.ACTIVE, null, "hash");
-        Role librarian = persistRole("ROLE_LIBRARIAN");
-        Role admin = persistRole("ROLE_ADMIN");
-        Permission catalogueRead = persistPermission("CATALOGUE_READ");
+        Role librarian = persistRole("ROLE_LIBRARIAN_TEST");
+        Role admin = persistRole("ROLE_ADMIN_TEST");
+        Permission catalogueRead = persistPermission("CATALOGUE_READ_TEST");
         persistUserRole(user, librarian);
         persistUserRole(user, admin);
         persistRolePermission(librarian, catalogueRead);
@@ -199,18 +208,18 @@ class PrimatisUserDetailsServiceTests {
         UserDetails principal = userDetailsService.loadUserByUsername("dedup-permission@primatis.test");
 
         List<String> catalogueReadOccurrences = authorityStrings(principal).stream()
-                .filter("CATALOGUE_READ"::equals)
+                .filter("CATALOGUE_READ_TEST"::equals)
                 .toList();
         assertThat(catalogueReadOccurrences).hasSize(1);
         assertThat(authorityStrings(principal)).containsExactlyInAnyOrder(
-                "ROLE_LIBRARIAN", "ROLE_ADMIN", "CATALOGUE_READ");
+                "ROLE_LIBRARIAN_TEST", "ROLE_ADMIN_TEST", "CATALOGUE_READ_TEST");
     }
 
     @Test
     void noArtificialAuthoritiesAreInvented() {
         AppUser user = persistUser("no-artificial@primatis.test", AccountStatus.ACTIVE, null, "hash");
-        Role member = persistRole("ROLE_MEMBER");
-        Permission catalogueRead = persistPermission("CATALOGUE_READ");
+        Role member = persistRole("ROLE_MEMBER_TEST");
+        Permission catalogueRead = persistPermission("CATALOGUE_READ_TEST");
         persistUserRole(user, member);
         persistRolePermission(member, catalogueRead);
         entityManager.flush();
@@ -220,7 +229,7 @@ class PrimatisUserDetailsServiceTests {
         // Preuve par exhaustivité : le jeu d'authorities est EXACTEMENT ce
         // qui a été fixturé, ce qui exclut par construction ROLE_VISITOR,
         // toute permission *_SELF, ou tout autre ajout non demandé.
-        assertThat(authorityStrings(principal)).containsExactlyInAnyOrder("ROLE_MEMBER", "CATALOGUE_READ");
+        assertThat(authorityStrings(principal)).containsExactlyInAnyOrder("ROLE_MEMBER_TEST", "CATALOGUE_READ_TEST");
         assertThat(authorityStrings(principal)).doesNotContain("ROLE_VISITOR");
         assertThat(authorityStrings(principal)).noneMatch(authority -> authority.endsWith("_SELF"));
     }
@@ -228,11 +237,11 @@ class PrimatisUserDetailsServiceTests {
     @Test
     void loadingUserWithAuthoritiesDoesNotIntroduceNPlusOneQueries() {
         AppUser user = persistUser("n-plus-one@primatis.test", AccountStatus.ACTIVE, null, "hash");
-        Role librarian = persistRole("ROLE_LIBRARIAN");
-        Role admin = persistRole("ROLE_ADMIN");
-        Permission catalogueRead = persistPermission("CATALOGUE_READ");
-        Permission articlePublish = persistPermission("ARTICLE_PUBLISH");
-        Permission loanManage = persistPermission("LOAN_MANAGE");
+        Role librarian = persistRole("ROLE_LIBRARIAN_TEST");
+        Role admin = persistRole("ROLE_ADMIN_TEST");
+        Permission catalogueRead = persistPermission("CATALOGUE_READ_TEST");
+        Permission articlePublish = persistPermission("ARTICLE_PUBLISH_TEST");
+        Permission loanManage = persistPermission("LOAN_MANAGE_TEST");
         persistUserRole(user, librarian);
         persistUserRole(user, admin);
         persistRolePermission(librarian, catalogueRead);
