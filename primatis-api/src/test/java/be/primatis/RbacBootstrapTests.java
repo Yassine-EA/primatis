@@ -151,7 +151,16 @@ class RbacBootstrapTests {
      * Preuve d'une véritable évolution V001 -> V002 (pas seulement une base
      * reconstruite directement jusqu'à latest) : migre d'abord uniquement
      * V001 (aucun bootstrap RBAC), vérifie l'absence de données RBAC, puis
-     * complète jusqu'à V002 et vérifie leur apparition.
+     * complète jusqu'à V002 (explicitement, pas vers la dernière migration
+     * disponible — {@code target("002")}, comme la phase V001 ci-dessus) et
+     * vérifie leur apparition.
+     *
+     * N'utilise jamais l'autowired {@code flyway} sans restriction pour la
+     * phase V002 : celui-ci résout toutes les migrations du classpath
+     * (V003+ compris dès qu'elles existent), ce qui ferait dériver ce test
+     * historique vers "dernière migration" au lieu de "V002 précisément" à
+     * chaque nouvelle migration ajoutée au projet — précisément le piège
+     * signalé lors de la correction de gate DEV-05.5.
      */
     @Test
     void migratingFromV001AloneThenToV002IntroducesRbacBootstrap() {
@@ -169,7 +178,12 @@ class RbacBootstrapTests {
         assertRowCount("permission", 0);
         assertRowCount("role_permission", 0);
 
-        MigrateResult latestResult = flyway.migrate();
+        Flyway v002Only = Flyway.configure()
+                .dataSource(dataSource)
+                .locations("classpath:db/migration")
+                .target("002")
+                .load();
+        MigrateResult latestResult = v002Only.migrate();
         assertThat(latestResult.success).isTrue();
         assertThat(latestResult.migrationsExecuted).isEqualTo(1);
         assertThat(latestResult.targetSchemaVersion).isEqualTo("002");
@@ -177,7 +191,12 @@ class RbacBootstrapTests {
         assertRowCount("permission", 19);
         assertRowCount("role_permission", 35);
 
-        assertThat(flyway.info().all()).hasSize(2);
+        // info().all() énumère TOUTES les migrations résolues depuis le
+        // classpath (V003+ incluses dès qu'elles existent), indépendamment
+        // de target() — inadapté ici. info().applied() reste borné à ce qui
+        // a réellement été appliqué par ce Flyway ciblé sur "002" : stable
+        // face à l'ajout de futures migrations sans lien avec RBAC.
+        assertThat(v002Only.info().applied()).hasSize(2);
     }
 
     /**

@@ -103,13 +103,13 @@ class RepositoryQueryTests {
     @Test
     void existsByMemberNumberReflectsPresenceAndAbsence() {
         AppUser user = persistUser("repo-exists-member-number@primatis.test");
-        user.setMemberNumber("REPO-CHECK-MN-1");
+        user.setMemberNumber("M900000001");
         user.setMemberStatus(MemberStatus.ACTIVE);
         user.setRegistrationDate(LocalDate.now());
         entityManager.flush();
 
-        assertThat(appUserRepository.existsByMemberNumber("REPO-CHECK-MN-1")).isTrue();
-        assertThat(appUserRepository.existsByMemberNumber("REPO-CHECK-MN-ABSENT")).isFalse();
+        assertThat(appUserRepository.existsByMemberNumber("M900000001")).isTrue();
+        assertThat(appUserRepository.existsByMemberNumber("M900000002")).isFalse();
     }
 
     @Test

@@ -33,7 +33,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.time.Instant;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -91,6 +94,14 @@ class UserControllerTests {
             appUserRepository.findByEmail("controller-detail@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("e2e-users-librarian@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("e2e-users-admin@primatis.test").ifPresent(this::deleteUserAndRoles);
+            // Utilisateurs créés PAR les tests POST : supprimés avant l'admin
+            // qui les a créés (fk_user_role_assigned_by ON DELETE RESTRICT).
+            appUserRepository.findByEmail("controller-create-librarian@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-create-member@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-create-duplicate-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-create-unknown-role@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-create-empty-roles@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("e2e-users-create-admin@primatis.test").ifPresent(this::deleteUserAndRoles);
         });
     }
 
@@ -299,8 +310,173 @@ class UserControllerTests {
     }
 
     // ---------------------------------------------------------------
+    // POST /api/v1/users — création administrative (DEV-05.5)
+    // ---------------------------------------------------------------
+
+    @Test
+    void postUsersWithoutJwtIsUnauthorized() throws Exception {
+        mockMvc.perform(post("/api/v1/users").contentType("application/json").content("{}"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    /**
+     * ROLE_MEMBER ne porte pas USER_MANAGE (bootstrap V002) : le corps reste
+     * structurellement valide pour que le refus provienne réellement de
+     * l'autorisation (Service), pas d'une 400 de validation antérieure.
+     */
+    @Test
+    void postUsersAuthenticatedWithRoleMemberWithoutUserManageIsForbidden() throws Exception {
+        String token = signToken(List.of("ROLE_MEMBER"), List.of("CATALOGUE_READ"));
+
+        mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validLibrarianCreationBody("controller-create-should-not-persist-1@primatis.test")))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
+    }
+
+    @Test
+    void postUsersAuthenticatedWithRoleLibrarianIsForbidden() throws Exception {
+        String token = signToken(List.of("ROLE_LIBRARIAN"), List.of("USER_READ"));
+
+        mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validLibrarianCreationBody("controller-create-should-not-persist-2@primatis.test")))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
+    }
+
+    @Test
+    void postUsersWithRolesEmptyIsBadRequest() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "email": "controller-create-empty-roles@primatis.test",
+                                  "firstName": "Prénom",
+                                  "lastName": "Nom",
+                                  "roles": []
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+                .andExpect(jsonPath("$.fieldErrors[0].field").value("roles"));
+    }
+
+    /**
+     * Chaîne réelle complète (comme {@code librarianRoleFromRealBootstrapCanListUsers})
+     * pour la seule création réellement réussie : ROLE_ADMIN provient du
+     * bootstrap V002 réel, jamais d'un claim injecté à la main.
+     */
+    @Test
+    void postUsersWithRoleAdminAndNonMemberRoleCreatesUser() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validLibrarianCreationBody("controller-create-librarian@primatis.test")))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"))
+                .andExpect(jsonPath("$.user.id").exists())
+                .andExpect(jsonPath("$.user.email").value("controller-create-librarian@primatis.test"))
+                .andExpect(jsonPath("$.user.accountStatus").value("ACTIVE"))
+                .andExpect(jsonPath("$.user.memberNumber").doesNotExist())
+                .andExpect(jsonPath("$.user.memberStatus").doesNotExist())
+                .andExpect(jsonPath("$.initialPassword").isString())
+                .andExpect(jsonPath("$.user.passwordHash").doesNotExist())
+                .andExpect(jsonPath("$.user.failedLoginCount").doesNotExist())
+                .andExpect(jsonPath("$.user.lockedUntil").doesNotExist())
+                .andExpect(jsonPath("$.user.lastLoginAt").doesNotExist())
+                .andExpect(jsonPath("$.passwordHash").doesNotExist());
+
+        AppUser persisted = appUserRepository.findByEmail("controller-create-librarian@primatis.test").orElseThrow();
+        assertThat(persisted.getMemberNumber()).isNull();
+    }
+
+    @Test
+    void postUsersWithRoleMemberGeneratesMemberNumber() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "email": "controller-create-member@primatis.test",
+                                  "firstName": "Prénom",
+                                  "lastName": "Nom",
+                                  "roles": ["ROLE_MEMBER"],
+                                  "memberStatus": "ACTIVE",
+                                  "registrationDate": "2026-01-01"
+                                }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.user.memberNumber").value(org.hamcrest.Matchers.matchesPattern("^M[0-9]{9}$")))
+                .andExpect(jsonPath("$.user.memberStatus").value("ACTIVE"))
+                .andExpect(jsonPath("$.user.registrationDate").value("2026-01-01"));
+    }
+
+    @Test
+    void postUsersWithExistingEmailReturnsConflict() throws Exception {
+        persistUser("controller-create-duplicate-target@primatis.test");
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validLibrarianCreationBody("controller-create-duplicate-target@primatis.test")))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("USER_EMAIL_ALREADY_EXISTS"));
+    }
+
+    @Test
+    void postUsersWithUnknownRoleCodeReturnsConflict() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "email": "controller-create-unknown-role@primatis.test",
+                                  "firstName": "Prénom",
+                                  "lastName": "Nom",
+                                  "roles": ["ROLE_NOT_REAL"]
+                                }
+                                """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("UNKNOWN_ROLE_CODE"));
+
+        assertThat(appUserRepository.findByEmail("controller-create-unknown-role@primatis.test")).isEmpty();
+    }
+
+    // ---------------------------------------------------------------
     // Utilitaires
     // ---------------------------------------------------------------
+
+    private String validLibrarianCreationBody(String email) {
+        return """
+                {
+                  "email": "%s",
+                  "firstName": "Prénom",
+                  "lastName": "Nom",
+                  "roles": ["ROLE_LIBRARIAN"]
+                }
+                """.formatted(email);
+    }
+
+    private String createActiveAdminAndGetToken(String email) {
+        persistActiveUserWithRole(email, "Correct-Admin-Password-2026!", "ROLE_ADMIN");
+        Authentication authentication = authService.login(email, "Correct-Admin-Password-2026!");
+        AccessToken accessToken = jwtService.generateAccessToken(authentication);
+        return accessToken.token();
+    }
 
     private String signToken(List<String> roles, List<String> permissions) {
         Instant now = Instant.now();
