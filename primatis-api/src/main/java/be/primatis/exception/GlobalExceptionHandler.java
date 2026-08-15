@@ -10,6 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
 import java.util.List;
@@ -96,6 +97,24 @@ public class GlobalExceptionHandler {
                         violation.getMessage()))
                 .toList();
         return build(HttpStatus.BAD_REQUEST, "CONSTRAINT_VIOLATION",
+                "Un ou plusieurs paramètres sont invalides.", request, fieldErrors);
+    }
+
+    /**
+     * Un paramètre présent mais non convertible vers le type attendu (ex.
+     * {@code ?page=abc} sur un {@code @RequestParam int}) échoue pendant la
+     * liaison Spring MVC, avant toute validation Bean Validation — distinct
+     * de {@link #handleConstraintViolation}, qui suppose une conversion déjà
+     * réussie mais une valeur hors contrainte. Le message d'origine de
+     * {@link MethodArgumentTypeMismatchException} contient le type Java
+     * cible et la valeur brute reçue : jamais renvoyé tel quel au client.
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiErrorResponse> handleMethodArgumentTypeMismatch(
+            MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+        List<ApiFieldError> fieldErrors =
+                List.of(new ApiFieldError(ex.getName(), "Valeur invalide pour ce paramètre."));
+        return build(HttpStatus.BAD_REQUEST, "INVALID_REQUEST_PARAMETER",
                 "Un ou plusieurs paramètres sont invalides.", request, fieldErrors);
     }
 

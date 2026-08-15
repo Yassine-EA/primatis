@@ -95,6 +95,27 @@ class GlobalExceptionHandlerTests {
                 .andExpect(jsonPath("$.fieldErrors[0].field").value("quantity"));
     }
 
+    /**
+     * {@code quantity} est un {@code @RequestParam int} : "abc" échoue la
+     * liaison Spring MVC elle-même (conversion de type), avant que
+     * {@code @Min(1)} n'ait la moindre chance de s'évaluer — distinct de
+     * {@link #invalidRequestParamReturns400WithFieldErrors} (valeur
+     * convertie avec succès mais hors contrainte).
+     */
+    @Test
+    void invalidRequestParamTypeReturns400WithoutExposingInternalDetail() throws Exception {
+        mockMvc.perform(get("/test-errors/validate-param").param("quantity", "abc"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.code").value("INVALID_REQUEST_PARAMETER"))
+                .andExpect(jsonPath("$.fieldErrors").isNotEmpty())
+                .andExpect(jsonPath("$.fieldErrors[0].field").value("quantity"))
+                .andExpect(jsonPath("$.message", org.hamcrest.Matchers.not(
+                        org.hamcrest.Matchers.containsString("java.lang"))))
+                .andExpect(jsonPath("$.fieldErrors[0].message", org.hamcrest.Matchers.not(
+                        org.hamcrest.Matchers.containsString("java.lang"))));
+    }
+
     @Test
     void unexpectedExceptionReturns500WithoutExposingInternalDetail() throws Exception {
         mockMvc.perform(get("/test-errors/unexpected"))
