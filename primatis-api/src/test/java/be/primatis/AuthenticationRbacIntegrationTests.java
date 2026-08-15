@@ -78,7 +78,7 @@ class AuthenticationRbacIntegrationTests {
             "RESERVATION_READ", "RESERVATION_MANAGE",
             "FINE_READ", "FINE_MANAGE",
             "ARTICLE_READ", "ARTICLE_MANAGE", "ARTICLE_PUBLISH",
-            "USER_READ");
+            "USER_READ", "USER_PROFILE_MANAGE");
 
     private static final Set<String> MEMBER_PERMISSION_CODES = Set.of("CATALOGUE_READ", "ARTICLE_READ");
 

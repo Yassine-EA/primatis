@@ -35,8 +35,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Bootstrap RBAC obligatoire (DEV-03.11, migration {@code V002}) : 3 rôles
  * canoniques, 19 permissions canoniques V1, 35 associations RolePermission
- * — matrice fixée par PRIMATIS_CONTEXT_DEV_v1.0 §6.3/§6.4. PostgreSQL réel,
- * aucun H2/Testcontainers.
+ * — matrice fixée par PRIMATIS_CONTEXT_DEV_v1.0 §6.3/§6.4. Complété par
+ * {@code V004} (DEV-05.8) : permission {@code USER_PROFILE_MANAGE}
+ * supplémentaire, attribuée à {@code ROLE_LIBRARIAN}/{@code ROLE_ADMIN}
+ * (jamais {@code ROLE_MEMBER}) — total après migration complète : 20
+ * permissions, 37 associations. PostgreSQL réel, aucun H2/Testcontainers.
  *
  * {@code spring.flyway.clean-disabled=false} n'est activé QUE dans le
  * contexte Spring dédié à cette classe ({@code @TestPropertySource} local),
@@ -59,7 +62,8 @@ class RbacBootstrapTests {
             "ARTICLE_READ", "ARTICLE_MANAGE", "ARTICLE_PUBLISH",
             "USER_READ", "USER_MANAGE",
             "ROLE_READ", "ROLE_MANAGE",
-            "SETTING_READ", "SETTING_MANAGE");
+            "SETTING_READ", "SETTING_MANAGE",
+            "USER_PROFILE_MANAGE");
 
     private static final Set<String> LIBRARIAN_PERMISSION_CODES = Set.of(
             "CATALOGUE_READ", "CATALOGUE_MANAGE",
@@ -68,7 +72,7 @@ class RbacBootstrapTests {
             "RESERVATION_READ", "RESERVATION_MANAGE",
             "FINE_READ", "FINE_MANAGE",
             "ARTICLE_READ", "ARTICLE_MANAGE", "ARTICLE_PUBLISH",
-            "USER_READ");
+            "USER_READ", "USER_PROFILE_MANAGE");
 
     @Autowired
     private Flyway flyway;
@@ -100,23 +104,23 @@ class RbacBootstrapTests {
         Set<String> roleCodes = roles.stream().map(Role::getCode).collect(Collectors.toSet());
         assertThat(roleCodes).containsExactlyInAnyOrder("ROLE_MEMBER", "ROLE_LIBRARIAN", "ROLE_ADMIN");
 
-        // --- Permission : exactement 19, aucune *_SELF ---
+        // --- Permission : exactement 20 (19 V002 + USER_PROFILE_MANAGE V004), aucune *_SELF ---
         List<Permission> permissions = permissionRepository.findAll();
-        assertThat(permissions).hasSize(19);
+        assertThat(permissions).hasSize(20);
         Set<String> permissionCodes = permissions.stream().map(Permission::getCode).collect(Collectors.toSet());
         assertThat(permissionCodes).containsExactlyInAnyOrderElementsOf(EXPECTED_PERMISSION_CODES);
         assertThat(permissionCodes).noneMatch(code -> code.endsWith("_SELF"));
 
-        // --- RolePermission : exactement 35, aucun doublon, FK valides ---
+        // --- RolePermission : exactement 37 (35 V002 + 2 V004), aucun doublon, FK valides ---
         List<RolePermission> associations = entityManager
                 .createQuery("SELECT rp FROM RolePermission rp", RolePermission.class)
                 .getResultList();
-        assertThat(associations).hasSize(35);
+        assertThat(associations).hasSize(37);
         long distinctPairs = associations.stream()
                 .map(rp -> rp.getRole().getCode() + "|" + rp.getPermission().getCode())
                 .distinct()
                 .count();
-        assertThat(distinctPairs).isEqualTo(35);
+        assertThat(distinctPairs).isEqualTo(37);
         assertThat(associations).allSatisfy(rp -> {
             assertThat(rp.getRole()).isNotNull();
             assertThat(rp.getPermission()).isNotNull();
