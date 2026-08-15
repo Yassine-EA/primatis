@@ -5,6 +5,7 @@ import be.primatis.access.RoleRepository;
 import be.primatis.access.UserRole;
 import be.primatis.access.UserRoleId;
 import be.primatis.config.JwtProperties;
+import be.primatis.exception.InvalidCredentialsException;
 import be.primatis.security.AccessToken;
 import be.primatis.security.AuthService;
 import be.primatis.security.JwtService;
@@ -35,6 +36,7 @@ import java.time.Instant;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -111,6 +113,22 @@ class UserControllerTests {
             appUserRepository.findByEmail("controller-update-partial-target@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("controller-update-phone-target@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("controller-update-null-firstname-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            // Utilisateurs créés/modifiés PAR les tests AccountStatus/MemberStatus (DEV-05.7).
+            appUserRepository.findByEmail("controller-disable-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-enable-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-jwt-after-disable@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-account-status-idempotent-active@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-account-status-idempotent-disabled@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-account-status-missing@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-account-status-null@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-account-status-invalid-enum@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-block-blank-reason@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-block-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-block-nonmember-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-block-again-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-unblock-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-reactivate-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-list-detail-coherence@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("e2e-users-create-admin@primatis.test").ifPresent(this::deleteUserAndRoles);
         });
     }
@@ -675,8 +693,495 @@ class UserControllerTests {
     }
 
     // ---------------------------------------------------------------
+    // PATCH /api/v1/users/{id}/account-status — DEV-05.7 gate conformité
+    // ---------------------------------------------------------------
+
+    @Test
+    void patchAccountStatusWithoutJwtIsUnauthorized() throws Exception {
+        mockMvc.perform(patch("/api/v1/users/1/account-status")
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "DISABLED"}
+                                """))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void patchAccountStatusAuthenticatedWithRoleMemberIsForbidden() throws Exception {
+        String token = signToken(List.of("ROLE_MEMBER"), List.of("CATALOGUE_READ"));
+
+        mockMvc.perform(patch("/api/v1/users/1/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "DISABLED"}
+                                """))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
+    }
+
+    @Test
+    void patchAccountStatusAuthenticatedWithRoleLibrarianIsForbidden() throws Exception {
+        String token = signToken(List.of("ROLE_LIBRARIAN"), List.of("USER_READ"));
+
+        mockMvc.perform(patch("/api/v1/users/1/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "DISABLED"}
+                                """))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
+    }
+
+    @Test
+    void patchAccountStatusWithRoleAdminDisablesAccountAndBlocksFutureLogin() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        String targetEmail = "controller-disable-target@primatis.test";
+        persistUser(targetEmail);
+        AppUser target = appUserRepository.findByEmail(targetEmail).orElseThrow();
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "DISABLED"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accountStatus").value("DISABLED"));
+
+        assertThatExceptionOfType(InvalidCredentialsException.class)
+                .isThrownBy(() -> authService.login(targetEmail, "Correct-Password-2026!"));
+    }
+
+    /**
+     * Contrat DEV-05.7 §3 : {@code ACTIVE → ACTIVE} est un succès idempotent
+     * sans effet de bord — {@code updatedAt} ne doit pas bouger.
+     */
+    @Test
+    void patchAccountStatusActiveToActiveIsIdempotentWithoutSideEffectViaHttp() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-account-status-idempotent-active@primatis.test");
+        String before = mockMvc.perform(get("/api/v1/users/" + target.getId())
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        String updatedAtBefore = JsonPath.read(before, "$.updatedAt");
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "ACTIVE"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accountStatus").value("ACTIVE"))
+                .andExpect(jsonPath("$.updatedAt").value(updatedAtBefore));
+    }
+
+    /**
+     * Symétrique de {@link #patchAccountStatusActiveToActiveIsIdempotentWithoutSideEffectViaHttp} :
+     * {@code DISABLED → DISABLED} réussit également, jamais une erreur.
+     */
+    @Test
+    void patchAccountStatusDisabledToDisabledIsIdempotentWithoutSideEffectViaHttp() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-account-status-idempotent-disabled@primatis.test");
+        mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "DISABLED"}
+                                """))
+                .andExpect(status().isOk());
+        String afterFirstDisable = mockMvc.perform(get("/api/v1/users/" + target.getId())
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        String updatedAtAfterFirstDisable = JsonPath.read(afterFirstDisable, "$.updatedAt");
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "DISABLED"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accountStatus").value("DISABLED"))
+                .andExpect(jsonPath("$.updatedAt").value(updatedAtAfterFirstDisable));
+    }
+
+    @Test
+    void patchAccountStatusWithRoleAdminReenablesAccountAndRestoresLogin() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        String targetEmail = "controller-enable-target@primatis.test";
+        persistUser(targetEmail);
+        AppUser target = appUserRepository.findByEmail(targetEmail).orElseThrow();
+        mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "DISABLED"}
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "ACTIVE"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accountStatus").value("ACTIVE"));
+
+        // authService.login(...) retourne une Authentication dont le principal est
+        // PrimatisUserPrincipal : getName() == UserDetails.getUsername() == email
+        // (distinct du claim JWT "sub" == userId, cf. JwtService.generateAccessToken).
+        Authentication authentication = authService.login(targetEmail, "Correct-Password-2026!");
+        assertThat(authentication.getName()).isEqualTo(targetEmail);
+    }
+
+    /**
+     * Contrat DEV-05.7 §4 : la clé {@code status} absente ou {@code null}
+     * échoue proprement en 400 (Bean Validation {@code @NotNull}), jamais
+     * une 500.
+     */
+    @Test
+    void patchAccountStatusMissingStatusKeyReturnsBadRequest() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-account-status-missing@primatis.test");
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+                .andExpect(jsonPath("$.fieldErrors[0].field").value("status"));
+    }
+
+    @Test
+    void patchAccountStatusExplicitNullStatusReturnsBadRequest() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-account-status-null@primatis.test");
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": null}
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+                .andExpect(jsonPath("$.fieldErrors[0].field").value("status"));
+    }
+
+    /**
+     * Contrat DEV-05.7 §4 : une valeur d'enum inconnue échoue la
+     * désérialisation Jackson elle-même — {@link GlobalExceptionHandler}
+     * doit la traduire en 400 {@code MALFORMED_REQUEST_BODY}, jamais en 500
+     * (voir aussi {@code GlobalExceptionHandlerTests}).
+     */
+    @Test
+    void patchAccountStatusUnknownEnumValueReturnsBadRequestNotServerError() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-account-status-invalid-enum@primatis.test");
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "BOGUS"}
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("MALFORMED_REQUEST_BODY"));
+    }
+
+    /**
+     * Preuve directe de la limitation architecturale confirmée (§4 DEV-05.7,
+     * FIGÉ) : un JWT déjà émis avant la désactivation du compte reste
+     * accepté par la SecurityFilterChain jusqu'à son expiration naturelle —
+     * PRIMATIS ne blackliste jamais un JWT (backend.md).
+     */
+    @Test
+    void jwtIssuedBeforeDisableStillGrantsAccessAfterAccountDisabled() throws Exception {
+        String adminToken = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        String targetEmail = "controller-jwt-after-disable@primatis.test";
+        String targetRawPassword = "Correct-Password-2026!";
+        // ROLE_LIBRARIAN (bootstrap réel V002) porte USER_READ : requis par
+        // GET /api/v1/users ci-dessous — persistUser() seul ne suffit pas
+        // (aucun rôle), ce qui ferait échouer la requête par 403 (RBAC) et
+        // non par 401 (JWT), masquant la preuve réellement recherchée.
+        persistActiveUserWithRole(targetEmail, targetRawPassword, "ROLE_LIBRARIAN");
+        AppUser target = appUserRepository.findByEmail(targetEmail).orElseThrow();
+        Authentication authentication = authService.login(targetEmail, targetRawPassword);
+        AccessToken preExistingToken = jwtService.generateAccessToken(authentication);
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
+                        .header("Authorization", "Bearer " + adminToken)
+                        .contentType("application/json")
+                        .content("""
+                                {"status": "DISABLED"}
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/v1/users").header("Authorization", "Bearer " + preExistingToken.token()))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Contrat DEV-05.7 §2 : les anciennes routes {@code POST .../disable} et
+     * {@code POST .../enable} sont supprimées, pas conservées en parallèle —
+     * aucune route ne doit plus y répondre.
+     */
+    @Test
+    void oldDisableEndpointIsNoLongerExposed() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users/1/disable").header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void oldEnableEndpointIsNoLongerExposed() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users/1/enable").header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound());
+    }
+
+    // ---------------------------------------------------------------
+    // POST /api/v1/users/{id}/membership/* — DEV-05.7 gate conformité
+    // ---------------------------------------------------------------
+
+    @Test
+    void postMembershipBlockRequiresNonBlankBlockedReason() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        String createResponseJson = mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validMemberCreationBody("controller-block-blank-reason@primatis.test")))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Long targetId = ((Number) JsonPath.read(createResponseJson, "$.user.id")).longValue();
+
+        mockMvc.perform(post("/api/v1/users/" + targetId + "/membership/block")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("{\"blockedReason\": \"\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"));
+    }
+
+    @Test
+    void postMembershipBlockWithRoleAdminBlocksMember() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        String createResponseJson = mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validMemberCreationBody("controller-block-target@primatis.test")))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Long targetId = ((Number) JsonPath.read(createResponseJson, "$.user.id")).longValue();
+
+        mockMvc.perform(post("/api/v1/users/" + targetId + "/membership/block")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"blockedReason": "Retard répété"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.memberStatus").value("BLOCKED"))
+                .andExpect(jsonPath("$.blockedReason").value("Retard répété"));
+    }
+
+    @Test
+    void postMembershipBlockOnNonMemberReturnsConflict() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-block-nonmember-target@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users/" + target.getId() + "/membership/block")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"blockedReason": "Motif"}
+                                """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("NOT_A_MEMBER"));
+    }
+
+    /**
+     * Contrat DEV-05.7 §6 : {@code BLOCKED → BLOCKED} n'est plus un conflit —
+     * le motif est remplacé et la réponse reste 200.
+     */
+    @Test
+    void postMembershipBlockOnAlreadyBlockedUpdatesReasonAndSucceeds() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        String createResponseJson = mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validMemberCreationBody("controller-block-again-target@primatis.test")))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Long targetId = ((Number) JsonPath.read(createResponseJson, "$.user.id")).longValue();
+        mockMvc.perform(post("/api/v1/users/" + targetId + "/membership/block")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"blockedReason": "Premier motif"}
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/api/v1/users/" + targetId + "/membership/block")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"blockedReason": "Second motif"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.memberStatus").value("BLOCKED"))
+                .andExpect(jsonPath("$.blockedReason").value("Second motif"));
+    }
+
+    @Test
+    void postMembershipUnblockWithRoleAdminUnblocksMember() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        String createResponseJson = mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validMemberCreationBody("controller-unblock-target@primatis.test")))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Long targetId = ((Number) JsonPath.read(createResponseJson, "$.user.id")).longValue();
+        mockMvc.perform(post("/api/v1/users/" + targetId + "/membership/block")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"blockedReason": "Motif"}
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/api/v1/users/" + targetId + "/membership/unblock")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.memberStatus").value("ACTIVE"))
+                .andExpect(jsonPath("$.blockedReason").value(org.hamcrest.Matchers.nullValue()));
+    }
+
+    @Test
+    void postMembershipReactivateRefusedIfStillExpired() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        String createResponseJson = mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validExpiredMemberCreationBody("controller-reactivate-target@primatis.test")))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Long targetId = ((Number) JsonPath.read(createResponseJson, "$.user.id")).longValue();
+        // synchronise ACTIVE -> EXPIRED via une lecture, comme le ferait un GET détail réel
+        mockMvc.perform(get("/api/v1/users/" + targetId).header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.memberStatus").value("EXPIRED"));
+
+        mockMvc.perform(post("/api/v1/users/" + targetId + "/membership/reactivate")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("CANNOT_REACTIVATE_EXPIRED_MEMBERSHIP"));
+    }
+
+    /**
+     * Contrat DEV-05.7 §5 : les anciennes routes {@code POST .../block},
+     * {@code .../unblock} et {@code .../reactivate} (sans {@code /membership/})
+     * sont supprimées, pas conservées en parallèle.
+     */
+    @Test
+    void oldBlockEndpointIsNoLongerExposed() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users/1/block")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {"blockedReason": "Motif"}
+                                """))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void oldUnblockEndpointIsNoLongerExposed() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users/1/unblock").header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void oldReactivateEndpointIsNoLongerExposed() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(post("/api/v1/users/1/reactivate").header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound());
+    }
+
+    // ---------------------------------------------------------------
+    // Cohérence liste/détail de l'expiration — DEV-05.7 gate conformité §9
+    // ---------------------------------------------------------------
+
+    /**
+     * Cœur du gate : {@code GET /api/v1/users} et {@code GET
+     * /api/v1/users/{id}} doivent raconter la même histoire pour le même
+     * utilisateur — jamais ACTIVE dans la liste et EXPIRED dans le détail.
+     */
+    @Test
+    void listAndDetailAgreeOnExpiredStatusForSameUser() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        String createResponseJson = mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validExpiredMemberCreationBody("controller-list-detail-coherence@primatis.test")))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Long targetId = ((Number) JsonPath.read(createResponseJson, "$.user.id")).longValue();
+
+        mockMvc.perform(get("/api/v1/users?size=100").header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.id==" + targetId + ")].memberStatus").value("EXPIRED"));
+
+        mockMvc.perform(get("/api/v1/users/" + targetId).header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.memberStatus").value("EXPIRED"));
+    }
+
+    // ---------------------------------------------------------------
     // Utilitaires
     // ---------------------------------------------------------------
+
+    private String validMemberCreationBody(String email) {
+        return """
+                {
+                  "email": "%s",
+                  "firstName": "Prénom",
+                  "lastName": "Nom",
+                  "roles": ["ROLE_MEMBER"],
+                  "memberStatus": "ACTIVE",
+                  "registrationDate": "2026-01-01"
+                }
+                """.formatted(email);
+    }
+
+    private String validExpiredMemberCreationBody(String email) {
+        return """
+                {
+                  "email": "%s",
+                  "firstName": "Prénom",
+                  "lastName": "Nom",
+                  "roles": ["ROLE_MEMBER"],
+                  "memberStatus": "ACTIVE",
+                  "registrationDate": "2020-01-01",
+                  "memberExpirationDate": "2020-06-30"
+                }
+                """.formatted(email);
+    }
 
     private String validUpdateBody() {
         return """

@@ -7,10 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.Instant;
 import java.util.List;
@@ -116,6 +119,43 @@ public class GlobalExceptionHandler {
                 List.of(new ApiFieldError(ex.getName(), "Valeur invalide pour ce paramètre."));
         return build(HttpStatus.BAD_REQUEST, "INVALID_REQUEST_PARAMETER",
                 "Un ou plusieurs paramètres sont invalides.", request, fieldErrors);
+    }
+
+    /**
+     * Corps de requête illisible : JSON malformé, ou valeur textuelle ne
+     * correspondant à aucune constante d'un enum cible (ex. {@code {"status":
+     * "BOGUS"}} sur {@link be.primatis.user.web.UpdateAccountStatusRequest})
+     * — échoue pendant la désérialisation Jackson elle-même, avant que
+     * Bean Validation ({@code @Valid}) n'ait la moindre chance de s'exécuter
+     * (distinct de {@link #handleMethodArgumentNotValid}, qui suppose une
+     * désérialisation déjà réussie). Le message d'origine peut contenir des
+     * détails internes Jackson (nom de classe complet, valeurs acceptées) :
+     * jamais renvoyé tel quel au client.
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiErrorResponse> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex, HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, "MALFORMED_REQUEST_BODY",
+                "Le corps de la requête est invalide ou illisible.", request, List.of());
+    }
+
+    /**
+     * Aucune route ne correspond à la requête (ex. ancienne route
+     * volontairement supprimée, comme {@code POST /users/{id}/disable}
+     * depuis DEV-05.7). Depuis Spring Framework 6.1/Boot 3.2, un chemin non
+     * mappé par un {@code @RequestMapping} est intercepté par le
+     * {@code HandlerMapping} des ressources statiques (catch-all {@code
+     * /**}), qui lève {@link NoResourceFoundException} plutôt que
+     * {@link NoHandlerFoundException} — sans ce handler dédié, cette
+     * exception tombait dans {@link #handleUnexpected}, produisant à tort
+     * une 500 pour une route simplement inexistante. {@link
+     * NoHandlerFoundException} reste géré par précaution (comportement
+     * historique, selon configuration Spring MVC).
+     */
+    @ExceptionHandler({NoResourceFoundException.class, NoHandlerFoundException.class})
+    public ResponseEntity<ApiErrorResponse> handleNoRouteFound(Exception ex, HttpServletRequest request) {
+        return build(HttpStatus.NOT_FOUND, "ROUTE_NOT_FOUND",
+                "Aucune route ne correspond à cette requête.", request, List.of());
     }
 
     @ExceptionHandler(Exception.class)

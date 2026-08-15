@@ -116,6 +116,42 @@ class GlobalExceptionHandlerTests {
                         org.hamcrest.Matchers.containsString("java.lang"))));
     }
 
+    /**
+     * JSON syntaxiquement invalide échoue la désérialisation Jackson
+     * elle-même, avant que {@code @Valid} n'ait la moindre chance de
+     * s'exécuter — même mécanisme que la valeur textuelle inconnue d'un
+     * enum cible (DEV-05.7 gate, {@code UpdateAccountStatusRequest.status}),
+     * reproduit ici sans endpoint dédié supplémentaire.
+     */
+    @Test
+    void malformedRequestBodyReturns400WithoutExposingInternalDetail() throws Exception {
+        mockMvc.perform(post("/test-errors/validate-body")
+                        .contentType("application/json")
+                        .content("{not-valid-json"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.code").value("MALFORMED_REQUEST_BODY"))
+                .andExpect(jsonPath("$.fieldErrors").isEmpty())
+                .andExpect(jsonPath("$.message", org.hamcrest.Matchers.not(
+                        org.hamcrest.Matchers.containsString("com.fasterxml"))));
+    }
+
+    /**
+     * Contrat DEV-05.7 gate PostgreSQL réel : une route simplement
+     * inexistante (ex. ancienne route supprimée) doit produire 404, jamais
+     * 500. Reproduit ici sans endpoint dédié : n'importe quel chemin non
+     * mappé sous cette même tranche {@code @WebMvcTest} déclenche déjà
+     * {@link org.springframework.web.servlet.resource.NoResourceFoundException}.
+     */
+    @Test
+    void unmappedRouteReturns404NotServerError() throws Exception {
+        mockMvc.perform(post("/test-errors/this-route-does-not-exist"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.code").value("ROUTE_NOT_FOUND"))
+                .andExpect(jsonPath("$.fieldErrors").isEmpty());
+    }
+
     @Test
     void unexpectedExceptionReturns500WithoutExposingInternalDetail() throws Exception {
         mockMvc.perform(get("/test-errors/unexpected"))

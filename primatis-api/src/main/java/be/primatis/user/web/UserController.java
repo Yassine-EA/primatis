@@ -32,11 +32,12 @@ import java.net.URI;
 
 /**
  * Contrat REST Users : lecture {@code USER_READ} (DEV-05.4, liste paginée +
- * détail), création administrative (DEV-05.5) et modification (DEV-05.6),
- * les deux dernières sous {@code USER_MANAGE}. Reste mince : mapping HTTP,
- * validation de forme, délégation à {@link UserService} — aucune logique
- * métier, aucune transaction ici (frontière transactionnelle portée par le
- * Service).
+ * détail), création administrative (DEV-05.5), modification (DEV-05.6) et
+ * transitions {@code AccountStatus}/{@code MemberStatus} (DEV-05.7) — ces
+ * six dernières opérations sous {@code USER_MANAGE}. Reste mince : mapping
+ * HTTP, validation de forme, délégation à {@link UserService} — aucune
+ * logique métier, aucune transaction ici (frontière transactionnelle
+ * portée par le Service).
  *
  * L'autorisation ({@code USER_READ}/{@code USER_MANAGE}) est appliquée par
  * {@code @PreAuthorize} sur {@link UserService}, jamais ici.
@@ -148,5 +149,98 @@ public class UserController {
             Authentication authentication) {
         Long adminUserId = Long.valueOf(authentication.getName());
         return userService.updateUser(id, request, adminUserId);
+    }
+
+    @Operation(
+            summary = "Changement d'AccountStatus",
+            description = "AccountStatus ACTIVE ⇄ DISABLED (USER_MANAGE requis). Idempotent : "
+                    + "appliquer le statut déjà courant est un succès sans effet de bord. N'affecte "
+                    + "jamais MemberStatus. DISABLED interdit l'authentification future ; un JWT déjà "
+                    + "émis reste valide jusqu'à son expiration naturelle (aucune révocation JWT "
+                    + "dans PRIMATIS).")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "AccountStatus appliqué (transition ou idempotent)."),
+            @ApiResponse(responseCode = "400", description = "status absent ou valeur inconnue.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Authentification requise ou JWT invalide.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Permission USER_MANAGE manquante.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Aucun utilisateur pour cet identifiant.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
+    })
+    @PatchMapping("/{id}/account-status")
+    public UserResponse updateAccountStatus(
+            @PathVariable Long id, @Valid @RequestBody UpdateAccountStatusRequest request) {
+        return userService.updateAccountStatus(id, request);
+    }
+
+    @Operation(
+            summary = "Blocage d'un adhérent (ou mise à jour du motif)",
+            description = "MemberStatus → BLOCKED (USER_MANAGE requis), depuis ACTIVE ou EXPIRED. "
+                    + "Idempotent sur le statut si déjà BLOCKED : remplace alors uniquement "
+                    + "blockedReason. blockedReason obligatoire. Réservé aux utilisateurs ayant déjà "
+                    + "été adhérents.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Adhérent bloqué (ou motif mis à jour)."),
+            @ApiResponse(responseCode = "400", description = "blockedReason manquant ou vide.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Authentification requise ou JWT invalide.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Permission USER_MANAGE manquante.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Aucun utilisateur pour cet identifiant.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Utilisateur n'ayant jamais été adhérent.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
+    })
+    @PostMapping("/{id}/membership/block")
+    public UserResponse blockMember(@PathVariable Long id, @Valid @RequestBody BlockMembershipRequest request) {
+        return userService.blockMember(id, request);
+    }
+
+    @Operation(
+            summary = "Déblocage d'un adhérent",
+            description = "MemberStatus BLOCKED → ACTIVE ou EXPIRED selon memberExpirationDate "
+                    + "(USER_MANAGE requis). blockedReason systématiquement effacé. Toujours "
+                    + "autorisé depuis BLOCKED, jamais refusé pour cause d'expiration.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Adhérent débloqué."),
+            @ApiResponse(responseCode = "401", description = "Authentification requise ou JWT invalide.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Permission USER_MANAGE manquante.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Aucun utilisateur pour cet identifiant.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Adhérent non bloqué ou utilisateur "
+                    + "n'ayant jamais été adhérent.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
+    })
+    @PostMapping("/{id}/membership/unblock")
+    public UserResponse unblockMember(@PathVariable Long id) {
+        return userService.unblockMember(id);
+    }
+
+    @Operation(
+            summary = "Réactivation d'une adhésion expirée",
+            description = "MemberStatus EXPIRED → ACTIVE (USER_MANAGE requis), uniquement si "
+                    + "memberExpirationDate n'est plus dans le passé. Ne renouvelle jamais la date "
+                    + "elle-même (PATCH /api/v1/users/{id} au préalable si nécessaire) : le "
+                    + "renouvellement complet reste hors scope V1.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Adhésion réactivée."),
+            @ApiResponse(responseCode = "401", description = "Authentification requise ou JWT invalide.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Permission USER_MANAGE manquante.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Aucun utilisateur pour cet identifiant.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Adhérent non expiré, memberExpirationDate "
+                    + "toujours dans le passé, ou utilisateur n'ayant jamais été adhérent.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
+    })
+    @PostMapping("/{id}/membership/reactivate")
+    public UserResponse reactivateMembership(@PathVariable Long id) {
+        return userService.reactivateMembership(id);
     }
 }

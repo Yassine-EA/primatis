@@ -8,8 +8,10 @@ import be.primatis.access.UserRoleRepository;
 import be.primatis.exception.BusinessRuleException;
 import be.primatis.exception.ConflictException;
 import be.primatis.exception.ResourceNotFoundException;
+import be.primatis.user.web.BlockMembershipRequest;
 import be.primatis.user.web.CreateUserRequest;
 import be.primatis.user.web.CreateUserResponse;
+import be.primatis.user.web.UpdateAccountStatusRequest;
 import be.primatis.user.web.UpdateUserRequest;
 import be.primatis.user.web.UserResponse;
 import org.springframework.data.domain.Page;
@@ -28,13 +30,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Lectures {@code USER_READ}, création administrative et modification
- * {@code USER_MANAGE} sur {@code AppUser} (DEV-05.4/DEV-05.5/DEV-05.6).
- * Orchestration Repository + mapping uniquement, aucune décision métier
- * déplacée hors de ce Service : ne calcule aucune expiration automatique,
- * n'implémente aucune transition {@code AccountStatus}/{@code
- * MemberStatus} (DEV-05.7), ne modifie jamais {@code email}/{@code
- * memberNumber} (immuables via ce Service).
+ * Lectures {@code USER_READ}, création/modification/statuts administratifs
+ * {@code USER_MANAGE} sur {@code AppUser} (DEV-05.4→DEV-05.7). Orchestration
+ * Repository + mapping uniquement. Ne modifie jamais {@code email}/{@code
+ * memberNumber} (immuables), n'implémente ni renouvellement complet ni
+ * forgot-password (hors scope V1).
  *
  * {@code @PreAuthorize} au niveau Service, jamais au niveau Controller,
  * conformément à la convention établie par
@@ -52,6 +52,7 @@ public class UserService {
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberNumberGenerator memberNumberGenerator;
+    private final MemberExpirationPolicy memberExpirationPolicy;
     private final Clock clock;
 
     public UserService(
@@ -60,27 +61,48 @@ public class UserService {
             UserRoleRepository userRoleRepository,
             PasswordEncoder passwordEncoder,
             MemberNumberGenerator memberNumberGenerator,
+            MemberExpirationPolicy memberExpirationPolicy,
             Clock clock) {
         this.appUserRepository = appUserRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.memberNumberGenerator = memberNumberGenerator;
+        this.memberExpirationPolicy = memberExpirationPolicy;
         this.clock = clock;
     }
 
+    /**
+     * Synchronise paresseusement {@code memberStatus} (DEV-05.7, {@link
+     * MemberExpirationPolicy}) pour chaque {@code AppUser} de la page avant
+     * de répondre : {@code listUsers} et {@link #getUserById} doivent
+     * exposer la même vérité métier (contrat DEV-05.7 §9) — un
+     * {@code ACTIVE} expiré ne doit jamais apparaître dans la liste puis
+     * {@code EXPIRED} au détail. Lecture non {@code readOnly} car cette
+     * méthode peut légitimement écrire. Aucune requête supplémentaire :
+     * {@code syncIfNeeded} mute des Entities déjà chargées par {@code
+     * findAll(Pageable)}, la synchronisation se limite au flush du
+     * persistance-context déjà géré par la transaction — pas de N+1, une
+     * page contenant au maximum 100 utilisateurs (contrat pagination).
+     */
     @PreAuthorize("hasAuthority('USER_READ')")
-    @Transactional(readOnly = true)
+    @Transactional
     public Page<UserResponse> listUsers(Pageable pageable) {
-        return appUserRepository.findAll(pageable).map(UserResponse::from);
+        Page<AppUser> page = appUserRepository.findAll(pageable);
+        page.forEach(memberExpirationPolicy::syncIfNeeded);
+        return page.map(UserResponse::from);
     }
 
+    /**
+     * Synchronise paresseusement {@code memberStatus} avant de répondre :
+     * lecture non {@code readOnly} car cette méthode peut légitimement
+     * écrire (transition {@code ACTIVE → EXPIRED}).
+     */
     @PreAuthorize("hasAuthority('USER_READ')")
-    @Transactional(readOnly = true)
+    @Transactional
     public UserResponse getUserById(Long id) {
-        AppUser user = appUserRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        USER_NOT_FOUND_CODE, "Utilisateur introuvable pour l'identifiant " + id + "."));
+        AppUser user = getRequiredUser(id);
+        memberExpirationPolicy.syncIfNeeded(user);
         return UserResponse.from(user);
     }
 
@@ -164,9 +186,7 @@ public class UserService {
     @PreAuthorize("hasAuthority('USER_MANAGE')")
     @Transactional
     public UserResponse updateUser(Long id, UpdateUserRequest request, Long adminUserId) {
-        AppUser user = appUserRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        USER_NOT_FOUND_CODE, "Utilisateur introuvable pour l'identifiant " + id + "."));
+        AppUser user = getRequiredUser(id);
 
         if (request.isFirstNamePresent()) {
             if (request.getFirstName() == null || request.getFirstName().isBlank()) {
@@ -194,6 +214,124 @@ public class UserService {
 
         user.setUpdatedAt(clock.instant());
         return UserResponse.from(user);
+    }
+
+    /**
+     * Change {@code AccountStatus} ({@code PATCH /api/v1/users/{id}/account-status},
+     * contrat DEV-05.7) : {@code ACTIVE ⇄ DISABLED}. N'affecte jamais
+     * {@code MemberStatus} (dimensions strictement distinctes, DO NOT
+     * CONTRADICT). Un JWT déjà émis avant la désactivation reste valide
+     * jusqu'à son expiration naturelle : aucune révocation/blacklist JWT
+     * n'existe dans PRIMATIS (backend.md « JWT », FIGÉ) — limitation
+     * architecturale connue, pas un défaut de cette méthode.
+     *
+     * <b>Idempotent</b> (contrat DEV-05.7 §3) : appliquer le statut déjà
+     * courant est un succès sans effet de bord (200, aucune mutation, aucun
+     * {@code updatedAt} rafraîchi) — distinct de {@link #blockMember}/
+     * {@link #unblockMember}/{@link #reactivateMembership}, qui restent des
+     * transitions strictes.
+     */
+    @PreAuthorize("hasAuthority('USER_MANAGE')")
+    @Transactional
+    public UserResponse updateAccountStatus(Long id, UpdateAccountStatusRequest request) {
+        AppUser user = getRequiredUser(id);
+        if (user.getAccountStatus() != request.status()) {
+            user.setAccountStatus(request.status());
+            user.setUpdatedAt(clock.instant());
+        }
+        return UserResponse.from(user);
+    }
+
+    /**
+     * Bloque un adhérent existant ({@code MemberStatus → BLOCKED}), depuis
+     * {@code ACTIVE} ou {@code EXPIRED} (un membre déjà expiré peut aussi
+     * être bloqué). Synchronise d'abord l'expiration ({@link
+     * MemberExpirationPolicy}) pour évaluer correctement la transition même
+     * si le statut stocké était encore {@code ACTIVE} de façon obsolète.
+     *
+     * <b>Idempotent sur le statut, pas sur le motif</b> (contrat DEV-05.7
+     * §6) : si l'adhérent est déjà {@code BLOCKED}, cet appel ne lève pas
+     * d'erreur — il remplace simplement {@code blockedReason} par la
+     * nouvelle valeur fournie (200). Ne modifie jamais {@code AccountStatus},
+     * {@code UserRole} ni {@code memberNumber}.
+     */
+    @PreAuthorize("hasAuthority('USER_MANAGE')")
+    @Transactional
+    public UserResponse blockMember(Long id, BlockMembershipRequest request) {
+        AppUser user = getRequiredUser(id);
+        requireExistingMembership(user);
+        memberExpirationPolicy.syncIfNeeded(user);
+        user.setMemberStatus(MemberStatus.BLOCKED);
+        user.setBlockedReason(request.blockedReason());
+        user.setUpdatedAt(clock.instant());
+        return UserResponse.from(user);
+    }
+
+    /**
+     * Débloque un adhérent ({@code BLOCKED → ACTIVE} ou {@code EXPIRED}
+     * selon l'expiration effective — §8 DEV-05.7). Le blocage étant levé,
+     * {@code blockedReason} est systématiquement effacé (invariant {@code
+     * blockedReason != null ⇒ memberStatus == BLOCKED}, déjà FIGÉ) ; le
+     * statut résultant dépend de {@code memberExpirationDate} : la levée du
+     * blocage ne rend jamais actif un adhérent dont l'adhésion a par
+     * ailleurs expiré. Toujours autorisé (jamais refusé pour cause
+     * d'expiration) — priorité inverse de {@link #reactivateMembership}.
+     */
+    @PreAuthorize("hasAuthority('USER_MANAGE')")
+    @Transactional
+    public UserResponse unblockMember(Long id) {
+        AppUser user = getRequiredUser(id);
+        requireExistingMembership(user);
+        if (user.getMemberStatus() != MemberStatus.BLOCKED) {
+            throw new BusinessRuleException("MEMBER_NOT_BLOCKED", "Cet adhérent n'est pas bloqué.");
+        }
+        user.setBlockedReason(null);
+        user.setMemberStatus(
+                memberExpirationPolicy.isExpired(user) ? MemberStatus.EXPIRED : MemberStatus.ACTIVE);
+        user.setUpdatedAt(clock.instant());
+        return UserResponse.from(user);
+    }
+
+    /**
+     * Réactive un adhérent {@code EXPIRED} ({@code EXPIRED → ACTIVE}),
+     * uniquement si {@code memberExpirationDate} n'est plus dans le passé
+     * (ou {@code null}). Ne renouvelle jamais {@code memberExpirationDate}
+     * elle-même : un renouvellement complet (calcul automatique d'une
+     * nouvelle échéance) reste hors scope V1 (DEV-05.1 §10, toujours OPEN).
+     * Pour réactiver un membre réellement expiré, l'admin doit d'abord
+     * prolonger {@code memberExpirationDate} via {@code PATCH
+     * /api/v1/users/{id}} (DEV-05.6, qui ne touche jamais {@code
+     * memberStatus}), puis appeler cette méthode — deux étapes explicites
+     * et auditées séparément plutôt qu'un renouvellement automatique
+     * implicite.
+     */
+    @PreAuthorize("hasAuthority('USER_MANAGE')")
+    @Transactional
+    public UserResponse reactivateMembership(Long id) {
+        AppUser user = getRequiredUser(id);
+        requireExistingMembership(user);
+        if (user.getMemberStatus() != MemberStatus.EXPIRED) {
+            throw new BusinessRuleException("MEMBER_NOT_EXPIRED", "Cet adhérent n'est pas expiré.");
+        }
+        if (memberExpirationPolicy.isExpired(user)) {
+            throw new BusinessRuleException("CANNOT_REACTIVATE_EXPIRED_MEMBERSHIP",
+                    "memberExpirationDate est toujours dans le passé : prolonger la date avant réactivation.");
+        }
+        user.setMemberStatus(MemberStatus.ACTIVE);
+        user.setUpdatedAt(clock.instant());
+        return UserResponse.from(user);
+    }
+
+    private AppUser getRequiredUser(Long id) {
+        return appUserRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        USER_NOT_FOUND_CODE, "Utilisateur introuvable pour l'identifiant " + id + "."));
+    }
+
+    private void requireExistingMembership(AppUser user) {
+        if (user.getMemberNumber() == null) {
+            throw new BusinessRuleException("NOT_A_MEMBER", "Cet utilisateur n'a jamais été adhérent.");
+        }
     }
 
     /**

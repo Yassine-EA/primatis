@@ -3,9 +3,13 @@ package be.primatis.user;
 import be.primatis.access.UserRole;
 import be.primatis.exception.BusinessRuleException;
 import be.primatis.exception.ConflictException;
+import be.primatis.exception.InvalidCredentialsException;
 import be.primatis.exception.ResourceNotFoundException;
+import be.primatis.security.AuthService;
+import be.primatis.user.web.BlockMembershipRequest;
 import be.primatis.user.web.CreateUserRequest;
 import be.primatis.user.web.CreateUserResponse;
+import be.primatis.user.web.UpdateAccountStatusRequest;
 import be.primatis.user.web.UpdateUserRequest;
 import be.primatis.user.web.UserResponse;
 import jakarta.persistence.EntityManager;
@@ -56,6 +60,9 @@ class UserServiceTests {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthService authService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -679,6 +686,566 @@ class UserServiceTests {
                 () -> userService.updateUser(1L, requestWith(r -> r.setLastName("Nom")), 1L));
     }
 
+    // ---------------------------------------------------------------
+    // AccountStatus — DEV-05.7
+    // ---------------------------------------------------------------
+
+    @Test
+    void updateAccountStatusActiveToDisabledTransitions() {
+        authenticateWithUserManage();
+        AppUser user = persistUser("service-disable-1@primatis.test");
+        entityManager.flush();
+
+        UserResponse response = userService.updateAccountStatus(
+                user.getId(), new UpdateAccountStatusRequest(AccountStatus.DISABLED));
+
+        assertThat(response.accountStatus()).isEqualTo(AccountStatus.DISABLED);
+    }
+
+    @Test
+    void updateAccountStatusDisabledToActiveTransitions() {
+        authenticateWithUserManage();
+        AppUser user = persistUser("service-enable-1@primatis.test");
+        entityManager.flush();
+        userService.updateAccountStatus(user.getId(), new UpdateAccountStatusRequest(AccountStatus.DISABLED));
+
+        UserResponse response = userService.updateAccountStatus(
+                user.getId(), new UpdateAccountStatusRequest(AccountStatus.ACTIVE));
+
+        assertThat(response.accountStatus()).isEqualTo(AccountStatus.ACTIVE);
+    }
+
+    @Test
+    void updateAccountStatusActiveToActiveIsIdempotentWithoutSideEffect() {
+        authenticateWithUserManage();
+        AppUser user = persistUser("service-idempotent-active@primatis.test");
+        entityManager.flush();
+        Instant updatedAtBefore = user.getUpdatedAt();
+
+        UserResponse response = userService.updateAccountStatus(
+                user.getId(), new UpdateAccountStatusRequest(AccountStatus.ACTIVE));
+
+        assertThat(response.accountStatus()).isEqualTo(AccountStatus.ACTIVE);
+        AppUser reloaded = entityManager.find(AppUser.class, user.getId());
+        assertThat(reloaded.getUpdatedAt())
+                .as("aucun effet de bord : updatedAt inchangé si le statut demandé est déjà le statut courant")
+                .isEqualTo(updatedAtBefore);
+    }
+
+    @Test
+    void updateAccountStatusDisabledToDisabledIsIdempotentWithoutSideEffect() {
+        authenticateWithUserManage();
+        AppUser user = persistUser("service-idempotent-disabled@primatis.test");
+        entityManager.flush();
+        userService.updateAccountStatus(user.getId(), new UpdateAccountStatusRequest(AccountStatus.DISABLED));
+        Instant updatedAtAfterFirstDisable = entityManager.find(AppUser.class, user.getId()).getUpdatedAt();
+
+        UserResponse response = userService.updateAccountStatus(
+                user.getId(), new UpdateAccountStatusRequest(AccountStatus.DISABLED));
+
+        assertThat(response.accountStatus()).isEqualTo(AccountStatus.DISABLED);
+        AppUser reloaded = entityManager.find(AppUser.class, user.getId());
+        assertThat(reloaded.getUpdatedAt()).isEqualTo(updatedAtAfterFirstDisable);
+    }
+
+    @Test
+    void updateAccountStatusDeniedWithoutUserManagePermission() {
+        authenticateAsAnonymous();
+
+        assertThrows(AccessDeniedException.class, () -> userService.updateAccountStatus(
+                1L, new UpdateAccountStatusRequest(AccountStatus.DISABLED)));
+    }
+
+    @Test
+    void updateAccountStatusThrowsResourceNotFoundWhenAbsent() {
+        authenticateWithUserManage();
+
+        assertThatExceptionOfType(ResourceNotFoundException.class)
+                .isThrownBy(() -> userService.updateAccountStatus(
+                        -1L, new UpdateAccountStatusRequest(AccountStatus.DISABLED)))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("USER_NOT_FOUND"));
+    }
+
+    // ---------------------------------------------------------------
+    // Auth impact — DEV-05.7 (réutilise AuthService réel, DEV-03.6)
+    // ---------------------------------------------------------------
+
+    @Test
+    void disabledAccountCannotLogin() {
+        authenticateWithUserManage();
+        String email = "service-auth-disable@primatis.test";
+        String rawPassword = "Correct-Password-2026!";
+        AppUser user = persistUserWithPassword(email, rawPassword);
+        entityManager.flush();
+        userService.updateAccountStatus(user.getId(), new UpdateAccountStatusRequest(AccountStatus.DISABLED));
+        entityManager.flush();
+
+        assertThatExceptionOfType(InvalidCredentialsException.class)
+                .isThrownBy(() -> authService.login(email, rawPassword));
+    }
+
+    @Test
+    void reenabledAccountCanLoginAgain() {
+        authenticateWithUserManage();
+        String email = "service-auth-enable@primatis.test";
+        String rawPassword = "Correct-Password-2026!";
+        AppUser user = persistUserWithPassword(email, rawPassword);
+        entityManager.flush();
+        userService.updateAccountStatus(user.getId(), new UpdateAccountStatusRequest(AccountStatus.DISABLED));
+        entityManager.flush();
+        userService.updateAccountStatus(user.getId(), new UpdateAccountStatusRequest(AccountStatus.ACTIVE));
+        entityManager.flush();
+
+        Authentication authentication = authService.login(email, rawPassword);
+
+        // authService.login(...) retourne une Authentication dont le principal est
+        // PrimatisUserPrincipal : getName() == UserDetails.getUsername() == email
+        // (distinct du claim JWT "sub" == userId, cf. JwtService.generateAccessToken
+        // et RbacMethodSecuritySampleService — deux Authentication différentes).
+        assertThat(authentication.getName()).isEqualTo(email);
+    }
+
+    // ---------------------------------------------------------------
+    // Temporary lock — confirmation de séparation (DEV-03.6, aucun changement)
+    // ---------------------------------------------------------------
+
+    @Test
+    void accountStatusAndMembershipActionsNeverTouchTemporaryLockFields() {
+        authenticateWithUserManage();
+        AppUser user = persistUser("service-lock-separation@primatis.test");
+        user.setFailedLoginCount(2);
+        Instant lockedUntil = Instant.now().plusSeconds(600);
+        user.setLockedUntil(lockedUntil);
+        entityManager.flush();
+
+        userService.updateAccountStatus(user.getId(), new UpdateAccountStatusRequest(AccountStatus.DISABLED));
+        userService.updateAccountStatus(user.getId(), new UpdateAccountStatusRequest(AccountStatus.ACTIVE));
+
+        AppUser reloaded = entityManager.find(AppUser.class, user.getId());
+        assertThat(reloaded.getFailedLoginCount()).isEqualTo(2);
+        assertThat(reloaded.getLockedUntil()).isEqualTo(lockedUntil);
+    }
+
+    // ---------------------------------------------------------------
+    // MemberStatus — Block / Unblock — DEV-05.7
+    // ---------------------------------------------------------------
+
+    @Test
+    void blockMemberTransitionsActiveToBlockedWithReason() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-block-1@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-block-active@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1));
+
+        UserResponse response = userService.blockMember(
+                created.user().id(), new BlockMembershipRequest("Retard répété"));
+
+        assertThat(response.memberStatus()).isEqualTo(MemberStatus.BLOCKED);
+        assertThat(response.blockedReason()).isEqualTo("Retard répété");
+    }
+
+    @Test
+    void blockMemberOnNonMemberIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-block-2@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-block-nonmember@primatis.test").id();
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.blockMember(userId, new BlockMembershipRequest("Motif")))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("NOT_A_MEMBER"));
+    }
+
+    /**
+     * Contrat DEV-05.7 §6 : {@code BLOCKED → BLOCKED} est idempotent sur le
+     * statut mais remplace {@code blockedReason} — pas une erreur.
+     */
+    @Test
+    void blockMemberOnAlreadyBlockedUpdatesReasonAndSucceeds() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-block-3@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-block-twice@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1));
+        userService.blockMember(created.user().id(), new BlockMembershipRequest("Premier motif"));
+
+        UserResponse response = userService.blockMember(
+                created.user().id(), new BlockMembershipRequest("Second motif"));
+
+        assertThat(response.memberStatus()).isEqualTo(MemberStatus.BLOCKED);
+        assertThat(response.blockedReason()).isEqualTo("Second motif");
+    }
+
+    @Test
+    void blockMemberFromExpiredIsAllowed() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-block-4@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-block-expired@primatis.test", MemberStatus.ACTIVE,
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 30));
+        // synchronise ACTIVE -> EXPIRED avant le blocage (comme un GET détail le ferait) :
+        // getUserById exige USER_READ, distinct de USER_MANAGE requis par blockMember.
+        authenticateWithUserRead();
+        userService.getUserById(created.user().id());
+        authenticateWithUserManage();
+
+        UserResponse response = userService.blockMember(
+                created.user().id(), new BlockMembershipRequest("Motif sur adhésion expirée"));
+
+        assertThat(response.memberStatus()).isEqualTo(MemberStatus.BLOCKED);
+    }
+
+    @Test
+    void unblockMemberNotExpiredTransitionsToActive() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-unblock-1@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-unblock-active@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1));
+        userService.blockMember(created.user().id(), new BlockMembershipRequest("Motif"));
+
+        UserResponse response = userService.unblockMember(created.user().id());
+
+        assertThat(response.memberStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(response.blockedReason()).isNull();
+    }
+
+    @Test
+    void unblockMemberExpiredTransitionsToExpiredNotActive() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-unblock-2@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-unblock-expired@primatis.test", MemberStatus.BLOCKED,
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 30));
+        entityManager.find(AppUser.class, created.user().id()).setBlockedReason("Motif initial");
+        entityManager.flush();
+
+        UserResponse response = userService.unblockMember(created.user().id());
+
+        assertThat(response.memberStatus())
+                .as("le déblocage ne rend jamais actif un membre dont l'adhésion a par ailleurs expiré")
+                .isEqualTo(MemberStatus.EXPIRED);
+        assertThat(response.blockedReason()).isNull();
+    }
+
+    @Test
+    void unblockMemberOnNotBlockedIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-unblock-3@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-unblock-not-blocked@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1));
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.unblockMember(created.user().id()))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("MEMBER_NOT_BLOCKED"));
+    }
+
+    @Test
+    void unblockMemberOnNonMemberIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-unblock-4@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-unblock-nonmember@primatis.test").id();
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.unblockMember(userId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("NOT_A_MEMBER"));
+    }
+
+    @Test
+    void blockAndUnblockNeverTouchUserRoles() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-block-roles@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = userService.createUser(
+                new CreateUserRequest(
+                        "service-block-roles-untouched@primatis.test", "Prénom", "Nom", null,
+                        Set.of("ROLE_MEMBER", "ROLE_LIBRARIAN"), MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1),
+                        null, null),
+                adminId);
+
+        userService.blockMember(created.user().id(), new BlockMembershipRequest("Motif"));
+        userService.unblockMember(created.user().id());
+
+        assertThat(findUserRoles(created.user().id()))
+                .extracting(ur -> ur.getRole().getCode())
+                .containsExactlyInAnyOrder("ROLE_MEMBER", "ROLE_LIBRARIAN");
+    }
+
+    @Test
+    void blockMemberDeniedWithoutUserManagePermission() {
+        authenticateAsAnonymous();
+
+        assertThrows(AccessDeniedException.class,
+                () -> userService.blockMember(1L, new BlockMembershipRequest("Motif")));
+    }
+
+    @Test
+    void unblockMemberDeniedWithoutUserManagePermission() {
+        authenticateAsAnonymous();
+
+        assertThrows(AccessDeniedException.class, () -> userService.unblockMember(1L));
+    }
+
+    // ---------------------------------------------------------------
+    // Expiration — synchronisation paresseuse — DEV-05.7
+    // ---------------------------------------------------------------
+
+    @Test
+    void getUserByIdSyncsExpiredActiveMemberToExpired() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-expire-1@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-expire-past@primatis.test", MemberStatus.ACTIVE,
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 30));
+
+        authenticateWithUserRead();
+        UserResponse response = userService.getUserById(created.user().id());
+
+        assertThat(response.memberStatus()).isEqualTo(MemberStatus.EXPIRED);
+        AppUser reloaded = entityManager.find(AppUser.class, created.user().id());
+        assertThat(reloaded.getMemberStatus())
+                .as("la synchronisation doit être réellement persistée, pas seulement reflétée dans la réponse")
+                .isEqualTo(MemberStatus.EXPIRED);
+    }
+
+    @Test
+    void getUserByIdOnExpirationDateBoundaryStillActive() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-expire-2@primatis.test").getId();
+        entityManager.flush();
+        LocalDate today = LocalDate.now();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-expire-boundary@primatis.test", MemberStatus.ACTIVE,
+                today.minusYears(1), today);
+
+        authenticateWithUserRead();
+        UserResponse response = userService.getUserById(created.user().id());
+
+        assertThat(response.memberStatus())
+                .as("memberExpirationDate == today reste le dernier jour valide")
+                .isEqualTo(MemberStatus.ACTIVE);
+    }
+
+    @Test
+    void getUserByIdNeverSyncsBlockedMemberEvenIfExpirationPassed() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-expire-3@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-expire-blocked@primatis.test", MemberStatus.ACTIVE,
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 30));
+        userService.blockMember(created.user().id(), new BlockMembershipRequest("Motif"));
+
+        authenticateWithUserRead();
+        UserResponse response = userService.getUserById(created.user().id());
+
+        assertThat(response.memberStatus())
+                .as("BLOCKED reste prioritaire, aucune synchronisation d'expiration ne l'écrase")
+                .isEqualTo(MemberStatus.BLOCKED);
+    }
+
+    @Test
+    void getUserByIdDoesNotExpireMemberWithoutExpirationDate() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-expire-4@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-expire-null-date@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2020, 1, 1));
+
+        authenticateWithUserRead();
+        UserResponse response = userService.getUserById(created.user().id());
+
+        assertThat(response.memberStatus())
+                .as("memberExpirationDate absente = jamais expiré automatiquement")
+                .isEqualTo(MemberStatus.ACTIVE);
+    }
+
+    // ---------------------------------------------------------------
+    // Expiration — cohérence liste/détail — DEV-05.7 gate conformité
+    // ---------------------------------------------------------------
+
+    /**
+     * Contrat DEV-05.7 §9 : {@code listUsers} et {@code getUserById} doivent
+     * présenter la même vérité pour un même utilisateur — la synchronisation
+     * paresseuse est étendue à {@code listUsers} (mutation des entités déjà
+     * chargées par la page, sans requête supplémentaire).
+     */
+    @Test
+    void listUsersSyncsExpiredActiveMemberToExpired() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-list-expire-1@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-list-expire-past@primatis.test", MemberStatus.ACTIVE,
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 30));
+
+        authenticateWithUserRead();
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 100, Sort.by(Sort.Direction.ASC, "id")));
+
+        UserResponse inList = page.getContent().stream()
+                .filter(u -> u.id().equals(created.user().id()))
+                .findFirst()
+                .orElseThrow();
+        assertThat(inList.memberStatus()).isEqualTo(MemberStatus.EXPIRED);
+        AppUser reloaded = entityManager.find(AppUser.class, created.user().id());
+        assertThat(reloaded.getMemberStatus())
+                .as("la synchronisation déclenchée par listUsers doit être réellement persistée")
+                .isEqualTo(MemberStatus.EXPIRED);
+    }
+
+    @Test
+    void listUsersOnExpirationDateBoundaryStillActive() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-list-expire-2@primatis.test").getId();
+        entityManager.flush();
+        LocalDate today = LocalDate.now();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-list-expire-boundary@primatis.test", MemberStatus.ACTIVE,
+                today.minusYears(1), today);
+
+        authenticateWithUserRead();
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 100, Sort.by(Sort.Direction.ASC, "id")));
+
+        UserResponse inList = page.getContent().stream()
+                .filter(u -> u.id().equals(created.user().id()))
+                .findFirst()
+                .orElseThrow();
+        assertThat(inList.memberStatus())
+                .as("memberExpirationDate == today reste le dernier jour valide")
+                .isEqualTo(MemberStatus.ACTIVE);
+    }
+
+    @Test
+    void listUsersNeverSyncsBlockedMemberEvenIfExpirationPassed() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-list-expire-3@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-list-expire-blocked@primatis.test", MemberStatus.ACTIVE,
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 30));
+        userService.blockMember(created.user().id(), new BlockMembershipRequest("Motif"));
+
+        authenticateWithUserRead();
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 100, Sort.by(Sort.Direction.ASC, "id")));
+
+        UserResponse inList = page.getContent().stream()
+                .filter(u -> u.id().equals(created.user().id()))
+                .findFirst()
+                .orElseThrow();
+        assertThat(inList.memberStatus())
+                .as("BLOCKED reste prioritaire dans la liste, jamais écrasé par la synchronisation d'expiration")
+                .isEqualTo(MemberStatus.BLOCKED);
+    }
+
+    /**
+     * Cœur du gate DEV-05.7 §9 : la liste et le détail doivent raconter la
+     * même histoire pour le même utilisateur — pas ACTIVE dans un endpoint
+     * et EXPIRED dans l'autre.
+     */
+    @Test
+    void listUsersAndGetUserByIdAgreeOnExpiredStatusForSameUser() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-list-expire-4@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-list-detail-coherence@primatis.test", MemberStatus.ACTIVE,
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 30));
+
+        authenticateWithUserRead();
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 100, Sort.by(Sort.Direction.ASC, "id")));
+        UserResponse inList = page.getContent().stream()
+                .filter(u -> u.id().equals(created.user().id()))
+                .findFirst()
+                .orElseThrow();
+        UserResponse detail = userService.getUserById(created.user().id());
+
+        assertThat(inList.memberStatus())
+                .as("liste et détail doivent présenter la même vérité pour le même utilisateur")
+                .isEqualTo(detail.memberStatus())
+                .isEqualTo(MemberStatus.EXPIRED);
+    }
+
+    // ---------------------------------------------------------------
+    // Reactivate (EXPIRED -> ACTIVE) — DEV-05.7
+    // ---------------------------------------------------------------
+
+    @Test
+    void reactivateMembershipFromExpiredWithFutureDateSucceeds() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-reactivate-1@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-reactivate-ok@primatis.test", MemberStatus.ACTIVE,
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 30));
+        // getUserById exige USER_READ, distinct de USER_MANAGE requis par reactivateMembership.
+        authenticateWithUserRead();
+        userService.getUserById(created.user().id());
+        authenticateWithUserManage();
+        entityManager.find(AppUser.class, created.user().id())
+                .setMemberExpirationDate(LocalDate.now().plusYears(1));
+        entityManager.flush();
+
+        UserResponse response = userService.reactivateMembership(created.user().id());
+
+        assertThat(response.memberStatus()).isEqualTo(MemberStatus.ACTIVE);
+    }
+
+    @Test
+    void reactivateMembershipRefusedIfStillExpired() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-reactivate-2@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMemberWithDates(
+                adminId, "service-reactivate-still-expired@primatis.test", MemberStatus.ACTIVE,
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 30));
+        // getUserById exige USER_READ, distinct de USER_MANAGE requis par reactivateMembership.
+        authenticateWithUserRead();
+        userService.getUserById(created.user().id());
+        authenticateWithUserManage();
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.reactivateMembership(created.user().id()))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("CANNOT_REACTIVATE_EXPIRED_MEMBERSHIP"));
+    }
+
+    @Test
+    void reactivateMembershipOnNotExpiredIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-reactivate-3@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-reactivate-not-expired@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1));
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.reactivateMembership(created.user().id()))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("MEMBER_NOT_EXPIRED"));
+    }
+
+    @Test
+    void reactivateMembershipOnNonMemberIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-reactivate-4@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-reactivate-nonmember@primatis.test").id();
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.reactivateMembership(userId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("NOT_A_MEMBER"));
+    }
+
+    @Test
+    void reactivateMembershipDeniedWithoutUserManagePermission() {
+        authenticateAsAnonymous();
+
+        assertThrows(AccessDeniedException.class, () -> userService.reactivateMembership(1L));
+    }
+
     private UpdateUserRequest requestWith(Consumer<UpdateUserRequest> mutator) {
         UpdateUserRequest request = new UpdateUserRequest();
         mutator.accept(request);
@@ -697,6 +1264,29 @@ class UserServiceTests {
                 new CreateUserRequest(email, "Prénom", "Nom", null, Set.of("ROLE_MEMBER"),
                         memberStatus, registrationDate, null, null),
                 adminId);
+    }
+
+    private CreateUserResponse createFixtureMemberWithDates(
+            Long adminId, String email, MemberStatus memberStatus,
+            LocalDate registrationDate, LocalDate memberExpirationDate) {
+        return userService.createUser(
+                new CreateUserRequest(email, "Prénom", "Nom", null, Set.of("ROLE_MEMBER"),
+                        memberStatus, registrationDate, memberExpirationDate, null),
+                adminId);
+    }
+
+    private AppUser persistUserWithPassword(String email, String rawPassword) {
+        AppUser user = new AppUser();
+        user.setEmail(email);
+        user.setPasswordHash(passwordEncoder.encode(rawPassword));
+        user.setFirstName("Prénom");
+        user.setLastName("Nom");
+        user.setAccountStatus(AccountStatus.ACTIVE);
+        user.setFailedLoginCount(0);
+        user.setCreatedAt(Instant.now());
+        user.setUpdatedAt(Instant.now());
+        entityManager.persist(user);
+        return user;
     }
 
     private List<UserRole> findUserRoles(Long userId) {
