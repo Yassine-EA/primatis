@@ -1,0 +1,6 @@
+<div class="error-state" role="alert">
+  <p class="error-state-message">{{ message() }}</p>
+  @if (showRetry()) {
+    <button type="button" class="error-state-retry" (click)="retry.emit()">Réessayer</button>
+  }
+</div>

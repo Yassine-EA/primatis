@@ -13,17 +13,12 @@ import java.util.List;
 /**
  * Controller strictement réservé aux tests de {@code SecurityFilterChain}
  * (scope src/test, DEV-03.8/DEV-03.10). Expose des routes correspondant
- * exactement aux patterns configurés (login/titles/articles/protected) pour
+ * exactement aux patterns configurés (titles/articles/protected) pour
  * prouver concrètement le comportement des matchers — jamais un Controller
  * métier de production.
  */
 @RestController
 class SecurityFilterChainTestController {
-
-    @PostMapping("/api/v1/auth/login")
-    public String login() {
-        return "login-ok";
-    }
 
     @GetMapping("/api/v1/titles/sample")
     public String getTitles() {
