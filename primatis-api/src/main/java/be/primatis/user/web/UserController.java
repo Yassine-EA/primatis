@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,10 +32,11 @@ import java.net.URI;
 
 /**
  * Contrat REST Users : lecture {@code USER_READ} (DEV-05.4, liste paginée +
- * détail) et création administrative {@code USER_MANAGE} (DEV-05.5). Reste
- * mince : mapping HTTP, validation de forme, délégation à {@link
- * UserService} — aucune logique métier, aucune transaction ici (frontière
- * transactionnelle portée par le Service).
+ * détail), création administrative (DEV-05.5) et modification (DEV-05.6),
+ * les deux dernières sous {@code USER_MANAGE}. Reste mince : mapping HTTP,
+ * validation de forme, délégation à {@link UserService} — aucune logique
+ * métier, aucune transaction ici (frontière transactionnelle portée par le
+ * Service).
  *
  * L'autorisation ({@code USER_READ}/{@code USER_MANAGE}) est appliquée par
  * {@code @PreAuthorize} sur {@link UserService}, jamais ici.
@@ -117,5 +119,34 @@ public class UserController {
                 .buildAndExpand(response.user().id())
                 .toUri();
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(response);
+    }
+
+    @Operation(
+            summary = "Modification administrative d'un utilisateur",
+            description = "Met à jour un AppUser existant (USER_MANAGE requis) : identité simple, "
+                    + "rôles (remplacement intégral de l'ensemble si fourni) et données Membership "
+                    + "d'un adhérent déjà existant. Ne modifie jamais email, accountStatus, "
+                    + "memberStatus ni memberNumber.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Utilisateur mis à jour."),
+            @ApiResponse(responseCode = "400", description = "Requête structurellement invalide.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Authentification requise ou JWT invalide.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Permission USER_MANAGE manquante.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Aucun utilisateur pour cet identifiant.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Rôle inconnu, ensemble de rôles vide "
+                    + "ou données Membership incohérentes.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
+    })
+    @PatchMapping("/{id}")
+    public UserResponse updateUser(
+            @PathVariable Long id,
+            @RequestBody UpdateUserRequest request,
+            Authentication authentication) {
+        Long adminUserId = Long.valueOf(authentication.getName());
+        return userService.updateUser(id, request, adminUserId);
     }
 }

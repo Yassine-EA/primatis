@@ -11,6 +11,7 @@ import be.primatis.security.JwtService;
 import be.primatis.user.AccountStatus;
 import be.primatis.user.AppUser;
 import be.primatis.user.AppUserRepository;
+import com.jayway.jsonpath.JsonPath;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -101,6 +103,14 @@ class UserControllerTests {
             appUserRepository.findByEmail("controller-create-duplicate-target@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("controller-create-unknown-role@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("controller-create-empty-roles@primatis.test").ifPresent(this::deleteUserAndRoles);
+            // Utilisateurs créés/modifiés PAR les tests PATCH : supprimés
+            // avant l'admin qui les a créés/modifiés.
+            appUserRepository.findByEmail("controller-update-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-update-roles-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-update-unknown-role-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-update-partial-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-update-phone-target@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-update-null-firstname-target@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("e2e-users-create-admin@primatis.test").ifPresent(this::deleteUserAndRoles);
         });
     }
@@ -457,8 +467,225 @@ class UserControllerTests {
     }
 
     // ---------------------------------------------------------------
+    // PATCH /api/v1/users/{id} — modification administrative (DEV-05.6)
+    // ---------------------------------------------------------------
+
+    @Test
+    void patchUserWithoutJwtIsUnauthorized() throws Exception {
+        mockMvc.perform(patch("/api/v1/users/1").contentType("application/json").content("{}"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    /**
+     * Corps structurellement valide pour que le refus provienne réellement
+     * de l'autorisation (Service), pas d'une 400 de validation antérieure —
+     * même précaution que pour POST (DEV-05.5).
+     */
+    @Test
+    void patchUserAuthenticatedWithRoleMemberWithoutUserManageIsForbidden() throws Exception {
+        String token = signToken(List.of("ROLE_MEMBER"), List.of("CATALOGUE_READ"));
+
+        mockMvc.perform(patch("/api/v1/users/1")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validUpdateBody()))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
+    }
+
+    @Test
+    void patchUserAuthenticatedWithRoleLibrarianIsForbidden() throws Exception {
+        String token = signToken(List.of("ROLE_LIBRARIAN"), List.of("USER_READ"));
+
+        mockMvc.perform(patch("/api/v1/users/1")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validUpdateBody()))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
+    }
+
+    @Test
+    void patchUserWithRoleAdminUpdatesSimpleFieldsAndNeverExposesSensitiveFields() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-update-target@primatis.test");
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "firstName": "Prénom modifié",
+                                  "lastName": "Nom modifié",
+                                  "phoneNumber": "+32 470 22 22 22"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("Prénom modifié"))
+                .andExpect(jsonPath("$.lastName").value("Nom modifié"))
+                .andExpect(jsonPath("$.phoneNumber").value("+32 470 22 22 22"))
+                .andExpect(jsonPath("$.passwordHash").doesNotExist())
+                .andExpect(jsonPath("$.failedLoginCount").doesNotExist())
+                .andExpect(jsonPath("$.lockedUntil").doesNotExist())
+                .andExpect(jsonPath("$.lastLoginAt").doesNotExist());
+    }
+
+    /**
+     * Preuve HTTP bout-en-bout de la sémantique à trois états (DEV-05.6
+     * gate) : la clé JSON absente ({@code lastName} ci-dessous n'apparaît
+     * jamais dans le corps) laisse la valeur actuelle strictement intacte —
+     * distinct d'une clé présente avec {@code null}.
+     */
+    @Test
+    void patchUserWithOnlyFirstNameKeyLeavesLastNameAndPhoneUnchanged() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-update-partial-target@primatis.test");
+        mockMvc.perform(patch("/api/v1/users/" + target.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "phoneNumber": "+32 470 44 44 44"
+                                }
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "firstName": "Seul prénom modifié"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("Seul prénom modifié"))
+                // lastName/phoneNumber : clé absente du corps PATCH = inchangé
+                .andExpect(jsonPath("$.lastName").value("Nom"))
+                .andExpect(jsonPath("$.phoneNumber").value("+32 470 44 44 44"));
+    }
+
+    /**
+     * Distinct du cas précédent : {@code phoneNumber} présent avec {@code
+     * null} explicite efface réellement la valeur.
+     */
+    @Test
+    void patchUserPhoneNumberExplicitNullClearsItViaHttp() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-update-phone-target@primatis.test");
+        mockMvc.perform(patch("/api/v1/users/" + target.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "phoneNumber": "+32 470 55 55 55"
+                                }
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "phoneNumber": null
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.phoneNumber").value(org.hamcrest.Matchers.nullValue()));
+    }
+
+    @Test
+    void patchUserFirstNameExplicitNullReturnsConflict() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-update-null-firstname-target@primatis.test");
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "firstName": null
+                                }
+                                """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("FIRST_NAME_MUST_NOT_BE_BLANK"));
+    }
+
+    @Test
+    void patchUserReplacesRoleSet() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        String createResponseJson = mockMvc.perform(post("/api/v1/users")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validLibrarianCreationBody("controller-update-roles-target@primatis.test")))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Long targetId = ((Number) JsonPath.read(createResponseJson, "$.user.id")).longValue();
+
+        mockMvc.perform(patch("/api/v1/users/" + targetId)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "firstName": "Prénom",
+                                  "lastName": "Nom",
+                                  "roles": ["ROLE_ADMIN"]
+                                }
+                                """))
+                .andExpect(status().isOk());
+
+        AppUser reloaded = appUserRepository.findByEmail("controller-update-roles-target@primatis.test").orElseThrow();
+        List<String> roleCodes = entityManager
+                .createQuery("SELECT ur.role.code FROM UserRole ur WHERE ur.id.userId = :userId", String.class)
+                .setParameter("userId", reloaded.getId())
+                .getResultList();
+        assertThat(roleCodes).containsExactly("ROLE_ADMIN");
+    }
+
+    @Test
+    void patchUserWithAbsentUserReturnsNotFound() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+
+        mockMvc.perform(patch("/api/v1/users/999999999")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content(validUpdateBody()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("USER_NOT_FOUND"));
+    }
+
+    @Test
+    void patchUserWithUnknownRoleCodeReturnsConflict() throws Exception {
+        String token = createActiveAdminAndGetToken("e2e-users-create-admin@primatis.test");
+        AppUser target = persistUser("controller-update-unknown-role-target@primatis.test");
+
+        mockMvc.perform(patch("/api/v1/users/" + target.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                  "firstName": "Prénom",
+                                  "lastName": "Nom",
+                                  "roles": ["ROLE_NOT_REAL"]
+                                }
+                                """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("UNKNOWN_ROLE_CODE"));
+    }
+
+    // ---------------------------------------------------------------
     // Utilitaires
     // ---------------------------------------------------------------
+
+    private String validUpdateBody() {
+        return """
+                {
+                  "firstName": "Prénom",
+                  "lastName": "Nom"
+                }
+                """;
+    }
 
     private String validLibrarianCreationBody(String email) {
         return """

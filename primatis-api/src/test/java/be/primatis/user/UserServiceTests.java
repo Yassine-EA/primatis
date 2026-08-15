@@ -6,6 +6,7 @@ import be.primatis.exception.ConflictException;
 import be.primatis.exception.ResourceNotFoundException;
 import be.primatis.user.web.CreateUserRequest;
 import be.primatis.user.web.CreateUserResponse;
+import be.primatis.user.web.UpdateUserRequest;
 import be.primatis.user.web.UserResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -31,6 +32,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -347,6 +349,354 @@ class UserServiceTests {
                         "service-denied@primatis.test", "Prénom", "Nom", null,
                         Set.of("ROLE_LIBRARIAN"), null, null, null, null),
                 1L));
+    }
+
+    // ---------------------------------------------------------------
+    // updateUser — DEV-05.6
+    // ---------------------------------------------------------------
+
+    @Test
+    void updateUserOnlyFirstNamePresentLeavesLastNameAndPhoneUnchanged() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-1@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-update-simple@primatis.test").id();
+        userService.updateUser(userId, requestWith(r -> {
+            r.setLastName("Nom");
+            r.setPhoneNumber("+32 470 11 11 11");
+        }), adminId);
+
+        UserResponse response = userService.updateUser(userId, requestWith(r -> r.setFirstName("Seul Prénom modifié")), adminId);
+
+        assertThat(response.firstName()).isEqualTo("Seul Prénom modifié");
+        assertThat(response.lastName()).as("lastName absent = inchangé").isEqualTo("Nom");
+        assertThat(response.phoneNumber()).as("phoneNumber absent = inchangé").isEqualTo("+32 470 11 11 11");
+    }
+
+    @Test
+    void updateUserOnlyRolesPresentLeavesFirstNameAndLastNameUnchanged() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-1b@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = userService.createUser(
+                new CreateUserRequest(
+                        "service-update-roles-only@primatis.test", "Prénom original", "Nom original", null,
+                        Set.of("ROLE_LIBRARIAN"), null, null, null, null),
+                adminId);
+
+        UserResponse response = userService.updateUser(
+                created.user().id(), requestWith(r -> r.setRoles(Set.of("ROLE_ADMIN"))), adminId);
+
+        assertThat(response.firstName()).as("firstName absent = inchangé").isEqualTo("Prénom original");
+        assertThat(response.lastName()).as("lastName absent = inchangé").isEqualTo("Nom original");
+        assertThat(findUserRoles(created.user().id()))
+                .extracting(ur -> ur.getRole().getCode()).containsExactly("ROLE_ADMIN");
+    }
+
+    @Test
+    void updateUserPhoneNumberAbsentIsPreserved() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-2@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-update-phone-absent@primatis.test").id();
+        userService.updateUser(userId, requestWith(r -> r.setPhoneNumber("+32 470 22 22 22")), adminId);
+
+        UserResponse response = userService.updateUser(userId, requestWith(r -> r.setLastName("Autre Nom")), adminId);
+
+        assertThat(response.phoneNumber()).isEqualTo("+32 470 22 22 22");
+    }
+
+    @Test
+    void updateUserPhoneNumberExplicitNullClearsIt() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-3@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-update-phone-clear@primatis.test").id();
+        userService.updateUser(userId, requestWith(r -> r.setPhoneNumber("+32 470 33 33 33")), adminId);
+
+        UserResponse response = userService.updateUser(userId, requestWith(r -> r.setPhoneNumber(null)), adminId);
+
+        assertThat(response.phoneNumber()).isNull();
+    }
+
+    @Test
+    void updateUserMemberExpirationDateAbsentIsPreserved() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-4@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-update-expiration-absent@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1));
+        userService.updateUser(created.user().id(),
+                requestWith(r -> r.setMemberExpirationDate(LocalDate.of(2027, 1, 1))), adminId);
+
+        UserResponse response = userService.updateUser(
+                created.user().id(), requestWith(r -> r.setLastName("Autre Nom")), adminId);
+
+        assertThat(response.memberExpirationDate()).isEqualTo(LocalDate.of(2027, 1, 1));
+    }
+
+    @Test
+    void updateUserMemberExpirationDateExplicitNullClearsIt() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-5@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-update-expiration-clear@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1));
+        userService.updateUser(created.user().id(),
+                requestWith(r -> r.setMemberExpirationDate(LocalDate.of(2027, 1, 1))), adminId);
+
+        UserResponse response = userService.updateUser(
+                created.user().id(), requestWith(r -> r.setMemberExpirationDate(null)), adminId);
+
+        assertThat(response.memberExpirationDate()).isNull();
+    }
+
+    @Test
+    void updateUserBlockedReasonAbsentIsPreserved() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-6@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-update-blocked-absent@primatis.test", MemberStatus.BLOCKED, LocalDate.of(2026, 1, 1));
+        userService.updateUser(created.user().id(), requestWith(r -> r.setBlockedReason("Motif initial")), adminId);
+
+        UserResponse response = userService.updateUser(
+                created.user().id(), requestWith(r -> r.setLastName("Autre Nom")), adminId);
+
+        assertThat(response.blockedReason()).isEqualTo("Motif initial");
+    }
+
+    @Test
+    void updateUserBlockedReasonExplicitNullClearsItWithoutChangingMemberStatus() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-7@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-update-blocked-clear@primatis.test", MemberStatus.BLOCKED, LocalDate.of(2026, 1, 1));
+        userService.updateUser(created.user().id(), requestWith(r -> r.setBlockedReason("Motif initial")), adminId);
+
+        UserResponse response = userService.updateUser(
+                created.user().id(), requestWith(r -> r.setBlockedReason(null)), adminId);
+
+        assertThat(response.blockedReason()).isNull();
+        assertThat(response.memberStatus())
+                .as("effacer blockedReason ne change jamais memberStatus (DEV-05.7)")
+                .isEqualTo(MemberStatus.BLOCKED);
+    }
+
+    @Test
+    void updateUserRegistrationDateAbsentIsPreserved() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-8@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-update-registration-absent@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1));
+
+        UserResponse response = userService.updateUser(
+                created.user().id(), requestWith(r -> r.setLastName("Autre Nom")), adminId);
+
+        assertThat(response.registrationDate()).isEqualTo(LocalDate.of(2026, 1, 1));
+    }
+
+    @Test
+    void updateUserRegistrationDateExplicitNullForExistingMemberIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-9@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-update-registration-clear@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1));
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.updateUser(
+                        created.user().id(), requestWith(r -> r.setRegistrationDate(null)), adminId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("REGISTRATION_DATE_REQUIRED"));
+    }
+
+    @Test
+    void updateUserFirstNameExplicitNullIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-10@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-update-firstname-null@primatis.test").id();
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.updateUser(userId, requestWith(r -> r.setFirstName(null)), adminId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("FIRST_NAME_MUST_NOT_BE_BLANK"));
+    }
+
+    @Test
+    void updateUserFirstNameBlankIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-11@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-update-firstname-blank@primatis.test").id();
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.updateUser(userId, requestWith(r -> r.setFirstName("   ")), adminId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("FIRST_NAME_MUST_NOT_BE_BLANK"));
+    }
+
+    @Test
+    void updateUserMembershipFieldsOnNonMemberIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-12@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-update-nonmember@primatis.test").id();
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.updateUser(
+                        userId, requestWith(r -> r.setRegistrationDate(LocalDate.of(2026, 1, 1))), adminId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("MEMBERSHIP_DATA_REQUIRES_EXISTING_MEMBERSHIP"));
+    }
+
+    @Test
+    void updateUserBlockedReasonWithoutBlockedStatusIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-13@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-update-not-blocked@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 1, 1));
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.updateUser(
+                        created.user().id(), requestWith(r -> r.setBlockedReason("Motif")), adminId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("BLOCKED_REASON_REQUIRES_BLOCKED_STATUS"));
+    }
+
+    @Test
+    void updateUserExpirationBeforeRegistrationIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-14@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = createFixtureMember(
+                adminId, "service-update-bad-dates@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2026, 6, 1));
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.updateUser(
+                        created.user().id(),
+                        requestWith(r -> r.setMemberExpirationDate(LocalDate.of(2026, 1, 1))),
+                        adminId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("MEMBER_EXPIRATION_BEFORE_REGISTRATION"));
+    }
+
+    @Test
+    void updateUserRolesAddsAndRemovesPreservingUntouchedAssignment() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-15@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = userService.createUser(
+                new CreateUserRequest(
+                        "service-update-roles@primatis.test", "Prénom", "Nom", null,
+                        Set.of("ROLE_LIBRARIAN", "ROLE_ADMIN"), null, null, null, null),
+                adminId);
+        Long userId = created.user().id();
+        UserRole originalLibrarianAssignment = findUserRoles(userId).stream()
+                .filter(ur -> ur.getRole().getCode().equals("ROLE_LIBRARIAN"))
+                .findFirst().orElseThrow();
+        entityManager.flush();
+
+        userService.updateUser(userId, requestWith(r -> r.setRoles(Set.of("ROLE_LIBRARIAN"))), adminId);
+
+        List<UserRole> afterUpdate = findUserRoles(userId);
+        assertThat(afterUpdate).extracting(ur -> ur.getRole().getCode()).containsExactly("ROLE_LIBRARIAN");
+        UserRole preserved = afterUpdate.get(0);
+        assertThat(preserved.getAssignedAt()).isEqualTo(originalLibrarianAssignment.getAssignedAt());
+        assertThat(preserved.getAssignedBy().getId()).isEqualTo(originalLibrarianAssignment.getAssignedBy().getId());
+    }
+
+    @Test
+    void updateUserRolesAbsentLeavesRolesUntouched() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-16@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = userService.createUser(
+                new CreateUserRequest(
+                        "service-update-roles-untouched@primatis.test", "Prénom", "Nom", null,
+                        Set.of("ROLE_LIBRARIAN"), null, null, null, null),
+                adminId);
+
+        userService.updateUser(created.user().id(), requestWith(r -> r.setFirstName("Prénom modifié")), adminId);
+
+        assertThat(findUserRoles(created.user().id()))
+                .extracting(ur -> ur.getRole().getCode()).containsExactly("ROLE_LIBRARIAN");
+    }
+
+    @Test
+    void updateUserRolesEmptyIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-17@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-update-empty-roles@primatis.test").id();
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.updateUser(userId, requestWith(r -> r.setRoles(Set.of())), adminId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("ROLES_MUST_NOT_BE_EMPTY"));
+    }
+
+    @Test
+    void updateUserUnknownRoleCodeIsRejected() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-18@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-update-unknown-role@primatis.test").id();
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.updateUser(
+                        userId, requestWith(r -> r.setRoles(Set.of("NOT_A_REAL_ROLE"))), adminId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("UNKNOWN_ROLE_CODE"));
+    }
+
+    @Test
+    void updateUserAddingMemberRoleToNonMemberIsRejectedAndMemberNumberNeverGenerated() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-update-19@primatis.test").getId();
+        entityManager.flush();
+        Long userId = createFixtureNonMember(adminId, "service-update-add-member-role@primatis.test").id();
+
+        assertThatExceptionOfType(BusinessRuleException.class)
+                .isThrownBy(() -> userService.updateUser(
+                        userId, requestWith(r -> r.setRoles(Set.of("ROLE_MEMBER"))), adminId))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("NEW_MEMBERSHIP_NOT_SUPPORTED_VIA_UPDATE"));
+
+        AppUser reloaded = entityManager.find(AppUser.class, userId);
+        assertThat(reloaded.getMemberNumber()).isNull();
+    }
+
+    @Test
+    void updateUserThrowsResourceNotFoundWhenAbsent() {
+        authenticateWithUserManage();
+
+        assertThatExceptionOfType(ResourceNotFoundException.class)
+                .isThrownBy(() -> userService.updateUser(-1L, requestWith(r -> r.setLastName("Nom")), 1L))
+                .satisfies(ex -> assertThat(ex.getCode()).isEqualTo("USER_NOT_FOUND"));
+    }
+
+    @Test
+    void updateUserDeniedWithoutUserManagePermission() {
+        authenticateAsAnonymous();
+
+        assertThrows(AccessDeniedException.class,
+                () -> userService.updateUser(1L, requestWith(r -> r.setLastName("Nom")), 1L));
+    }
+
+    private UpdateUserRequest requestWith(Consumer<UpdateUserRequest> mutator) {
+        UpdateUserRequest request = new UpdateUserRequest();
+        mutator.accept(request);
+        return request;
+    }
+
+    private UserResponse createFixtureNonMember(Long adminId, String email) {
+        return userService.createUser(
+                new CreateUserRequest(email, "Prénom", "Nom", null, Set.of("ROLE_LIBRARIAN"), null, null, null, null),
+                adminId).user();
+    }
+
+    private CreateUserResponse createFixtureMember(
+            Long adminId, String email, MemberStatus memberStatus, LocalDate registrationDate) {
+        return userService.createUser(
+                new CreateUserRequest(email, "Prénom", "Nom", null, Set.of("ROLE_MEMBER"),
+                        memberStatus, registrationDate, null, null),
+                adminId);
     }
 
     private List<UserRole> findUserRoles(Long userId) {
