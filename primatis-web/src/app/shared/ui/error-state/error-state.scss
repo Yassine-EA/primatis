@@ -1,0 +1,25 @@
+.error-state {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--p-red-200, #fecaca);
+  background: var(--p-red-50, #fef2f2);
+  border-radius: 0.375rem;
+  color: var(--p-red-700, #b91c1c);
+}
+
+.error-state-message {
+  margin: 0;
+  flex: 1;
+}
+
+.error-state-retry {
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0.35rem 0.75rem;
+}

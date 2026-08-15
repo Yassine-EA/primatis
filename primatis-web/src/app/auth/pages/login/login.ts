@@ -7,7 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { PasswordModule } from 'primeng/password';
 
-import { ApiErrorResponse } from '../../../core/models/api-error-response';
+import { isApiErrorResponse } from '../../../core/errors/api-error.util';
 import { AuthService } from '../../services/auth.service';
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -68,13 +68,17 @@ export class Login {
 
 /**
  * Résout un message utilisateur à partir du code stable d'`ApiErrorResponse`
- * — jamais en interprétant le texte `message` du backend.
+ * — jamais en interprétant le texte `message` du backend. Conserve la
+ * correspondance code -> message spécifique au login (DEV-04.7) :
+ * INVALID_CREDENTIALS/ACCOUNT_TEMPORARILY_LOCKED restent des messages
+ * dédiés, jamais remplacés par le message générique brut du backend
+ * (DEV-04.11 : `isApiErrorResponse` remplace ici un cast non vérifié par un
+ * contrôle runtime réel, sans changer le comportement).
  */
 function resolveErrorMessage(error: unknown): string {
-  if (error instanceof HttpErrorResponse) {
-    const body = error.error as ApiErrorResponse | null;
-    const code = body?.code;
-    if (code && code in ERROR_MESSAGES) {
+  if (error instanceof HttpErrorResponse && isApiErrorResponse(error.error)) {
+    const code = error.error.code;
+    if (code in ERROR_MESSAGES) {
       return ERROR_MESSAGES[code];
     }
   }

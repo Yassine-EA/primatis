@@ -1,0 +1,15 @@
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--p-text-muted-color, #6b7280);
+}
+
+.empty-state-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.empty-state-message {
+  margin: 0;
+}
