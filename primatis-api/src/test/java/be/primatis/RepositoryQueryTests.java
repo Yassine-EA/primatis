@@ -24,6 +24,7 @@ import be.primatis.setting.ApplicationSettingRepository;
 import be.primatis.user.AccountStatus;
 import be.primatis.user.AppUser;
 import be.primatis.user.AppUserRepository;
+import be.primatis.user.MemberStatus;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
@@ -43,8 +44,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Vérifie contre PostgreSQL réel les méthodes dérivées ajoutées en DEV-02.5,
  * chacune directement liée à un identifiant fonctionnel ou un invariant
- * structurel déjà fixé par V001. Ne teste pas les méthodes JpaRepository
- * standard (save/findById/...), déjà couvertes par Spring Data lui-même.
+ * structurel déjà fixé par V001, complétées en DEV-05.2 par les primitives
+ * {@code existsByEmail}/{@code existsByMemberNumber} d'{@link AppUserRepository}.
+ * Ne teste pas les méthodes JpaRepository standard (save/findById/...), déjà
+ * couvertes par Spring Data lui-même.
  */
 @SpringBootTest
 @ActiveProfiles("test")
@@ -86,6 +89,27 @@ class RepositoryQueryTests {
                 .extracting(AppUser::getId)
                 .isEqualTo(user.getId());
         assertThat(appUserRepository.findByEmail("absent@primatis.test")).isEmpty();
+    }
+
+    @Test
+    void existsByEmailReflectsPresenceAndAbsence() {
+        persistUser("repo-exists-email@primatis.test");
+        entityManager.flush();
+
+        assertThat(appUserRepository.existsByEmail("repo-exists-email@primatis.test")).isTrue();
+        assertThat(appUserRepository.existsByEmail("repo-exists-email-absent@primatis.test")).isFalse();
+    }
+
+    @Test
+    void existsByMemberNumberReflectsPresenceAndAbsence() {
+        AppUser user = persistUser("repo-exists-member-number@primatis.test");
+        user.setMemberNumber("REPO-CHECK-MN-1");
+        user.setMemberStatus(MemberStatus.ACTIVE);
+        user.setRegistrationDate(LocalDate.now());
+        entityManager.flush();
+
+        assertThat(appUserRepository.existsByMemberNumber("REPO-CHECK-MN-1")).isTrue();
+        assertThat(appUserRepository.existsByMemberNumber("REPO-CHECK-MN-ABSENT")).isFalse();
     }
 
     @Test

@@ -45,4 +45,23 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             WHERE ur.id.userId = :userId
             """)
     List<RoleAndPermissionCode> findRoleAndPermissionCodesByUserId(@Param("userId") Long userId);
+
+    /**
+     * Permet à un futur Service (création/modification administrative,
+     * DEV-05.5/DEV-05.6) de produire une erreur métier propre (ex. 409
+     * CONFLICT) avant de heurter la contrainte {@code uq_app_user_email},
+     * sans charger l'Entity complète. Ne remplace pas la contrainte DB, qui
+     * reste l'autorité finale en cas de course concurrente.
+     */
+    boolean existsByEmail(String email);
+
+    /**
+     * Même usage qu'{@link #existsByEmail(String)} pour {@code memberNumber}
+     * (contrainte {@code uq_app_user_member_number}). Ne doit jamais être
+     * appelée avec {@code null} : {@code memberNumber} est nullable en base,
+     * mais un appelant ne vérifie l'existence que d'une valeur candidate
+     * concrète, jamais de l'absence de valeur (l'égalité SQL sur NULL ne
+     * renverrait de toute façon jamais {@code true}).
+     */
+    boolean existsByMemberNumber(String memberNumber);
 }
