@@ -23,6 +23,7 @@ export type PermissionCode =
   | 'ARTICLE_PUBLISH'
   | 'USER_READ'
   | 'USER_MANAGE'
+  | 'USER_PROFILE_MANAGE'
   | 'ROLE_READ'
   | 'ROLE_MANAGE'
   | 'SETTING_READ'
