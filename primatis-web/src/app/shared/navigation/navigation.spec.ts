@@ -90,6 +90,22 @@ describe('Navigation', () => {
     expect(linkLabels()).toContain('Espace personnel');
   });
 
+  it('should show the Espace personnel link for ROLE_ADMIN (DEV-05.11)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
+    render();
+
+    expect(linkLabels()).toContain('Espace personnel');
+  });
+
+  it('should point the Espace personnel link at /staff/users (DEV-05.11)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/staff/users"]')).not.toBeNull();
+  });
+
   it('should call AuthService.logout() and navigate to "/" when logging out', () => {
     authServiceMock.authenticated.mockReturnValue(true);
     render();

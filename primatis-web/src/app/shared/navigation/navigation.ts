@@ -9,10 +9,11 @@ import { NavigationItem, isNavigationItemVisible } from './navigation-item';
  * layouts. Purement UX : masquer un lien ne constitue jamais une
  * autorisation réelle — le backend Spring Security reste l'autorité.
  *
- * Zones actuelles : `/staff` visible pour `ROLE_LIBRARIAN` uniquement.
- * L'éventuelle visibilité de `/staff` pour `ROLE_ADMIN` n'est pas établie
- * par les sources du projet — volontairement non ajoutée (point OPEN,
- * voir tracking DEV-04.10) plutôt qu'inventée.
+ * Zones actuelles : `/staff` visible pour `ROLE_LIBRARIAN` et `ROLE_ADMIN`
+ * (DEV-05.11-DEC-04 — un Admin porte `USER_READ`/`USER_PROFILE_MANAGE` au
+ * même titre qu'un Librarian ; cela ne lui donne aucune capacité
+ * `USER_MANAGE` supplémentaire, qui reste une question d'écrans DEV-05.12,
+ * pas de visibilité de zone).
  */
 @Component({
   selector: 'app-navigation',
@@ -27,7 +28,7 @@ export class Navigation {
   private static readonly ITEMS: readonly NavigationItem[] = [
     { label: 'Accueil', routerLink: '/' },
     { label: 'Espace membre', routerLink: '/member', requiredRoles: ['ROLE_MEMBER'] },
-    { label: 'Espace personnel', routerLink: '/staff', requiredRoles: ['ROLE_LIBRARIAN'] },
+    { label: 'Espace personnel', routerLink: '/staff/users', requiredRoles: ['ROLE_LIBRARIAN', 'ROLE_ADMIN'] },
     { label: 'Administration', routerLink: '/admin', requiredRoles: ['ROLE_ADMIN'] },
   ];
 

@@ -5,6 +5,7 @@ import { MemberLayout } from './core/layouts/member-layout/member-layout';
 import { PublicLayout } from './core/layouts/public-layout/public-layout';
 import { StaffLayout } from './core/layouts/staff-layout/staff-layout';
 import { authGuard } from './core/guards/auth.guard';
+import { permissionGuard } from './core/guards/permission.guard';
 import { Forbidden } from './shared/pages/forbidden/forbidden';
 import { Home } from './shared/pages/home/home';
 import { NotFound } from './shared/pages/not-found/not-found';
@@ -38,10 +39,34 @@ export const routes: Routes = [
     children: [],
   },
   {
+    // AuthGuard au niveau de la zone (DEV-04.9) ; PermissionGuard porté par
+    // le segment 'users' (DEV-05.11) protège liste ET détail par héritage
+    // de route, une seule déclaration pour les deux pages.
     path: 'staff',
     component: StaffLayout,
     canActivate: [authGuard],
-    children: [],
+    children: [
+      { path: '', redirectTo: 'users', pathMatch: 'full' },
+      {
+        path: 'users',
+        canActivate: [permissionGuard],
+        data: { permissions: ['USER_READ'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./staff/users/pages/staff-users-page/staff-users-page').then((m) => m.StaffUsersPage),
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./staff/users/pages/staff-user-detail-page/staff-user-detail-page').then(
+                (m) => m.StaffUserDetailPage,
+              ),
+          },
+        ],
+      },
+    ],
   },
   {
     path: 'admin',

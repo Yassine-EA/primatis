@@ -1,4 +1,5 @@
 import { authGuard } from './core/guards/auth.guard';
+import { permissionGuard } from './core/guards/permission.guard';
 import { routes } from './app.routes';
 
 describe('Application routes', () => {
@@ -34,5 +35,29 @@ describe('Application routes', () => {
     const route = routes.find((candidate) => candidate.path === 'forbidden');
 
     expect(route?.canActivate).toBeUndefined();
+  });
+
+  it('should redirect the bare /staff zone to /staff/users (DEV-05.11)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const redirectChild = staffRoute?.children?.find((child) => child.path === '');
+
+    expect(redirectChild?.redirectTo).toBe('users');
+  });
+
+  it('should protect /staff/users with permissionGuard and USER_READ (DEV-05.11)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const usersRoute = staffRoute?.children?.find((child) => child.path === 'users');
+
+    expect(usersRoute?.canActivate).toContain(permissionGuard);
+    expect(usersRoute?.data?.['permissions']).toEqual(['USER_READ']);
+  });
+
+  it('should expose the staff users list and detail routes as children of /staff/users (DEV-05.11)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const usersRoute = staffRoute?.children?.find((child) => child.path === 'users');
+    const childPaths = usersRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('');
+    expect(childPaths).toContain(':id');
   });
 });

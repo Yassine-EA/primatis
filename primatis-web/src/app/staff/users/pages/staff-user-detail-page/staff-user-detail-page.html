@@ -1,0 +1,105 @@
+@if (userLoading()) {
+  <app-loading-state message="Chargement de l'utilisateur…" />
+} @else if (userError(); as currentUserError) {
+  <app-error-state [message]="currentUserError.message" />
+} @else if (user(); as currentUser) {
+  <h1>{{ currentUser.firstName }} {{ currentUser.lastName }}</h1>
+  <p class="staff-user-detail__subtitle">Utilisateur #{{ currentUser.id }}</p>
+
+  <section aria-labelledby="identity-heading">
+    <h2 id="identity-heading">Identité</h2>
+    <dl>
+      <dt>Email</dt>
+      <dd>{{ currentUser.email }}</dd>
+      <dt>Téléphone</dt>
+      <dd>{{ currentUser.phoneNumber ?? '—' }}</dd>
+      <dt>Statut du compte</dt>
+      <dd><p-tag [value]="currentUser.accountStatus" /></dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="membership-heading">
+    <h2 id="membership-heading">Adhésion</h2>
+    <dl>
+      <dt>N° adhérent</dt>
+      <dd>{{ currentUser.memberNumber ?? '—' }}</dd>
+      <dt>Statut d'adhésion</dt>
+      <dd>
+        @if (currentUser.memberStatus) {
+          <p-tag [value]="currentUser.memberStatus" />
+        } @else {
+          —
+        }
+      </dd>
+      <dt>Date d'inscription</dt>
+      <dd>{{ currentUser.registrationDate ?? '—' }}</dd>
+      <dt>Date d'expiration</dt>
+      <dd>{{ currentUser.memberExpirationDate ?? '—' }}</dd>
+      <dt>Motif de blocage</dt>
+      <dd>{{ currentUser.blockedReason ?? '—' }}</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="timestamps-heading">
+    <h2 id="timestamps-heading">Historique technique</h2>
+    <dl>
+      <dt>Créé le</dt>
+      <dd>{{ currentUser.createdAt }}</dd>
+      <dt>Modifié le</dt>
+      <dd>{{ currentUser.updatedAt }}</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="residence-heading">
+    <h2 id="residence-heading">Résidence actuelle</h2>
+    @if (residenceLoading()) {
+      <app-loading-state message="Chargement de la résidence…" />
+    } @else if (residenceError(); as currentResidenceError) {
+      <app-error-state [message]="currentResidenceError.message" />
+    } @else if (currentResidence(); as residence) {
+      <dl>
+        <dt>Rue</dt>
+        <dd>{{ residence.address.street }} {{ residence.address.streetNumber }}</dd>
+        @if (residence.address.boxNumber) {
+          <dt>Boîte</dt>
+          <dd>{{ residence.address.boxNumber }}</dd>
+        }
+        @if (residence.address.additionalInfo) {
+          <dt>Complément</dt>
+          <dd>{{ residence.address.additionalInfo }}</dd>
+        }
+        <dt>Code postal</dt>
+        <dd>{{ residence.address.city.postalCode }}</dd>
+        <dt>Ville</dt>
+        <dd>{{ residence.address.city.name }}</dd>
+        <dt>Pays</dt>
+        <dd>{{ residence.address.city.country.name }}</dd>
+        <dt>Depuis le</dt>
+        <dd>{{ residence.startDate }}</dd>
+      </dl>
+    } @else {
+      <p>Aucune résidence actuelle.</p>
+    }
+  </section>
+
+  <section aria-labelledby="residence-history-heading">
+    <h2 id="residence-history-heading">Historique des résidences</h2>
+    @if (historyLoading()) {
+      <app-loading-state message="Chargement de l'historique…" />
+    } @else if (historyError(); as currentHistoryError) {
+      <app-error-state [message]="currentHistoryError.message" />
+    } @else if (residenceHistory().length === 0) {
+      <app-empty-state title="Aucun historique" message="Aucune résidence historique n'est enregistrée." />
+    } @else {
+      <ul>
+        @for (residence of residenceHistory(); track residence.id) {
+          <li>
+            {{ residence.address.street }} {{ residence.address.streetNumber }},
+            {{ residence.address.city.postalCode }} {{ residence.address.city.name }}
+            — {{ residence.startDate }} → {{ residence.endDate ?? 'en cours' }}
+          </li>
+        }
+      </ul>
+    }
+  </section>
+}
