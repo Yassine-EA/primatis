@@ -60,7 +60,7 @@ describe('StaffUserDetailPage', () => {
 
   function configure(rawId: string | null): void {
     const paramMap$ = new BehaviorSubject<ParamMap>(convertToParamMap(rawId === null ? {} : { id: rawId }));
-    userApiServiceMock = { getUser: vi.fn().mockReturnValue(of(buildUser())) };
+    userApiServiceMock = { getUser: vi.fn().mockReturnValue(of({ user: buildUser(), roles: [] })) };
     residenceApiServiceMock = {
       getResidence: vi.fn().mockReturnValue(of(buildResidence())),
       getResidenceHistory: vi.fn().mockReturnValue(of([])),

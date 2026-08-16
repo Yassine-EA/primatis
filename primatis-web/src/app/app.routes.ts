@@ -69,10 +69,43 @@ export const routes: Routes = [
     ],
   },
   {
+    // AuthGuard au niveau de la zone (DEV-04.9) ; PermissionGuard porté par
+    // le segment 'users' (DEV-05.12, USER_MANAGE) protège liste, création
+    // ET détail par héritage de route, une seule déclaration pour les
+    // trois pages. 'new' déclaré avant ':id' pour que le routing statique
+    // l'emporte sur le paramétrique.
     path: 'admin',
     component: AdminLayout,
     canActivate: [authGuard],
-    children: [],
+    children: [
+      { path: '', redirectTo: 'users', pathMatch: 'full' },
+      {
+        path: 'users',
+        canActivate: [permissionGuard],
+        data: { permissions: ['USER_MANAGE'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./admin/users/pages/admin-users-page/admin-users-page').then((m) => m.AdminUsersPage),
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import('./admin/users/pages/admin-user-create-page/admin-user-create-page').then(
+                (m) => m.AdminUserCreatePage,
+              ),
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./admin/users/pages/admin-user-detail-page/admin-user-detail-page').then(
+                (m) => m.AdminUserDetailPage,
+              ),
+          },
+        ],
+      },
+    ],
   },
   {
     path: 'forbidden',

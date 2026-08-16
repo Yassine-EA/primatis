@@ -1,0 +1,242 @@
+@if (userLoading()) {
+  <app-loading-state message="Chargement de l'utilisateur…" />
+} @else if (userError(); as currentUserError) {
+  <app-error-state [message]="currentUserError.message" />
+} @else if (user(); as currentUser) {
+  <h1>{{ currentUser.firstName }} {{ currentUser.lastName }}</h1>
+  <p class="admin-user-detail__subtitle">Utilisateur #{{ currentUser.id }}</p>
+
+  <section aria-labelledby="identity-heading">
+    <h2 id="identity-heading">Identité</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submitUpdate()" novalidate>
+      @if (updateErrorMessage(); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+
+      <div class="field">
+        <label>Email</label>
+        <p>{{ currentUser.email }}</p>
+      </div>
+
+      <div class="field">
+        <label for="firstName">Prénom</label>
+        <input pInputText id="firstName" formControlName="firstName" />
+        @if (form.controls.firstName.invalid && form.controls.firstName.touched) {
+          <p-message severity="error" text="Prénom requis." />
+        }
+      </div>
+
+      <div class="field">
+        <label for="lastName">Nom</label>
+        <input pInputText id="lastName" formControlName="lastName" />
+        @if (form.controls.lastName.invalid && form.controls.lastName.touched) {
+          <p-message severity="error" text="Nom requis." />
+        }
+      </div>
+
+      <div class="field">
+        <label for="phoneNumber">Téléphone</label>
+        <input pInputText id="phoneNumber" formControlName="phoneNumber" />
+      </div>
+
+      <div class="field">
+        <label for="roles">Rôles</label>
+        <p-multiselect
+          inputId="roles"
+          formControlName="roles"
+          [options]="roleOptions"
+          optionLabel="label"
+          optionValue="value"
+          optionDisabled="disabled"
+        />
+        @if (form.controls.roles.invalid && form.controls.roles.touched) {
+          <p-message severity="error" text="Au moins un rôle est requis." />
+        }
+        @if (!hasMembership) {
+          <p class="hint">Adhérent indisponible : cet utilisateur n'a jamais été adhérent.</p>
+        }
+      </div>
+
+      @if (hasMembership) {
+        <fieldset class="membership-fields">
+          <legend>Adhésion</legend>
+
+          <div class="field">
+            <label>N° adhérent</label>
+            <p>{{ currentUser.memberNumber }}</p>
+          </div>
+
+          <div class="field">
+            <label for="registrationDate">Date d'inscription</label>
+            <input pInputText id="registrationDate" type="date" formControlName="registrationDate" />
+            @if (form.controls.registrationDate.invalid && form.controls.registrationDate.touched) {
+              <p-message severity="error" text="Date d'inscription requise." />
+            }
+          </div>
+
+          <div class="field">
+            <label for="memberExpirationDate">Date d'expiration</label>
+            <input pInputText id="memberExpirationDate" type="date" formControlName="memberExpirationDate" />
+          </div>
+
+          <div class="field">
+            <label for="blockedReason">Motif de blocage</label>
+            <input pInputText id="blockedReason" formControlName="blockedReason" />
+          </div>
+        </fieldset>
+      }
+
+      <div class="form-actions">
+        <button pButton type="submit" label="Enregistrer les modifications" [disabled]="updateSubmitting()"></button>
+      </div>
+    </form>
+  </section>
+
+  <section aria-labelledby="account-status-heading">
+    <h2 id="account-status-heading">Statut du compte</h2>
+    <p><p-tag [value]="currentUser.accountStatus" [severity]="currentUser.accountStatus === 'ACTIVE' ? 'success' : 'danger'" /></p>
+    <button
+      pButton
+      type="button"
+      [label]="accountStatusActionLabel()"
+      [disabled]="accountStatusSubmitting()"
+      (click)="toggleAccountStatus()"
+    ></button>
+  </section>
+
+  <section aria-labelledby="membership-actions-heading">
+    <h2 id="membership-actions-heading">Actions d'adhésion</h2>
+    @if (currentUser.memberStatus) {
+      <p><p-tag [value]="currentUser.memberStatus" /></p>
+      <div class="membership-actions">
+        @if (canBlock) {
+          <button
+            pButton
+            type="button"
+            label="Bloquer"
+            severity="danger"
+            [disabled]="membershipActionSubmitting()"
+            (click)="openBlockDialog()"
+          ></button>
+        }
+        @if (canReactivate) {
+          <button
+            pButton
+            type="button"
+            label="Réactiver"
+            [disabled]="membershipActionSubmitting()"
+            (click)="confirmReactivate()"
+          ></button>
+        }
+        @if (canUnblock) {
+          <button
+            pButton
+            type="button"
+            label="Débloquer"
+            [disabled]="membershipActionSubmitting()"
+            (click)="confirmUnblock()"
+          ></button>
+        }
+        @if (canModifyBlockedReason) {
+          <button
+            pButton
+            type="button"
+            label="Modifier le motif"
+            severity="secondary"
+            [disabled]="membershipActionSubmitting()"
+            (click)="openBlockDialog()"
+          ></button>
+        }
+      </div>
+    } @else {
+      <p>Cet utilisateur n'a jamais été adhérent.</p>
+    }
+  </section>
+
+  <section aria-labelledby="timestamps-heading">
+    <h2 id="timestamps-heading">Historique technique</h2>
+    <dl>
+      <dt>Créé le</dt>
+      <dd>{{ currentUser.createdAt }}</dd>
+      <dt>Modifié le</dt>
+      <dd>{{ currentUser.updatedAt }}</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="residence-heading">
+    <h2 id="residence-heading">Résidence actuelle</h2>
+    @if (residenceLoading()) {
+      <app-loading-state message="Chargement de la résidence…" />
+    } @else if (residenceError(); as currentResidenceError) {
+      <app-error-state [message]="currentResidenceError.message" />
+    } @else if (currentResidence(); as residence) {
+      <dl>
+        <dt>Rue</dt>
+        <dd>{{ residence.address.street }} {{ residence.address.streetNumber }}</dd>
+        @if (residence.address.boxNumber) {
+          <dt>Boîte</dt>
+          <dd>{{ residence.address.boxNumber }}</dd>
+        }
+        @if (residence.address.additionalInfo) {
+          <dt>Complément</dt>
+          <dd>{{ residence.address.additionalInfo }}</dd>
+        }
+        <dt>Code postal</dt>
+        <dd>{{ residence.address.city.postalCode }}</dd>
+        <dt>Ville</dt>
+        <dd>{{ residence.address.city.name }}</dd>
+        <dt>Pays</dt>
+        <dd>{{ residence.address.city.country.name }}</dd>
+        <dt>Depuis le</dt>
+        <dd>{{ residence.startDate }}</dd>
+      </dl>
+    } @else {
+      <p>Aucune résidence actuelle.</p>
+    }
+  </section>
+
+  <section aria-labelledby="residence-history-heading">
+    <h2 id="residence-history-heading">Historique des résidences</h2>
+    @if (historyLoading()) {
+      <app-loading-state message="Chargement de l'historique…" />
+    } @else if (historyError(); as currentHistoryError) {
+      <app-error-state [message]="currentHistoryError.message" />
+    } @else if (residenceHistory().length === 0) {
+      <app-empty-state title="Aucun historique" message="Aucune résidence historique n'est enregistrée." />
+    } @else {
+      <ul>
+        @for (residence of residenceHistory(); track residence.id) {
+          <li>
+            {{ residence.address.street }} {{ residence.address.streetNumber }},
+            {{ residence.address.city.postalCode }} {{ residence.address.city.name }}
+            — {{ residence.startDate }} → {{ residence.endDate ?? 'en cours' }}
+          </li>
+        }
+      </ul>
+    }
+  </section>
+}
+
+@if (blockDialogVisible()) {
+  <p-dialog
+    header="Bloquer l'adhérent"
+    [visible]="true"
+    [modal]="true"
+    [closable]="true"
+    [closeOnEscape]="true"
+    (onHide)="cancelBlock()"
+  >
+    <div class="field">
+      <label for="blockReason">Motif de blocage</label>
+      <input pInputText id="blockReason" [formControl]="blockReasonControl" />
+      @if (blockReasonControl.invalid && blockReasonControl.touched) {
+        <p-message severity="error" text="Le motif de blocage est requis." />
+      }
+    </div>
+    <div class="dialog-actions">
+      <button pButton type="button" label="Confirmer" [disabled]="blockSubmitting()" (click)="confirmBlock()"></button>
+      <button pButton type="button" label="Annuler" severity="secondary" (click)="cancelBlock()"></button>
+    </div>
+  </p-dialog>
+}

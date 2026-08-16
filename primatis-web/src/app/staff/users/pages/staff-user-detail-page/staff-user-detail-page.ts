@@ -66,7 +66,7 @@ export class StaffUserDetailPage {
     this.userError.set(null);
     this.userApiService.getUser(id).subscribe({
       next: (value) => {
-        this.user.set(value);
+        this.user.set(value.user);
         this.userLoading.set(false);
       },
       error: (err: unknown) => {

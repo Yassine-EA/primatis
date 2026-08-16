@@ -11,6 +11,7 @@ import be.primatis.user.web.CreateUserRequest;
 import be.primatis.user.web.CreateUserResponse;
 import be.primatis.user.web.UpdateAccountStatusRequest;
 import be.primatis.user.web.UpdateUserRequest;
+import be.primatis.user.web.UserDetailResponse;
 import be.primatis.user.web.UserResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -32,6 +33,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
@@ -115,10 +119,115 @@ class UserServiceTests {
         AppUser user = persistUser("service-detail-present@primatis.test");
         entityManager.flush();
 
-        UserResponse response = userService.getUserById(user.getId());
+        UserDetailResponse response = userService.getUserById(user.getId());
 
-        assertThat(response.id()).isEqualTo(user.getId());
-        assertThat(response.email()).isEqualTo("service-detail-present@primatis.test");
+        assertThat(response.user().id()).isEqualTo(user.getId());
+        assertThat(response.user().email()).isEqualTo("service-detail-present@primatis.test");
+    }
+
+    /**
+     * DEV-05.12 Décision 13 : {@code roles} expose le code unique d'un
+     * utilisateur n'ayant qu'un seul rôle.
+     */
+    @Test
+    void getUserByIdReturnsSingleRoleForUserWithOneRole() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-roles-1@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = userService.createUser(
+                new CreateUserRequest(
+                        "service-detail-single-role@primatis.test", "Prénom", "Nom", null,
+                        Set.of("ROLE_LIBRARIAN"), null, null, null, null),
+                adminId);
+
+        authenticateWithUserRead();
+        UserDetailResponse response = userService.getUserById(created.user().id());
+
+        assertThat(response.roles()).containsExactly("ROLE_LIBRARIAN");
+    }
+
+    /**
+     * DEV-05.12 Décision 13 : plusieurs rôles sont tous exposés, triés pour
+     * une sortie déterministe (indépendante de l'ordre d'attribution).
+     */
+    @Test
+    void getUserByIdReturnsRolesSortedForUserWithMultipleRoles() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-roles-2@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = userService.createUser(
+                new CreateUserRequest(
+                        "service-detail-multi-role@primatis.test", "Prénom", "Nom", null,
+                        Set.of("ROLE_MEMBER", "ROLE_ADMIN", "ROLE_LIBRARIAN"), MemberStatus.ACTIVE,
+                        LocalDate.of(2026, 1, 1), null, null),
+                adminId);
+
+        authenticateWithUserRead();
+        UserDetailResponse response = userService.getUserById(created.user().id());
+
+        assertThat(response.roles()).containsExactly("ROLE_ADMIN", "ROLE_LIBRARIAN", "ROLE_MEMBER");
+    }
+
+    /**
+     * DEV-05.12 Décision 13 : après un remplacement complet via {@code
+     * updateUser}, le détail reflète immédiatement le nouvel ensemble —
+     * aucune trace de l'ancien rôle retiré.
+     */
+    @Test
+    void getUserByIdReflectsRolesAfterUpdateUserReplacesThem() {
+        authenticateWithUserManage();
+        Long adminId = persistUser("service-admin-roles-3@primatis.test").getId();
+        entityManager.flush();
+        CreateUserResponse created = userService.createUser(
+                new CreateUserRequest(
+                        "service-detail-roles-updated@primatis.test", "Prénom", "Nom", null,
+                        Set.of("ROLE_LIBRARIAN"), null, null, null, null),
+                adminId);
+
+        userService.updateUser(
+                created.user().id(), requestWith(r -> r.setRoles(Set.of("ROLE_ADMIN"))), adminId);
+
+        authenticateWithUserRead();
+        UserDetailResponse response = userService.getUserById(created.user().id());
+
+        assertThat(response.roles()).containsExactly("ROLE_ADMIN");
+    }
+
+    /**
+     * Confirmation structurelle (pas un test de performance, DEV-05.12
+     * Décision 13) : {@code listUsers} ne doit jamais référencer {@code
+     * userRoleRepository} dans son corps — l'absence de N+1 sur la liste
+     * paginée est garantie par construction, pas par une mesure.
+     */
+    @Test
+    void listUsersMethodBodyNeverReferencesUserRoleRepository() throws IOException {
+        Path sourceFile = Path.of("src/main/java/be/primatis/user/UserService.java");
+        String source = Files.readString(sourceFile);
+        String methodBody = extractMethodBody(source, "public Page<UserResponse> listUsers(Pageable pageable) {");
+
+        assertThat(methodBody)
+                .as("listUsers ne doit jamais charger les rôles : aucun N+1 sur la liste paginée")
+                .doesNotContain("userRoleRepository");
+    }
+
+    private static String extractMethodBody(String source, String signature) {
+        int signatureIndex = source.indexOf(signature);
+        assertThat(signatureIndex).as("signature attendue introuvable dans UserService.java").isNotEqualTo(-1);
+
+        int bodyStart = source.indexOf('{', signatureIndex);
+        int depth = 0;
+        for (int i = bodyStart; i < source.length(); i++) {
+            char c = source.charAt(i);
+            if (c == '{') {
+                depth++;
+            } else if (c == '}') {
+                depth--;
+                if (depth == 0) {
+                    return source.substring(bodyStart, i + 1);
+                }
+            }
+        }
+        throw new IllegalStateException("Corps de méthode non fermé pour la signature : " + signature);
     }
 
     @Test
@@ -1005,9 +1114,9 @@ class UserServiceTests {
                 LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 30));
 
         authenticateWithUserRead();
-        UserResponse response = userService.getUserById(created.user().id());
+        UserDetailResponse response = userService.getUserById(created.user().id());
 
-        assertThat(response.memberStatus()).isEqualTo(MemberStatus.EXPIRED);
+        assertThat(response.user().memberStatus()).isEqualTo(MemberStatus.EXPIRED);
         AppUser reloaded = entityManager.find(AppUser.class, created.user().id());
         assertThat(reloaded.getMemberStatus())
                 .as("la synchronisation doit être réellement persistée, pas seulement reflétée dans la réponse")
@@ -1025,9 +1134,9 @@ class UserServiceTests {
                 today.minusYears(1), today);
 
         authenticateWithUserRead();
-        UserResponse response = userService.getUserById(created.user().id());
+        UserDetailResponse response = userService.getUserById(created.user().id());
 
-        assertThat(response.memberStatus())
+        assertThat(response.user().memberStatus())
                 .as("memberExpirationDate == today reste le dernier jour valide")
                 .isEqualTo(MemberStatus.ACTIVE);
     }
@@ -1043,9 +1152,9 @@ class UserServiceTests {
         userService.blockMember(created.user().id(), new BlockMembershipRequest("Motif"));
 
         authenticateWithUserRead();
-        UserResponse response = userService.getUserById(created.user().id());
+        UserDetailResponse response = userService.getUserById(created.user().id());
 
-        assertThat(response.memberStatus())
+        assertThat(response.user().memberStatus())
                 .as("BLOCKED reste prioritaire, aucune synchronisation d'expiration ne l'écrase")
                 .isEqualTo(MemberStatus.BLOCKED);
     }
@@ -1059,9 +1168,9 @@ class UserServiceTests {
                 adminId, "service-expire-null-date@primatis.test", MemberStatus.ACTIVE, LocalDate.of(2020, 1, 1));
 
         authenticateWithUserRead();
-        UserResponse response = userService.getUserById(created.user().id());
+        UserDetailResponse response = userService.getUserById(created.user().id());
 
-        assertThat(response.memberStatus())
+        assertThat(response.user().memberStatus())
                 .as("memberExpirationDate absente = jamais expiré automatiquement")
                 .isEqualTo(MemberStatus.ACTIVE);
     }
@@ -1163,11 +1272,11 @@ class UserServiceTests {
                 .filter(u -> u.id().equals(created.user().id()))
                 .findFirst()
                 .orElseThrow();
-        UserResponse detail = userService.getUserById(created.user().id());
+        UserDetailResponse detail = userService.getUserById(created.user().id());
 
         assertThat(inList.memberStatus())
                 .as("liste et détail doivent présenter la même vérité pour le même utilisateur")
-                .isEqualTo(detail.memberStatus())
+                .isEqualTo(detail.user().memberStatus())
                 .isEqualTo(MemberStatus.EXPIRED);
     }
 

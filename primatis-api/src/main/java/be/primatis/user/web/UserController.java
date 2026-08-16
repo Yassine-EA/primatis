@@ -76,7 +76,8 @@ public class UserController {
 
     @Operation(
             summary = "Détail d'un utilisateur",
-            description = "Retourne un utilisateur par son identifiant technique (USER_READ requis).")
+            description = "Retourne un utilisateur et ses rôles actuels par son identifiant "
+                    + "technique (USER_READ requis).")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Utilisateur trouvé."),
             @ApiResponse(responseCode = "401", description = "Authentification requise ou JWT invalide.",
@@ -87,7 +88,7 @@ public class UserController {
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     @GetMapping("/{id}")
-    public UserResponse getUserById(@PathVariable Long id) {
+    public UserDetailResponse getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 

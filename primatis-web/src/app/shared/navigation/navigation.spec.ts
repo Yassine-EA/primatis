@@ -74,6 +74,14 @@ describe('Navigation', () => {
     expect(linkLabels()).toContain('Administration');
   });
 
+  it('should point the Administration link at /admin/users (DEV-05.12)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/admin/users"]')).not.toBeNull();
+  });
+
   it('should hide the Administration link for a user without ROLE_ADMIN', () => {
     authServiceMock.authenticated.mockReturnValue(true);
     authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);

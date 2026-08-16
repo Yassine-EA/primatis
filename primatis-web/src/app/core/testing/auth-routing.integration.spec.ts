@@ -63,7 +63,11 @@ describe('Routing + AuthGuard integration (real routes, real Router navigation)'
     await RouterTestingHarness.create('/admin');
     const location = TestBed.inject(Location);
 
-    expect(location.path()).toBe('/login?returnUrl=%2Fadmin');
+    // DEV-05.12 : '/admin' redirige désormais vers '/admin/users' (même
+    // principe que '/staff' -> '/staff/users', DEV-05.11) ; Angular résout
+    // ce redirectTo pendant la reconnaissance de route, avant l'évaluation
+    // des guards — returnUrl porte donc déjà l'URL post-redirection.
+    expect(location.path()).toBe('/login?returnUrl=%2Fadmin%2Fusers');
   });
 
   it('should let an authenticated user reach /member directly (AuthGuard passes)', async () => {

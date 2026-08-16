@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { API_BASE_URL } from '../../core/api/api-base-url.token';
 import { CreateUserResponse } from '../models/create-user-response';
+import { UserDetailResponse } from '../models/user-detail-response';
 import { UserResponse } from '../models/user-response';
 import { UserApiService } from './user-api.service';
 
@@ -93,7 +94,18 @@ describe('UserApiService', () => {
     const request = httpTestingController.expectOne('/api/v1/users/1');
     expect(request.request.method).toBe('GET');
 
-    request.flush(user);
+    const detail: UserDetailResponse = { user, roles: ['ROLE_LIBRARIAN'] };
+    request.flush(detail);
+  });
+
+  it('should propagate the UserDetailResponse returned by the backend', () => {
+    let received: UserDetailResponse | undefined;
+    service.getUser(1).subscribe((value) => (received = value));
+
+    const detail: UserDetailResponse = { user, roles: ['ROLE_LIBRARIAN', 'ROLE_MEMBER'] };
+    httpTestingController.expectOne('/api/v1/users/1').flush(detail);
+
+    expect(received).toEqual(detail);
   });
 
   // ---------------------------------------------------------------

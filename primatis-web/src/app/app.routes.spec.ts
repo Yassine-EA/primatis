@@ -60,4 +60,37 @@ describe('Application routes', () => {
     expect(childPaths).toContain('');
     expect(childPaths).toContain(':id');
   });
+
+  it('should redirect the bare /admin zone to /admin/users (DEV-05.12)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const redirectChild = adminRoute?.children?.find((child) => child.path === '');
+
+    expect(redirectChild?.redirectTo).toBe('users');
+  });
+
+  it('should protect /admin/users with permissionGuard and USER_MANAGE (DEV-05.12)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const usersRoute = adminRoute?.children?.find((child) => child.path === 'users');
+
+    expect(usersRoute?.canActivate).toContain(permissionGuard);
+    expect(usersRoute?.data?.['permissions']).toEqual(['USER_MANAGE']);
+  });
+
+  it('should expose the admin users list, create and detail routes as children of /admin/users (DEV-05.12)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const usersRoute = adminRoute?.children?.find((child) => child.path === 'users');
+    const childPaths = usersRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('');
+    expect(childPaths).toContain('new');
+    expect(childPaths).toContain(':id');
+  });
+
+  it('should declare /admin/users/new before /admin/users/:id (DEV-05.12)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const usersRoute = adminRoute?.children?.find((child) => child.path === 'users');
+    const childPaths = usersRoute?.children?.map((child) => child.path) ?? [];
+
+    expect(childPaths.indexOf('new')).toBeLessThan(childPaths.indexOf(':id'));
+  });
 });

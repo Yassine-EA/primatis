@@ -29,7 +29,7 @@ export class Navigation {
     { label: 'Accueil', routerLink: '/' },
     { label: 'Espace membre', routerLink: '/member', requiredRoles: ['ROLE_MEMBER'] },
     { label: 'Espace personnel', routerLink: '/staff/users', requiredRoles: ['ROLE_LIBRARIAN', 'ROLE_ADMIN'] },
-    { label: 'Administration', routerLink: '/admin', requiredRoles: ['ROLE_ADMIN'] },
+    { label: 'Administration', routerLink: '/admin/users', requiredRoles: ['ROLE_ADMIN'] },
   ];
 
   authenticated(): boolean {

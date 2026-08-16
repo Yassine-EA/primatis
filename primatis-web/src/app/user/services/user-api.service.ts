@@ -9,6 +9,7 @@ import { CreateUserRequest } from '../models/create-user-request';
 import { CreateUserResponse } from '../models/create-user-response';
 import { UpdateAccountStatusRequest } from '../models/update-account-status-request';
 import { UpdateUserRequest } from '../models/update-user-request';
+import { UserDetailResponse } from '../models/user-detail-response';
 import { UserResponse } from '../models/user-response';
 
 /**
@@ -26,8 +27,8 @@ export class UserApiService {
     return this.http.get<PageResponse<UserResponse>>(`${this.baseUrl}/users`, { params });
   }
 
-  getUser(id: number): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${this.baseUrl}/users/${id}`);
+  getUser(id: number): Observable<UserDetailResponse> {
+    return this.http.get<UserDetailResponse>(`${this.baseUrl}/users/${id}`);
   }
 
   createUser(request: CreateUserRequest): Observable<CreateUserResponse> {

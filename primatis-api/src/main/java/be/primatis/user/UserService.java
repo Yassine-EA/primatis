@@ -13,6 +13,7 @@ import be.primatis.user.web.CreateUserRequest;
 import be.primatis.user.web.CreateUserResponse;
 import be.primatis.user.web.UpdateAccountStatusRequest;
 import be.primatis.user.web.UpdateUserRequest;
+import be.primatis.user.web.UserDetailResponse;
 import be.primatis.user.web.UserResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -97,13 +98,23 @@ public class UserService {
      * Synchronise paresseusement {@code memberStatus} avant de répondre :
      * lecture non {@code readOnly} car cette méthode peut légitimement
      * écrire (transition {@code ACTIVE → EXPIRED}).
+     *
+     * Compose {@code roles} (DEV-05.12 Décision 13) via {@link
+     * UserRoleRepository#findByIdUserId(Long)}, triés pour une sortie
+     * déterministe — requête bornée aux rôles du seul utilisateur demandé,
+     * jamais appliquée à {@link #listUsers} (aucun N+1 introduit sur la
+     * liste paginée).
      */
     @PreAuthorize("hasAuthority('USER_READ')")
     @Transactional
-    public UserResponse getUserById(Long id) {
+    public UserDetailResponse getUserById(Long id) {
         AppUser user = getRequiredUser(id);
         memberExpirationPolicy.syncIfNeeded(user);
-        return UserResponse.from(user);
+        List<String> roles = userRoleRepository.findByIdUserId(user.getId()).stream()
+                .map(userRole -> userRole.getRole().getCode())
+                .sorted()
+                .toList();
+        return new UserDetailResponse(UserResponse.from(user), roles);
     }
 
     /**

@@ -96,6 +96,7 @@ class UserControllerTests {
         transactionTemplate().executeWithoutResult(status -> {
             appUserRepository.findByEmail("controller-list@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("controller-detail@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-detail-with-role@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("e2e-users-librarian@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("e2e-users-admin@primatis.test").ifPresent(this::deleteUserAndRoles);
             // Utilisateurs créés PAR les tests POST : supprimés avant l'admin
@@ -277,14 +278,35 @@ class UserControllerTests {
 
         mockMvc.perform(get("/api/v1/users/" + user.getId()).header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(user.getId()))
-                .andExpect(jsonPath("$.email").value("controller-detail@primatis.test"))
-                .andExpect(jsonPath("$.accountStatus").value("ACTIVE"))
-                .andExpect(jsonPath("$.memberNumber").doesNotExist())
-                .andExpect(jsonPath("$.passwordHash").doesNotExist())
-                .andExpect(jsonPath("$.failedLoginCount").doesNotExist())
-                .andExpect(jsonPath("$.lockedUntil").doesNotExist())
-                .andExpect(jsonPath("$.lastLoginAt").doesNotExist());
+                .andExpect(jsonPath("$.user.id").value(user.getId()))
+                .andExpect(jsonPath("$.user.email").value("controller-detail@primatis.test"))
+                .andExpect(jsonPath("$.user.accountStatus").value("ACTIVE"))
+                .andExpect(jsonPath("$.user.memberNumber").doesNotExist())
+                .andExpect(jsonPath("$.user.passwordHash").doesNotExist())
+                .andExpect(jsonPath("$.user.failedLoginCount").doesNotExist())
+                .andExpect(jsonPath("$.user.lockedUntil").doesNotExist())
+                .andExpect(jsonPath("$.user.lastLoginAt").doesNotExist())
+                .andExpect(jsonPath("$.roles").isArray())
+                .andExpect(jsonPath("$.roles").isEmpty());
+    }
+
+    /**
+     * DEV-05.12 Décision 13 : {@code roles} du détail expose les codes de
+     * rôle réellement attribués — pas de permissions, pas de reconstruction
+     * frontend nécessaire.
+     */
+    @Test
+    void getUserByIdExposesRoleCodesForUserWithRole() throws Exception {
+        String email = "controller-detail-with-role@primatis.test";
+        persistActiveUserWithRole(email, "Correct-Password-2026!", "ROLE_LIBRARIAN");
+        AppUser user = appUserRepository.findByEmail(email).orElseThrow();
+        String token = signToken(List.of(), List.of("USER_READ"));
+
+        mockMvc.perform(get("/api/v1/users/" + user.getId()).header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.roles").isArray())
+                .andExpect(jsonPath("$.roles.length()").value(1))
+                .andExpect(jsonPath("$.roles[0]").value("ROLE_LIBRARIAN"));
     }
 
     @Test
@@ -766,7 +788,7 @@ class UserControllerTests {
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        String updatedAtBefore = JsonPath.read(before, "$.updatedAt");
+        String updatedAtBefore = JsonPath.read(before, "$.user.updatedAt");
 
         mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
                         .header("Authorization", "Bearer " + token)
@@ -798,7 +820,7 @@ class UserControllerTests {
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        String updatedAtAfterFirstDisable = JsonPath.read(afterFirstDisable, "$.updatedAt");
+        String updatedAtAfterFirstDisable = JsonPath.read(afterFirstDisable, "$.user.updatedAt");
 
         mockMvc.perform(patch("/api/v1/users/" + target.getId() + "/account-status")
                         .header("Authorization", "Bearer " + token)
@@ -1081,7 +1103,7 @@ class UserControllerTests {
         // synchronise ACTIVE -> EXPIRED via une lecture, comme le ferait un GET détail réel
         mockMvc.perform(get("/api/v1/users/" + targetId).header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.memberStatus").value("EXPIRED"));
+                .andExpect(jsonPath("$.user.memberStatus").value("EXPIRED"));
 
         mockMvc.perform(post("/api/v1/users/" + targetId + "/membership/reactivate")
                         .header("Authorization", "Bearer " + token))
@@ -1149,7 +1171,7 @@ class UserControllerTests {
 
         mockMvc.perform(get("/api/v1/users/" + targetId).header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.memberStatus").value("EXPIRED"));
+                .andExpect(jsonPath("$.user.memberStatus").value("EXPIRED"));
     }
 
     // ---------------------------------------------------------------
