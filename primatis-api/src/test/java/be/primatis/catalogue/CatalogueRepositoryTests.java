@@ -41,6 +41,12 @@ class CatalogueRepositoryTests {
     @Autowired
     private CopyRepository copyRepository;
 
+    @Autowired
+    private TitleAuthorRepository titleAuthorRepository;
+
+    @Autowired
+    private TitleGenreRepository titleGenreRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -258,6 +264,61 @@ class CatalogueRepositoryTests {
     }
 
     // ---------------------------------------------------------------
+    // AuthorRepository.findByTitleIdOrderByFullNameAscIdAsc (DEV-06.4)
+    // ---------------------------------------------------------------
+
+    @Test
+    void findsMultipleAuthorsOfATitleOrderedByFullName() {
+        Title title = persistTitle("Multi-author Work CRT", null, Language.EN, TitleStatus.ACTIVE);
+        Author zed = persistAuthor("Zed Author CRT");
+        Author anna = persistAuthor("Anna Author CRT");
+        linkAuthor(title, zed);
+        linkAuthor(title, anna);
+        entityManager.flush();
+
+        List<Author> found = authorRepository.findByTitleIdOrderByFullNameAscIdAsc(title.getId());
+
+        assertThat(found).extracting(Author::getId).containsExactly(anna.getId(), zed.getId());
+    }
+
+    @Test
+    void findByTitleIdReturnsEmptyListWhenTitleHasNoAuthors() {
+        Title title = persistTitle("Authorless Work CRT", null, Language.EN, TitleStatus.ACTIVE);
+        entityManager.flush();
+
+        assertThat(authorRepository.findByTitleIdOrderByFullNameAscIdAsc(title.getId())).isEmpty();
+    }
+
+    @Test
+    void findsAuthorsByTitleIdExcludesAuthorsOfOtherTitles() {
+        Title targetTitle = persistTitle("Target Title CRT Authors", null, Language.EN, TitleStatus.ACTIVE);
+        Title otherTitle = persistTitle("Other Title CRT Authors", null, Language.EN, TitleStatus.ACTIVE);
+        Author targetAuthor = persistAuthor("Target Author CRT");
+        Author otherAuthor = persistAuthor("Other Author CRT");
+        linkAuthor(targetTitle, targetAuthor);
+        linkAuthor(otherTitle, otherAuthor);
+        entityManager.flush();
+
+        List<Author> found = authorRepository.findByTitleIdOrderByFullNameAscIdAsc(targetTitle.getId());
+
+        assertThat(found).extracting(Author::getId).containsExactly(targetAuthor.getId());
+    }
+
+    @Test
+    void findsAuthorsOfATitleBreaksTiesByIdOnEqualFullName() {
+        Title title = persistTitle("Homonym Authors Work CRT", null, Language.EN, TitleStatus.ACTIVE);
+        Author first = persistAuthor("Homonym Author CRT");
+        Author second = persistAuthor("Homonym Author CRT");
+        linkAuthor(title, second);
+        linkAuthor(title, first);
+        entityManager.flush();
+
+        List<Author> found = authorRepository.findByTitleIdOrderByFullNameAscIdAsc(title.getId());
+
+        assertThat(found).extracting(Author::getId).containsExactly(first.getId(), second.getId());
+    }
+
+    // ---------------------------------------------------------------
     // GenreRepository.findByCode
     // ---------------------------------------------------------------
 
@@ -276,6 +337,47 @@ class CatalogueRepositoryTests {
     @Test
     void findByCodeIsEmptyWhenAbsent() {
         assertThat(genreRepository.findByCode("ABSENT-CODE-CRT")).isEmpty();
+    }
+
+    // ---------------------------------------------------------------
+    // GenreRepository.findByTitleIdOrderByLabelAscIdAsc (DEV-06.4)
+    // ---------------------------------------------------------------
+
+    @Test
+    void findsMultipleGenresOfATitleOrderedByLabel() {
+        Title title = persistTitle("Multi-genre Work CRT Detail", null, Language.FR, TitleStatus.ACTIVE);
+        Genre zed = persistGenre("ZED-GENRE-CRT", "Zed Genre CRT");
+        Genre anna = persistGenre("ANNA-GENRE-CRT", "Anna Genre CRT");
+        linkGenre(title, zed);
+        linkGenre(title, anna);
+        entityManager.flush();
+
+        List<Genre> found = genreRepository.findByTitleIdOrderByLabelAscIdAsc(title.getId());
+
+        assertThat(found).extracting(Genre::getId).containsExactly(anna.getId(), zed.getId());
+    }
+
+    @Test
+    void findByTitleIdReturnsEmptyListWhenTitleHasNoGenres() {
+        Title title = persistTitle("Genreless Work CRT", null, Language.FR, TitleStatus.ACTIVE);
+        entityManager.flush();
+
+        assertThat(genreRepository.findByTitleIdOrderByLabelAscIdAsc(title.getId())).isEmpty();
+    }
+
+    @Test
+    void findsGenresByTitleIdExcludesGenresOfOtherTitles() {
+        Title targetTitle = persistTitle("Target Title CRT Genres", null, Language.FR, TitleStatus.ACTIVE);
+        Title otherTitle = persistTitle("Other Title CRT Genres", null, Language.FR, TitleStatus.ACTIVE);
+        Genre targetGenre = persistGenre("TARGET-GENRE-CRT", "Target Genre CRT");
+        Genre otherGenre = persistGenre("OTHER-GENRE-CRT", "Other Genre CRT");
+        linkGenre(targetTitle, targetGenre);
+        linkGenre(otherTitle, otherGenre);
+        entityManager.flush();
+
+        List<Genre> found = genreRepository.findByTitleIdOrderByLabelAscIdAsc(targetTitle.getId());
+
+        assertThat(found).extracting(Genre::getId).containsExactly(targetGenre.getId());
     }
 
     // ---------------------------------------------------------------
@@ -311,6 +413,50 @@ class CatalogueRepositoryTests {
 
         assertThat(copyRepository.existsByTitleId(withCopy.getId())).isTrue();
         assertThat(copyRepository.existsByTitleId(withoutCopy.getId())).isFalse();
+    }
+
+    // ---------------------------------------------------------------
+    // TitleAuthorRepository.findByIdTitleId / TitleGenreRepository.findByIdTitleId (DEV-06.5)
+    // ---------------------------------------------------------------
+
+    @Test
+    void findsTitleAuthorAssociationsOfATitle() {
+        Title title = persistTitle("Title Author Assoc CRT", null, Language.EN, TitleStatus.ACTIVE);
+        Author author = persistAuthor("Title Author Assoc Author CRT");
+        linkAuthor(title, author);
+        entityManager.flush();
+
+        List<TitleAuthor> found = titleAuthorRepository.findByIdTitleId(title.getId());
+
+        assertThat(found).extracting(ta -> ta.getAuthor().getId()).containsExactly(author.getId());
+    }
+
+    @Test
+    void findByIdTitleIdReturnsEmptyListWhenTitleAuthorHasNoAssociations() {
+        Title title = persistTitle("Title Author No Assoc CRT", null, Language.EN, TitleStatus.ACTIVE);
+        entityManager.flush();
+
+        assertThat(titleAuthorRepository.findByIdTitleId(title.getId())).isEmpty();
+    }
+
+    @Test
+    void findsTitleGenreAssociationsOfATitle() {
+        Title title = persistTitle("Title Genre Assoc CRT", null, Language.FR, TitleStatus.ACTIVE);
+        Genre genre = persistGenre("TITLE-GENRE-ASSOC-CRT", "Title Genre Assoc CRT");
+        linkGenre(title, genre);
+        entityManager.flush();
+
+        List<TitleGenre> found = titleGenreRepository.findByIdTitleId(title.getId());
+
+        assertThat(found).extracting(tg -> tg.getGenre().getId()).containsExactly(genre.getId());
+    }
+
+    @Test
+    void findByIdTitleIdReturnsEmptyListWhenTitleGenreHasNoAssociations() {
+        Title title = persistTitle("Title Genre No Assoc CRT", null, Language.FR, TitleStatus.ACTIVE);
+        entityManager.flush();
+
+        assertThat(titleGenreRepository.findByIdTitleId(title.getId())).isEmpty();
     }
 
     // ---------------------------------------------------------------
