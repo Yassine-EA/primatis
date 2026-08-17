@@ -416,6 +416,51 @@ class CatalogueRepositoryTests {
     }
 
     // ---------------------------------------------------------------
+    // CopyRepository.existsByInventoryCode / findByIdAndTitleId (DEV-06.6)
+    // ---------------------------------------------------------------
+
+    @Test
+    void existsByInventoryCodeReflectsPresenceAndAbsence() {
+        Title title = persistTitle("Inventory Exists Work CRT", null, Language.FR, TitleStatus.ACTIVE);
+        persistCopy(title, "CRT-INV-EXISTS-1");
+        entityManager.flush();
+
+        assertThat(copyRepository.existsByInventoryCode("CRT-INV-EXISTS-1")).isTrue();
+        assertThat(copyRepository.existsByInventoryCode("CRT-INV-ABSENT-1")).isFalse();
+    }
+
+    @Test
+    void findsByIdAndTitleIdWhenCopyBelongsToTitle() {
+        Title title = persistTitle("Scoping Correct Title CRT", null, Language.FR, TitleStatus.ACTIVE);
+        Copy copy = persistCopy(title, "CRT-SCOPING-CORRECT-1");
+        entityManager.flush();
+
+        assertThat(copyRepository.findByIdAndTitleId(copy.getId(), title.getId()))
+                .isPresent()
+                .get()
+                .extracting(Copy::getId)
+                .isEqualTo(copy.getId());
+    }
+
+    @Test
+    void findByIdAndTitleIdIsEmptyWhenCopyBelongsToAnotherTitle() {
+        Title owningTitle = persistTitle("Scoping Owning Title CRT", null, Language.FR, TitleStatus.ACTIVE);
+        Title otherTitle = persistTitle("Scoping Other Title CRT", null, Language.FR, TitleStatus.ACTIVE);
+        Copy copy = persistCopy(owningTitle, "CRT-SCOPING-OTHER-1");
+        entityManager.flush();
+
+        assertThat(copyRepository.findByIdAndTitleId(copy.getId(), otherTitle.getId())).isEmpty();
+    }
+
+    @Test
+    void findByIdAndTitleIdIsEmptyWhenCopyDoesNotExist() {
+        Title title = persistTitle("Scoping Nonexistent Copy Title CRT", null, Language.FR, TitleStatus.ACTIVE);
+        entityManager.flush();
+
+        assertThat(copyRepository.findByIdAndTitleId(-1L, title.getId())).isEmpty();
+    }
+
+    // ---------------------------------------------------------------
     // TitleAuthorRepository.findByIdTitleId / TitleGenreRepository.findByIdTitleId (DEV-06.5)
     // ---------------------------------------------------------------
 
