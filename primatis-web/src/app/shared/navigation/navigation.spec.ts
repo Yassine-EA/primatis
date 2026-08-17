@@ -42,12 +42,42 @@ describe('Navigation', () => {
     vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
   });
 
-  it('should show only Accueil and a Connexion link for an anonymous user', () => {
+  it('should show only Accueil, Catalogue and a Connexion link for an anonymous user', () => {
     render();
 
-    expect(linkLabels()).toEqual(['Accueil']);
+    expect(linkLabels()).toEqual(['Accueil', 'Catalogue']);
     expect(fixture.nativeElement.textContent).toContain('Connexion');
     expect(fixture.nativeElement.textContent).not.toContain('Déconnexion');
+  });
+
+  it('should show the Catalogue link pointing at /catalogue for an anonymous user (DEV-06.8)', () => {
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/catalogue"]')).not.toBeNull();
+  });
+
+  it('should show the Catalogue link for ROLE_MEMBER (DEV-06.8)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(linkLabels()).toContain('Catalogue');
+  });
+
+  it('should show the Catalogue link for ROLE_LIBRARIAN (DEV-06.8)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(linkLabels()).toContain('Catalogue');
+  });
+
+  it('should show the Catalogue link for ROLE_ADMIN (DEV-06.8)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
+    render();
+
+    expect(linkLabels()).toContain('Catalogue');
   });
 
   it('should show Déconnexion and hide Connexion for an authenticated user', () => {

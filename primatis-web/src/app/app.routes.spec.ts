@@ -25,6 +25,23 @@ describe('Application routes', () => {
     expect(publicRoute?.children?.some((child) => child.path === 'login')).toBe(true);
   });
 
+  it('should expose public /catalogue and /catalogue/:id routes under the public layout (DEV-06.8)', () => {
+    const publicRoute = routes.find((route) => route.path === '');
+    const childPaths = publicRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('catalogue');
+    expect(childPaths).toContain('catalogue/:id');
+  });
+
+  it('should never guard /catalogue or /catalogue/:id (DEV-06.8, backend permitAll)', () => {
+    const publicRoute = routes.find((route) => route.path === '');
+    const catalogueRoute = publicRoute?.children?.find((child) => child.path === 'catalogue');
+    const titleDetailRoute = publicRoute?.children?.find((child) => child.path === 'catalogue/:id');
+
+    expect(catalogueRoute?.canActivate).toBeUndefined();
+    expect(titleDetailRoute?.canActivate).toBeUndefined();
+  });
+
   it('should protect /member, /staff and /admin with authGuard', () => {
     for (const path of ['member', 'staff', 'admin']) {
       const route = routes.find((candidate) => candidate.path === path);

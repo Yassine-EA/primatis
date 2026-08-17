@@ -28,6 +28,20 @@ export const routes: Routes = [
         path: 'login',
         loadComponent: () => import('./auth/pages/login/login').then((m) => m.Login),
       },
+      {
+        // Catalogue public (DEV-06.8) : surface backend permitAll
+        // (Title.titleStatus = ACTIVE uniquement, DEV-DEC-0027) — aucun
+        // guard, même principe que 'login'. Deux routes distinctes (pas de
+        // segment parent avec redirectTo) : /catalogue n'a aucune capacité
+        // commune à protéger, contrairement à /staff ou /admin.
+        path: 'catalogue',
+        loadComponent: () => import('./catalogue/pages/catalogue-page/catalogue-page').then((m) => m.CataloguePage),
+      },
+      {
+        path: 'catalogue/:id',
+        loadComponent: () =>
+          import('./catalogue/pages/title-detail-page/title-detail-page').then((m) => m.TitleDetailPage),
+      },
     ],
   },
   {

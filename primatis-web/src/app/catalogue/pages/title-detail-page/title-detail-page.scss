@@ -1,0 +1,34 @@
+:host {
+  display: block;
+}
+
+.title-detail-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.title-detail-cover {
+  inline-size: 8rem;
+  block-size: auto;
+}
+
+.title-detail-subtitle {
+  color: var(--p-text-muted-color, #6b7280);
+}
+
+.title-detail-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 1rem;
+}
+
+dt {
+  font-weight: 600;
+}

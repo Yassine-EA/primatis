@@ -1,0 +1,60 @@
+@if (loading()) {
+  <app-loading-state message="Chargement du titre…" />
+} @else if (error(); as currentError) {
+  <app-error-state [message]="currentError.message" />
+} @else if (title(); as currentTitle) {
+  <article class="title-detail">
+    <div class="title-detail-header">
+      @if (currentTitle.coverImageUrl) {
+        <img
+          [src]="currentTitle.coverImageUrl"
+          [alt]="'Couverture de ' + currentTitle.title"
+          class="title-detail-cover"
+        />
+      }
+      <div>
+        <h1>{{ currentTitle.title }}</h1>
+        @if (currentTitle.subtitle) {
+          <p class="title-detail-subtitle">{{ currentTitle.subtitle }}</p>
+        }
+      </div>
+    </div>
+
+    @if (currentTitle.summary) {
+      <p class="title-detail-summary">{{ currentTitle.summary }}</p>
+    }
+
+    <dl>
+      @if (currentTitle.authors.length > 0) {
+        <dt>Auteur(s)</dt>
+        <dd>{{ authorNames(currentTitle) }}</dd>
+      }
+      @if (currentTitle.genres.length > 0) {
+        <dt>Genre(s)</dt>
+        <dd class="title-detail-genres">
+          @for (genre of currentTitle.genres; track genre.id) {
+            <p-tag [value]="genre.label" />
+          }
+        </dd>
+      }
+      <dt>Langue</dt>
+      <dd>{{ currentTitle.language }}</dd>
+      @if (currentTitle.publicationYear) {
+        <dt>Année de publication</dt>
+        <dd>{{ currentTitle.publicationYear }}</dd>
+      }
+      @if (currentTitle.publisher) {
+        <dt>Éditeur</dt>
+        <dd>{{ currentTitle.publisher }}</dd>
+      }
+      @if (currentTitle.pageCount) {
+        <dt>Nombre de pages</dt>
+        <dd>{{ currentTitle.pageCount }}</dd>
+      }
+      @if (currentTitle.isbn) {
+        <dt>ISBN</dt>
+        <dd>{{ currentTitle.isbn }}</dd>
+      }
+    </dl>
+  </article>
+}
