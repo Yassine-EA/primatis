@@ -66,12 +66,36 @@ describe('Navigation', () => {
     expect(linkLabels()).toContain('Espace membre');
   });
 
+  it('should point the Espace membre link at /member/profile (DEV-05.13)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/member/profile"]')).not.toBeNull();
+  });
+
+  it('should hide the Espace membre link for a user without ROLE_MEMBER (DEV-05.13)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(linkLabels()).not.toContain('Espace membre');
+  });
+
   it('should show the Administration link for ROLE_ADMIN', () => {
     authServiceMock.authenticated.mockReturnValue(true);
     authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
     render();
 
     expect(linkLabels()).toContain('Administration');
+  });
+
+  it('should point the Administration link at /admin/users (DEV-05.12)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/admin/users"]')).not.toBeNull();
   });
 
   it('should hide the Administration link for a user without ROLE_ADMIN', () => {
@@ -88,6 +112,22 @@ describe('Navigation', () => {
     render();
 
     expect(linkLabels()).toContain('Espace personnel');
+  });
+
+  it('should show the Espace personnel link for ROLE_ADMIN (DEV-05.11)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
+    render();
+
+    expect(linkLabels()).toContain('Espace personnel');
+  });
+
+  it('should point the Espace personnel link at /staff/users (DEV-05.11)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/staff/users"]')).not.toBeNull();
   });
 
   it('should call AuthService.logout() and navigate to "/" when logging out', () => {

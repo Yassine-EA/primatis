@@ -35,8 +35,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Bootstrap RBAC obligatoire (DEV-03.11, migration {@code V002}) : 3 rôles
  * canoniques, 19 permissions canoniques V1, 35 associations RolePermission
- * — matrice fixée par PRIMATIS_CONTEXT_DEV_v1.0 §6.3/§6.4. PostgreSQL réel,
- * aucun H2/Testcontainers.
+ * — matrice fixée par PRIMATIS_CONTEXT_DEV_v1.0 §6.3/§6.4. Complété par
+ * {@code V004} (DEV-05.8) : permission {@code USER_PROFILE_MANAGE}
+ * supplémentaire, attribuée à {@code ROLE_LIBRARIAN}/{@code ROLE_ADMIN}
+ * (jamais {@code ROLE_MEMBER}) — total après migration complète : 20
+ * permissions, 37 associations. PostgreSQL réel, aucun H2/Testcontainers.
  *
  * {@code spring.flyway.clean-disabled=false} n'est activé QUE dans le
  * contexte Spring dédié à cette classe ({@code @TestPropertySource} local),
@@ -59,7 +62,8 @@ class RbacBootstrapTests {
             "ARTICLE_READ", "ARTICLE_MANAGE", "ARTICLE_PUBLISH",
             "USER_READ", "USER_MANAGE",
             "ROLE_READ", "ROLE_MANAGE",
-            "SETTING_READ", "SETTING_MANAGE");
+            "SETTING_READ", "SETTING_MANAGE",
+            "USER_PROFILE_MANAGE");
 
     private static final Set<String> LIBRARIAN_PERMISSION_CODES = Set.of(
             "CATALOGUE_READ", "CATALOGUE_MANAGE",
@@ -68,7 +72,7 @@ class RbacBootstrapTests {
             "RESERVATION_READ", "RESERVATION_MANAGE",
             "FINE_READ", "FINE_MANAGE",
             "ARTICLE_READ", "ARTICLE_MANAGE", "ARTICLE_PUBLISH",
-            "USER_READ");
+            "USER_READ", "USER_PROFILE_MANAGE");
 
     @Autowired
     private Flyway flyway;
@@ -100,23 +104,23 @@ class RbacBootstrapTests {
         Set<String> roleCodes = roles.stream().map(Role::getCode).collect(Collectors.toSet());
         assertThat(roleCodes).containsExactlyInAnyOrder("ROLE_MEMBER", "ROLE_LIBRARIAN", "ROLE_ADMIN");
 
-        // --- Permission : exactement 19, aucune *_SELF ---
+        // --- Permission : exactement 20 (19 V002 + USER_PROFILE_MANAGE V004), aucune *_SELF ---
         List<Permission> permissions = permissionRepository.findAll();
-        assertThat(permissions).hasSize(19);
+        assertThat(permissions).hasSize(20);
         Set<String> permissionCodes = permissions.stream().map(Permission::getCode).collect(Collectors.toSet());
         assertThat(permissionCodes).containsExactlyInAnyOrderElementsOf(EXPECTED_PERMISSION_CODES);
         assertThat(permissionCodes).noneMatch(code -> code.endsWith("_SELF"));
 
-        // --- RolePermission : exactement 35, aucun doublon, FK valides ---
+        // --- RolePermission : exactement 37 (35 V002 + 2 V004), aucun doublon, FK valides ---
         List<RolePermission> associations = entityManager
                 .createQuery("SELECT rp FROM RolePermission rp", RolePermission.class)
                 .getResultList();
-        assertThat(associations).hasSize(35);
+        assertThat(associations).hasSize(37);
         long distinctPairs = associations.stream()
                 .map(rp -> rp.getRole().getCode() + "|" + rp.getPermission().getCode())
                 .distinct()
                 .count();
-        assertThat(distinctPairs).isEqualTo(35);
+        assertThat(distinctPairs).isEqualTo(37);
         assertThat(associations).allSatisfy(rp -> {
             assertThat(rp.getRole()).isNotNull();
             assertThat(rp.getPermission()).isNotNull();
@@ -151,7 +155,16 @@ class RbacBootstrapTests {
      * Preuve d'une véritable évolution V001 -> V002 (pas seulement une base
      * reconstruite directement jusqu'à latest) : migre d'abord uniquement
      * V001 (aucun bootstrap RBAC), vérifie l'absence de données RBAC, puis
-     * complète jusqu'à V002 et vérifie leur apparition.
+     * complète jusqu'à V002 (explicitement, pas vers la dernière migration
+     * disponible — {@code target("002")}, comme la phase V001 ci-dessus) et
+     * vérifie leur apparition.
+     *
+     * N'utilise jamais l'autowired {@code flyway} sans restriction pour la
+     * phase V002 : celui-ci résout toutes les migrations du classpath
+     * (V003+ compris dès qu'elles existent), ce qui ferait dériver ce test
+     * historique vers "dernière migration" au lieu de "V002 précisément" à
+     * chaque nouvelle migration ajoutée au projet — précisément le piège
+     * signalé lors de la correction de gate DEV-05.5.
      */
     @Test
     void migratingFromV001AloneThenToV002IntroducesRbacBootstrap() {
@@ -169,7 +182,12 @@ class RbacBootstrapTests {
         assertRowCount("permission", 0);
         assertRowCount("role_permission", 0);
 
-        MigrateResult latestResult = flyway.migrate();
+        Flyway v002Only = Flyway.configure()
+                .dataSource(dataSource)
+                .locations("classpath:db/migration")
+                .target("002")
+                .load();
+        MigrateResult latestResult = v002Only.migrate();
         assertThat(latestResult.success).isTrue();
         assertThat(latestResult.migrationsExecuted).isEqualTo(1);
         assertThat(latestResult.targetSchemaVersion).isEqualTo("002");
@@ -177,7 +195,12 @@ class RbacBootstrapTests {
         assertRowCount("permission", 19);
         assertRowCount("role_permission", 35);
 
-        assertThat(flyway.info().all()).hasSize(2);
+        // info().all() énumère TOUTES les migrations résolues depuis le
+        // classpath (V003+ incluses dès qu'elles existent), indépendamment
+        // de target() — inadapté ici. info().applied() reste borné à ce qui
+        // a réellement été appliqué par ce Flyway ciblé sur "002" : stable
+        // face à l'ajout de futures migrations sans lien avec RBAC.
+        assertThat(v002Only.info().applied()).hasSize(2);
     }
 
     /**

@@ -1,4 +1,6 @@
 import { authGuard } from './core/guards/auth.guard';
+import { permissionGuard } from './core/guards/permission.guard';
+import { roleGuard } from './core/guards/role.guard';
 import { routes } from './app.routes';
 
 describe('Application routes', () => {
@@ -34,5 +36,97 @@ describe('Application routes', () => {
     const route = routes.find((candidate) => candidate.path === 'forbidden');
 
     expect(route?.canActivate).toBeUndefined();
+  });
+
+  it('should redirect the bare /staff zone to /staff/users (DEV-05.11)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const redirectChild = staffRoute?.children?.find((child) => child.path === '');
+
+    expect(redirectChild?.redirectTo).toBe('users');
+  });
+
+  it('should protect /staff/users with permissionGuard and USER_READ (DEV-05.11)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const usersRoute = staffRoute?.children?.find((child) => child.path === 'users');
+
+    expect(usersRoute?.canActivate).toContain(permissionGuard);
+    expect(usersRoute?.data?.['permissions']).toEqual(['USER_READ']);
+  });
+
+  it('should expose the staff users list and detail routes as children of /staff/users (DEV-05.11)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const usersRoute = staffRoute?.children?.find((child) => child.path === 'users');
+    const childPaths = usersRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('');
+    expect(childPaths).toContain(':id');
+  });
+
+  it('should redirect the bare /admin zone to /admin/users (DEV-05.12)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const redirectChild = adminRoute?.children?.find((child) => child.path === '');
+
+    expect(redirectChild?.redirectTo).toBe('users');
+  });
+
+  it('should protect /admin/users with permissionGuard and USER_MANAGE (DEV-05.12)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const usersRoute = adminRoute?.children?.find((child) => child.path === 'users');
+
+    expect(usersRoute?.canActivate).toContain(permissionGuard);
+    expect(usersRoute?.data?.['permissions']).toEqual(['USER_MANAGE']);
+  });
+
+  it('should expose the admin users list, create and detail routes as children of /admin/users (DEV-05.12)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const usersRoute = adminRoute?.children?.find((child) => child.path === 'users');
+    const childPaths = usersRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('');
+    expect(childPaths).toContain('new');
+    expect(childPaths).toContain(':id');
+  });
+
+  it('should declare /admin/users/new before /admin/users/:id (DEV-05.12)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const usersRoute = adminRoute?.children?.find((child) => child.path === 'users');
+    const childPaths = usersRoute?.children?.map((child) => child.path) ?? [];
+
+    expect(childPaths.indexOf('new')).toBeLessThan(childPaths.indexOf(':id'));
+  });
+
+  it('should redirect the bare /member zone to /member/profile (DEV-05.13)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const redirectChild = memberRoute?.children?.find((child) => child.path === '');
+
+    expect(redirectChild?.redirectTo).toBe('profile');
+  });
+
+  it('should protect /member with roleGuard and ROLE_MEMBER (DEV-05.13)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+
+    expect(memberRoute?.canActivate).toContain(roleGuard);
+    expect(memberRoute?.data?.['roles']).toEqual(['ROLE_MEMBER']);
+  });
+
+  it('should expose the member profile route as a child of /member (DEV-05.13)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const childPaths = memberRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('');
+    expect(childPaths).toContain('profile');
+  });
+
+  it('should never add roleGuard to /staff or /admin (DEV-05.13)', () => {
+    for (const path of ['staff', 'admin']) {
+      const route = routes.find((candidate) => candidate.path === path);
+      expect(route?.canActivate ?? []).not.toContain(roleGuard);
+    }
+  });
+
+  it('should never add permissionGuard to /member (DEV-05.13)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+
+    expect(memberRoute?.canActivate ?? []).not.toContain(permissionGuard);
   });
 });

@@ -44,8 +44,8 @@ class FlywaySchemaRebuildTests {
         MigrateResult result = flyway.migrate();
 
         assertThat(result.success).isTrue();
-        assertThat(result.migrationsExecuted).isEqualTo(2);
-        assertThat(result.targetSchemaVersion).isEqualTo("002");
+        assertThat(result.migrationsExecuted).isEqualTo(4);
+        assertThat(result.targetSchemaVersion).isEqualTo("004");
 
         long tableCount = ((Number) entityManager
                 .createNativeQuery("SELECT count(*) FROM information_schema.tables "
@@ -63,6 +63,13 @@ class FlywaySchemaRebuildTests {
                 .createNativeQuery("SELECT setting_value FROM application_setting WHERE setting_key = 'LOAN_DURATION_DAYS'")
                 .getSingleResult();
         assertThat(loanDurationDays).isEqualTo("21");
+
+        // V003 : séquence member_number_seq présente et fraîche (première
+        // valeur = 1 immédiatement après un rebuild propre).
+        long firstMemberNumberSequenceValue = ((Number) entityManager
+                .createNativeQuery("SELECT nextval('member_number_seq')")
+                .getSingleResult()).longValue();
+        assertThat(firstMemberNumberSequenceValue).isEqualTo(1L);
 
         // Hibernate doit rester capable d'écrire contre le schéma fraîchement
         // reconstruit (ddl-auto=validate a déjà été vérifié au démarrage du

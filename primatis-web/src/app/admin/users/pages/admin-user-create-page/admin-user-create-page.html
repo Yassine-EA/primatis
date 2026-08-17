@@ -1,0 +1,122 @@
+<h1>Créer un utilisateur</h1>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  @if (errorMessage(); as message) {
+    <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+  }
+
+  <div class="field">
+    <label for="email">Email</label>
+    <input pInputText id="email" type="email" formControlName="email" />
+    @if (form.controls.email.invalid && form.controls.email.touched) {
+      <p-message severity="error" text="Email valide requis." />
+    }
+    @if (fieldError('email'); as message) {
+      <p-message severity="error" [text]="message" />
+    }
+  </div>
+
+  <div class="field">
+    <label for="firstName">Prénom</label>
+    <input pInputText id="firstName" formControlName="firstName" />
+    @if (form.controls.firstName.invalid && form.controls.firstName.touched) {
+      <p-message severity="error" text="Prénom requis." />
+    }
+  </div>
+
+  <div class="field">
+    <label for="lastName">Nom</label>
+    <input pInputText id="lastName" formControlName="lastName" />
+    @if (form.controls.lastName.invalid && form.controls.lastName.touched) {
+      <p-message severity="error" text="Nom requis." />
+    }
+  </div>
+
+  <div class="field">
+    <label for="phoneNumber">Téléphone</label>
+    <input pInputText id="phoneNumber" formControlName="phoneNumber" />
+  </div>
+
+  <div class="field">
+    <label for="roles">Rôles</label>
+    <p-multiselect
+      inputId="roles"
+      formControlName="roles"
+      [options]="roleOptions"
+      optionLabel="label"
+      optionValue="value"
+      (onChange)="onRolesChange()"
+    />
+    @if (form.controls.roles.invalid && form.controls.roles.touched) {
+      <p-message severity="error" text="Au moins un rôle est requis." />
+    }
+  </div>
+
+  @if (isMember) {
+    <fieldset class="membership-fields">
+      <legend>Adhésion</legend>
+
+      <div class="field">
+        <label for="memberStatus">Statut d'adhésion</label>
+        <p-select
+          inputId="memberStatus"
+          formControlName="memberStatus"
+          [options]="memberStatusOptions"
+          optionLabel="label"
+          optionValue="value"
+        />
+        @if (form.controls.memberStatus.invalid && form.controls.memberStatus.touched) {
+          <p-message severity="error" text="Statut d'adhésion requis." />
+        }
+      </div>
+
+      <div class="field">
+        <label for="registrationDate">Date d'inscription</label>
+        <input pInputText id="registrationDate" type="date" formControlName="registrationDate" />
+        @if (form.controls.registrationDate.invalid && form.controls.registrationDate.touched) {
+          <p-message severity="error" text="Date d'inscription requise." />
+        }
+      </div>
+
+      <div class="field">
+        <label for="memberExpirationDate">Date d'expiration</label>
+        <input pInputText id="memberExpirationDate" type="date" formControlName="memberExpirationDate" />
+      </div>
+
+      @if (isBlocked) {
+        <div class="field">
+          <label for="blockedReason">Motif de blocage</label>
+          <input pInputText id="blockedReason" formControlName="blockedReason" />
+        </div>
+      }
+    </fieldset>
+  }
+
+  <div class="form-actions">
+    <button pButton type="submit" label="Créer l'utilisateur" [disabled]="submitting()"></button>
+  </div>
+</form>
+
+@if (createdPassword(); as password) {
+  <p-dialog
+    header="Utilisateur créé"
+    [visible]="true"
+    [modal]="true"
+    [closable]="true"
+    [closeOnEscape]="true"
+    (onHide)="closePasswordDialog()"
+  >
+    <p>
+      Voici le mot de passe initial généré pour ce compte. Il ne sera plus jamais affiché : transmettez-le
+      immédiatement à l'utilisateur.
+    </p>
+    <p class="generated-password" data-testid="generated-password">{{ password }}</p>
+    @if (copyFeedback(); as feedback) {
+      <p-message severity="info" [text]="feedback" />
+    }
+    <div class="dialog-actions">
+      <button pButton type="button" label="Copier le mot de passe" (click)="copyPassword()"></button>
+      <button pButton type="button" label="Fermer" severity="secondary" (click)="closePasswordDialog()"></button>
+    </div>
+  </p-dialog>
+}
