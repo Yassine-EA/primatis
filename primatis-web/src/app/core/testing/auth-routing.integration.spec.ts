@@ -6,6 +6,7 @@ import { TestBed } from '@angular/core/testing';
 import { Routes, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
+import { MessageService } from 'primeng/api';
 
 import { routes } from '../../app.routes';
 import { Login } from '../../auth/pages/login/login';
@@ -44,6 +45,11 @@ describe('Routing + AuthGuard integration (real routes, real Router navigation)'
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: API_BASE_URL, useValue: '/api/v1' },
+        // DEV-05.13 : '/member' redirige désormais vers '/member/profile',
+        // qui construit réellement MemberProfilePage (roleGuard laisse
+        // passer un ROLE_MEMBER) — MessageService doit donc être fourni ici,
+        // comme il l'est réellement par app.config.ts en production.
+        MessageService,
       ],
     });
   });
@@ -56,7 +62,9 @@ describe('Routing + AuthGuard integration (real routes, real Router navigation)'
     await RouterTestingHarness.create('/member');
     const location = TestBed.inject(Location);
 
-    expect(location.path()).toBe('/login?returnUrl=%2Fmember');
+    // DEV-05.13 : même mécanisme que /admin (redirectTo résolu avant les
+    // guards) — returnUrl porte déjà l'URL post-redirection '/member/profile'.
+    expect(location.path()).toBe('/login?returnUrl=%2Fmember%2Fprofile');
   });
 
   it('should redirect an anonymous user requesting /admin to /login with returnUrl', async () => {
@@ -77,7 +85,9 @@ describe('Routing + AuthGuard integration (real routes, real Router navigation)'
     await RouterTestingHarness.create('/member');
     const location = TestBed.inject(Location);
 
-    expect(location.path()).toBe('/member');
+    // DEV-05.13 : '/member' redirige désormais vers '/member/profile' (même
+    // principe que '/staff' -> '/staff/users', '/admin' -> '/admin/users').
+    expect(location.path()).toBe('/member/profile');
   });
 
   it('should not have permissionGuard artificially applied to /member, /staff or /admin', () => {
@@ -103,6 +113,10 @@ describe('Login returnUrl integration (real routing, real ActivatedRoute)', () =
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: API_BASE_URL, useValue: '/api/v1' },
+        // DEV-05.13 : le returnUrl testé ci-dessous cible '/member/profile',
+        // réellement construit (MessageService requis, comme fourni par
+        // app.config.ts en production).
+        MessageService,
       ],
     });
   });
@@ -119,11 +133,11 @@ describe('Login returnUrl integration (real routing, real ActivatedRoute)', () =
     const login = harness.fixture.debugElement.query(By.directive(Login))?.componentInstance as Login;
     expect(login).toBeInstanceOf(Login);
 
-    login.form.setValue({ email: 'librarian@primatis.test', password: 'Correct-Password-2026!' });
+    login.form.setValue({ email: 'member@primatis.test', password: 'Correct-Password-2026!' });
     login.submit();
 
     const httpTestingController = TestBed.inject(HttpTestingController);
-    const token = buildJwt({ sub: '1', roles: ['ROLE_LIBRARIAN'], permissions: ['LOAN_MANAGE'], exp: futureExp() });
+    const token = buildJwt({ sub: '1', roles: ['ROLE_MEMBER'], permissions: [], exp: futureExp() });
     httpTestingController.expectOne('/api/v1/auth/login').flush({
       token,
       tokenType: 'Bearer',
@@ -136,7 +150,10 @@ describe('Login returnUrl integration (real routing, real ActivatedRoute)', () =
   }
 
   it('should navigate to the internal returnUrl after a successful login', async () => {
-    expect(await loginAndReturnLocation('?returnUrl=%2Fmember')).toBe('/member');
+    // DEV-05.13 : '/member' redirige vers '/member/profile' (même mécanisme
+    // que /staff, /admin) — le token émis par ce flux porte ROLE_MEMBER pour
+    // que roleGuard laisse passer la cible testée.
+    expect(await loginAndReturnLocation('?returnUrl=%2Fmember')).toBe('/member/profile');
   });
 
   // Location.path() sérialise la racine de l'application en chaîne vide

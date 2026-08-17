@@ -6,6 +6,7 @@ import { PublicLayout } from './core/layouts/public-layout/public-layout';
 import { StaffLayout } from './core/layouts/staff-layout/staff-layout';
 import { authGuard } from './core/guards/auth.guard';
 import { permissionGuard } from './core/guards/permission.guard';
+import { roleGuard } from './core/guards/role.guard';
 import { Forbidden } from './shared/pages/forbidden/forbidden';
 import { Home } from './shared/pages/home/home';
 import { NotFound } from './shared/pages/not-found/not-found';
@@ -30,13 +31,26 @@ export const routes: Routes = [
     ],
   },
   {
-    // AuthGuard uniquement (DEV-04.9) : aucune route métier n'existe encore
-    // sous ces layouts, donc aucune permission ne serait légitime à y
-    // brancher pour l'instant (voir PermissionGuard, testé isolément).
+    // roleGuard porté par la zone elle-même (DEV-05.13), pas par un segment
+    // enfant comme permissionGuard en Staff/Admin : ROLE_MEMBER conditionne
+    // TOUTE la zone /member par définition ("Espace membre"), pas une
+    // ressource spécifique parmi plusieurs possibles. Backend /api/v1/me/**
+    // reste inchangé (ownership structurelle, accessible à tout AppUser
+    // authentifié) — cette restriction est strictement UX/frontend.
     path: 'member',
     component: MemberLayout,
-    canActivate: [authGuard],
-    children: [],
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_MEMBER'] },
+    children: [
+      { path: '', redirectTo: 'profile', pathMatch: 'full' },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./member/profile/pages/member-profile-page/member-profile-page').then(
+            (m) => m.MemberProfilePage,
+          ),
+      },
+    ],
   },
   {
     // AuthGuard au niveau de la zone (DEV-04.9) ; PermissionGuard porté par

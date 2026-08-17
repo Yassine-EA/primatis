@@ -66,6 +66,22 @@ describe('Navigation', () => {
     expect(linkLabels()).toContain('Espace membre');
   });
 
+  it('should point the Espace membre link at /member/profile (DEV-05.13)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/member/profile"]')).not.toBeNull();
+  });
+
+  it('should hide the Espace membre link for a user without ROLE_MEMBER (DEV-05.13)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(linkLabels()).not.toContain('Espace membre');
+  });
+
   it('should show the Administration link for ROLE_ADMIN', () => {
     authServiceMock.authenticated.mockReturnValue(true);
     authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);

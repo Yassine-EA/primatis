@@ -27,7 +27,7 @@ export class Navigation {
 
   private static readonly ITEMS: readonly NavigationItem[] = [
     { label: 'Accueil', routerLink: '/' },
-    { label: 'Espace membre', routerLink: '/member', requiredRoles: ['ROLE_MEMBER'] },
+    { label: 'Espace membre', routerLink: '/member/profile', requiredRoles: ['ROLE_MEMBER'] },
     { label: 'Espace personnel', routerLink: '/staff/users', requiredRoles: ['ROLE_LIBRARIAN', 'ROLE_ADMIN'] },
     { label: 'Administration', routerLink: '/admin/users', requiredRoles: ['ROLE_ADMIN'] },
   ];

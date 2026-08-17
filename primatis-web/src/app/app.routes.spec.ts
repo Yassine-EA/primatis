@@ -1,5 +1,6 @@
 import { authGuard } from './core/guards/auth.guard';
 import { permissionGuard } from './core/guards/permission.guard';
+import { roleGuard } from './core/guards/role.guard';
 import { routes } from './app.routes';
 
 describe('Application routes', () => {
@@ -92,5 +93,40 @@ describe('Application routes', () => {
     const childPaths = usersRoute?.children?.map((child) => child.path) ?? [];
 
     expect(childPaths.indexOf('new')).toBeLessThan(childPaths.indexOf(':id'));
+  });
+
+  it('should redirect the bare /member zone to /member/profile (DEV-05.13)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const redirectChild = memberRoute?.children?.find((child) => child.path === '');
+
+    expect(redirectChild?.redirectTo).toBe('profile');
+  });
+
+  it('should protect /member with roleGuard and ROLE_MEMBER (DEV-05.13)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+
+    expect(memberRoute?.canActivate).toContain(roleGuard);
+    expect(memberRoute?.data?.['roles']).toEqual(['ROLE_MEMBER']);
+  });
+
+  it('should expose the member profile route as a child of /member (DEV-05.13)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const childPaths = memberRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('');
+    expect(childPaths).toContain('profile');
+  });
+
+  it('should never add roleGuard to /staff or /admin (DEV-05.13)', () => {
+    for (const path of ['staff', 'admin']) {
+      const route = routes.find((candidate) => candidate.path === path);
+      expect(route?.canActivate ?? []).not.toContain(roleGuard);
+    }
+  });
+
+  it('should never add permissionGuard to /member (DEV-05.13)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+
+    expect(memberRoute?.canActivate ?? []).not.toContain(permissionGuard);
   });
 });
