@@ -458,6 +458,309 @@ class LoanServiceTests {
     }
 
     // ---------------------------------------------------------------
+    // registerReturn — DEV-07.6, LOAN_MANAGE
+    // ---------------------------------------------------------------
+
+    @Test
+    void registerReturnDeniedWithoutLoanManagePermission() {
+        authenticateAsAnonymous();
+        AppUser borrower = persistMember("service-return-denied@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-DENIED");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        entityManager.flush();
+
+        assertThrows(AccessDeniedException.class, () -> loanService.registerReturn(loan.getId()));
+    }
+
+    @Test
+    void registerReturnOfActiveLoanSucceeds() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-active@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-ACTIVE");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now().minusSeconds(3600));
+        entityManager.flush();
+
+        LoanResponse response = loanService.registerReturn(loan.getId());
+
+        assertThat(response.loanStatus()).isEqualTo(LoanStatus.RETURNED);
+        assertThat(response.returnDate()).isEqualTo(LocalDate.now());
+    }
+
+    @Test
+    void registerReturnOfOverdueLoanSucceeds() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-overdue@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-OVERDUE");
+        Loan loan = persistLoanWithDueDate(borrower, copy, LoanStatus.OVERDUE, LocalDate.now().minusDays(10));
+        entityManager.flush();
+
+        LoanResponse response = loanService.registerReturn(loan.getId());
+
+        assertThat(response.loanStatus()).isEqualTo(LoanStatus.RETURNED);
+        assertThat(response.returnDate()).isEqualTo(LocalDate.now());
+    }
+
+    @Test
+    void registerReturnOnGoodCopyWithoutReservationMakesCopyAvailable() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-good@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-GOOD");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        entityManager.flush();
+
+        loanService.registerReturn(loan.getId());
+
+        Copy reloadedCopy = entityManager.find(Copy.class, copy.getId());
+        assertThat(reloadedCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.AVAILABLE);
+    }
+
+    @Test
+    void registerReturnOnDamagedCopyWithoutReservationMakesCopyAvailable() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-damaged@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-DAMAGED");
+        copy.setCopyCondition(CopyCondition.DAMAGED);
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        entityManager.flush();
+
+        loanService.registerReturn(loan.getId());
+
+        Copy reloadedCopy = entityManager.find(Copy.class, copy.getId());
+        assertThat(reloadedCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.AVAILABLE);
+    }
+
+    /**
+     * {@code ck_copy_condition_availability} (V001) garantit qu'un Copy
+     * {@code LOST} est déjà {@code UNAVAILABLE} — y compris pendant qu'un
+     * Loan reste ouvert (ex. le staff signale la perte via {@code
+     * CopyService.updateCopy} avant que le retour ne soit enregistré,
+     * DEV-06.6). La fixture reflète donc directement cet état réaliste
+     * (jamais {@code ON_LOAN} + {@code LOST} simultanément, combinaison
+     * rejetée par la contrainte dès la persistance).
+     */
+    @Test
+    void registerReturnOnLostCopyMakesCopyUnavailable() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-lost@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopyWithCondition(title, "SERVICE-RETURN-LOST", CopyCondition.LOST, AvailabilityStatus.UNAVAILABLE);
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        entityManager.flush();
+
+        LoanResponse response = loanService.registerReturn(loan.getId());
+
+        assertThat(response.loanStatus()).isEqualTo(LoanStatus.RETURNED);
+        Copy reloadedCopy = entityManager.find(Copy.class, copy.getId());
+        assertThat(reloadedCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.UNAVAILABLE);
+    }
+
+    @Test
+    void registerReturnOnOutOfServiceCopyMakesCopyUnavailable() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-oos@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopyWithCondition(title, "SERVICE-RETURN-OOS", CopyCondition.OUT_OF_SERVICE, AvailabilityStatus.UNAVAILABLE);
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        entityManager.flush();
+
+        LoanResponse response = loanService.registerReturn(loan.getId());
+
+        assertThat(response.loanStatus()).isEqualTo(LoanStatus.RETURNED);
+        Copy reloadedCopy = entityManager.find(Copy.class, copy.getId());
+        assertThat(reloadedCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.UNAVAILABLE);
+    }
+
+    @Test
+    void registerReturnDoesNotPromoteReservationWhenCopyIsLost() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-lost-reservation@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser waitingUser = persistMember("service-return-lost-waiting@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopyWithCondition(title, "SERVICE-RETURN-LOST-RESERVATION", CopyCondition.LOST, AvailabilityStatus.UNAVAILABLE);
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        Reservation waiting = persistWaitingReservation(waitingUser, title, Instant.now());
+        entityManager.flush();
+
+        loanService.registerReturn(loan.getId());
+
+        Reservation reloadedReservation = entityManager.find(Reservation.class, waiting.getId());
+        assertThat(reloadedReservation.getReservationStatus()).isEqualTo(ReservationStatus.WAITING);
+        assertThat(reloadedReservation.getAssignedCopy()).isNull();
+    }
+
+    @Test
+    void registerReturnWithWaitingReservationPromotesItToReadyAndCopyToReserved() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-promote@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser waitingUser = persistMember("service-return-promote-waiting@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-PROMOTE");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        Reservation waiting = persistWaitingReservation(waitingUser, title, Instant.now());
+        entityManager.flush();
+
+        loanService.registerReturn(loan.getId());
+
+        Copy reloadedCopy = entityManager.find(Copy.class, copy.getId());
+        Reservation reloadedReservation = entityManager.find(Reservation.class, waiting.getId());
+        assertThat(reloadedCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.RESERVED);
+        assertThat(reloadedReservation.getReservationStatus()).isEqualTo(ReservationStatus.READY);
+        assertThat(reloadedReservation.getAssignedCopy().getId()).isEqualTo(copy.getId());
+        assertThat(reloadedReservation.getExpirationDate()).isNotNull();
+    }
+
+    @Test
+    void registerReturnComputesReadyExpirationFromHoldHoursSetting() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-hold@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser waitingUser = persistMember("service-return-hold-waiting@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-HOLD");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        Reservation waiting = persistWaitingReservation(waitingUser, title, Instant.now());
+        entityManager.flush();
+        Instant beforeReturn = Instant.now();
+
+        loanService.registerReturn(loan.getId());
+
+        Reservation reloadedReservation = entityManager.find(Reservation.class, waiting.getId());
+        Instant expectedExpiration = beforeReturn.plus(java.time.Duration.ofHours(48));
+        assertThat(reloadedReservation.getExpirationDate())
+                .isBetween(expectedExpiration.minusSeconds(5), expectedExpiration.plusSeconds(5));
+    }
+
+    @Test
+    void registerReturnDetectsLatenessEvenWhenLoanWasStillActive() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-late-active@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-LATE-ACTIVE");
+        Loan loan = persistLoanWithDueDate(borrower, copy, LoanStatus.ACTIVE, LocalDate.now().minusDays(5));
+        entityManager.flush();
+
+        LoanResponse response = loanService.registerReturn(loan.getId());
+
+        assertThat(response.loanStatus()).isEqualTo(LoanStatus.RETURNED);
+        assertThat(response.returnDate()).isAfter(response.dueDate());
+    }
+
+    @Test
+    void registerReturnWithUnknownLoanThrowsResourceNotFound() {
+        authenticateWithLoanManage();
+
+        assertThrows(ResourceNotFoundException.class, () -> loanService.registerReturn(999999999L));
+    }
+
+    @Test
+    void registerReturnOfAlreadyReturnedLoanIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-already@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-RETURN-ALREADY");
+        copy.setAvailabilityStatus(AvailabilityStatus.AVAILABLE);
+        Loan loan = persistLoan(borrower, copy, LoanStatus.RETURNED, Instant.now());
+        loan.setReturnDate(LocalDate.now());
+        entityManager.flush();
+
+        assertBusinessRuleCode("LOAN_ALREADY_RETURNED", () -> loanService.registerReturn(loan.getId()));
+    }
+
+    @Test
+    void registerReturnWithInconsistentCopyStateIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-inconsistent@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        // Incohérence de données volontaire : Loan ACTIVE (donc ouvert) mais Copy
+        // laissé AVAILABLE au lieu d'ON_LOAN — preuve que l'anomalie est signalée,
+        // jamais masquée silencieusement (mission §5 : « ne pas masquer
+        // silencieusement l'anomalie »).
+        Copy copy = persistCopy(title, "SERVICE-RETURN-INCONSISTENT");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        entityManager.flush();
+
+        assertBusinessRuleCode("LOAN_COPY_STATE_INCONSISTENT", () -> loanService.registerReturn(loan.getId()));
+    }
+
+    @Test
+    void registerReturnPromotesOldestWaitingReservationFirst() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-fifo@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser olderUser = persistMember("service-return-fifo-older@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser newerUser = persistMember("service-return-fifo-newer@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-FIFO");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        Reservation older = persistWaitingReservation(olderUser, title, Instant.now().minusSeconds(3600));
+        Reservation newer = persistWaitingReservation(newerUser, title, Instant.now());
+        entityManager.flush();
+
+        loanService.registerReturn(loan.getId());
+
+        Reservation reloadedOlder = entityManager.find(Reservation.class, older.getId());
+        Reservation reloadedNewer = entityManager.find(Reservation.class, newer.getId());
+        assertThat(reloadedOlder.getReservationStatus()).isEqualTo(ReservationStatus.READY);
+        assertThat(reloadedNewer.getReservationStatus()).isEqualTo(ReservationStatus.WAITING);
+    }
+
+    @Test
+    void registerReturnBreaksTiesByIdWhenReservationDatesAreEqual() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-tie@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser userOne = persistMember("service-return-tie-1@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser userTwo = persistMember("service-return-tie-2@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-TIE");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        Instant sameInstant = Instant.now();
+        Reservation first = persistWaitingReservation(userOne, title, sameInstant);
+        Reservation second = persistWaitingReservation(userTwo, title, sameInstant);
+        entityManager.flush();
+
+        loanService.registerReturn(loan.getId());
+
+        Long promotedId = Math.min(first.getId(), second.getId());
+        Long stillWaitingId = Math.max(first.getId(), second.getId());
+        assertThat(entityManager.find(Reservation.class, promotedId).getReservationStatus())
+                .isEqualTo(ReservationStatus.READY);
+        assertThat(entityManager.find(Reservation.class, stillWaitingId).getReservationStatus())
+                .isEqualTo(ReservationStatus.WAITING);
+    }
+
+    @Test
+    void registerReturnPromotesOnlyOneWaitingReservation() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-onlyone@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser userOne = persistMember("service-return-onlyone-1@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser userTwo = persistMember("service-return-onlyone-2@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser userThree = persistMember("service-return-onlyone-3@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-ONLYONE");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        persistWaitingReservation(userOne, title, Instant.now().minusSeconds(300));
+        persistWaitingReservation(userTwo, title, Instant.now().minusSeconds(200));
+        persistWaitingReservation(userThree, title, Instant.now().minusSeconds(100));
+        entityManager.flush();
+
+        loanService.registerReturn(loan.getId());
+
+        List<Reservation> reservations = entityManager
+                .createQuery("SELECT r FROM Reservation r WHERE r.title.id = :titleId", Reservation.class)
+                .setParameter("titleId", title.getId())
+                .getResultList();
+        long readyReservations = reservations.stream()
+                .filter(r -> r.getReservationStatus() == ReservationStatus.READY).count();
+        long waitingReservations = reservations.stream()
+                .filter(r -> r.getReservationStatus() == ReservationStatus.WAITING).count();
+        assertThat(readyReservations).isEqualTo(1);
+        assertThat(waitingReservations).isEqualTo(2);
+    }
+
+    // ---------------------------------------------------------------
     // Confirmation structurelle N+1 (DEV-07.3 a identifié le risque
     // LoanResponse.from → loan.getUser()/loan.getCopy()/copy.getTitle()).
     // Ni listLoans ni listOwnLoans n'introduisent de Repository/requête
@@ -579,6 +882,45 @@ class LoanServiceTests {
         return loan;
     }
 
+    private Loan persistLoanWithDueDate(AppUser user, Copy copy, LoanStatus status, LocalDate dueDate) {
+        Loan loan = new Loan();
+        loan.setUser(user);
+        loan.setCopy(copy);
+        loan.setLoanDate(dueDate.minusDays(21).atStartOfDay(java.time.ZoneOffset.UTC).toInstant());
+        loan.setDueDate(dueDate);
+        loan.setLoanStatus(status);
+        loan.setCreatedAt(Instant.now());
+        loan.setUpdatedAt(Instant.now());
+        entityManager.persist(loan);
+        return loan;
+    }
+
+    private Copy persistOnLoanCopy(Title title, String inventoryCode) {
+        Copy copy = persistCopy(title, inventoryCode);
+        copy.setAvailabilityStatus(AvailabilityStatus.ON_LOAN);
+        return copy;
+    }
+
+    /**
+     * Persiste directement la combinaison condition/disponibilité voulue
+     * (jamais via une mutation en deux temps sur un Copy déjà persisté) :
+     * {@code ck_copy_condition_availability} (V001) est vérifiée à chaque
+     * flush, une combinaison transitoirement invalide échouerait même si
+     * l'état final visé est cohérent.
+     */
+    private Copy persistCopyWithCondition(
+            Title title, String inventoryCode, CopyCondition condition, AvailabilityStatus availability) {
+        Copy copy = new Copy();
+        copy.setTitle(title);
+        copy.setInventoryCode(inventoryCode);
+        copy.setCopyCondition(condition);
+        copy.setAvailabilityStatus(availability);
+        copy.setCreatedAt(Instant.now());
+        copy.setUpdatedAt(Instant.now());
+        entityManager.persist(copy);
+        return copy;
+    }
+
     private AppUser persistMember(String email, MemberStatus memberStatus, LocalDate memberExpirationDate) {
         AppUser user = persistUser(email);
         user.setMemberNumber(String.format("M%09d", System.nanoTime() % 1_000_000_000L));
@@ -607,6 +949,18 @@ class LoanServiceTests {
         reservation.setReservationDate(Instant.now());
         reservation.setExpirationDate(Instant.now().plusSeconds(3600));
         reservation.setReservationStatus(ReservationStatus.READY);
+        reservation.setCreatedAt(Instant.now());
+        reservation.setUpdatedAt(Instant.now());
+        entityManager.persist(reservation);
+        return reservation;
+    }
+
+    private Reservation persistWaitingReservation(AppUser user, Title title, Instant reservationDate) {
+        Reservation reservation = new Reservation();
+        reservation.setUser(user);
+        reservation.setTitle(title);
+        reservation.setReservationDate(reservationDate);
+        reservation.setReservationStatus(ReservationStatus.WAITING);
         reservation.setCreatedAt(Instant.now());
         reservation.setUpdatedAt(Instant.now());
         entityManager.persist(reservation);

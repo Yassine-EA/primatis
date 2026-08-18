@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -117,6 +118,30 @@ public class LoanController {
     @PostMapping("/api/v1/loans")
     public ResponseEntity<LoanResponse> registerLoan(@Valid @RequestBody CreateLoanRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(loanService.registerLoan(request));
+    }
+
+    @Operation(
+            summary = "Retour d'un prêt",
+            description = "Enregistre le retour d'un Loan ouvert (ACTIVE ou OVERDUE) — LOAN_MANAGE requis. "
+                    + "Aucun corps de requête : le retard est déterminé à partir de la date courante et de "
+                    + "dueDate, l'état de l'exemplaire (CopyCondition) est lu depuis sa fiche déjà persistée. "
+                    + "Si l'exemplaire reste prêtable et qu'une Reservation WAITING admissible existe pour son "
+                    + "Title, elle passe automatiquement à READY et l'exemplaire devient RESERVED ; sinon "
+                    + "l'exemplaire devient AVAILABLE (ou UNAVAILABLE si LOST/OUT_OF_SERVICE).")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Prêt retourné."),
+            @ApiResponse(responseCode = "401", description = "Authentification requise ou JWT invalide.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Permission LOAN_MANAGE manquante.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Prêt introuvable.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Prêt déjà retourné ou état incohérent.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
+    })
+    @PostMapping("/api/v1/loans/{loanId}/return")
+    public LoanResponse registerReturn(@PathVariable Long loanId) {
+        return loanService.registerReturn(loanId);
     }
 
     private Pageable pageable(int page, int size) {

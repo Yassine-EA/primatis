@@ -516,6 +516,127 @@ class LoanControllerTests {
     }
 
     // ---------------------------------------------------------------
+    // POST /api/v1/loans/{loanId}/return — staff, LOAN_MANAGE
+    // ---------------------------------------------------------------
+
+    @Test
+    void registerReturnWithoutJwtIsUnauthorized() throws Exception {
+        mockMvc.perform(post("/api/v1/loans/1/return"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void registerReturnAuthenticatedWithoutLoanManageIsForbidden() throws Exception {
+        String token = signToken(1L, List.of(), List.of("LOAN_READ"));
+
+        mockMvc.perform(post("/api/v1/loans/1/return").header("Authorization", "Bearer " + token))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
+    }
+
+    @Test
+    void registerReturnOnOpenLoanReturnsOkWithReturnedLoan() throws Exception {
+        AppUser borrower = persistMember("controller-return-open@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "CONTROLLER-RETURN-OPEN");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        String token = signToken(1L, List.of(), List.of("LOAN_MANAGE"));
+
+        mockMvc.perform(post("/api/v1/loans/" + loan.getId() + "/return")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(loan.getId()))
+                .andExpect(jsonPath("$.loanStatus").value("RETURNED"))
+                .andExpect(jsonPath("$.returnDate").exists());
+
+        Copy reloadedCopy = entityManager.find(Copy.class, copy.getId());
+        assertThat(reloadedCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.AVAILABLE);
+    }
+
+    @Test
+    void registerReturnOnUnknownLoanReturnsNotFound() throws Exception {
+        String token = signToken(1L, List.of(), List.of("LOAN_MANAGE"));
+
+        mockMvc.perform(post("/api/v1/loans/999999999/return").header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("LOAN_NOT_FOUND"));
+    }
+
+    @Test
+    void registerReturnOnAlreadyReturnedLoanReturnsConflict() throws Exception {
+        AppUser borrower = persistMember("controller-return-already@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "CONTROLLER-RETURN-ALREADY");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.RETURNED, Instant.now());
+        String token = signToken(1L, List.of(), List.of("LOAN_MANAGE"));
+
+        mockMvc.perform(post("/api/v1/loans/" + loan.getId() + "/return")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("LOAN_ALREADY_RETURNED"));
+    }
+
+    @Test
+    void registerReturnWithWaitingReservationAssignsCopyToReserved() throws Exception {
+        AppUser borrower = persistMember("controller-return-fifo-borrower@primatis.test");
+        AppUser waitingUser = persistMember("controller-return-fifo-waiting@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "CONTROLLER-RETURN-FIFO");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+        Long reservationId = persistWaitingReservation(waitingUser, title);
+        String token = signToken(1L, List.of(), List.of("LOAN_MANAGE"));
+
+        mockMvc.perform(post("/api/v1/loans/" + loan.getId() + "/return")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk());
+
+        Copy reloadedCopy = entityManager.find(Copy.class, copy.getId());
+        Reservation reloadedReservation = entityManager.find(Reservation.class, reservationId);
+        assertThat(reloadedCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.RESERVED);
+        assertThat(reloadedReservation.getReservationStatus()).isEqualTo(ReservationStatus.READY);
+        assertThat(reloadedReservation.getAssignedCopy().getId()).isEqualTo(copy.getId());
+    }
+
+    /**
+     * Chaîne réelle complète : prouve que {@code ROLE_LIBRARIAN} bootstrapé
+     * par V002 porte bien {@code LOAN_MANAGE} pour le retour.
+     */
+    @Test
+    void librarianRoleFromRealBootstrapCanRegisterReturn() throws Exception {
+        String email = "controller-return-librarian@primatis.test";
+        String rawPassword = "Correct-Librarian-Password-2026!";
+        persistActiveUserWithRole(email, rawPassword, "ROLE_LIBRARIAN");
+        AppUser borrower = persistMember("controller-return-librarian-borrower@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "CONTROLLER-RETURN-LIBRARIAN");
+        Loan loan = persistLoan(borrower, copy, LoanStatus.ACTIVE, Instant.now());
+
+        Authentication authentication = authService.login(email, rawPassword);
+        AccessToken accessToken = jwtService.generateAccessToken(authentication);
+
+        mockMvc.perform(post("/api/v1/loans/" + loan.getId() + "/return")
+                        .header("Authorization", "Bearer " + accessToken.token()))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * {@code ROLE_MEMBER} ne porte pas {@code LOAN_MANAGE} (bootstrap V002).
+     */
+    @Test
+    void memberRoleFromRealBootstrapCannotRegisterReturn() throws Exception {
+        String email = "controller-return-member@primatis.test";
+        String rawPassword = "Correct-Member-Password-2026!";
+        persistActiveUserWithRole(email, rawPassword, "ROLE_MEMBER");
+
+        Authentication authentication = authService.login(email, rawPassword);
+        AccessToken accessToken = jwtService.generateAccessToken(authentication);
+
+        mockMvc.perform(post("/api/v1/loans/1/return")
+                        .header("Authorization", "Bearer " + accessToken.token()))
+                .andExpect(status().isForbidden());
+    }
+
+    // ---------------------------------------------------------------
     // Fixtures
     // ---------------------------------------------------------------
 
@@ -713,6 +834,45 @@ class LoanControllerTests {
             reservation.setReservationDate(Instant.now());
             reservation.setExpirationDate(Instant.now().plusSeconds(3600));
             reservation.setReservationStatus(ReservationStatus.READY);
+            reservation.setCreatedAt(Instant.now());
+            reservation.setUpdatedAt(Instant.now());
+            entityManager.persist(reservation);
+            entityManager.flush();
+            holder[0] = reservation.getId();
+        });
+        createdReservationIds.add(holder[0]);
+        return holder[0];
+    }
+
+    private Copy persistOnLoanCopy(Title title, String inventoryCode) {
+        Long[] holder = new Long[1];
+        transactionTemplate().executeWithoutResult(status -> {
+            Title managedTitle = entityManager.find(Title.class, title.getId());
+            Copy copy = new Copy();
+            copy.setTitle(managedTitle);
+            copy.setInventoryCode(inventoryCode);
+            copy.setCopyCondition(CopyCondition.GOOD);
+            copy.setAvailabilityStatus(AvailabilityStatus.ON_LOAN);
+            copy.setCreatedAt(Instant.now());
+            copy.setUpdatedAt(Instant.now());
+            entityManager.persist(copy);
+            entityManager.flush();
+            holder[0] = copy.getId();
+        });
+        createdCopyIds.add(holder[0]);
+        return entityManager.find(Copy.class, holder[0]);
+    }
+
+    private Long persistWaitingReservation(AppUser user, Title title) {
+        Long[] holder = new Long[1];
+        transactionTemplate().executeWithoutResult(status -> {
+            AppUser managedUser = entityManager.find(AppUser.class, user.getId());
+            Title managedTitle = entityManager.find(Title.class, title.getId());
+            Reservation reservation = new Reservation();
+            reservation.setUser(managedUser);
+            reservation.setTitle(managedTitle);
+            reservation.setReservationDate(Instant.now());
+            reservation.setReservationStatus(ReservationStatus.WAITING);
             reservation.setCreatedAt(Instant.now());
             reservation.setUpdatedAt(Instant.now());
             entityManager.persist(reservation);

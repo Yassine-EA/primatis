@@ -146,6 +146,29 @@ class LoanRepositoryTests {
     }
 
     // ---------------------------------------------------------------
+    // findByIdForUpdate (DEV-07.6)
+    // ---------------------------------------------------------------
+
+    @Test
+    void findByIdForUpdateReturnsTheLoanWhenItExists() {
+        AppUser user = persistUser("borrower-lock-existing@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "LOCK-EXISTING");
+        Loan loan = persistLoan(user, copy, LoanStatus.ACTIVE);
+        entityManager.flush();
+
+        Loan locked = loanRepository.findByIdForUpdate(loan.getId()).orElseThrow();
+
+        assertThat(locked.getId()).isEqualTo(loan.getId());
+        assertThat(locked.getLoanStatus()).isEqualTo(LoanStatus.ACTIVE);
+    }
+
+    @Test
+    void findByIdForUpdateReturnsEmptyForAnUnknownId() {
+        assertThat(loanRepository.findByIdForUpdate(999999999L)).isEmpty();
+    }
+
+    // ---------------------------------------------------------------
     // Fixtures minimales
     // ---------------------------------------------------------------
 
