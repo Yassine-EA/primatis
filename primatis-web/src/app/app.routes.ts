@@ -64,6 +64,14 @@ export const routes: Routes = [
             (m) => m.MemberProfilePage,
           ),
       },
+      {
+        // DEV-07.8 : consultation seule des prêts du membre authentifié,
+        // aucun guard propre — hérite du roleGuard ROLE_MEMBER porté par la
+        // zone /member (même principe que 'profile').
+        path: 'loans',
+        loadComponent: () =>
+          import('./member/loans/pages/member-loans-page/member-loans-page').then((m) => m.MemberLoansPage),
+      },
     ],
   },
   {

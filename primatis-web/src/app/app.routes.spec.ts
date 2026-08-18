@@ -2,6 +2,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { permissionGuard } from './core/guards/permission.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { routes } from './app.routes';
+import { MemberLoansPage } from './member/loans/pages/member-loans-page/member-loans-page';
 
 describe('Application routes', () => {
   it('should expose the expected application zones', () => {
@@ -168,6 +169,33 @@ describe('Application routes', () => {
 
     expect(childPaths).toContain('');
     expect(childPaths).toContain('profile');
+  });
+
+  it('should expose /member/loans as a child of /member, accessible for ROLE_MEMBER via the zone-level roleGuard (DEV-07.8)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const childPaths = memberRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('loans');
+    expect(memberRoute?.canActivate).toContain(roleGuard);
+    expect(memberRoute?.data?.['roles']).toEqual(['ROLE_MEMBER']);
+  });
+
+  it('should never add its own guard to /member/loans — it inherits the zone-level roleGuard (DEV-07.8)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const loansRoute = memberRoute?.children?.find((child) => child.path === 'loans');
+
+    expect(loansRoute?.canActivate).toBeUndefined();
+    expect(loansRoute?.data).toBeUndefined();
+  });
+
+  it('should lazy-load MemberLoansPage for /member/loans (DEV-07.8)', async () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const loansRoute = memberRoute?.children?.find((child) => child.path === 'loans');
+
+    expect(loansRoute?.loadComponent).toBeDefined();
+    const loadedComponent = await loansRoute!.loadComponent!();
+
+    expect(loadedComponent).toBe(MemberLoansPage);
   });
 
   it('should never add roleGuard to /staff or /admin (DEV-05.13)', () => {

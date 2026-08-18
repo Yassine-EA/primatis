@@ -112,6 +112,30 @@ describe('Navigation', () => {
     expect(linkLabels()).not.toContain('Espace membre');
   });
 
+  it('should show the Mes prêts link for ROLE_MEMBER (DEV-07.8)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(linkLabels()).toContain('Mes prêts');
+  });
+
+  it('should point the Mes prêts link at /member/loans (DEV-07.8)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/member/loans"]')).not.toBeNull();
+  });
+
+  it('should hide the Mes prêts link for a user without ROLE_MEMBER (DEV-07.8)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(linkLabels()).not.toContain('Mes prêts');
+  });
+
   it('should show the Administration link for ROLE_ADMIN', () => {
     authServiceMock.authenticated.mockReturnValue(true);
     authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);

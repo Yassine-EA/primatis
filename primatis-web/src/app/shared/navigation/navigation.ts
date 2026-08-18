@@ -31,6 +31,7 @@ export class Navigation {
     // surface backend permitAll (DEV-DEC-0027), même statut qu'Accueil.
     { label: 'Catalogue', routerLink: '/catalogue' },
     { label: 'Espace membre', routerLink: '/member/profile', requiredRoles: ['ROLE_MEMBER'] },
+    { label: 'Mes prêts', routerLink: '/member/loans', requiredRoles: ['ROLE_MEMBER'] },
     { label: 'Espace personnel', routerLink: '/staff/users', requiredRoles: ['ROLE_LIBRARIAN', 'ROLE_ADMIN'] },
     {
       label: 'Gestion du catalogue',
