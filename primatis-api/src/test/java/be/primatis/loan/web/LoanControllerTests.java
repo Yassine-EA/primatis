@@ -13,12 +13,17 @@ import be.primatis.catalogue.TitleStatus;
 import be.primatis.config.JwtProperties;
 import be.primatis.loan.Loan;
 import be.primatis.loan.LoanStatus;
+import be.primatis.loan.dto.CreateLoanRequest;
+import be.primatis.reservation.Reservation;
+import be.primatis.reservation.ReservationStatus;
 import be.primatis.security.AccessToken;
 import be.primatis.security.AuthService;
 import be.primatis.security.JwtService;
 import be.primatis.user.AccountStatus;
 import be.primatis.user.AppUser;
 import be.primatis.user.AppUserRepository;
+import be.primatis.user.MemberStatus;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
@@ -26,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
@@ -45,6 +51,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -91,10 +98,14 @@ class LoanControllerTests {
     @Autowired
     private PlatformTransactionManager transactionManager;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @PersistenceContext
     private EntityManager entityManager;
 
     private final List<Long> createdLoanIds = new ArrayList<>();
+    private final List<Long> createdReservationIds = new ArrayList<>();
     private final List<Long> createdCopyIds = new ArrayList<>();
     private final List<Long> createdTitleIds = new ArrayList<>();
     private final List<Long> createdUserIds = new ArrayList<>();
@@ -106,6 +117,10 @@ class LoanControllerTests {
     @AfterEach
     void cleanupFixtures() {
         transactionTemplate().executeWithoutResult(status -> {
+            for (Long reservationId : createdReservationIds) {
+                entityManager.createQuery("DELETE FROM Reservation r WHERE r.id = :id")
+                        .setParameter("id", reservationId).executeUpdate();
+            }
             for (Long loanId : createdLoanIds) {
                 entityManager.createQuery("DELETE FROM Loan l WHERE l.id = :id")
                         .setParameter("id", loanId).executeUpdate();
@@ -333,6 +348,174 @@ class LoanControllerTests {
     }
 
     // ---------------------------------------------------------------
+    // POST /api/v1/loans — staff, LOAN_MANAGE
+    // ---------------------------------------------------------------
+
+    @Test
+    void registerLoanWithoutJwtIsUnauthorized() throws Exception {
+        mockMvc.perform(post("/api/v1/loans")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"borrowerUserId\":1,\"copyId\":1}"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void registerLoanAuthenticatedWithoutLoanManageIsForbidden() throws Exception {
+        String token = signToken(1L, List.of(), List.of("LOAN_READ"));
+
+        mockMvc.perform(post("/api/v1/loans")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"borrowerUserId\":1,\"copyId\":1}"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
+    }
+
+    @Test
+    void registerLoanRejectsMissingFields() throws Exception {
+        String token = signToken(1L, List.of(), List.of("LOAN_MANAGE"));
+
+        mockMvc.perform(post("/api/v1/loans")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"));
+    }
+
+    @Test
+    void registerLoanOnAvailableCopyReturnsCreatedLoan() throws Exception {
+        AppUser borrower = persistMember("controller-register-available@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "CONTROLLER-REGISTER-AVAILABLE");
+        String token = signToken(1L, List.of(), List.of("LOAN_MANAGE"));
+
+        String responseBody = mockMvc.perform(post("/api/v1/loans")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CreateLoanRequest(borrower.getId(), copy.getId()))))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.loanStatus").value("ACTIVE"))
+                .andExpect(jsonPath("$.returnDate").doesNotExist())
+                .andExpect(jsonPath("$.borrower.id").value(borrower.getId()))
+                .andExpect(jsonPath("$.copy.id").value(copy.getId()))
+                .andReturn().getResponse().getContentAsString();
+
+        Long loanId = objectMapper.readTree(responseBody).get("id").asLong();
+        createdLoanIds.add(loanId);
+    }
+
+    @Test
+    void registerLoanOnUnknownBorrowerReturnsNotFound() throws Exception {
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "CONTROLLER-REGISTER-NO-BORROWER");
+        String token = signToken(1L, List.of(), List.of("LOAN_MANAGE"));
+
+        mockMvc.perform(post("/api/v1/loans")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CreateLoanRequest(999999999L, copy.getId()))))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("USER_NOT_FOUND"));
+    }
+
+    @Test
+    void registerLoanOnUnknownCopyReturnsNotFound() throws Exception {
+        AppUser borrower = persistMember("controller-register-no-copy@primatis.test");
+        String token = signToken(1L, List.of(), List.of("LOAN_MANAGE"));
+
+        mockMvc.perform(post("/api/v1/loans")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CreateLoanRequest(borrower.getId(), 999999999L))))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("COPY_NOT_FOUND"));
+    }
+
+    @Test
+    void registerLoanOnUnavailableCopyReturnsConflict() throws Exception {
+        AppUser borrower = persistMember("controller-register-unavailable@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistUnavailableCopy(title, "CONTROLLER-REGISTER-UNAVAILABLE");
+        String token = signToken(1L, List.of(), List.of("LOAN_MANAGE"));
+
+        mockMvc.perform(post("/api/v1/loans")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CreateLoanRequest(borrower.getId(), copy.getId()))))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("COPY_NOT_LENDABLE"));
+    }
+
+    @Test
+    void registerLoanOnReservedCopyFulfillsReadyReservation() throws Exception {
+        AppUser borrower = persistMember("controller-register-fulfill@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistReservedCopy(title, "CONTROLLER-REGISTER-FULFILL");
+        Long reservationId = persistReadyReservation(borrower, title, copy);
+        String token = signToken(1L, List.of(), List.of("LOAN_MANAGE"));
+
+        String responseBody = mockMvc.perform(post("/api/v1/loans")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CreateLoanRequest(borrower.getId(), copy.getId()))))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.loanStatus").value("ACTIVE"))
+                .andReturn().getResponse().getContentAsString();
+        Long loanId = objectMapper.readTree(responseBody).get("id").asLong();
+        createdLoanIds.add(loanId);
+
+        Reservation reloadedReservation = transactionTemplate()
+                .execute(status -> entityManager.find(Reservation.class, reservationId));
+        assertThat(reloadedReservation.getReservationStatus()).isEqualTo(ReservationStatus.FULFILLED);
+        assertThat(reloadedReservation.getFulfilledByLoan().getId()).isEqualTo(loanId);
+    }
+
+    /**
+     * Chaîne réelle complète : prouve que {@code ROLE_LIBRARIAN} bootstrapé
+     * par V002 porte bien {@code LOAN_MANAGE}.
+     */
+    @Test
+    void librarianRoleFromRealBootstrapCanRegisterLoan() throws Exception {
+        String email = "controller-loan-manage-librarian@primatis.test";
+        String rawPassword = "Correct-Librarian-Password-2026!";
+        persistActiveUserWithRole(email, rawPassword, "ROLE_LIBRARIAN");
+        AppUser borrower = persistMember("controller-register-librarian-borrower@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "CONTROLLER-REGISTER-LIBRARIAN");
+
+        Authentication authentication = authService.login(email, rawPassword);
+        AccessToken accessToken = jwtService.generateAccessToken(authentication);
+
+        String responseBody = mockMvc.perform(post("/api/v1/loans")
+                        .header("Authorization", "Bearer " + accessToken.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CreateLoanRequest(borrower.getId(), copy.getId()))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        createdLoanIds.add(objectMapper.readTree(responseBody).get("id").asLong());
+    }
+
+    /**
+     * {@code ROLE_MEMBER} ne porte pas {@code LOAN_MANAGE} (bootstrap V002).
+     */
+    @Test
+    void memberRoleFromRealBootstrapCannotRegisterLoan() throws Exception {
+        String email = "controller-loan-manage-member@primatis.test";
+        String rawPassword = "Correct-Member-Password-2026!";
+        persistActiveUserWithRole(email, rawPassword, "ROLE_MEMBER");
+
+        Authentication authentication = authService.login(email, rawPassword);
+        AccessToken accessToken = jwtService.generateAccessToken(authentication);
+
+        mockMvc.perform(post("/api/v1/loans")
+                        .header("Authorization", "Bearer " + accessToken.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"borrowerUserId\":1,\"copyId\":1}"))
+                .andExpect(status().isForbidden());
+    }
+
+    // ---------------------------------------------------------------
     // Fixtures
     // ---------------------------------------------------------------
 
@@ -454,5 +637,89 @@ class LoanControllerTests {
         });
         createdLoanIds.add(holder[0]);
         return entityManager.find(Loan.class, holder[0]);
+    }
+
+    private AppUser persistMember(String email) {
+        Long[] holder = new Long[1];
+        transactionTemplate().executeWithoutResult(status -> {
+            AppUser user = new AppUser();
+            user.setEmail(email);
+            user.setPasswordHash(passwordEncoder.encode("Correct-Password-2026!"));
+            user.setFirstName("Prénom");
+            user.setLastName("Nom");
+            user.setAccountStatus(AccountStatus.ACTIVE);
+            user.setMemberNumber(String.format("M%09d", System.nanoTime() % 1_000_000_000L));
+            user.setMemberStatus(MemberStatus.ACTIVE);
+            user.setRegistrationDate(LocalDate.now().minusYears(1));
+            user.setMemberExpirationDate(LocalDate.now().plusYears(1));
+            user.setFailedLoginCount(0);
+            user.setCreatedAt(Instant.now());
+            user.setUpdatedAt(Instant.now());
+            appUserRepository.save(user);
+            holder[0] = user.getId();
+        });
+        createdUserIds.add(holder[0]);
+        return entityManager.find(AppUser.class, holder[0]);
+    }
+
+    private Copy persistUnavailableCopy(Title title, String inventoryCode) {
+        Long[] holder = new Long[1];
+        transactionTemplate().executeWithoutResult(status -> {
+            Title managedTitle = entityManager.find(Title.class, title.getId());
+            Copy copy = new Copy();
+            copy.setTitle(managedTitle);
+            copy.setInventoryCode(inventoryCode);
+            copy.setCopyCondition(CopyCondition.GOOD);
+            copy.setAvailabilityStatus(AvailabilityStatus.UNAVAILABLE);
+            copy.setCreatedAt(Instant.now());
+            copy.setUpdatedAt(Instant.now());
+            entityManager.persist(copy);
+            entityManager.flush();
+            holder[0] = copy.getId();
+        });
+        createdCopyIds.add(holder[0]);
+        return entityManager.find(Copy.class, holder[0]);
+    }
+
+    private Copy persistReservedCopy(Title title, String inventoryCode) {
+        Long[] holder = new Long[1];
+        transactionTemplate().executeWithoutResult(status -> {
+            Title managedTitle = entityManager.find(Title.class, title.getId());
+            Copy copy = new Copy();
+            copy.setTitle(managedTitle);
+            copy.setInventoryCode(inventoryCode);
+            copy.setCopyCondition(CopyCondition.GOOD);
+            copy.setAvailabilityStatus(AvailabilityStatus.RESERVED);
+            copy.setCreatedAt(Instant.now());
+            copy.setUpdatedAt(Instant.now());
+            entityManager.persist(copy);
+            entityManager.flush();
+            holder[0] = copy.getId();
+        });
+        createdCopyIds.add(holder[0]);
+        return entityManager.find(Copy.class, holder[0]);
+    }
+
+    private Long persistReadyReservation(AppUser user, Title title, Copy assignedCopy) {
+        Long[] holder = new Long[1];
+        transactionTemplate().executeWithoutResult(status -> {
+            AppUser managedUser = entityManager.find(AppUser.class, user.getId());
+            Title managedTitle = entityManager.find(Title.class, title.getId());
+            Copy managedCopy = entityManager.find(Copy.class, assignedCopy.getId());
+            Reservation reservation = new Reservation();
+            reservation.setUser(managedUser);
+            reservation.setTitle(managedTitle);
+            reservation.setAssignedCopy(managedCopy);
+            reservation.setReservationDate(Instant.now());
+            reservation.setExpirationDate(Instant.now().plusSeconds(3600));
+            reservation.setReservationStatus(ReservationStatus.READY);
+            reservation.setCreatedAt(Instant.now());
+            reservation.setUpdatedAt(Instant.now());
+            entityManager.persist(reservation);
+            entityManager.flush();
+            holder[0] = reservation.getId();
+        });
+        createdReservationIds.add(holder[0]);
+        return holder[0];
     }
 }

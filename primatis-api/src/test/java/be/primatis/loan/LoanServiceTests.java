@@ -6,9 +6,17 @@ import be.primatis.catalogue.CopyCondition;
 import be.primatis.catalogue.Language;
 import be.primatis.catalogue.Title;
 import be.primatis.catalogue.TitleStatus;
+import be.primatis.exception.BusinessRuleException;
+import be.primatis.exception.ResourceNotFoundException;
+import be.primatis.fine.Fine;
+import be.primatis.fine.FineStatus;
+import be.primatis.loan.dto.CreateLoanRequest;
 import be.primatis.loan.dto.LoanResponse;
+import be.primatis.reservation.Reservation;
+import be.primatis.reservation.ReservationStatus;
 import be.primatis.user.AccountStatus;
 import be.primatis.user.AppUser;
+import be.primatis.user.MemberStatus;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
@@ -29,6 +37,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -74,6 +83,13 @@ class LoanServiceTests {
         Authentication anonymous = new AnonymousAuthenticationToken(
                 "key", "anonymousUser", List.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
         SecurityContextHolder.getContext().setAuthentication(anonymous);
+    }
+
+    private static void authenticateWithLoanManage() {
+        List<GrantedAuthority> grantedAuthorities = List.of(new SimpleGrantedAuthority("LOAN_MANAGE"));
+        Authentication authentication = new TestingAuthenticationToken("1", null, grantedAuthorities);
+        authentication.setAuthenticated(true);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     // ---------------------------------------------------------------
@@ -178,6 +194,267 @@ class LoanServiceTests {
 
         assertThat(page.getContent()).isEmpty();
         assertThat(page.getTotalElements()).isZero();
+    }
+
+    // ---------------------------------------------------------------
+    // registerLoan — DEV-07.5, LOAN_MANAGE
+    // ---------------------------------------------------------------
+
+    @Test
+    void registerLoanDeniedWithoutLoanManagePermission() {
+        authenticateAsAnonymous();
+        AppUser borrower = persistMember("service-manage-denied@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-MANAGE-DENIED");
+        entityManager.flush();
+
+        assertThrows(AccessDeniedException.class,
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanOnAvailableCopySucceedsAndTransitionsCopyToOnLoan() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-available@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-AVAILABLE");
+        entityManager.flush();
+
+        LoanResponse response = loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId()));
+
+        assertThat(response.loanStatus()).isEqualTo(LoanStatus.ACTIVE);
+        assertThat(response.returnDate()).isNull();
+        assertThat(response.borrower().id()).isEqualTo(borrower.getId());
+        assertThat(response.copy().id()).isEqualTo(copy.getId());
+        Copy reloadedCopy = entityManager.find(Copy.class, copy.getId());
+        assertThat(reloadedCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.ON_LOAN);
+    }
+
+    @Test
+    void registerLoanComputesDueDateFromLoanDurationDaysSetting() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-duedate@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-DUEDATE");
+        entityManager.flush();
+
+        LoanResponse response = loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId()));
+
+        LocalDate expectedDueDate = LocalDate.now().plusDays(21);
+        assertThat(response.dueDate()).isEqualTo(expectedDueDate);
+    }
+
+    @Test
+    void registerLoanOnReservedCopyWithMatchingReadyReservationFulfillsIt() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-fulfill@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-FULFILL");
+        copy.setAvailabilityStatus(AvailabilityStatus.RESERVED);
+        Reservation reservation = persistReadyReservation(borrower, title, copy);
+        entityManager.flush();
+
+        LoanResponse response = loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId()));
+
+        Copy reloadedCopy = entityManager.find(Copy.class, copy.getId());
+        assertThat(reloadedCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.ON_LOAN);
+        Reservation reloadedReservation = entityManager.find(Reservation.class, reservation.getId());
+        assertThat(reloadedReservation.getReservationStatus()).isEqualTo(ReservationStatus.FULFILLED);
+        assertThat(reloadedReservation.getFulfilledByLoan().getId()).isEqualTo(response.id());
+    }
+
+    @Test
+    void registerLoanWithUnknownBorrowerThrowsResourceNotFound() {
+        authenticateWithLoanManage();
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-NO-BORROWER");
+        entityManager.flush();
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> loanService.registerLoan(new CreateLoanRequest(-1L, copy.getId())));
+    }
+
+    @Test
+    void registerLoanWithDisabledAccountIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-disabled@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        borrower.setAccountStatus(AccountStatus.DISABLED);
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-DISABLED");
+        entityManager.flush();
+
+        assertBusinessRuleCode("ACCOUNT_DISABLED",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanForNonMemberIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistUser("service-register-nonmember@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-NONMEMBER");
+        entityManager.flush();
+
+        assertBusinessRuleCode("NOT_A_MEMBER",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanWithBlockedMemberIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-blocked@primatis.test", MemberStatus.BLOCKED, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-BLOCKED");
+        entityManager.flush();
+
+        assertBusinessRuleCode("MEMBER_BLOCKED",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanWithExpiredMemberIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-expired@primatis.test", MemberStatus.ACTIVE, LocalDate.now().minusDays(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-EXPIRED");
+        entityManager.flush();
+
+        assertBusinessRuleCode("MEMBER_EXPIRED",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanWithUnpaidFineIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-unpaidfine@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy pastCopy = persistCopy(title, "SERVICE-REGISTER-UNPAIDFINE-PAST");
+        Loan pastLoan = persistLoan(borrower, pastCopy, LoanStatus.RETURNED, Instant.now().minusSeconds(3600));
+        persistFine(pastLoan, FineStatus.UNPAID);
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-UNPAIDFINE");
+        entityManager.flush();
+
+        assertBusinessRuleCode("MEMBER_HAS_UNPAID_FINE",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanWithFiveOpenLoansIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-maxloans@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        for (int i = 0; i < 5; i++) {
+            Copy openCopy = persistCopy(title, "SERVICE-REGISTER-MAXLOANS-" + i);
+            persistLoan(borrower, openCopy, LoanStatus.ACTIVE, Instant.now());
+        }
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-MAXLOANS-NEW");
+        entityManager.flush();
+
+        assertBusinessRuleCode("MAX_ACTIVE_LOANS_REACHED",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanWithUnknownCopyThrowsResourceNotFound() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-nocopy@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        entityManager.flush();
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), -1L)));
+    }
+
+    @Test
+    void registerLoanOnLoanCopyIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-onloan@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-ONLOAN");
+        copy.setAvailabilityStatus(AvailabilityStatus.ON_LOAN);
+        AppUser otherBorrower = persistMember("service-register-onloan-other@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        persistLoan(otherBorrower, copy, LoanStatus.ACTIVE, Instant.now());
+        entityManager.flush();
+
+        assertBusinessRuleCode("COPY_ALREADY_ON_LOAN",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanOnUnavailableCopyIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-unavailable@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-UNAVAILABLE");
+        copy.setAvailabilityStatus(AvailabilityStatus.UNAVAILABLE);
+        entityManager.flush();
+
+        assertBusinessRuleCode("COPY_NOT_LENDABLE",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanOnCopyReservedForAnotherMemberIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-reserved-other@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser beneficiary = persistMember("service-register-reserved-beneficiary@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-RESERVED-OTHER");
+        copy.setAvailabilityStatus(AvailabilityStatus.RESERVED);
+        persistReadyReservation(beneficiary, title, copy);
+        entityManager.flush();
+
+        assertBusinessRuleCode("COPY_RESERVED_FOR_ANOTHER_MEMBER",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanOnReservedCopyWithoutMatchingReadyReservationIsRejected() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-reserved-nomatch@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-RESERVED-NOMATCH");
+        copy.setAvailabilityStatus(AvailabilityStatus.RESERVED);
+        entityManager.flush();
+
+        assertBusinessRuleCode("COPY_RESERVED_FOR_ANOTHER_MEMBER",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanWithAnotherOpenLoanOnCopyIsRejectedEvenIfAvailabilityStatusSaysAvailable() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-dataincoherence@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        AppUser otherBorrower = persistMember("service-register-dataincoherence-other@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-DATAINCOHERENCE");
+        // Incohérence de données volontaire : availabilityStatus = AVAILABLE alors qu'un Loan ouvert
+        // existe déjà — prouve que la revalidation post-lock ne se fie jamais uniquement à
+        // availabilityStatus (défense en profondeur explicitement mandatée par la mission).
+        persistLoan(otherBorrower, copy, LoanStatus.ACTIVE, Instant.now());
+        entityManager.flush();
+
+        assertBusinessRuleCode("COPY_ALREADY_ON_LOAN",
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    @Test
+    void registerLoanFailsExplicitlyWhenLoanDurationDaysSettingIsMissing() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-register-nosetting@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "SERVICE-REGISTER-NOSETTING");
+        entityManager.createQuery("DELETE FROM ApplicationSetting s WHERE s.settingKey = :key")
+                .setParameter("key", "LOAN_DURATION_DAYS")
+                .executeUpdate();
+        entityManager.flush();
+
+        assertThrows(IllegalStateException.class,
+                () -> loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId())));
+    }
+
+    private static void assertBusinessRuleCode(String expectedCode, org.junit.jupiter.api.function.Executable executable) {
+        BusinessRuleException exception = (BusinessRuleException) assertThrows(BusinessRuleException.class, executable);
+        assertThat(exception.getCode()).isEqualTo(expectedCode);
     }
 
     // ---------------------------------------------------------------
@@ -300,5 +577,39 @@ class LoanServiceTests {
         loan.setUpdatedAt(Instant.now());
         entityManager.persist(loan);
         return loan;
+    }
+
+    private AppUser persistMember(String email, MemberStatus memberStatus, LocalDate memberExpirationDate) {
+        AppUser user = persistUser(email);
+        user.setMemberNumber(String.format("M%09d", System.nanoTime() % 1_000_000_000L));
+        user.setMemberStatus(memberStatus);
+        user.setRegistrationDate(LocalDate.now().minusYears(1));
+        user.setMemberExpirationDate(memberExpirationDate);
+        return user;
+    }
+
+    private Fine persistFine(Loan loan, FineStatus status) {
+        Fine fine = new Fine();
+        fine.setLoan(loan);
+        fine.setAmount(BigDecimal.TEN);
+        fine.setReason("Retard de test");
+        fine.setIssuedAt(Instant.now());
+        fine.setFineStatus(status);
+        entityManager.persist(fine);
+        return fine;
+    }
+
+    private Reservation persistReadyReservation(AppUser user, Title title, Copy assignedCopy) {
+        Reservation reservation = new Reservation();
+        reservation.setUser(user);
+        reservation.setTitle(title);
+        reservation.setAssignedCopy(assignedCopy);
+        reservation.setReservationDate(Instant.now());
+        reservation.setExpirationDate(Instant.now().plusSeconds(3600));
+        reservation.setReservationStatus(ReservationStatus.READY);
+        reservation.setCreatedAt(Instant.now());
+        reservation.setUpdatedAt(Instant.now());
+        entityManager.persist(reservation);
+        return reservation;
     }
 }
