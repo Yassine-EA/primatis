@@ -1,0 +1,92 @@
+<h1>Créer un titre</h1>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  @if (errorMessage(); as message) {
+    <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+  }
+
+  <div class="form-field">
+    <label for="title-title">Titre</label>
+    <input pInputText id="title-title" formControlName="title" />
+    @if (form.controls.title.invalid && form.controls.title.touched) {
+      <p-message severity="error" text="Le titre est requis." />
+    }
+    @if (fieldError('title'); as message) {
+      <p-message severity="error" [text]="message" />
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="title-subtitle">Sous-titre</label>
+    <input pInputText id="title-subtitle" formControlName="subtitle" />
+  </div>
+
+  <div class="form-field">
+    <label for="title-isbn">ISBN</label>
+    <input pInputText id="title-isbn" formControlName="isbn" />
+    @if (fieldError('isbn'); as message) {
+      <p-message severity="error" [text]="message" />
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="title-summary">Résumé</label>
+    <input pInputText id="title-summary" formControlName="summary" />
+  </div>
+
+  <div class="form-field">
+    <label for="title-publication-year">Année de publication</label>
+    <input pInputText id="title-publication-year" type="number" formControlName="publicationYear" />
+  </div>
+
+  <div class="form-field">
+    <label for="title-language">Langue</label>
+    <p-select
+      inputId="title-language"
+      formControlName="language"
+      [options]="languageOptions"
+      optionLabel="label"
+      optionValue="value"
+    />
+    @if (form.controls.language.invalid && form.controls.language.touched) {
+      <p-message severity="error" text="La langue est requise." />
+    }
+    @if (fieldError('language'); as message) {
+      <p-message severity="error" [text]="message" />
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="title-page-count">Nombre de pages</label>
+    <input pInputText id="title-page-count" type="number" min="1" formControlName="pageCount" />
+    @if (fieldError('pageCount'); as message) {
+      <p-message severity="error" [text]="message" />
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="title-publisher">Éditeur</label>
+    <input pInputText id="title-publisher" formControlName="publisher" />
+  </div>
+
+  <div class="form-field">
+    <label for="title-cover-image-url">URL de couverture</label>
+    <input pInputText id="title-cover-image-url" formControlName="coverImageUrl" />
+  </div>
+
+  <div class="form-field">
+    <app-author-picker (selectionChange)="onAuthorsChange($event)" />
+    @if (authorsInvalid) {
+      <p-message severity="error" text="Au moins un auteur est requis." />
+    }
+  </div>
+
+  <div class="form-field">
+    <span class="form-label">Genres</span>
+    <app-genre-picker (selectionChange)="onGenresChange($event)" />
+  </div>
+
+  <div class="form-actions">
+    <button pButton type="submit" label="Créer le titre" [disabled]="submitting()"></button>
+  </div>
+</form>

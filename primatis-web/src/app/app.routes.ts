@@ -94,6 +94,39 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        // Segment 'catalogue' (DEV-06.9, CATALOGUE_MANAGE) — sibling de
+        // 'users', même structure que /admin/users : 'new' déclaré avant
+        // ':id' pour que le routing statique l'emporte sur le paramétrique.
+        // Aucune route Copy séparée (K.4, FIGÉ) : Copies gérées inline dans
+        // le détail Title.
+        path: 'catalogue',
+        canActivate: [permissionGuard],
+        data: { permissions: ['CATALOGUE_MANAGE'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./staff/catalogue/pages/staff-catalogue-page/staff-catalogue-page').then(
+                (m) => m.StaffCataloguePage,
+              ),
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import('./staff/catalogue/pages/staff-title-create-page/staff-title-create-page').then(
+                (m) => m.StaffTitleCreatePage,
+              ),
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./staff/catalogue/pages/staff-title-detail-page/staff-title-detail-page').then(
+                (m) => m.StaffTitleDetailPage,
+              ),
+          },
+        ],
+      },
     ],
   },
   {

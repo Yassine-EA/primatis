@@ -1,0 +1,39 @@
+@if (loading()) {
+  <app-loading-state message="Chargement des genres…" />
+} @else if (error(); as currentError) {
+  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+} @else {
+  <div class="genre-picker">
+    <p-multiselect
+      inputId="genre-picker-select"
+      [options]="allGenres()"
+      [ngModel]="selectedIds()"
+      (ngModelChange)="onSelectionChange($event)"
+      optionLabel="label"
+      optionValue="id"
+      [filter]="true"
+      filterBy="label,code"
+      placeholder="Sélectionner des genres"
+    >
+      <ng-template let-option pTemplate="item">
+        <span>{{ option.label }}</span>
+        <button
+          type="button"
+          class="link-button"
+          (click)="openEditDialog(option); $event.stopPropagation()"
+        >
+          Modifier
+        </button>
+      </ng-template>
+    </p-multiselect>
+
+    <button type="button" pButton label="Nouveau genre" severity="secondary" (click)="openCreateDialog()"></button>
+
+    <app-genre-form-dialog
+      [visible]="dialogVisible()"
+      [genre]="dialogGenre()"
+      (closed)="closeDialog()"
+      (saved)="onDialogSaved($event)"
+    />
+  </div>
+}

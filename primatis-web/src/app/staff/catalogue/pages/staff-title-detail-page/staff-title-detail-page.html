@@ -1,0 +1,188 @@
+@if (titleLoading()) {
+  <app-loading-state message="Chargement du titre…" />
+} @else if (titleError(); as currentError) {
+  <app-error-state [message]="currentError.message" />
+} @else if (title(); as currentTitle) {
+  <h1>{{ currentTitle.title }}</h1>
+  <p-tag [value]="currentTitle.titleStatus" [severity]="titleStatusSeverity(currentTitle.titleStatus)" />
+  <button
+    pButton
+    type="button"
+    [label]="statusActionLabel"
+    severity="secondary"
+    [disabled]="statusSubmitting()"
+    (click)="confirmToggleStatus()"
+  ></button>
+
+  <section aria-labelledby="edit-heading">
+    <h2 id="edit-heading">Modifier le titre</h2>
+    <form [formGroup]="form" (ngSubmit)="submitUpdate()">
+      @if (updateErrorMessage(); as message) {
+        <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+      }
+
+      <div class="form-field">
+        <label for="detail-title">Titre</label>
+        <input pInputText id="detail-title" formControlName="title" />
+        @if (form.controls.title.invalid && form.controls.title.touched) {
+          <p-message severity="error" text="Le titre est requis." />
+        }
+        @if (fieldError('title'); as message) {
+          <p-message severity="error" [text]="message" />
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="detail-subtitle">Sous-titre</label>
+        <input pInputText id="detail-subtitle" formControlName="subtitle" />
+      </div>
+
+      <div class="form-field">
+        <label for="detail-isbn">ISBN</label>
+        <input pInputText id="detail-isbn" formControlName="isbn" />
+        @if (fieldError('isbn'); as message) {
+          <p-message severity="error" [text]="message" />
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="detail-summary">Résumé</label>
+        <input pInputText id="detail-summary" formControlName="summary" />
+      </div>
+
+      <div class="form-field">
+        <label for="detail-publication-year">Année de publication</label>
+        <input pInputText id="detail-publication-year" type="number" formControlName="publicationYear" />
+      </div>
+
+      <div class="form-field">
+        <label for="detail-language">Langue</label>
+        <p-select
+          inputId="detail-language"
+          formControlName="language"
+          [options]="languageOptions"
+          optionLabel="label"
+          optionValue="value"
+        />
+        @if (form.controls.language.invalid && form.controls.language.touched) {
+          <p-message severity="error" text="La langue est requise." />
+        }
+        @if (fieldError('language'); as message) {
+          <p-message severity="error" [text]="message" />
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="detail-page-count">Nombre de pages</label>
+        <input pInputText id="detail-page-count" type="number" min="1" formControlName="pageCount" />
+        @if (fieldError('pageCount'); as message) {
+          <p-message severity="error" [text]="message" />
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="detail-publisher">Éditeur</label>
+        <input pInputText id="detail-publisher" formControlName="publisher" />
+      </div>
+
+      <div class="form-field">
+        <label for="detail-cover-image-url">URL de couverture</label>
+        <input pInputText id="detail-cover-image-url" formControlName="coverImageUrl" />
+      </div>
+
+      <div class="form-field">
+        <app-author-picker [initialAuthors]="currentTitle.authors" (selectionChange)="onAuthorsChange($event)" />
+        @if (authorsInvalid) {
+          <p-message severity="error" text="Au moins un auteur est requis." />
+        }
+      </div>
+
+      <div class="form-field">
+        <span class="form-label">Genres</span>
+        <app-genre-picker [initialGenres]="currentTitle.genres" (selectionChange)="onGenresChange($event)" />
+      </div>
+
+      <div class="form-actions">
+        <button pButton type="submit" label="Enregistrer" [disabled]="updateSubmitting()"></button>
+      </div>
+    </form>
+  </section>
+
+  @if (canReadCopies) {
+    <section aria-labelledby="copies-heading">
+      <h2 id="copies-heading">Exemplaires</h2>
+
+      @if (copiesLoading()) {
+        <app-loading-state message="Chargement des exemplaires…" />
+      } @else if (copiesError(); as currentCopiesError) {
+        <app-error-state [message]="currentCopiesError.message" [showRetry]="true" (retry)="retryCopies()" />
+      } @else {
+        @if (canManageCopies) {
+          <button
+            pButton
+            type="button"
+            label="Ajouter un exemplaire"
+            severity="secondary"
+            (click)="openCreateCopyDialog()"
+          ></button>
+        }
+
+        @if (copies().length === 0) {
+          <app-empty-state title="Aucun exemplaire" message="Ce titre ne possède aucun exemplaire." />
+        } @else {
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Code d'inventaire</th>
+                <th scope="col">Localisation</th>
+                <th scope="col">État</th>
+                <th scope="col">Disponibilité</th>
+                @if (canManageCopies) {
+                  <th scope="col">Actions</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (copy of copies(); track copy.id) {
+                <tr>
+                  <td>{{ copy.inventoryCode }}</td>
+                  <td>{{ copy.location ?? '—' }}</td>
+                  <td>{{ copy.copyCondition }}</td>
+                  <td><p-tag [value]="copy.availabilityStatus" /></td>
+                  @if (canManageCopies) {
+                    <td>
+                      <button type="button" class="link-button" (click)="openEditCopyDialog(copy)">Modifier</button>
+                      @if (canToggleAvailability(copy)) {
+                        <button
+                          type="button"
+                          class="link-button"
+                          [disabled]="
+                            availabilitySubmittingCopyId() === copy.id ||
+                            (copy.availabilityStatus === 'UNAVAILABLE' && !canOfferAvailable(copy))
+                          "
+                          (click)="confirmToggleAvailability(copy)"
+                        >
+                          {{ availabilityActionLabel(copy) }}
+                        </button>
+                      }
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      }
+
+      @if (canManageCopies) {
+        <app-copy-form-dialog
+          [visible]="copyDialogVisible()"
+          [titleId]="currentTitle.id"
+          [copy]="copyDialogCopy()"
+          (closed)="closeCopyDialog()"
+          (saved)="onCopyDialogSaved($event)"
+        />
+      }
+    </section>
+  }
+}

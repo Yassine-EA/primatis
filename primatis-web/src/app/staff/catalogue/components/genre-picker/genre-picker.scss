@@ -1,0 +1,20 @@
+:host {
+  display: block;
+}
+
+.genre-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-inline-start: 0.5rem;
+  color: var(--p-primary-color, #2563eb);
+  cursor: pointer;
+  text-decoration: underline;
+}
