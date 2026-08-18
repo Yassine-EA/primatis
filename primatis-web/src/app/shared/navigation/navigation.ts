@@ -27,8 +27,16 @@ export class Navigation {
 
   private static readonly ITEMS: readonly NavigationItem[] = [
     { label: 'Accueil', routerLink: '/' },
+    // Catalogue public (DEV-06.8) : toujours visible, aucun requiredRoles —
+    // surface backend permitAll (DEV-DEC-0027), même statut qu'Accueil.
+    { label: 'Catalogue', routerLink: '/catalogue' },
     { label: 'Espace membre', routerLink: '/member/profile', requiredRoles: ['ROLE_MEMBER'] },
     { label: 'Espace personnel', routerLink: '/staff/users', requiredRoles: ['ROLE_LIBRARIAN', 'ROLE_ADMIN'] },
+    {
+      label: 'Gestion du catalogue',
+      routerLink: '/staff/catalogue',
+      requiredRoles: ['ROLE_LIBRARIAN', 'ROLE_ADMIN'],
+    },
     { label: 'Administration', routerLink: '/admin/users', requiredRoles: ['ROLE_ADMIN'] },
   ];
 

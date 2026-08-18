@@ -1,0 +1,61 @@
+<div class="author-picker">
+  <div class="author-picker-selected">
+    <span class="author-picker-label">Auteurs sélectionnés</span>
+    @if (selected().length === 0) {
+      <p class="author-picker-empty">Aucun auteur sélectionné.</p>
+    } @else {
+      <ul class="author-picker-list">
+        @for (author of selected(); track author.id) {
+          <li>
+            <span>{{ author.fullName }}</span>
+            <button type="button" class="link-button" (click)="openEditDialog(author)">Modifier</button>
+            <button type="button" class="link-button" (click)="remove(author)">Retirer</button>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <div class="author-picker-search">
+    <label for="author-picker-search-input">Rechercher un auteur existant</label>
+    <input
+      pInputText
+      id="author-picker-search-input"
+      type="search"
+      [ngModel]="searchTerm()"
+      (ngModelChange)="onSearchInput($event)"
+      placeholder="Nom de l'auteur…"
+    />
+
+    @if (searchError(); as currentError) {
+      <app-error-state [message]="currentError.message" />
+    } @else if (searching()) {
+      <p class="author-picker-status">Recherche…</p>
+    } @else if (searchTerm().trim().length > 0 && searchResults().length === 0) {
+      <p class="author-picker-status">Aucun auteur trouvé.</p>
+    } @else if (searchResults().length > 0) {
+      <ul class="author-picker-list">
+        @for (author of searchResults(); track author.id) {
+          <li>
+            <span>{{ author.fullName }}</span>
+            <button type="button" class="link-button" (click)="openEditDialog(author)">Modifier</button>
+            @if (isSelected(author)) {
+              <span class="author-picker-status">Déjà sélectionné</span>
+            } @else {
+              <button type="button" class="link-button" (click)="add(author)">Ajouter</button>
+            }
+          </li>
+        }
+      </ul>
+    }
+
+    <button type="button" pButton label="Nouvel auteur" severity="secondary" (click)="openCreateDialog()"></button>
+  </div>
+
+  <app-author-form-dialog
+    [visible]="dialogVisible()"
+    [author]="dialogAuthor()"
+    (closed)="closeDialog()"
+    (saved)="onDialogSaved($event)"
+  />
+</div>

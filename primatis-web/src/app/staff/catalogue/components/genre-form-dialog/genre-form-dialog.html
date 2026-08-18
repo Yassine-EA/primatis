@@ -1,0 +1,45 @@
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  [header]="isCreate ? 'Nouveau genre' : 'Modifier le genre'"
+  [closable]="!submitting()"
+  (onHide)="cancel()"
+>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    @if (errorMessage(); as message) {
+      <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+    }
+
+    <div class="form-field">
+      <label for="genre-code">Code</label>
+      <input pInputText id="genre-code" formControlName="code" />
+      @if (form.controls.code.invalid && form.controls.code.touched) {
+        <p-message severity="error" text="Le code est requis." />
+      }
+      @if (fieldError('code'); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="genre-label">Libellé</label>
+      <input pInputText id="genre-label" formControlName="label" />
+      @if (form.controls.label.invalid && form.controls.label.touched) {
+        <p-message severity="error" text="Le libellé est requis." />
+      }
+      @if (fieldError('label'); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="genre-description">Description</label>
+      <input pInputText id="genre-description" formControlName="description" />
+    </div>
+
+    <div class="form-actions">
+      <button type="button" pButton label="Annuler" severity="secondary" [disabled]="submitting()" (click)="cancel()"></button>
+      <button type="submit" pButton label="Enregistrer" [disabled]="submitting()"></button>
+    </div>
+  </form>
+</p-dialog>

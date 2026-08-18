@@ -1,0 +1,55 @@
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  [header]="isCreate ? 'Nouvel auteur' : 'Modifier l’auteur'"
+  [closable]="!submitting()"
+  (onHide)="cancel()"
+>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    @if (errorMessage(); as message) {
+      <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+    }
+
+    <div class="form-field">
+      <label for="author-full-name">Nom complet</label>
+      <input pInputText id="author-full-name" formControlName="fullName" />
+      @if (form.controls.fullName.invalid && form.controls.fullName.touched) {
+        <p-message severity="error" text="Le nom complet est requis." />
+      }
+      @if (fieldError('fullName'); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="author-birth-date">Date de naissance</label>
+      <input pInputText id="author-birth-date" type="date" formControlName="birthDate" />
+      @if (fieldError('birthDate'); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="author-death-date">Date de décès</label>
+      <input pInputText id="author-death-date" type="date" formControlName="deathDate" />
+      @if (fieldError('deathDate'); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="author-nationality">Nationalité</label>
+      <input pInputText id="author-nationality" formControlName="nationality" />
+    </div>
+
+    <div class="form-field">
+      <label for="author-biography">Biographie</label>
+      <input pInputText id="author-biography" formControlName="biography" />
+    </div>
+
+    <div class="form-actions">
+      <button type="button" pButton label="Annuler" severity="secondary" [disabled]="submitting()" (click)="cancel()"></button>
+      <button type="submit" pButton label="Enregistrer" [disabled]="submitting()"></button>
+    </div>
+  </form>
+</p-dialog>

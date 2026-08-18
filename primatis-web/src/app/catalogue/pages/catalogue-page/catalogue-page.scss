@@ -1,0 +1,31 @@
+:host {
+  display: block;
+}
+
+.catalogue-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-block-end: 1rem;
+}
+
+.catalogue-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.catalogue-title-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.catalogue-cover {
+  block-size: 2.5rem;
+  inline-size: auto;
+}
+
+.catalogue-subtitle {
+  color: var(--p-text-muted-color, #6b7280);
+}

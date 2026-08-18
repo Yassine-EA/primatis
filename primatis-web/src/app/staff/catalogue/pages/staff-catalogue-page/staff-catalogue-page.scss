@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.create-link {
+  display: inline-block;
+  margin-block-end: 1rem;
+}
+
+.catalogue-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-block-end: 1rem;
+}
+
+.catalogue-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}

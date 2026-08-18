@@ -42,12 +42,42 @@ describe('Navigation', () => {
     vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
   });
 
-  it('should show only Accueil and a Connexion link for an anonymous user', () => {
+  it('should show only Accueil, Catalogue and a Connexion link for an anonymous user', () => {
     render();
 
-    expect(linkLabels()).toEqual(['Accueil']);
+    expect(linkLabels()).toEqual(['Accueil', 'Catalogue']);
     expect(fixture.nativeElement.textContent).toContain('Connexion');
     expect(fixture.nativeElement.textContent).not.toContain('Déconnexion');
+  });
+
+  it('should show the Catalogue link pointing at /catalogue for an anonymous user (DEV-06.8)', () => {
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/catalogue"]')).not.toBeNull();
+  });
+
+  it('should show the Catalogue link for ROLE_MEMBER (DEV-06.8)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(linkLabels()).toContain('Catalogue');
+  });
+
+  it('should show the Catalogue link for ROLE_LIBRARIAN (DEV-06.8)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(linkLabels()).toContain('Catalogue');
+  });
+
+  it('should show the Catalogue link for ROLE_ADMIN (DEV-06.8)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
+    render();
+
+    expect(linkLabels()).toContain('Catalogue');
   });
 
   it('should show Déconnexion and hide Connexion for an authenticated user', () => {
@@ -120,6 +150,44 @@ describe('Navigation', () => {
     render();
 
     expect(linkLabels()).toContain('Espace personnel');
+  });
+
+  it('should show the Gestion du catalogue link for ROLE_LIBRARIAN (DEV-06.9)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(linkLabels()).toContain('Gestion du catalogue');
+  });
+
+  it('should show the Gestion du catalogue link for ROLE_ADMIN (DEV-06.9)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
+    render();
+
+    expect(linkLabels()).toContain('Gestion du catalogue');
+  });
+
+  it('should point the Gestion du catalogue link at /staff/catalogue (DEV-06.9)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/staff/catalogue"]')).not.toBeNull();
+  });
+
+  it('should hide the Gestion du catalogue link for ROLE_MEMBER (DEV-06.9)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(linkLabels()).not.toContain('Gestion du catalogue');
+  });
+
+  it('should hide the Gestion du catalogue link for an anonymous user (DEV-06.9)', () => {
+    render();
+
+    expect(linkLabels()).not.toContain('Gestion du catalogue');
   });
 
   it('should point the Espace personnel link at /staff/users (DEV-05.11)', () => {

@@ -40,3 +40,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local PostgreSQL backups
+db_backup/

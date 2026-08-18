@@ -28,6 +28,20 @@ export const routes: Routes = [
         path: 'login',
         loadComponent: () => import('./auth/pages/login/login').then((m) => m.Login),
       },
+      {
+        // Catalogue public (DEV-06.8) : surface backend permitAll
+        // (Title.titleStatus = ACTIVE uniquement, DEV-DEC-0027) — aucun
+        // guard, même principe que 'login'. Deux routes distinctes (pas de
+        // segment parent avec redirectTo) : /catalogue n'a aucune capacité
+        // commune à protéger, contrairement à /staff ou /admin.
+        path: 'catalogue',
+        loadComponent: () => import('./catalogue/pages/catalogue-page/catalogue-page').then((m) => m.CataloguePage),
+      },
+      {
+        path: 'catalogue/:id',
+        loadComponent: () =>
+          import('./catalogue/pages/title-detail-page/title-detail-page').then((m) => m.TitleDetailPage),
+      },
     ],
   },
   {
@@ -76,6 +90,39 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./staff/users/pages/staff-user-detail-page/staff-user-detail-page').then(
                 (m) => m.StaffUserDetailPage,
+              ),
+          },
+        ],
+      },
+      {
+        // Segment 'catalogue' (DEV-06.9, CATALOGUE_MANAGE) — sibling de
+        // 'users', même structure que /admin/users : 'new' déclaré avant
+        // ':id' pour que le routing statique l'emporte sur le paramétrique.
+        // Aucune route Copy séparée (K.4, FIGÉ) : Copies gérées inline dans
+        // le détail Title.
+        path: 'catalogue',
+        canActivate: [permissionGuard],
+        data: { permissions: ['CATALOGUE_MANAGE'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./staff/catalogue/pages/staff-catalogue-page/staff-catalogue-page').then(
+                (m) => m.StaffCataloguePage,
+              ),
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import('./staff/catalogue/pages/staff-title-create-page/staff-title-create-page').then(
+                (m) => m.StaffTitleCreatePage,
+              ),
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./staff/catalogue/pages/staff-title-detail-page/staff-title-detail-page').then(
+                (m) => m.StaffTitleDetailPage,
               ),
           },
         ],

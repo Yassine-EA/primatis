@@ -1,0 +1,67 @@
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  [header]="isCreate ? 'Nouvel exemplaire' : 'Modifier l’exemplaire'"
+  [closable]="!submitting()"
+  (onHide)="cancel()"
+>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    @if (errorMessage(); as message) {
+      <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+    }
+
+    <div class="form-field">
+      <label for="copy-inventory-code">Code d'inventaire</label>
+      <input pInputText id="copy-inventory-code" formControlName="inventoryCode" />
+      @if (form.controls.inventoryCode.invalid && form.controls.inventoryCode.touched) {
+        <p-message severity="error" text="Le code d'inventaire est requis." />
+      }
+      @if (fieldError('inventoryCode'); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="copy-location">Localisation</label>
+      <input pInputText id="copy-location" formControlName="location" />
+    </div>
+
+    <div class="form-field">
+      <label for="copy-condition">État</label>
+      <p-select
+        inputId="copy-condition"
+        formControlName="copyCondition"
+        [options]="copyConditionOptions"
+        optionLabel="label"
+        optionValue="value"
+      />
+      @if (form.controls.copyCondition.invalid && form.controls.copyCondition.touched) {
+        <p-message severity="error" text="L'état est requis." />
+      }
+      @if (fieldError('copyCondition'); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+    </div>
+
+    @if (isCreate) {
+      <div class="form-field">
+        <label for="copy-availability">Disponibilité</label>
+        <p-select
+          inputId="copy-availability"
+          formControlName="availabilityStatus"
+          [options]="availabilityOptions"
+          optionLabel="label"
+          optionValue="value"
+        />
+        @if (form.controls.availabilityStatus.invalid && form.controls.availabilityStatus.touched) {
+          <p-message severity="error" text="La disponibilité est requise." />
+        }
+      </div>
+    }
+
+    <div class="form-actions">
+      <button type="button" pButton label="Annuler" severity="secondary" [disabled]="submitting()" (click)="cancel()"></button>
+      <button type="submit" pButton label="Enregistrer" [disabled]="submitting()"></button>
+    </div>
+  </form>
+</p-dialog>

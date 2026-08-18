@@ -25,6 +25,23 @@ describe('Application routes', () => {
     expect(publicRoute?.children?.some((child) => child.path === 'login')).toBe(true);
   });
 
+  it('should expose public /catalogue and /catalogue/:id routes under the public layout (DEV-06.8)', () => {
+    const publicRoute = routes.find((route) => route.path === '');
+    const childPaths = publicRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('catalogue');
+    expect(childPaths).toContain('catalogue/:id');
+  });
+
+  it('should never guard /catalogue or /catalogue/:id (DEV-06.8, backend permitAll)', () => {
+    const publicRoute = routes.find((route) => route.path === '');
+    const catalogueRoute = publicRoute?.children?.find((child) => child.path === 'catalogue');
+    const titleDetailRoute = publicRoute?.children?.find((child) => child.path === 'catalogue/:id');
+
+    expect(catalogueRoute?.canActivate).toBeUndefined();
+    expect(titleDetailRoute?.canActivate).toBeUndefined();
+  });
+
   it('should protect /member, /staff and /admin with authGuard', () => {
     for (const path of ['member', 'staff', 'admin']) {
       const route = routes.find((candidate) => candidate.path === path);
@@ -60,6 +77,42 @@ describe('Application routes', () => {
 
     expect(childPaths).toContain('');
     expect(childPaths).toContain(':id');
+  });
+
+  it('should protect /staff/catalogue with permissionGuard and CATALOGUE_MANAGE (DEV-06.9)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const catalogueRoute = staffRoute?.children?.find((child) => child.path === 'catalogue');
+
+    expect(catalogueRoute?.canActivate).toContain(permissionGuard);
+    expect(catalogueRoute?.data?.['permissions']).toEqual(['CATALOGUE_MANAGE']);
+  });
+
+  it('should expose the staff catalogue list, create and detail routes as children of /staff/catalogue (DEV-06.9)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const catalogueRoute = staffRoute?.children?.find((child) => child.path === 'catalogue');
+    const childPaths = catalogueRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('');
+    expect(childPaths).toContain('new');
+    expect(childPaths).toContain(':id');
+  });
+
+  it('should declare /staff/catalogue/new before /staff/catalogue/:id (DEV-06.9)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const catalogueRoute = staffRoute?.children?.find((child) => child.path === 'catalogue');
+    const childPaths = catalogueRoute?.children?.map((child) => child.path) ?? [];
+
+    expect(childPaths.indexOf('new')).toBeLessThan(childPaths.indexOf(':id'));
+  });
+
+  it('should never expose a dedicated route for Copy under /staff/catalogue (K.4, DEV-06.9)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const catalogueRoute = staffRoute?.children?.find((child) => child.path === 'catalogue');
+    const childPaths = catalogueRoute?.children?.map((child) => child.path) ?? [];
+
+    expect(childPaths.some((path) => path?.includes('copies'))).toBe(false);
+    expect(childPaths).not.toContain('authors');
+    expect(childPaths).not.toContain('genres');
   });
 
   it('should redirect the bare /admin zone to /admin/users (DEV-05.12)', () => {
