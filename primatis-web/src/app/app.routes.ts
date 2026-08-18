@@ -135,6 +135,22 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        // Segment 'loans' (DEV-07.9, LOAN_READ) — sibling de 'users'/
+        // 'catalogue', même structure. Un seul écran (liste + retour) :
+        // aucun GET /api/v1/loans/{id} (DEV-DEC-0031), donc aucune route
+        // ':id' comme pour users/catalogue.
+        path: 'loans',
+        canActivate: [permissionGuard],
+        data: { permissions: ['LOAN_READ'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./staff/loans/pages/staff-loans-page/staff-loans-page').then((m) => m.StaffLoansPage),
+          },
+        ],
+      },
     ],
   },
   {

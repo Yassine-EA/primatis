@@ -3,6 +3,7 @@ import { permissionGuard } from './core/guards/permission.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { routes } from './app.routes';
 import { MemberLoansPage } from './member/loans/pages/member-loans-page/member-loans-page';
+import { StaffLoansPage } from './staff/loans/pages/staff-loans-page/staff-loans-page';
 
 describe('Application routes', () => {
   it('should expose the expected application zones', () => {
@@ -114,6 +115,33 @@ describe('Application routes', () => {
     expect(childPaths.some((path) => path?.includes('copies'))).toBe(false);
     expect(childPaths).not.toContain('authors');
     expect(childPaths).not.toContain('genres');
+  });
+
+  it('should protect /staff/loans with permissionGuard and LOAN_READ (DEV-07.9)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const loansRoute = staffRoute?.children?.find((child) => child.path === 'loans');
+
+    expect(loansRoute?.canActivate).toContain(permissionGuard);
+    expect(loansRoute?.data?.['permissions']).toEqual(['LOAN_READ']);
+  });
+
+  it('should expose a single list route as the only child of /staff/loans, no :id route (DEV-DEC-0031, DEV-07.9)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const loansRoute = staffRoute?.children?.find((child) => child.path === 'loans');
+    const childPaths = loansRoute?.children?.map((child) => child.path) ?? [];
+
+    expect(childPaths).toEqual(['']);
+  });
+
+  it('should lazy-load StaffLoansPage for /staff/loans (DEV-07.9)', async () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const loansRoute = staffRoute?.children?.find((child) => child.path === 'loans');
+    const listRoute = loansRoute?.children?.find((child) => child.path === '');
+
+    expect(listRoute?.loadComponent).toBeDefined();
+    const loadedComponent = await listRoute!.loadComponent!();
+
+    expect(loadedComponent).toBe(StaffLoansPage);
   });
 
   it('should redirect the bare /admin zone to /admin/users (DEV-05.12)', () => {
