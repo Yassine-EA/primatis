@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
@@ -63,6 +64,9 @@ class LoanServiceTests {
 
     @Autowired
     private LoanService loanService;
+
+    @Autowired
+    private Clock clock;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -314,7 +318,12 @@ class LoanServiceTests {
     @Test
     void registerLoanWithExpiredMemberIsRejected() {
         authenticateWithLoanManage();
-        AppUser borrower = persistMember("service-register-expired@primatis.test", MemberStatus.ACTIVE, LocalDate.now().minusDays(1));
+        // LocalDate.now(clock) — pas LocalDate.now() brut : MemberExpirationPolicy
+        // compare expirationDate à LocalDate.now(clock) (UTC, ClockConfig). Une
+        // marge d'un seul jour rend ce fixture sensible à l'écart Bruxelles/UTC
+        // (DEV-07.10) si le clock applicatif n'est pas utilisé ici aussi.
+        AppUser borrower = persistMember(
+                "service-register-expired@primatis.test", MemberStatus.ACTIVE, LocalDate.now(clock).minusDays(1));
         Title title = persistTitle();
         Copy copy = persistCopy(title, "SERVICE-REGISTER-EXPIRED");
         entityManager.flush();
@@ -485,7 +494,9 @@ class LoanServiceTests {
         LoanResponse response = loanService.registerReturn(loan.getId());
 
         assertThat(response.loanStatus()).isEqualTo(LoanStatus.RETURNED);
-        assertThat(response.returnDate()).isEqualTo(LocalDate.now());
+        // LocalDate.now(clock) — pas LocalDate.now() brut : registerReturn calcule
+        // returnDate via le même Clock UTC injecté (DEV-07.10, ClockConfig).
+        assertThat(response.returnDate()).isEqualTo(LocalDate.now(clock));
     }
 
     @Test
@@ -500,7 +511,9 @@ class LoanServiceTests {
         LoanResponse response = loanService.registerReturn(loan.getId());
 
         assertThat(response.loanStatus()).isEqualTo(LoanStatus.RETURNED);
-        assertThat(response.returnDate()).isEqualTo(LocalDate.now());
+        // LocalDate.now(clock) — pas LocalDate.now() brut : registerReturn calcule
+        // returnDate via le même Clock UTC injecté (DEV-07.10, ClockConfig).
+        assertThat(response.returnDate()).isEqualTo(LocalDate.now(clock));
     }
 
     @Test
