@@ -1,0 +1,114 @@
+<p-dialog [visible]="visible()" [modal]="true" header="Enregistrer un prêt" [closable]="!submitting()" (onHide)="cancel()">
+  <section aria-labelledby="loan-create-borrower-heading">
+    <h3 id="loan-create-borrower-heading">Emprunteur</h3>
+
+    @if (selectedBorrower(); as borrower) {
+      <p class="loan-create-selection">
+        <span>{{ borrower.firstName }} {{ borrower.lastName }} — {{ borrower.memberNumber }}</span>
+        <button type="button" class="link-button" (click)="changeBorrower()">Changer</button>
+      </p>
+    } @else {
+      <label for="loan-create-borrower-search">Rechercher un emprunteur</label>
+      <input
+        pInputText
+        id="loan-create-borrower-search"
+        type="search"
+        [ngModel]="borrowerSearchTerm()"
+        (ngModelChange)="onBorrowerSearchInput($event)"
+        placeholder="Nom, numéro d'adhérent ou email…"
+      />
+
+      @if (borrowerSearchError(); as currentError) {
+        <app-error-state [message]="currentError.message" />
+      } @else if (borrowerSearching()) {
+        <p class="loan-create-status">Recherche…</p>
+      } @else if (borrowerSearchTerm().trim().length > 0 && borrowerSearchResults().length === 0) {
+        <p class="loan-create-status">Aucun utilisateur trouvé.</p>
+      } @else if (borrowerSearchResults().length > 0) {
+        <ul class="loan-create-list">
+          @for (result of borrowerSearchResults(); track result.id) {
+            <li>
+              <span>{{ result.firstName }} {{ result.lastName }}</span>
+              @if (result.memberNumber; as memberNumber) {
+                <span>{{ memberNumber }}</span>
+                <button type="button" class="link-button" (click)="selectBorrower(result)">Sélectionner</button>
+              } @else {
+                <span class="loan-create-non-member">Non adhérent</span>
+              }
+            </li>
+          }
+        </ul>
+      }
+    }
+  </section>
+
+  <section aria-labelledby="loan-create-copy-heading">
+    <h3 id="loan-create-copy-heading">Exemplaire</h3>
+
+    @if (selectedTitle(); as title) {
+      <p class="loan-create-selection">
+        <span>{{ title.title }}</span>
+        <button type="button" class="link-button" (click)="changeTitle()">Changer</button>
+      </p>
+
+      @if (copiesLoading()) {
+        <app-loading-state message="Chargement des exemplaires…" />
+      } @else if (copiesError(); as currentCopiesError) {
+        <app-error-state [message]="currentCopiesError.message" [showRetry]="true" (retry)="retryCopies()" />
+      } @else if (copies().length === 0) {
+        <app-empty-state title="Aucun exemplaire" message="Ce titre ne possède aucun exemplaire." />
+      } @else {
+        <ul class="loan-create-list">
+          @for (copy of copies(); track copy.id) {
+            <li>
+              <span>{{ copy.inventoryCode }}</span>
+              <p-tag [value]="copy.availabilityStatus" />
+              <p-tag [value]="copy.copyCondition" />
+              @if (selectedCopy()?.id === copy.id) {
+                <span>Sélectionné</span>
+              } @else {
+                <button type="button" class="link-button" (click)="selectCopy(copy)">Sélectionner</button>
+              }
+            </li>
+          }
+        </ul>
+      }
+    } @else {
+      <label for="loan-create-title-search">Rechercher un titre</label>
+      <input
+        pInputText
+        id="loan-create-title-search"
+        type="search"
+        [ngModel]="titleSearchTerm()"
+        (ngModelChange)="onTitleSearchInput($event)"
+        placeholder="Titre…"
+      />
+
+      @if (titleSearchError(); as currentError) {
+        <app-error-state [message]="currentError.message" />
+      } @else if (titleSearching()) {
+        <p class="loan-create-status">Recherche…</p>
+      } @else if (titleSearchTerm().trim().length > 0 && titleSearchResults().length === 0) {
+        <p class="loan-create-status">Aucun titre trouvé.</p>
+      } @else if (titleSearchResults().length > 0) {
+        <ul class="loan-create-list">
+          @for (result of titleSearchResults(); track result.id) {
+            <li>
+              <span>{{ result.title }}</span>
+              <button type="button" class="link-button" (click)="selectTitle(result)">Sélectionner</button>
+            </li>
+          }
+        </ul>
+      }
+    }
+  </section>
+
+  @if (submitError(); as message) {
+    <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+  }
+
+  <div class="form-actions">
+    <button type="button" pButton label="Annuler" severity="secondary" [disabled]="submitting()" (click)="cancel()"></button>
+    <button type="button" pButton label="Enregistrer" [disabled]="!canSubmit" (click)="submit()"></button>
+  </div>
+</p-dialog>

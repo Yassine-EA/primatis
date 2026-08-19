@@ -1,4 +1,17 @@
-<h1>Prêts</h1>
+<div class="page-header">
+  <h1>Prêts</h1>
+  @if (canManageLoans) {
+    <button type="button" pButton label="Enregistrer un prêt" severity="secondary" (click)="openCreateDialog()"></button>
+  }
+</div>
+
+@if (canManageLoans) {
+  <app-loan-create-dialog
+    [visible]="createDialogVisible()"
+    (closed)="closeCreateDialog()"
+    (saved)="onLoanCreated($event)"
+  />
+}
 
 @if (loading() && rows().length === 0 && !error()) {
   <app-loading-state message="Chargement des prêts…" />

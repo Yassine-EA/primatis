@@ -13,29 +13,30 @@ import { LoanApiService } from '../../../../loans/services/loan-api.service';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import { LoanCreateDialog } from '../../components/loan-create-dialog/loan-create-dialog';
 
 const DEFAULT_PAGE_SIZE = 20;
 const OPEN_LOAN_STATUSES: readonly LoanStatus[] = ['ACTIVE', 'OVERDUE'];
 
 /**
  * Consultation staff paginée de tous les prêts (DEV-07.9, `LOAN_READ`,
- * `GET /api/v1/loans`) + retour d'un prêt ouvert (`LOAN_MANAGE`,
- * `POST /api/v1/loans/{id}/return`). Même pattern que `StaffUsersPage`
- * pour la liste (`p-table` lazy server-side) et que
- * `AdminUserDetailPage` pour le workflow confirmation/retour
- * (`ConfirmationService` global + `MessageService` global, aucun Dialog
- * local). `LOAN_READ` conditionne déjà l'accès à la route entière
- * (`permissionGuard`) ; `LOAN_MANAGE` est vérifiée ici uniquement pour
- * révéler/masquer l'action Retour — UX seulement, le backend reste
- * l'autorité (`@PreAuthorize` sur `LoanService.registerReturn`).
+ * `GET /api/v1/loans`), retour d'un prêt ouvert (`LOAN_MANAGE`,
+ * `POST /api/v1/loans/{id}/return`) et création d'un prêt (DEV-07.9.2,
+ * `LOAN_MANAGE`, `POST /api/v1/loans`, via `LoanCreateDialog`). Même
+ * pattern que `StaffUsersPage` pour la liste (`p-table` lazy server-side)
+ * et que `AdminUserDetailPage` pour le workflow confirmation/retour
+ * (`ConfirmationService` global + `MessageService` global). `LOAN_READ`
+ * conditionne déjà l'accès à la route entière (`permissionGuard`) ;
+ * `LOAN_MANAGE` est vérifiée ici uniquement pour révéler/masquer les
+ * actions Créer/Retourner — UX seulement, le backend reste l'autorité
+ * (`@PreAuthorize` sur `LoanService.registerLoan`/`registerReturn`).
  *
- * **Aucune création de prêt** : DEV-07.9 a confirmé qu'aucune API
- * frontend/backend réelle ne permet de rechercher un emprunteur
- * (`UserApiService.listUsers`/`GET /api/v1/users` : pagination brute
- * `page`/`size` uniquement, aucun paramètre de recherche) — un input
- * brut de `borrowerUserId`, un chargement arbitraire de tous les
- * membres, ou un faux autocomplete sur une seule page sont tous
- * explicitement interdits. `GAP-07.9-01` documenté dans le log DEV-07.9.
+ * Après une création réussie (`onLoanCreated`), la page courante est
+ * simplement rechargée (`load(lastPage, lastSize)`) — la ligne insérée
+ * n'existe pas forcément dans la page actuellement affichée (tri
+ * `loanDate` décroissant, DEV-DEC-0031), un rafraîchissement complet
+ * reste donc la stratégie la plus fiable, jamais une insertion locale
+ * devinée.
  *
  * Aucune règle métier Loan recalculée ici : `loanStatus`, `dueDate`,
  * `returnDate` proviennent exclusivement de la réponse backend — après
@@ -44,7 +45,7 @@ const OPEN_LOAN_STATUSES: readonly LoanStatus[] = ['ACTIVE', 'OVERDUE'];
  */
 @Component({
   selector: 'app-staff-loans-page',
-  imports: [TableModule, TagModule, ButtonModule, LoadingState, EmptyState, ErrorState],
+  imports: [TableModule, TagModule, ButtonModule, LoadingState, EmptyState, ErrorState, LoanCreateDialog],
   templateUrl: './staff-loans-page.html',
   styleUrl: './staff-loans-page.scss',
 })
@@ -63,6 +64,7 @@ export class StaffLoansPage {
   readonly loading = signal(true);
   readonly error = signal<AppError | null>(null);
   readonly returningLoanId = signal<number | null>(null);
+  readonly createDialogVisible = signal(false);
 
   private lastPage = 0;
   private lastSize = DEFAULT_PAGE_SIZE;
@@ -103,6 +105,24 @@ export class StaffLoansPage {
 
   isReturnable(loan: LoanResponse): boolean {
     return OPEN_LOAN_STATUSES.includes(loan.loanStatus);
+  }
+
+  openCreateDialog(): void {
+    this.createDialogVisible.set(true);
+  }
+
+  closeCreateDialog(): void {
+    this.createDialogVisible.set(false);
+  }
+
+  /**
+   * `loan` (le `LoanResponse` exact renvoyé par `registerLoan`) n'est pas
+   * inséré localement : la page courante est rechargée pour rester
+   * cohérente avec le tri serveur (`loanDate` décroissant).
+   */
+  onLoanCreated(loan: LoanResponse): void {
+    this.createDialogVisible.set(false);
+    this.load(this.lastPage, this.lastSize);
   }
 
   confirmReturn(loan: LoanResponse): void {
