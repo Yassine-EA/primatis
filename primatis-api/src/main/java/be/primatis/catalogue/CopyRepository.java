@@ -1,6 +1,10 @@
 package be.primatis.catalogue;
 
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,4 +58,21 @@ public interface CopyRepository extends JpaRepository<Copy, Long> {
      * cas échéant.
      */
     boolean existsByTitleId(Long titleId);
+
+    /**
+     * Chargement verrouillé (SELECT ... FOR UPDATE), réservé aux futurs
+     * workflows Loan/Return (DEV-07.2, préparation de primitive — même
+     * précédent que {@code AppUserRepository.findByEmailForAuthentication},
+     * DEV-03.6) : deux tentatives concurrentes d'emprunt/retour sur le même
+     * exemplaire se sérialisent au niveau de la ligne PostgreSQL. Ce
+     * Repository ne décide et n'écrit aucune transition
+     * {@code AvailabilityStatus} — seul le futur Service, après avoir
+     * acquis ce verrou, revalide l'état et applique la transition
+     * (architecture.md §8.2/§8.3 : lock ciblé + revalidation obligatoire).
+     * {@link #findById(Object)} reste non verrouillé pour tous les autres
+     * usages (consultation, DEV-06).
+     */
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT c FROM Copy c WHERE c.id = :id")
+    Optional<Copy> findByIdForUpdate(@Param("id") Long id);
 }

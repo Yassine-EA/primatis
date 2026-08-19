@@ -2,6 +2,8 @@ package be.primatis.user;
 
 import be.primatis.access.RoleAndPermissionCode;
 import jakarta.persistence.LockModeType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -64,4 +66,20 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
      * renverrait de toute façon jamais {@code true}).
      */
     boolean existsByMemberNumber(String memberNumber);
+
+    /**
+     * Recherche staff optionnelle (DEV-07.9.1, {@code GET /api/v1/users?q=}) :
+     * sous-chaîne insensible à la casse sur {@code memberNumber}/{@code
+     * firstName}/{@code lastName}/{@code email}, même principe que {@link
+     * be.primatis.catalogue.AuthorRepository#findByFullNameContainingIgnoreCase}.
+     * Le même terme trimé est passé aux quatre paramètres par l'appelant
+     * ({@code UserService}) — aucune combinaison de filtres indépendants
+     * (contrairement à {@code TitleSpecifications}), donc pas besoin d'une
+     * {@code Specification} : une requête dérivée Spring Data standard
+     * suffit. {@code memberNumber} étant nullable en base, un utilisateur
+     * sans adhésion ne matche simplement jamais sur ce champ (comparaison
+     * SQL sur {@code NULL}), sans erreur.
+     */
+    Page<AppUser> findByMemberNumberContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+            String memberNumber, String firstName, String lastName, String email, Pageable pageable);
 }

@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+.loan-create-selection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loan-create-status,
+.loan-create-non-member {
+  color: var(--p-text-muted-color, #6b7280);
+}
+
+.loan-create-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.25rem;
+  }
+}
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--p-primary-color, #2563eb);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-block-start: 1rem;
+}

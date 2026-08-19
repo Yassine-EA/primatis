@@ -56,7 +56,10 @@ public class UserController {
     @Operation(
             summary = "Liste paginée des utilisateurs",
             description = "Retourne une page d'utilisateurs (USER_READ requis). "
-                    + "Pagination 0-based, taille par défaut 20, maximum 100.")
+                    + "Pagination 0-based, taille par défaut 20, maximum 100. "
+                    + "Paramètre optionnel q (DEV-07.9.1) : recherche insensible à la casse, "
+                    + "par sous-chaîne, sur memberNumber/firstName/lastName/email. "
+                    + "q absent ou blanc conserve exactement le comportement paginé existant.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Page d'utilisateurs."),
             @ApiResponse(responseCode = "400", description = "Paramètres de pagination invalides.",
@@ -69,9 +72,10 @@ public class UserController {
     @GetMapping
     public PageResponse<UserResponse> listUsers(
             @RequestParam(defaultValue = "0") @Min(0) int page,
-            @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size) {
+            @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size,
+            @RequestParam(required = false) String q) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id"));
-        return PageResponse.from(userService.listUsers(pageable));
+        return PageResponse.from(userService.listUsers(pageable, q));
     }
 
     @Operation(

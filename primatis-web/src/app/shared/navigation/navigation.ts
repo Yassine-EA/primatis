@@ -31,12 +31,17 @@ export class Navigation {
     // surface backend permitAll (DEV-DEC-0027), même statut qu'Accueil.
     { label: 'Catalogue', routerLink: '/catalogue' },
     { label: 'Espace membre', routerLink: '/member/profile', requiredRoles: ['ROLE_MEMBER'] },
+    { label: 'Mes prêts', routerLink: '/member/loans', requiredRoles: ['ROLE_MEMBER'] },
     { label: 'Espace personnel', routerLink: '/staff/users', requiredRoles: ['ROLE_LIBRARIAN', 'ROLE_ADMIN'] },
     {
       label: 'Gestion du catalogue',
       routerLink: '/staff/catalogue',
       requiredRoles: ['ROLE_LIBRARIAN', 'ROLE_ADMIN'],
     },
+    // DEV-07.9 : accès/navigation piloté par la permission LOAN_READ
+    // (comme le guard réel de la route), pas par rôle — contrairement aux
+    // autres entrées staff ci-dessus.
+    { label: 'Prêts', routerLink: '/staff/loans', requiredPermissions: ['LOAN_READ'] },
     { label: 'Administration', routerLink: '/admin/users', requiredRoles: ['ROLE_ADMIN'] },
   ];
 

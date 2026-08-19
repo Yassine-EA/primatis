@@ -64,6 +64,14 @@ export const routes: Routes = [
             (m) => m.MemberProfilePage,
           ),
       },
+      {
+        // DEV-07.8 : consultation seule des prêts du membre authentifié,
+        // aucun guard propre — hérite du roleGuard ROLE_MEMBER porté par la
+        // zone /member (même principe que 'profile').
+        path: 'loans',
+        loadComponent: () =>
+          import('./member/loans/pages/member-loans-page/member-loans-page').then((m) => m.MemberLoansPage),
+      },
     ],
   },
   {
@@ -124,6 +132,22 @@ export const routes: Routes = [
               import('./staff/catalogue/pages/staff-title-detail-page/staff-title-detail-page').then(
                 (m) => m.StaffTitleDetailPage,
               ),
+          },
+        ],
+      },
+      {
+        // Segment 'loans' (DEV-07.9, LOAN_READ) — sibling de 'users'/
+        // 'catalogue', même structure. Un seul écran (liste + retour) :
+        // aucun GET /api/v1/loans/{id} (DEV-DEC-0031), donc aucune route
+        // ':id' comme pour users/catalogue.
+        path: 'loans',
+        canActivate: [permissionGuard],
+        data: { permissions: ['LOAN_READ'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./staff/loans/pages/staff-loans-page/staff-loans-page').then((m) => m.StaffLoansPage),
           },
         ],
       },
