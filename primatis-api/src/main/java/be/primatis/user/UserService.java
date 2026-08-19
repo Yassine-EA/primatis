@@ -89,7 +89,32 @@ public class UserService {
     @PreAuthorize("hasAuthority('USER_READ')")
     @Transactional
     public Page<UserResponse> listUsers(Pageable pageable) {
-        Page<AppUser> page = appUserRepository.findAll(pageable);
+        return listUsers(pageable, null);
+    }
+
+    /**
+     * Variante avec recherche optionnelle (DEV-07.9.1, {@code GET
+     * /api/v1/users?q=}) : {@code q} {@code null}/blanc conserve exactement
+     * le comportement de {@link #listUsers(Pageable)} ({@code
+     * findAll(pageable)}) ; sinon, sous-chaîne insensible à la casse sur
+     * {@code memberNumber}/{@code firstName}/{@code lastName}/{@code email}
+     * ({@link AppUserRepository#findByMemberNumberContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase}).
+     * Même synchronisation paresseuse {@code memberStatus} que {@link
+     * #listUsers(Pageable)} dans les deux cas — aucune divergence de vérité
+     * métier entre liste simple et liste filtrée. Fonctionnalité Users
+     * générique : ne présuppose aucun usage Loan particulier, le futur
+     * picker de sélection d'emprunteur (DEV-07.9.2) ne fait qu'en consommer
+     * le résultat.
+     */
+    @PreAuthorize("hasAuthority('USER_READ')")
+    @Transactional
+    public Page<UserResponse> listUsers(Pageable pageable, String q) {
+        String trimmed = q == null ? "" : q.trim();
+        Page<AppUser> page = trimmed.isEmpty()
+                ? appUserRepository.findAll(pageable)
+                : appUserRepository
+                        .findByMemberNumberContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                                trimmed, trimmed, trimmed, trimmed, pageable);
         page.forEach(memberExpirationPolicy::syncIfNeeded);
         return page.map(UserResponse::from);
     }

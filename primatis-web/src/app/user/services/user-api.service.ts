@@ -22,8 +22,18 @@ export class UserApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = inject(API_BASE_URL);
 
-  listUsers(page = 0, size = 20): Observable<PageResponse<UserResponse>> {
-    const params = new HttpParams().set('page', page).set('size', size);
+  /**
+   * `q` (DEV-07.9.1) : recherche optionnelle sous-chaîne insensible à la
+   * casse (backend : `memberNumber`/`firstName`/`lastName`/`email`).
+   * Envoyé uniquement s'il reste non vide après trim — sinon requête
+   * strictement identique au comportement paginé existant.
+   */
+  listUsers(page = 0, size = 20, q?: string): Observable<PageResponse<UserResponse>> {
+    let params = new HttpParams().set('page', page).set('size', size);
+    const trimmedQ = q?.trim();
+    if (trimmedQ) {
+      params = params.set('q', trimmedQ);
+    }
     return this.http.get<PageResponse<UserResponse>>(`${this.baseUrl}/users`, { params });
   }
 

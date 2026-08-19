@@ -130,6 +130,8 @@ class UserControllerTests {
             appUserRepository.findByEmail("controller-unblock-target@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("controller-reactivate-target@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("controller-list-detail-coherence@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-search-membernumber@primatis.test").ifPresent(this::deleteUserAndRoles);
+            appUserRepository.findByEmail("controller-search-other@primatis.test").ifPresent(this::deleteUserAndRoles);
             appUserRepository.findByEmail("e2e-users-create-admin@primatis.test").ifPresent(this::deleteUserAndRoles);
         });
     }
@@ -236,6 +238,42 @@ class UserControllerTests {
                 .andExpect(jsonPath("$.fieldErrors[0].field").value("size"))
                 .andExpect(jsonPath("$.message", org.hamcrest.Matchers.not(
                         org.hamcrest.Matchers.containsString("java.lang"))));
+    }
+
+    // ---------------------------------------------------------------
+    // GET /api/v1/users?q= — recherche optionnelle (DEV-07.9.1)
+    // ---------------------------------------------------------------
+
+    @Test
+    void listUsersWithQFiltersToMatchingMemberNumber() throws Exception {
+        AppUser target = persistUser(
+                "controller-search-membernumber@primatis.test", "Prénom", "Nom", "M998000001");
+        persistUser("controller-search-other@primatis.test", "Prénom", "Nom", "M998000002");
+        String token = signToken(List.of(), List.of("USER_READ"));
+
+        mockMvc.perform(get("/api/v1/users?q=M998000001").header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].id").value(target.getId()));
+    }
+
+    @Test
+    void listUsersWithBlankQReturnsUnfilteredResults() throws Exception {
+        persistUser("controller-search-membernumber@primatis.test", "Prénom", "Nom", "M998000001");
+        String token = signToken(List.of(), List.of("USER_READ"));
+
+        mockMvc.perform(get("/api/v1/users?q=   ").header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(org.hamcrest.Matchers.greaterThanOrEqualTo(1)));
+    }
+
+    @Test
+    void listUsersWithQAuthenticatedWithoutUserReadIsForbidden() throws Exception {
+        String token = signToken(List.of(), List.of("CATALOGUE_READ"));
+
+        mockMvc.perform(get("/api/v1/users?q=martin").header("Authorization", "Bearer " + token))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"));
     }
 
     @Test
@@ -1248,13 +1286,22 @@ class UserControllerTests {
     }
 
     private AppUser persistUser(String email) {
+        return persistUser(email, "Prénom", "Nom", null);
+    }
+
+    /**
+     * Variante DEV-07.9.1 pour les tests HTTP de recherche {@code q} :
+     * {@code firstName}/{@code lastName}/{@code memberNumber} distinctifs.
+     */
+    private AppUser persistUser(String email, String firstName, String lastName, String memberNumber) {
         AppUser[] holder = new AppUser[1];
         transactionTemplate().executeWithoutResult(status -> {
             AppUser user = new AppUser();
             user.setEmail(email);
             user.setPasswordHash(passwordEncoder.encode("Correct-Password-2026!"));
-            user.setFirstName("Prénom");
-            user.setLastName("Nom");
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setMemberNumber(memberNumber);
             user.setAccountStatus(AccountStatus.ACTIVE);
             user.setFailedLoginCount(0);
             user.setCreatedAt(Instant.now());

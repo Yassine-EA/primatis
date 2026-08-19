@@ -113,6 +113,130 @@ class UserServiceTests {
         assertThat(page.getTotalElements()).isGreaterThanOrEqualTo(3);
     }
 
+    // ---------------------------------------------------------------
+    // listUsers — recherche optionnelle q (DEV-07.9.1, GAP-07.9-01)
+    // ---------------------------------------------------------------
+
+    @Test
+    void listUsersWithBlankQBehavesExactlyLikeNoQ() {
+        authenticateWithUserRead();
+        persistUser("service-search-blank@primatis.test");
+        entityManager.flush();
+
+        Page<UserResponse> withoutQ =
+                userService.listUsers(PageRequest.of(0, 100, Sort.by(Sort.Direction.ASC, "id")));
+        Page<UserResponse> withBlankQ =
+                userService.listUsers(PageRequest.of(0, 100, Sort.by(Sort.Direction.ASC, "id")), "   ");
+
+        assertThat(withBlankQ.getTotalElements()).isEqualTo(withoutQ.getTotalElements());
+        assertThat(withBlankQ.getContent()).extracting(UserResponse::id)
+                .containsExactlyElementsOf(withoutQ.getContent().stream().map(UserResponse::id).toList());
+    }
+
+    @Test
+    void listUsersSearchesByMemberNumber() {
+        authenticateWithUserRead();
+        AppUser target = persistUser(
+                "service-search-membernumber@primatis.test", "Prénom", "Nom", "M999000001");
+        persistUser("service-search-membernumber-other@primatis.test", "Prénom", "Nom", "M999000002");
+        entityManager.flush();
+
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 20), "M999000001");
+
+        assertThat(page.getContent()).extracting(UserResponse::id).containsExactly(target.getId());
+    }
+
+    @Test
+    void listUsersSearchesByFirstName() {
+        authenticateWithUserRead();
+        AppUser target = persistUser("service-search-firstname@primatis.test", "Zbigniew", "Kowalski", null);
+        entityManager.flush();
+
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 20), "Zbigniew");
+
+        assertThat(page.getContent()).extracting(UserResponse::id).contains(target.getId());
+    }
+
+    @Test
+    void listUsersSearchesByLastName() {
+        authenticateWithUserRead();
+        AppUser target = persistUser("service-search-lastname@primatis.test", "Prénom", "Zawadzki", null);
+        entityManager.flush();
+
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 20), "Zawadzki");
+
+        assertThat(page.getContent()).extracting(UserResponse::id).contains(target.getId());
+    }
+
+    @Test
+    void listUsersSearchesByEmail() {
+        authenticateWithUserRead();
+        AppUser target = persistUser("service-search-distinctive-email@primatis.test");
+        entityManager.flush();
+
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 20), "search-distinctive-email");
+
+        assertThat(page.getContent()).extracting(UserResponse::id).contains(target.getId());
+    }
+
+    @Test
+    void listUsersSearchIsCaseInsensitive() {
+        authenticateWithUserRead();
+        AppUser target = persistUser("service-search-case@primatis.test", "Xiomara", "Nom", null);
+        entityManager.flush();
+
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 20), "xiomara");
+
+        assertThat(page.getContent()).extracting(UserResponse::id).contains(target.getId());
+    }
+
+    @Test
+    void listUsersSearchMatchesSubstring() {
+        authenticateWithUserRead();
+        AppUser target = persistUser("service-search-substring@primatis.test", "Przemysław", "Nom", null);
+        entityManager.flush();
+
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 20), "zemys");
+
+        assertThat(page.getContent()).extracting(UserResponse::id).contains(target.getId());
+    }
+
+    @Test
+    void listUsersSearchWithNoMatchReturnsEmptyPage() {
+        authenticateWithUserRead();
+
+        Page<UserResponse> page = userService.listUsers(PageRequest.of(0, 20), "no-such-user-zzzxyzzy-term");
+
+        assertThat(page.getContent()).isEmpty();
+        assertThat(page.getTotalElements()).isZero();
+    }
+
+    @Test
+    void listUsersSearchRespectsPagination() {
+        authenticateWithUserRead();
+        persistUser("service-search-page-1@primatis.test", "Pagsearch", "Un", null);
+        persistUser("service-search-page-2@primatis.test", "Pagsearch", "Deux", null);
+        persistUser("service-search-page-3@primatis.test", "Pagsearch", "Trois", null);
+        entityManager.flush();
+
+        Page<UserResponse> firstPage =
+                userService.listUsers(PageRequest.of(0, 2, Sort.by(Sort.Direction.ASC, "id")), "Pagsearch");
+        Page<UserResponse> secondPage =
+                userService.listUsers(PageRequest.of(1, 2, Sort.by(Sort.Direction.ASC, "id")), "Pagsearch");
+
+        assertThat(firstPage.getContent()).hasSize(2);
+        assertThat(firstPage.getTotalElements()).isEqualTo(3);
+        assertThat(secondPage.getContent()).hasSize(1);
+    }
+
+    @Test
+    void listUsersWithQDeniedWithoutUserReadPermission() {
+        authenticateAsAnonymous();
+
+        assertThrows(AccessDeniedException.class,
+                () -> userService.listUsers(PageRequest.of(0, 20), "martin"));
+    }
+
     @Test
     void getUserByIdReturnsUserResponseWhenPresent() {
         authenticateWithUserRead();
@@ -1406,11 +1530,21 @@ class UserServiceTests {
     }
 
     private AppUser persistUser(String email) {
+        return persistUser(email, "Prénom", "Nom", null);
+    }
+
+    /**
+     * Variante DEV-07.9.1 pour les tests de recherche {@code q} : permet des
+     * {@code firstName}/{@code lastName}/{@code memberNumber} distinctifs,
+     * jamais fournis par {@link #persistUser(String)}.
+     */
+    private AppUser persistUser(String email, String firstName, String lastName, String memberNumber) {
         AppUser user = new AppUser();
         user.setEmail(email);
         user.setPasswordHash("hash");
-        user.setFirstName("Prénom");
-        user.setLastName("Nom");
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setMemberNumber(memberNumber);
         user.setAccountStatus(AccountStatus.ACTIVE);
         user.setFailedLoginCount(0);
         user.setCreatedAt(Instant.now());

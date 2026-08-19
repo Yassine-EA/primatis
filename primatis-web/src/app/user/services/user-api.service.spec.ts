@@ -85,6 +85,77 @@ describe('UserApiService', () => {
   });
 
   // ---------------------------------------------------------------
+  // listUsers — recherche q (DEV-07.9.1)
+  // ---------------------------------------------------------------
+
+  it('should send q when non-empty', () => {
+    service.listUsers(0, 20, 'martin').subscribe();
+
+    const request = httpTestingController.expectOne(
+      (req) => req.url === '/api/v1/users' && req.method === 'GET',
+    );
+    expect(request.request.params.get('q')).toBe('martin');
+
+    request.flush({ content: [], page: 0, size: 20, totalElements: 0, totalPages: 0 });
+  });
+
+  it('should trim q before sending it', () => {
+    service.listUsers(0, 20, '  martin  ').subscribe();
+
+    const request = httpTestingController.expectOne(
+      (req) => req.url === '/api/v1/users' && req.method === 'GET',
+    );
+    expect(request.request.params.get('q')).toBe('martin');
+
+    request.flush({ content: [], page: 0, size: 20, totalElements: 0, totalPages: 0 });
+  });
+
+  it('should never send q when it is undefined', () => {
+    service.listUsers(0, 20).subscribe();
+
+    const request = httpTestingController.expectOne(
+      (req) => req.url === '/api/v1/users' && req.method === 'GET',
+    );
+    expect(request.request.params.has('q')).toBe(false);
+
+    request.flush({ content: [], page: 0, size: 20, totalElements: 0, totalPages: 0 });
+  });
+
+  it('should never send q when it is empty after trim (blank)', () => {
+    service.listUsers(0, 20, '   ').subscribe();
+
+    const request = httpTestingController.expectOne(
+      (req) => req.url === '/api/v1/users' && req.method === 'GET',
+    );
+    expect(request.request.params.has('q')).toBe(false);
+
+    request.flush({ content: [], page: 0, size: 20, totalElements: 0, totalPages: 0 });
+  });
+
+  it('should keep page/size unchanged when q is provided', () => {
+    service.listUsers(2, 10, 'martin').subscribe();
+
+    const request = httpTestingController.expectOne(
+      (req) => req.url === '/api/v1/users' && req.method === 'GET',
+    );
+    expect(request.request.params.get('page')).toBe('2');
+    expect(request.request.params.get('size')).toBe('10');
+
+    request.flush({ content: [], page: 2, size: 10, totalElements: 0, totalPages: 0 });
+  });
+
+  it('should still propagate PageResponse<UserResponse> unchanged when q is used', () => {
+    let received: unknown;
+    service.listUsers(0, 20, 'martin').subscribe((value) => (received = value));
+
+    httpTestingController
+      .expectOne((req) => req.url === '/api/v1/users' && req.method === 'GET')
+      .flush({ content: [user], page: 0, size: 20, totalElements: 1, totalPages: 1 });
+
+    expect(received).toEqual({ content: [user], page: 0, size: 20, totalElements: 1, totalPages: 1 });
+  });
+
+  // ---------------------------------------------------------------
   // getUser
   // ---------------------------------------------------------------
 
