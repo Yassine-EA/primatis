@@ -160,6 +160,30 @@ describe('Navigation', () => {
     expect(linkLabels()).not.toContain('Mes réservations');
   });
 
+  it('should show the Mes amendes link for ROLE_MEMBER (DEV-09.12)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(linkLabels()).toContain('Mes amendes');
+  });
+
+  it('should point the Mes amendes link at /member/fines (DEV-09.12)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/member/fines"]')).not.toBeNull();
+  });
+
+  it('should hide the Mes amendes link for a user without ROLE_MEMBER (DEV-09.12)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(linkLabels()).not.toContain('Mes amendes');
+  });
+
   it('should show the Prêts link for LOAN_READ (DEV-07.9)', () => {
     authServiceMock.authenticated.mockReturnValue(true);
     authServiceMock.permissions.mockReturnValue(['LOAN_READ']);
@@ -216,6 +240,39 @@ describe('Navigation', () => {
     render();
 
     expect(linkLabels()).not.toContain('Réservations');
+  });
+
+  it('should show the Amendes link for FINE_READ (DEV-09.13)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['FINE_READ']);
+    render();
+
+    expect(linkLabels()).toContain('Amendes');
+  });
+
+  it('should point the Amendes link at /staff/fines (DEV-09.13)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['FINE_READ']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/staff/fines"]')).not.toBeNull();
+  });
+
+  it('should hide the Amendes link for a user without FINE_READ (DEV-09.13)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    authServiceMock.permissions.mockReturnValue([]);
+    render();
+
+    expect(linkLabels()).not.toContain('Amendes');
+  });
+
+  it('should hide the Amendes link for a user with only FINE_MANAGE, without FINE_READ (DEV-09.13)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['FINE_MANAGE']);
+    render();
+
+    expect(linkLabels()).not.toContain('Amendes');
   });
 
   it('should show the Administration link for ROLE_ADMIN', () => {

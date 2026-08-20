@@ -36,6 +36,10 @@ export class Navigation {
     // permission frontend — mêmes principes exacts que 'Mes prêts'
     // (DEV-DEC-0041).
     { label: 'Mes réservations', routerLink: '/member/reservations', requiredRoles: ['ROLE_MEMBER'] },
+    // DEV-09.12 : même principe exact que 'Mes prêts'/'Mes réservations' —
+    // consultation self-service par rôle, aucune permission FINE_READ (page
+    // strictement en lecture seule, aucune action FINE_MANAGE côté membre).
+    { label: 'Mes amendes', routerLink: '/member/fines', requiredRoles: ['ROLE_MEMBER'] },
     { label: 'Espace personnel', routerLink: '/staff/users', requiredRoles: ['ROLE_LIBRARIAN', 'ROLE_ADMIN'] },
     {
       label: 'Gestion du catalogue',
@@ -50,6 +54,11 @@ export class Navigation {
     // la visibilité de l'entrée, comme le guard réel de la route ; l'action
     // mutatrice RESERVATION_MANAGE reste contrôlée dans la page elle-même.
     { label: 'Réservations', routerLink: '/staff/reservations', requiredPermissions: ['RESERVATION_READ'] },
+    // DEV-09.13 : même principe exact que 'Prêts'/'Réservations' —
+    // FINE_READ pilote la visibilité de l'entrée, comme le guard réel de la
+    // route ; l'action mutatrice FINE_MANAGE reste contrôlée dans la page
+    // elle-même.
+    { label: 'Amendes', routerLink: '/staff/fines', requiredPermissions: ['FINE_READ'] },
     { label: 'Administration', routerLink: '/admin/users', requiredRoles: ['ROLE_ADMIN'] },
   ];
 

@@ -2,8 +2,10 @@ import { authGuard } from './core/guards/auth.guard';
 import { permissionGuard } from './core/guards/permission.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { routes } from './app.routes';
+import { MemberFinesPage } from './member/fines/pages/member-fines-page/member-fines-page';
 import { MemberLoansPage } from './member/loans/pages/member-loans-page/member-loans-page';
 import { MemberReservationsPage } from './member/reservations/pages/member-reservations-page/member-reservations-page';
+import { StaffFinesPage } from './staff/fines/pages/staff-fines-page/staff-fines-page';
 import { StaffLoansPage } from './staff/loans/pages/staff-loans-page/staff-loans-page';
 import { StaffReservationsPage } from './staff/reservations/pages/staff-reservations-page/staff-reservations-page';
 
@@ -180,6 +182,40 @@ describe('Application routes', () => {
     expect(loadedComponent).toBe(StaffReservationsPage);
   });
 
+  it('should protect /staff/fines with permissionGuard and FINE_READ (DEV-09.13)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const finesRoute = staffRoute?.children?.find((child) => child.path === 'fines');
+
+    expect(finesRoute?.canActivate).toContain(permissionGuard);
+    expect(finesRoute?.data?.['permissions']).toEqual(['FINE_READ']);
+  });
+
+  it('should never require FINE_MANAGE at the /staff/fines route level (DEV-09.13)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const finesRoute = staffRoute?.children?.find((child) => child.path === 'fines');
+
+    expect(finesRoute?.data?.['permissions']).not.toContain('FINE_MANAGE');
+  });
+
+  it('should expose a single list route as the only child of /staff/fines, no :id route (DEV-09.13)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const finesRoute = staffRoute?.children?.find((child) => child.path === 'fines');
+    const childPaths = finesRoute?.children?.map((child) => child.path) ?? [];
+
+    expect(childPaths).toEqual(['']);
+  });
+
+  it('should lazy-load StaffFinesPage for /staff/fines (DEV-09.13)', async () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const finesRoute = staffRoute?.children?.find((child) => child.path === 'fines');
+    const listRoute = finesRoute?.children?.find((child) => child.path === '');
+
+    expect(listRoute?.loadComponent).toBeDefined();
+    const loadedComponent = await listRoute!.loadComponent!();
+
+    expect(loadedComponent).toBe(StaffFinesPage);
+  });
+
   it('should redirect the bare /admin zone to /admin/users (DEV-05.12)', () => {
     const adminRoute = routes.find((candidate) => candidate.path === 'admin');
     const redirectChild = adminRoute?.children?.find((child) => child.path === '');
@@ -287,6 +323,33 @@ describe('Application routes', () => {
     const loadedComponent = await reservationsRoute!.loadComponent!();
 
     expect(loadedComponent).toBe(MemberReservationsPage);
+  });
+
+  it('should expose /member/fines as a child of /member, accessible for ROLE_MEMBER via the zone-level roleGuard (DEV-09.12)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const childPaths = memberRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('fines');
+    expect(memberRoute?.canActivate).toContain(roleGuard);
+    expect(memberRoute?.data?.['roles']).toEqual(['ROLE_MEMBER']);
+  });
+
+  it('should never add its own guard to /member/fines — it inherits the zone-level roleGuard (DEV-09.12)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const finesRoute = memberRoute?.children?.find((child) => child.path === 'fines');
+
+    expect(finesRoute?.canActivate).toBeUndefined();
+    expect(finesRoute?.data).toBeUndefined();
+  });
+
+  it('should lazy-load MemberFinesPage for /member/fines (DEV-09.12)', async () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const finesRoute = memberRoute?.children?.find((child) => child.path === 'fines');
+
+    expect(finesRoute?.loadComponent).toBeDefined();
+    const loadedComponent = await finesRoute!.loadComponent!();
+
+    expect(loadedComponent).toBe(MemberFinesPage);
   });
 
   it('should never add roleGuard to /staff or /admin (DEV-05.13)', () => {

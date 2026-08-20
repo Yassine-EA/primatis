@@ -86,6 +86,18 @@ export const routes: Routes = [
             (m) => m.MemberReservationsPage,
           ),
       },
+      {
+        // DEV-09.12 : consultation seule des amendes du membre authentifié,
+        // aucun guard propre — hérite du roleGuard ROLE_MEMBER porté par la
+        // zone /member (même principe exact que 'loans'/'reservations').
+        // Aucune permission FINE_READ ici : ownership self-service par
+        // identité JWT uniquement (endpoint /me/fines), aucune action
+        // (paiement/annulation requièrent toutes deux FINE_MANAGE, staff
+        // uniquement, DEV-09.10 §16).
+        path: 'fines',
+        loadComponent: () =>
+          import('./member/fines/pages/member-fines-page/member-fines-page').then((m) => m.MemberFinesPage),
+      },
     ],
   },
   {
@@ -184,6 +196,28 @@ export const routes: Routes = [
               import('./staff/reservations/pages/staff-reservations-page/staff-reservations-page').then(
                 (m) => m.StaffReservationsPage,
               ),
+          },
+        ],
+      },
+      {
+        // Segment 'fines' (DEV-09.13, FINE_READ) — sibling de
+        // 'users'/'catalogue'/'loans'/'reservations', même structure : la
+        // route ne demande que la consultation, les actions mutatrices
+        // (confirmation de paiement, annulation) sont déjà contrôlées dans
+        // StaffFinesPage via AuthService.hasPermission('FINE_MANAGE'),
+        // jamais au niveau du guard de route. Un seul écran (liste +
+        // actions) : aucun GET /api/v1/fines/{id}, aucune route ':id',
+        // aucune création (Fine créée automatiquement au retour tardif,
+        // DEV-DEC-0048) — donc aucun dialog de création comme pour
+        // 'loans'/'reservations'.
+        path: 'fines',
+        canActivate: [permissionGuard],
+        data: { permissions: ['FINE_READ'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./staff/fines/pages/staff-fines-page/staff-fines-page').then((m) => m.StaffFinesPage),
           },
         ],
       },
