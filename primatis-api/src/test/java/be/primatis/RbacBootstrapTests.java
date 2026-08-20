@@ -140,8 +140,9 @@ class RbacBootstrapTests {
         assertRowCount("app_user", 0);
         assertRowCount("user_role", 0);
 
-        // --- application_setting non altéré (bootstrap V001, DEV-02) ---
-        assertRowCount("application_setting", 4);
+        // --- application_setting non altéré (bootstrap V001, DEV-02 ;
+        // V006, DEV-09.3, porte le total de 4 à 6) ---
+        assertRowCount("application_setting", 6);
 
         // --- Hibernate ddl-auto=validate reste compatible : le contexte a
         // déjà démarré avec ces Entities contre ce schéma (sinon la
@@ -201,6 +202,21 @@ class RbacBootstrapTests {
         // a réellement été appliqué par ce Flyway ciblé sur "002" : stable
         // face à l'ajout de futures migrations sans lien avec RBAC.
         assertThat(v002Only.info().applied()).hasSize(2);
+
+        // Restauration explicite de l'état pleinement migré (gap découvert
+        // pendant DEV-09.3) : les Flyway ci-dessus ciblent volontairement
+        // "001"/"002" sur la base physique partagée primatis_test (même
+        // principe d'isolation de contexte Spring que FlywaySchemaRebuildTests,
+        // mais la base PostgreSQL sous-jacente reste, elle, partagée entre
+        // classes de test). Sans cette remigration finale via le flyway
+        // autowired non restreint (résout tout le classpath, donc jusqu'à la
+        // dernière migration disponible), la base restait figée à V002 après
+        // ce test, faisant échouer de façon non déterministe (selon l'ordre
+        // d'exécution Surefire) toute assertion ultérieure d'une autre classe
+        // dépendant de données introduites par V003+ (ex. RepositoryQueryTests
+        // et les deux paramètres FINE_WEEKLY_RATE/FINE_MAX_AMOUNT de V006).
+        MigrateResult restoreResult = flyway.migrate();
+        assertThat(restoreResult.success).isTrue();
     }
 
     /**

@@ -159,6 +159,18 @@ class RepositoryQueryTests {
     }
 
     @Test
+    void bothFineApplicationSettingsAreBootstrappedWithCorrectValues() {
+        assertThat(applicationSettingRepository.findBySettingKey("FINE_WEEKLY_RATE"))
+                .isPresent().get()
+                .extracting(ApplicationSetting::getSettingValue, ApplicationSetting::getValueType)
+                .containsExactly("0.80", "DECIMAL");
+        assertThat(applicationSettingRepository.findBySettingKey("FINE_MAX_AMOUNT"))
+                .isPresent().get()
+                .extracting(ApplicationSetting::getSettingValue, ApplicationSetting::getValueType)
+                .containsExactly("25.00", "DECIMAL");
+    }
+
+    @Test
     void findsFineByLoanId() {
         AppUser user = persistUser("repo-fine-user@primatis.test");
         Title title = persistTitle();

@@ -1,0 +1,81 @@
+<h1>Amendes</h1>
+
+@if (loading() && rows().length === 0 && !error()) {
+  <app-loading-state message="Chargement des amendes…" />
+} @else if (error(); as currentError) {
+  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+} @else if (rows().length === 0) {
+  <app-empty-state title="Aucune amende" message="Aucune amende ne correspond à cette page." />
+} @else {
+  <p-table
+    [value]="rows()"
+    [lazy]="true"
+    [lazyLoadOnInit]="false"
+    [paginator]="true"
+    [rows]="20"
+    [first]="0"
+    [totalRecords]="totalRecords()"
+    [loading]="loading()"
+    (onLazyLoad)="onLazyLoad($event)"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Membre</th>
+        <th scope="col">N° adhérent</th>
+        <th scope="col">Motif</th>
+        <th scope="col">Montant</th>
+        <th scope="col">Date d'émission</th>
+        <th scope="col">Exemplaire</th>
+        <th scope="col">Statut</th>
+        <th scope="col">Date de paiement</th>
+        <th scope="col">Date d'annulation</th>
+        @if (canManageFines) {
+          <th scope="col">Actions</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-fine>
+      <tr>
+        <td>{{ fine.borrower.firstName }} {{ fine.borrower.lastName }}</td>
+        <td>{{ fine.borrower.memberNumber }}</td>
+        <td>{{ fine.reason }}</td>
+        <td>{{ fine.amount | currency: 'EUR' }}</td>
+        <td>{{ fine.issuedAt }}</td>
+        <td>{{ fine.loan.copy.inventoryCode }}</td>
+        <td>
+          <p-tag [value]="fineStatusLabel(fine.fineStatus)" [severity]="fineStatusSeverity(fine.fineStatus)" />
+        </td>
+        <td>{{ fine.paidAt ?? '—' }}</td>
+        <td>{{ fine.cancelledAt ?? '—' }}</td>
+        @if (canManageFines) {
+          <td>
+            @if (isActionable(fine)) {
+              <button
+                type="button"
+                pButton
+                severity="secondary"
+                label="Confirmer paiement"
+                [disabled]="isBusy(fine)"
+                [attr.aria-label]="
+                  'Confirmer le paiement de l\'amende de ' + fine.borrower.firstName + ' ' + fine.borrower.lastName
+                "
+                (click)="confirmPaymentPrompt(fine)"
+              ></button>
+              <button
+                type="button"
+                pButton
+                severity="secondary"
+                label="Annuler"
+                [disabled]="isBusy(fine)"
+                [attr.aria-label]="
+                  'Annuler l\'amende de ' + fine.borrower.firstName + ' ' + fine.borrower.lastName
+                "
+                (click)="confirmCancelPrompt(fine)"
+              ></button>
+            }
+          </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+}

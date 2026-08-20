@@ -10,6 +10,9 @@ import be.primatis.catalogue.TitleRepository;
 import be.primatis.catalogue.TitleStatus;
 import be.primatis.exception.BusinessRuleException;
 import be.primatis.exception.ConflictException;
+import be.primatis.fine.Fine;
+import be.primatis.fine.FineRepository;
+import be.primatis.fine.FineStatus;
 import be.primatis.loan.dto.CreateLoanRequest;
 import be.primatis.reservation.Reservation;
 import be.primatis.reservation.ReservationRepository;
@@ -47,6 +50,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Preuve de concurrence réelle pour DEV-07.5 : deux appels concurrents à
@@ -103,6 +107,9 @@ class LoanServiceConcurrencyTests {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private FineRepository fineRepository;
 
     @Autowired
     private PlatformTransactionManager transactionManager;
@@ -220,6 +227,14 @@ class LoanServiceConcurrencyTests {
      * PostgreSQL jusqu'au commit du premier, puis découvre {@code
      * loanStatus == RETURNED} et rejette proprement ({@code
      * LOAN_ALREADY_RETURNED}), jamais une violation de contrainte brute.
+     *
+     * <p><b>DEV-09.6</b> : le Loan est désormais délibérément en retard
+     * ({@code dueDate} dans le passé) — preuve complémentaire, sans
+     * infrastructure de concurrence supplémentaire (mission §17), qu'une
+     * seule Fine est créée malgré la tentative concurrente : le thread
+     * perdant est rejeté par le verrou {@code Loan} <em>avant</em> d'
+     * atteindre {@code FineService} (jamais exécuté deux fois), et {@code
+     * uq_fine_loan_id} (V001) reste le filet de sécurité structurel ultime.
      */
     @Test
     void concurrentRegisterReturnOnTheSameLoanYieldsExactlyOneSuccessAndOneCleanRejection()
@@ -253,8 +268,8 @@ class LoanServiceConcurrencyTests {
             Loan loan = new Loan();
             loan.setUser(appUserRepository.findById(borrowerId).orElseThrow());
             loan.setCopy(copyRepository.findById(copyId).orElseThrow());
-            loan.setLoanDate(Instant.now().minusSeconds(3600));
-            loan.setDueDate(LocalDate.now().plusDays(21));
+            loan.setLoanDate(Instant.now().minusSeconds(3600 * 24 * 10));
+            loan.setDueDate(LocalDate.now().minusDays(5));
             loan.setLoanStatus(LoanStatus.ACTIVE);
             loan.setCreatedAt(Instant.now());
             loan.setUpdatedAt(Instant.now());
@@ -297,8 +312,15 @@ class LoanServiceConcurrencyTests {
 
             Loan finalLoan = transactionTemplate.execute(status -> loanRepository.findById(loanId).orElseThrow());
             assertThat(finalLoan.getLoanStatus()).isEqualTo(LoanStatus.RETURNED);
+
+            // DEV-09.6 : exactement une Fine créée malgré la tentative concurrente.
+            List<Fine> fines = transactionTemplate.execute(status ->
+                    fineRepository.findByLoanId(loanId).map(List::of).orElseGet(List::of));
+            assertThat(fines).hasSize(1);
         } finally {
             transactionTemplate.executeWithoutResult(status -> {
+                fineRepository.findByLoanId(loanId).ifPresent(fineRepository::delete);
+                fineRepository.flush();
                 loanRepository.deleteById(loanId);
                 loanRepository.flush();
                 Copy copy = copyRepository.findById(copyId).orElseThrow();
@@ -857,6 +879,109 @@ class LoanServiceConcurrencyTests {
                 titleRepository.deleteById(titleId);
                 appUserRepository.deleteById(borrowerId);
                 waitingUserIds.forEach(appUserRepository::deleteById);
+            });
+        }
+    }
+
+    /**
+     * Preuve d'atomicité transactionnelle réelle pour DEV-09.6 (mission
+     * §14) : un échec de {@code FineService.createForLateReturnIfApplicable}
+     * (ici forcé via l'anomalie anti-doublon — même précédent exact que
+     * {@link #concurrentReturnThrowsContentionAndRollsBackWhenAllAttemptsAreRaced},
+     * qui force {@code ConflictException} pour prouver le même type de
+     * rollback complet) ne doit laisser <b>aucune</b> mutation Loan/Copy
+     * commitée. Un seul thread suffit ici (pas un scénario de concurrence à
+     * proprement parler) : ce qui compte est que {@code registerReturn}
+     * s'exécute dans sa propre transaction réelle (classe volontairement
+     * sans {@code @Transactional}, comme le reste du fichier), commitée ou
+     * rollback pour de vrai — jamais le mécanisme de rollback simulé en fin
+     * de test des classes {@code @Transactional} (qui ne permettrait pas
+     * d'observer un rollback partiel à l'intérieur du test lui-même).
+     *
+     * <p>Fixture délibérément anormale (jamais atteignable par le workflow
+     * normal — {@code registerReturn} refuse déjà tout second retour via
+     * {@code LOAN_ALREADY_RETURNED} avant d'atteindre la création de Fine) :
+     * une Fine existe déjà pour un Loan encore {@code ACTIVE}, simulant
+     * directement l'anomalie structurelle que {@link
+     * be.primatis.fine.FineService} refuse (voir Javadoc de la méthode).
+     */
+    @Test
+    void registerReturnRollsBackEntirelyWhenFineCreationFailsForALateReturn() {
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+
+        Long borrowerId = transactionTemplate.execute(status -> persistMember("return-fine-rollback"));
+
+        Long copyId = transactionTemplate.execute(status -> {
+            Title title = new Title();
+            title.setTitle("Titre rollback Fine");
+            title.setLanguage(Language.FR);
+            title.setTitleStatus(TitleStatus.ACTIVE);
+            title.setCreatedAt(Instant.now());
+            title.setUpdatedAt(Instant.now());
+            titleRepository.save(title);
+
+            Copy copy = new Copy();
+            copy.setTitle(title);
+            copy.setInventoryCode("RETURN-FINE-ROLLBACK-" + System.nanoTime());
+            copy.setCopyCondition(CopyCondition.GOOD);
+            copy.setAvailabilityStatus(AvailabilityStatus.ON_LOAN);
+            copy.setCreatedAt(Instant.now());
+            copy.setUpdatedAt(Instant.now());
+            copyRepository.save(copy);
+            return copy.getId();
+        });
+
+        Long loanId = transactionTemplate.execute(status -> {
+            Loan loan = new Loan();
+            loan.setUser(appUserRepository.findById(borrowerId).orElseThrow());
+            loan.setCopy(copyRepository.findById(copyId).orElseThrow());
+            loan.setLoanDate(Instant.now().minusSeconds(3600 * 24 * 10));
+            loan.setDueDate(LocalDate.now().minusDays(5));
+            loan.setLoanStatus(LoanStatus.ACTIVE);
+            loan.setCreatedAt(Instant.now());
+            loan.setUpdatedAt(Instant.now());
+            loanRepository.save(loan);
+
+            // Anomalie délibérée : une Fine existe déjà pour ce Loan encore ACTIVE
+            // (structurellement impossible via le workflow normal), pour forcer
+            // FineService à lever IllegalStateException pendant registerReturn.
+            Fine fine = new Fine();
+            fine.setLoan(loan);
+            fine.setAmount(java.math.BigDecimal.TEN);
+            fine.setReason("Fine préexistante (test rollback DEV-09.6)");
+            fine.setIssuedAt(Instant.now());
+            fine.setFineStatus(FineStatus.PAID);
+            fine.setPaidAt(Instant.now());
+            fineRepository.save(fine);
+
+            return loan.getId();
+        });
+
+        try {
+            authenticateWithLoanManage();
+            try {
+                assertThatThrownBy(() -> loanService.registerReturn(loanId)).isInstanceOf(IllegalStateException.class);
+            } finally {
+                SecurityContextHolder.clearContext();
+            }
+
+            Loan finalLoan = transactionTemplate.execute(status -> loanRepository.findById(loanId).orElseThrow());
+            Copy finalCopy = transactionTemplate.execute(status -> copyRepository.findById(copyId).orElseThrow());
+            assertThat(finalLoan.getLoanStatus()).isEqualTo(LoanStatus.ACTIVE);
+            assertThat(finalLoan.getReturnDate()).isNull();
+            assertThat(finalCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.ON_LOAN);
+        } finally {
+            transactionTemplate.executeWithoutResult(status -> {
+                fineRepository.findByLoanId(loanId).ifPresent(fineRepository::delete);
+                fineRepository.flush();
+                loanRepository.deleteById(loanId);
+                loanRepository.flush();
+                Copy copy = copyRepository.findById(copyId).orElseThrow();
+                Long titleId = copy.getTitle().getId();
+                copyRepository.delete(copy);
+                copyRepository.flush();
+                titleRepository.deleteById(titleId);
+                appUserRepository.deleteById(borrowerId);
             });
         }
     }
