@@ -1,0 +1,68 @@
+<div class="page-header">
+  <h1>Mes réservations</h1>
+  <button type="button" pButton label="Nouvelle réservation" severity="secondary" (click)="openCreateDialog()"></button>
+</div>
+
+<app-reservation-create-dialog
+  [visible]="createDialogVisible()"
+  (closed)="closeCreateDialog()"
+  (saved)="onReservationCreated($event)"
+/>
+
+@if (loading() && rows().length === 0 && !error()) {
+  <app-loading-state message="Chargement de vos réservations…" />
+} @else if (error(); as currentError) {
+  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+} @else if (rows().length === 0) {
+  <app-empty-state title="Aucune réservation" message="Aucune réservation à afficher." />
+} @else {
+  <p-table
+    [value]="rows()"
+    [lazy]="true"
+    [lazyLoadOnInit]="false"
+    [paginator]="true"
+    [rows]="20"
+    [first]="0"
+    [totalRecords]="totalRecords()"
+    [loading]="loading()"
+    (onLazyLoad)="onLazyLoad($event)"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Titre</th>
+        <th scope="col">Date de réservation</th>
+        <th scope="col">Expiration</th>
+        <th scope="col">Exemplaire</th>
+        <th scope="col">Statut</th>
+        <th scope="col">Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-reservation>
+      <tr>
+        <td>{{ reservation.title.title }}</td>
+        <td>{{ reservation.reservationDate }}</td>
+        <td>{{ reservation.expirationDate ?? '—' }}</td>
+        <td>{{ reservation.assignedCopy?.inventoryCode ?? '—' }}</td>
+        <td>
+          <p-tag
+            [value]="reservation.reservationStatus"
+            [severity]="reservationStatusSeverity(reservation.reservationStatus)"
+          />
+        </td>
+        <td>
+          @if (isCancellable(reservation)) {
+            <button
+              type="button"
+              pButton
+              severity="secondary"
+              label="Annuler"
+              [disabled]="cancellingReservationId() === reservation.id"
+              [attr.aria-label]="'Annuler la réservation de ' + reservation.title.title"
+              (click)="confirmCancel(reservation)"
+            ></button>
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+}

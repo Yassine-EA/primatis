@@ -1,0 +1,104 @@
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  header="Créer une réservation"
+  [closable]="!submitting()"
+  (onHide)="cancel()"
+>
+  <section aria-labelledby="staff-reservation-create-member-heading">
+    <h3 id="staff-reservation-create-member-heading">Membre</h3>
+
+    @if (selectedMember(); as member) {
+      <p class="staff-reservation-create-selection">
+        <span>{{ member.firstName }} {{ member.lastName }} — {{ member.memberNumber }}</span>
+        <button type="button" class="link-button" (click)="changeMember()">Changer</button>
+      </p>
+    } @else {
+      <label for="staff-reservation-create-member-search">Rechercher un membre</label>
+      <input
+        pInputText
+        id="staff-reservation-create-member-search"
+        type="search"
+        [ngModel]="memberSearchTerm()"
+        (ngModelChange)="onMemberSearchInput($event)"
+        placeholder="Nom, numéro d'adhérent ou email…"
+      />
+
+      @if (memberSearchError(); as currentError) {
+        <app-error-state [message]="currentError.message" />
+      } @else if (memberSearching()) {
+        <p class="staff-reservation-create-status">Recherche…</p>
+      } @else if (memberSearchTerm().trim().length > 0 && memberSearchResults().length === 0) {
+        <p class="staff-reservation-create-status">Aucun utilisateur trouvé.</p>
+      } @else if (memberSearchResults().length > 0) {
+        <ul class="staff-reservation-create-list">
+          @for (result of memberSearchResults(); track result.id) {
+            <li>
+              <span>{{ result.firstName }} {{ result.lastName }}</span>
+              @if (result.memberNumber; as memberNumber) {
+                <span>{{ memberNumber }}</span>
+                <button type="button" class="link-button" (click)="selectMember(result)">Sélectionner</button>
+              } @else {
+                <span class="staff-reservation-create-non-member">Non adhérent</span>
+              }
+            </li>
+          }
+        </ul>
+      }
+    }
+  </section>
+
+  <section aria-labelledby="staff-reservation-create-title-heading">
+    <h3 id="staff-reservation-create-title-heading">Titre</h3>
+
+    @if (selectedTitle(); as title) {
+      <p class="staff-reservation-create-selection">
+        <span>{{ title.title }}</span>
+        <button type="button" class="link-button" (click)="changeTitle()">Changer</button>
+      </p>
+    } @else {
+      <label for="staff-reservation-create-title-search">Rechercher un titre</label>
+      <input
+        pInputText
+        id="staff-reservation-create-title-search"
+        type="search"
+        [ngModel]="titleSearchTerm()"
+        (ngModelChange)="onTitleSearchInput($event)"
+        placeholder="Titre…"
+      />
+
+      @if (titleSearchError(); as currentError) {
+        <app-error-state [message]="currentError.message" />
+      } @else if (titleSearching()) {
+        <p class="staff-reservation-create-status">Recherche…</p>
+      } @else if (titleSearchTerm().trim().length > 0 && titleSearchResults().length === 0) {
+        <p class="staff-reservation-create-status">Aucun titre trouvé.</p>
+      } @else if (titleSearchResults().length > 0) {
+        <ul class="staff-reservation-create-list">
+          @for (result of titleSearchResults(); track result.id) {
+            <li>
+              <span>{{ result.title }}</span>
+              <button type="button" class="link-button" (click)="selectTitle(result)">Sélectionner</button>
+            </li>
+          }
+        </ul>
+      }
+    }
+  </section>
+
+  @if (submitError(); as message) {
+    <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+  }
+
+  <div class="form-actions">
+    <button
+      type="button"
+      pButton
+      label="Annuler"
+      severity="secondary"
+      [disabled]="submitting()"
+      (click)="cancel()"
+    ></button>
+    <button type="button" pButton label="Créer" [disabled]="!canSubmit" (click)="submit()"></button>
+  </div>
+</p-dialog>

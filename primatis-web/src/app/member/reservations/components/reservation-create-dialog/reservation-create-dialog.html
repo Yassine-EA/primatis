@@ -1,0 +1,61 @@
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  header="Réserver un titre"
+  [closable]="!submitting()"
+  (onHide)="cancel()"
+>
+  <section aria-labelledby="reservation-create-title-heading">
+    <h3 id="reservation-create-title-heading">Titre</h3>
+
+    @if (selectedTitle(); as title) {
+      <p class="reservation-create-selection">
+        <span>{{ title.title }}</span>
+        <button type="button" class="link-button" (click)="changeTitle()">Changer</button>
+      </p>
+    } @else {
+      <label for="reservation-create-title-search">Rechercher un titre</label>
+      <input
+        pInputText
+        id="reservation-create-title-search"
+        type="search"
+        [ngModel]="titleSearchTerm()"
+        (ngModelChange)="onTitleSearchInput($event)"
+        placeholder="Titre…"
+      />
+
+      @if (titleSearchError(); as currentError) {
+        <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retryTitleSearch()" />
+      } @else if (titleSearching()) {
+        <p class="reservation-create-status">Recherche…</p>
+      } @else if (titleSearchTerm().trim().length > 0 && titleSearchResults().length === 0) {
+        <p class="reservation-create-status">Aucun titre trouvé.</p>
+      } @else if (titleSearchResults().length > 0) {
+        <ul class="reservation-create-list">
+          @for (result of titleSearchResults(); track result.id) {
+            <li>
+              <span>{{ result.title }}</span>
+              <button type="button" class="link-button" (click)="selectTitle(result)">Sélectionner</button>
+            </li>
+          }
+        </ul>
+      }
+    }
+  </section>
+
+  @if (submitError(); as message) {
+    <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+  }
+
+  <div class="form-actions">
+    <button
+      type="button"
+      pButton
+      label="Annuler"
+      severity="secondary"
+      [disabled]="submitting()"
+      (click)="cancel()"
+    ></button>
+    <button type="button" pButton label="Réserver" [disabled]="!canSubmit" (click)="submit()"></button>
+  </div>
+</p-dialog>

@@ -32,6 +32,10 @@ export class Navigation {
     { label: 'Catalogue', routerLink: '/catalogue' },
     { label: 'Espace membre', routerLink: '/member/profile', requiredRoles: ['ROLE_MEMBER'] },
     { label: 'Mes prêts', routerLink: '/member/loans', requiredRoles: ['ROLE_MEMBER'] },
+    // DEV-08.14 : ownership self-service par identité JWT, jamais par
+    // permission frontend — mêmes principes exacts que 'Mes prêts'
+    // (DEV-DEC-0041).
+    { label: 'Mes réservations', routerLink: '/member/reservations', requiredRoles: ['ROLE_MEMBER'] },
     { label: 'Espace personnel', routerLink: '/staff/users', requiredRoles: ['ROLE_LIBRARIAN', 'ROLE_ADMIN'] },
     {
       label: 'Gestion du catalogue',
@@ -42,6 +46,10 @@ export class Navigation {
     // (comme le guard réel de la route), pas par rôle — contrairement aux
     // autres entrées staff ci-dessus.
     { label: 'Prêts', routerLink: '/staff/loans', requiredPermissions: ['LOAN_READ'] },
+    // DEV-08.14 : même principe exact que 'Prêts' — RESERVATION_READ pilote
+    // la visibilité de l'entrée, comme le guard réel de la route ; l'action
+    // mutatrice RESERVATION_MANAGE reste contrôlée dans la page elle-même.
+    { label: 'Réservations', routerLink: '/staff/reservations', requiredPermissions: ['RESERVATION_READ'] },
     { label: 'Administration', routerLink: '/admin/users', requiredRoles: ['ROLE_ADMIN'] },
   ];
 
