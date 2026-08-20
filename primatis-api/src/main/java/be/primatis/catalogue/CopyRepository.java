@@ -60,6 +60,21 @@ public interface CopyRepository extends JpaRepository<Copy, Long> {
     boolean existsByTitleId(Long titleId);
 
     /**
+     * Existence d'au moins un Copy {@code AVAILABLE} pour un Title (DEV-08.5,
+     * OD-DEV08-02) : traduction technique de « aucun Copy immédiatement
+     * disponible » (business-rules.md §4.3/§4.6, condition de création d'une
+     * Reservation). {@code CopyCondition} n'est jamais revérifiée séparément
+     * ici — même raisonnement que {@code LoanService.requireLendableCopy}
+     * (DEV-07.5) : {@code ck_copy_condition_availability} (V001) garantit
+     * structurellement que {@code LOST}/{@code OUT_OF_SERVICE} impliquent
+     * déjà {@code UNAVAILABLE}, donc {@code AVAILABLE} couvre transitivement
+     * l'état physique du Copy sans dupliquer la règle. Requête d'existence
+     * ciblée (pas de chargement des Copies elles-mêmes), même précédent que
+     * {@code existsByInventoryCode}/{@code existsByTitleId} ci-dessus.
+     */
+    boolean existsByTitleIdAndAvailabilityStatus(Long titleId, AvailabilityStatus availabilityStatus);
+
+    /**
      * Chargement verrouillé (SELECT ... FOR UPDATE), réservé aux futurs
      * workflows Loan/Return (DEV-07.2, préparation de primitive — même
      * précédent que {@code AppUserRepository.findByEmailForAuthentication},

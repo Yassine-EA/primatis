@@ -29,3 +29,12 @@ primatis:
       issuer: primatis-api
       audience: primatis-api
       access-token-ttl: PT1H
+  # DEV-08.7 : neutralise le déclenchement automatique réel du scheduler
+  # d'expiration pendant les tests (aucune suite de tests ne dure une
+  # heure) — la cadence métier décidée (une minute) reste inchangée en
+  # production, seul le défaut applicatif (application.yml absent ici)
+  # s'applique hors du profil "test".
+  reservation:
+    expiration:
+      fixed-delay-ms: 3600000
+      initial-delay-ms: 3600000

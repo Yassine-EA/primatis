@@ -5,13 +5,13 @@ import be.primatis.catalogue.Copy;
 import be.primatis.catalogue.CopyCondition;
 import be.primatis.catalogue.CopyRepository;
 import be.primatis.exception.BusinessRuleException;
-import be.primatis.exception.ConflictException;
 import be.primatis.exception.ResourceNotFoundException;
 import be.primatis.fine.FineRepository;
 import be.primatis.fine.FineStatus;
 import be.primatis.loan.dto.CreateLoanRequest;
 import be.primatis.loan.dto.LoanResponse;
 import be.primatis.reservation.Reservation;
+import be.primatis.reservation.ReservationAssignmentService;
 import be.primatis.reservation.ReservationRepository;
 import be.primatis.reservation.ReservationStatus;
 import be.primatis.setting.ApplicationSettingService;
@@ -21,7 +21,6 @@ import be.primatis.user.AppUserRepository;
 import be.primatis.user.MemberExpirationPolicy;
 import be.primatis.user.MemberStatus;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -78,12 +76,9 @@ public class LoanService {
     private static final String LOAN_NOT_FOUND_CODE = "LOAN_NOT_FOUND";
     private static final String LOAN_ALREADY_RETURNED_CODE = "LOAN_ALREADY_RETURNED";
     private static final String LOAN_COPY_STATE_INCONSISTENT_CODE = "LOAN_COPY_STATE_INCONSISTENT";
-    private static final String RESERVATION_ASSIGNMENT_CONTENTION_CODE = "RESERVATION_ASSIGNMENT_CONTENTION";
 
     private static final String LOAN_DURATION_DAYS_KEY = "LOAN_DURATION_DAYS";
-    private static final String RESERVATION_READY_HOLD_HOURS_KEY = "RESERVATION_READY_HOLD_HOURS";
     private static final int MAX_ACTIVE_LOANS = 5;
-    private static final int MAX_RESERVATION_ASSIGNMENT_ATTEMPTS = 20;
     private static final List<LoanStatus> OPEN_LOAN_STATUSES = List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE);
 
     private final LoanRepository loanRepository;
@@ -93,6 +88,7 @@ public class LoanService {
     private final ReservationRepository reservationRepository;
     private final ApplicationSettingService applicationSettingService;
     private final MemberExpirationPolicy memberExpirationPolicy;
+    private final ReservationAssignmentService reservationAssignmentService;
     private final Clock clock;
 
     public LoanService(
@@ -103,6 +99,7 @@ public class LoanService {
             ReservationRepository reservationRepository,
             ApplicationSettingService applicationSettingService,
             MemberExpirationPolicy memberExpirationPolicy,
+            ReservationAssignmentService reservationAssignmentService,
             Clock clock) {
         this.loanRepository = loanRepository;
         this.appUserRepository = appUserRepository;
@@ -111,6 +108,7 @@ public class LoanService {
         this.reservationRepository = reservationRepository;
         this.applicationSettingService = applicationSettingService;
         this.memberExpirationPolicy = memberExpirationPolicy;
+        this.reservationAssignmentService = reservationAssignmentService;
         this.clock = clock;
     }
 
@@ -257,6 +255,36 @@ public class LoanService {
      * Title (business-rules.md §3.4/§3.11) — sinon refus, qu'aucune
      * Reservation READY n'existe (incohérence de données) ou qu'elle
      * appartienne à un autre adhérent.
+     *
+     * <p><b>Absence volontaire de {@code ReservationRepository.findByIdForUpdate}
+     * ici</b> (audit contradictoire DEV-08.6/08.7, finding C) : la
+     * Reservation {@code READY} retournée par
+     * {@code findByAssignedCopyIdAndReservationStatus} n'est jamais
+     * verrouillée explicitement avant sa mutation ultérieure
+     * ({@code FULFILLED}) dans {@link #registerLoan}. Ce choix est
+     * délibéré, pas un oubli : au moment de cet appel, {@link #registerLoan}
+     * détient déjà le verrou {@code PESSIMISTIC_WRITE} sur le {@code Copy}
+     * associé ({@code CopyRepository.findByIdForUpdate}, acquis avant cet
+     * appel). Tous les workflows mutateurs concurrents connus sur une
+     * {@code Reservation READY} (annulation — {@code
+     * ReservationService.cancelReservationForUser} —, expiration — {@code
+     * ReservationExpirationService.expireReservationIfStillDue} —,
+     * réaffectation FIFO — {@code ReservationAssignmentService}) suivent
+     * actuellement, sans exception, l'ordre de verrouillage {@code Copy →
+     * Reservation} (DEV-DEC-0033, statut de gouvernance
+     * <b>IMPLEMENTATION FREEDOM / ACTIVE — NON FIGÉE</b>) : aucun ne peut
+     * donc atteindre cette même ligne {@code Reservation} sans d'abord se
+     * bloquer sur le verrou {@code Copy} déjà détenu ici. La sérialisation
+     * de cette lecture est ainsi assurée <em>transitivement</em> par le
+     * verrou {@code Copy}, jamais par un verrou direct sur la
+     * {@code Reservation} elle-même — preuve par test de concurrence réel :
+     * {@code ReservationServiceConcurrencyTests.
+     * concurrentExpirationAndFulfillmentOfTheSameReadyReservationNeverProducesBothTerminalStates}.
+     * Si un futur workflow venait à muter une {@code Reservation READY}
+     * sans verrouiller son {@code Copy} au préalable, cette protection
+     * transitive cesserait de tenir — toute évolution de DEV-DEC-0033
+     * (actuellement non figée) doit donc être vérifiée contre ce point
+     * d'usage précis.
      */
     private Reservation requireMatchingReadyReservation(Copy copy, AppUser borrower) {
         return reservationRepository
@@ -340,100 +368,10 @@ public class LoanService {
         if (copyUnusable) {
             copy.setAvailabilityStatus(AvailabilityStatus.UNAVAILABLE);
         } else {
-            assignNextWaitingReservationOrMakeAvailable(copy, now);
+            reservationAssignmentService.assignNextAdmissibleWaitingReservationOrMakeAvailable(copy, now);
         }
         copy.setUpdatedAt(now);
 
         return LoanResponse.from(loan);
-    }
-
-    /**
-     * Intégration minimale Reservation au retour (business-rules.md §3.9/
-     * §3.10/§4.7/§4.8/§4.9) : FIFO déterministe sur le Title du Copy
-     * retourné, sans re-vérification d'éligibilité du bénéficiaire de la
-     * Reservation (portée volontairement minimale — la gestion complète des
-     * Reservations, y compris une éventuelle réadmissibilité, appartient à
-     * DEV-08).
-     *
-     * <p>Identification du candidat par {@code id} seul (jamais l'entité —
-     * {@link ReservationRepository#findWaitingReservationIdsForTitleOrderedByFifo}
-     * ne charge rien dans le contexte de persistance, précisément pour
-     * éviter qu'un rechargement verrouillé ultérieur ne retourne une
-     * instance déjà gérée et périmée — bug réel corrigé en DEV-07.6, cf.
-     * log dédié §9), puis verrouillage individuel par {@code id} et
-     * revalidation de son statut — jamais une requête combinant
-     * {@code ORDER BY}/{@code LIMIT} avec {@code FOR UPDATE} (comportement
-     * documenté comme non fiable par PostgreSQL).
-     *
-     * <p><b>Retry borné</b> (correctif DEV-07.6) : si le candidat verrouillé
-     * n'est plus {@code WAITING} (concurrence avec un autre retour pour le
-     * même Title l'ayant déjà promu/annulé entre son identification et son
-     * verrouillage), la recherche est retentée — {@code
-     * findWaitingReservationIdsForTitleOrderedByFifo} exclut naturellement
-     * ce candidat périmé (son statut ne vaut plus {@code WAITING}) et
-     * retourne la prochaine Reservation FIFO réellement encore {@code
-     * WAITING}, sans qu'aucun identifiant déjà tenté ne doive être suivi
-     * explicitement. Borné par {@value #MAX_RESERVATION_ASSIGNMENT_ATTEMPTS}
-     * tentatives — jamais une boucle indéfinie ; ce plafond ne représente
-     * aucune règle métier (aucun Title réel n'a besoin d'autant de
-     * tentatives dans une seule transaction), seulement un garde-fou
-     * défensif.
-     *
-     * <p><b>Deux issues distinctes après la boucle</b> (correctif de sûreté
-     * DEV-07.6, addendum) — jamais confondues :
-     * <ul>
-     * <li>la requête FIFO ne retourne <em>aucun</em> candidat (liste vide) :
-     * il n'existe réellement plus aucune Reservation {@code WAITING}
-     * admissible pour ce Title — le Copy devient légitimement {@code
-     * AVAILABLE} ;</li>
-     * <li>les {@value #MAX_RESERVATION_ASSIGNMENT_ATTEMPTS} tentatives sont
-     * épuisées <em>alors qu'un candidat était systématiquement trouvé à
-     * chaque itération</em> (chacun raciné avant verrouillage) : il peut
-     * encore exister une Reservation {@code WAITING} sous forte contention
-     * — traiter ce cas comme {@code AVAILABLE} masquerait silencieusement
-     * une Reservation potentiellement encore satisfaisable. {@link
-     * ConflictException} ({@code RESERVATION_ASSIGNMENT_CONTENTION}, 409)
-     * est levée à la place : {@code RuntimeException} non interceptée par
-     * cette méthode, elle fait échouer (rollback complet, non
-     * partiel) la transaction {@code @Transactional} de {@link
-     * #registerReturn(Long)} — le Loan n'est jamais clôturé, le Copy jamais
-     * transitionné, dans ce cas précis.</li>
-     * </ul>
-     */
-    private void assignNextWaitingReservationOrMakeAvailable(Copy copy, Instant now) {
-        for (int attempt = 0; attempt < MAX_RESERVATION_ASSIGNMENT_ATTEMPTS; attempt++) {
-            List<Long> candidateIds = reservationRepository.findWaitingReservationIdsForTitleOrderedByFifo(
-                    copy.getTitle().getId(), ReservationStatus.WAITING, PageRequest.of(0, 1));
-
-            if (candidateIds.isEmpty()) {
-                copy.setAvailabilityStatus(AvailabilityStatus.AVAILABLE);
-                return;
-            }
-
-            Reservation reservation = reservationRepository.findByIdForUpdate(candidateIds.get(0))
-                    .orElseThrow(() -> new IllegalStateException(
-                            "Incohérence de données : Reservation " + candidateIds.get(0)
-                                    + " disparue entre son identification et son verrouillage."));
-
-            if (reservation.getReservationStatus() != ReservationStatus.WAITING) {
-                // Raciné par un autre retour concurrent entre l'identification (non verrouillée)
-                // et ce verrouillage : ce candidat est définitivement écarté (jamais remis
-                // WAITING), la prochaine itération identifie le suivant en FIFO.
-                continue;
-            }
-
-            int holdHours = applicationSettingService.getInteger(RESERVATION_READY_HOLD_HOURS_KEY);
-            reservation.setReservationStatus(ReservationStatus.READY);
-            reservation.setAssignedCopy(copy);
-            reservation.setExpirationDate(now.plus(holdHours, ChronoUnit.HOURS));
-            reservation.setUpdatedAt(now);
-
-            copy.setAvailabilityStatus(AvailabilityStatus.RESERVED);
-            return;
-        }
-
-        throw new ConflictException(RESERVATION_ASSIGNMENT_CONTENTION_CODE,
-                "Impossible d'assigner une Reservation WAITING après " + MAX_RESERVATION_ASSIGNMENT_ATTEMPTS
-                        + " tentatives : contention concurrente trop forte sur ce Title.");
     }
 }
