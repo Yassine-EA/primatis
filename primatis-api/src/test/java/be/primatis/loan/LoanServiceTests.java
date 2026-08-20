@@ -9,6 +9,7 @@ import be.primatis.catalogue.TitleStatus;
 import be.primatis.exception.BusinessRuleException;
 import be.primatis.exception.ResourceNotFoundException;
 import be.primatis.fine.Fine;
+import be.primatis.fine.FineRepository;
 import be.primatis.fine.FineStatus;
 import be.primatis.loan.dto.CreateLoanRequest;
 import be.primatis.loan.dto.LoanResponse;
@@ -67,6 +68,9 @@ class LoanServiceTests {
 
     @Autowired
     private Clock clock;
+
+    @Autowired
+    private FineRepository fineRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -666,6 +670,54 @@ class LoanServiceTests {
 
         assertThat(response.loanStatus()).isEqualTo(LoanStatus.RETURNED);
         assertThat(response.returnDate()).isAfter(response.dueDate());
+    }
+
+    /**
+     * DEV-09.6 — intégration {@code FineService} : preuve que {@code
+     * registerReturn} ne crée aucune Fine pour un retour à temps. Le détail
+     * du calcul (semaines/plafond/motif/settings/anti-doublon) est couvert
+     * par {@code FineServiceTests}, jamais dupliqué ici — cette classe
+     * vérifie uniquement le câblage transactionnel réel à travers le
+     * workflow complet (éligibilité, verrous, DTO).
+     */
+    @Test
+    void registerReturnOnTimeCreatesNoFine() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-no-fine@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-NO-FINE");
+        Loan loan = persistLoanWithDueDate(borrower, copy, LoanStatus.ACTIVE, LocalDate.now(clock).plusDays(5));
+        entityManager.flush();
+
+        loanService.registerReturn(loan.getId());
+
+        assertThat(fineRepository.findByLoanId(loan.getId())).isEmpty();
+    }
+
+    /**
+     * DEV-09.6 — intégration {@code FineService} : un retour tardif à
+     * travers le workflow complet {@code registerReturn} crée exactement
+     * une Fine {@code UNPAID}, correctement liée au Loan, avec un montant
+     * dérivé des settings réellement bootstrapés (V006 : {@code
+     * FINE_WEEKLY_RATE = 0.80}). Ne reteste pas chaque variante de retard
+     * (déjà couvert par {@code FineServiceTests}).
+     */
+    @Test
+    void registerReturnOfALateLoanCreatesAFineLinkedToIt() {
+        authenticateWithLoanManage();
+        AppUser borrower = persistMember("service-return-with-fine@primatis.test", MemberStatus.ACTIVE, LocalDate.now().plusYears(1));
+        Title title = persistTitle();
+        Copy copy = persistOnLoanCopy(title, "SERVICE-RETURN-WITH-FINE");
+        Loan loan = persistLoanWithDueDate(borrower, copy, LoanStatus.ACTIVE, LocalDate.now(clock).minusDays(5));
+        entityManager.flush();
+
+        loanService.registerReturn(loan.getId());
+
+        Fine fine = fineRepository.findByLoanId(loan.getId()).orElseThrow();
+        assertThat(fine.getFineStatus()).isEqualTo(FineStatus.UNPAID);
+        assertThat(fine.getLoan().getId()).isEqualTo(loan.getId());
+        // 5 jours de retard -> 1 semaine entamée x FINE_WEEKLY_RATE (0.80, V006)
+        assertThat(fine.getAmount()).isEqualByComparingTo(new BigDecimal("0.80"));
     }
 
     @Test

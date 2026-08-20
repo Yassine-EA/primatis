@@ -44,8 +44,8 @@ class FlywaySchemaRebuildTests {
         MigrateResult result = flyway.migrate();
 
         assertThat(result.success).isTrue();
-        assertThat(result.migrationsExecuted).isEqualTo(5);
-        assertThat(result.targetSchemaVersion).isEqualTo("005");
+        assertThat(result.migrationsExecuted).isEqualTo(6);
+        assertThat(result.targetSchemaVersion).isEqualTo("006");
 
         long tableCount = ((Number) entityManager
                 .createNativeQuery("SELECT count(*) FROM information_schema.tables "
@@ -57,7 +57,7 @@ class FlywaySchemaRebuildTests {
         long settingCount = ((Number) entityManager
                 .createNativeQuery("SELECT count(*) FROM application_setting")
                 .getSingleResult()).longValue();
-        assertThat(settingCount).isEqualTo(4);
+        assertThat(settingCount).isEqualTo(6);
 
         Object loanDurationDays = entityManager
                 .createNativeQuery("SELECT setting_value FROM application_setting WHERE setting_key = 'LOAN_DURATION_DAYS'")

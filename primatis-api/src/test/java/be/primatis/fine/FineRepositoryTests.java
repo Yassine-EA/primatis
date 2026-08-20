@@ -15,6 +15,8 @@ import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +27,13 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Vérifie contre PostgreSQL réel la primitive {@link FineRepository}
- * ajoutée en DEV-07.2 : {@code existsByLoanUserIdAndFineStatus} (jointure
- * Fine → Loan → AppUser). Ne teste pas {@code findByLoanId}, déjà couvert
- * par {@code RepositoryQueryTests} (DEV-02.5). Aucun calcul de montant,
- * aucune règle d'éligibilité au prêt testée ici — uniquement l'existence.
+ * Vérifie contre PostgreSQL réel les primitives {@link FineRepository} :
+ * {@code existsByLoanUserIdAndFineStatus} (DEV-07.2, jointure Fine → Loan →
+ * AppUser) ; {@code findByLoanUserId} et {@code findByIdForUpdate}
+ * (DEV-09.4). Ne teste pas {@code findByLoanId}, déjà couvert par {@code
+ * RepositoryQueryTests} (DEV-02.5). Aucun calcul de montant, aucune règle
+ * d'éligibilité au prêt, aucune consommation par un Service testée ici —
+ * uniquement les primitives Repository elles-mêmes.
  */
 @SpringBootTest
 @ActiveProfiles("test")
@@ -98,6 +102,96 @@ class FineRepositoryTests {
         entityManager.flush();
 
         assertThat(fineRepository.existsByLoanUserIdAndFineStatus(user.getId(), FineStatus.UNPAID)).isFalse();
+    }
+
+    // ---------------------------------------------------------------
+    // findByLoanUserId (DEV-09.4)
+    // ---------------------------------------------------------------
+
+    @Test
+    void findsAllFinesOfAMemberRegardlessOfStatus() {
+        AppUser user = persistUser("fine-history-owner@primatis.test");
+        Title title = persistTitle();
+        Loan loanUnpaid = persistLoan(user, persistCopy(title, "HISTORY-UNPAID"), LoanStatus.RETURNED);
+        Loan loanPaid = persistLoan(user, persistCopy(title, "HISTORY-PAID"), LoanStatus.RETURNED);
+        Loan loanCancelled = persistLoan(user, persistCopy(title, "HISTORY-CANCELLED"), LoanStatus.RETURNED);
+        Fine fineUnpaid = persistFine(loanUnpaid, FineStatus.UNPAID);
+        Fine finePaid = persistFine(loanPaid, FineStatus.PAID);
+        Fine fineCancelled = persistFine(loanCancelled, FineStatus.CANCELLED);
+        entityManager.flush();
+
+        Page<Fine> page = fineRepository.findByLoanUserId(user.getId(), PageRequest.of(0, 20));
+
+        assertThat(page.getTotalElements()).isEqualTo(3);
+        assertThat(page.getContent()).extracting(Fine::getId)
+                .containsExactlyInAnyOrder(fineUnpaid.getId(), finePaid.getId(), fineCancelled.getId());
+    }
+
+    @Test
+    void isolatesFineHistoryBetweenMembers() {
+        AppUser memberOne = persistUser("fine-isolation-member-1@primatis.test");
+        AppUser memberTwo = persistUser("fine-isolation-member-2@primatis.test");
+        Title title = persistTitle();
+        Loan loanOne = persistLoan(memberOne, persistCopy(title, "FINE-ISOLATION-1"), LoanStatus.RETURNED);
+        Loan loanTwo = persistLoan(memberTwo, persistCopy(title, "FINE-ISOLATION-2"), LoanStatus.RETURNED);
+        persistFine(loanOne, FineStatus.UNPAID);
+        persistFine(loanTwo, FineStatus.UNPAID);
+        entityManager.flush();
+
+        Page<Fine> memberOnePage = fineRepository.findByLoanUserId(memberOne.getId(), PageRequest.of(0, 20));
+
+        assertThat(memberOnePage.getContent()).hasSize(1);
+        assertThat(memberOnePage.getContent().get(0).getLoan().getUser().getId()).isEqualTo(memberOne.getId());
+    }
+
+    @Test
+    void findByLoanUserIdReturnsEmptyPageForAMemberWithNoFine() {
+        AppUser user = persistUser("fine-history-none@primatis.test");
+        entityManager.flush();
+
+        Page<Fine> page = fineRepository.findByLoanUserId(user.getId(), PageRequest.of(0, 20));
+
+        assertThat(page.getTotalElements()).isZero();
+    }
+
+    @Test
+    void findByLoanUserIdRespectsPageSize() {
+        AppUser user = persistUser("fine-pagination@primatis.test");
+        Title title = persistTitle();
+        for (int i = 0; i < 3; i++) {
+            Loan loan = persistLoan(user, persistCopy(title, "PAGINATION-" + i), LoanStatus.RETURNED);
+            persistFine(loan, FineStatus.UNPAID);
+        }
+        entityManager.flush();
+
+        Page<Fine> firstPage = fineRepository.findByLoanUserId(user.getId(), PageRequest.of(0, 2));
+
+        assertThat(firstPage.getTotalElements()).isEqualTo(3);
+        assertThat(firstPage.getTotalPages()).isEqualTo(2);
+        assertThat(firstPage.getContent()).hasSize(2);
+    }
+
+    // ---------------------------------------------------------------
+    // findByIdForUpdate (DEV-09.4)
+    // ---------------------------------------------------------------
+
+    @Test
+    void findByIdForUpdateReturnsTheFineWhenItExists() {
+        AppUser user = persistUser("fine-lock-existing@primatis.test");
+        Title title = persistTitle();
+        Loan loan = persistLoan(user, persistCopy(title, "LOCK-EXISTING"), LoanStatus.RETURNED);
+        Fine fine = persistFine(loan, FineStatus.UNPAID);
+        entityManager.flush();
+
+        Fine locked = fineRepository.findByIdForUpdate(fine.getId()).orElseThrow();
+
+        assertThat(locked.getId()).isEqualTo(fine.getId());
+        assertThat(locked.getFineStatus()).isEqualTo(FineStatus.UNPAID);
+    }
+
+    @Test
+    void findByIdForUpdateReturnsEmptyForAnUnknownId() {
+        assertThat(fineRepository.findByIdForUpdate(999999999L)).isEmpty();
     }
 
     // ---------------------------------------------------------------

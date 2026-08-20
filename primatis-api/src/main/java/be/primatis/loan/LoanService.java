@@ -7,6 +7,7 @@ import be.primatis.catalogue.CopyRepository;
 import be.primatis.exception.BusinessRuleException;
 import be.primatis.exception.ResourceNotFoundException;
 import be.primatis.fine.FineRepository;
+import be.primatis.fine.FineService;
 import be.primatis.fine.FineStatus;
 import be.primatis.loan.dto.CreateLoanRequest;
 import be.primatis.loan.dto.LoanResponse;
@@ -85,6 +86,7 @@ public class LoanService {
     private final AppUserRepository appUserRepository;
     private final CopyRepository copyRepository;
     private final FineRepository fineRepository;
+    private final FineService fineService;
     private final ReservationRepository reservationRepository;
     private final ApplicationSettingService applicationSettingService;
     private final MemberExpirationPolicy memberExpirationPolicy;
@@ -96,6 +98,7 @@ public class LoanService {
             AppUserRepository appUserRepository,
             CopyRepository copyRepository,
             FineRepository fineRepository,
+            FineService fineService,
             ReservationRepository reservationRepository,
             ApplicationSettingService applicationSettingService,
             MemberExpirationPolicy memberExpirationPolicy,
@@ -105,6 +108,7 @@ public class LoanService {
         this.appUserRepository = appUserRepository;
         this.copyRepository = copyRepository;
         this.fineRepository = fineRepository;
+        this.fineService = fineService;
         this.reservationRepository = reservationRepository;
         this.applicationSettingService = applicationSettingService;
         this.memberExpirationPolicy = memberExpirationPolicy;
@@ -311,14 +315,16 @@ public class LoanService {
      * {@code registerReturn}/{@code registerLoan} concurrent ne peut modifier
      * cette ligne pendant ce temps).
      *
-     * <p>Le retard ({@code returnDate > dueDate}) n'est jamais calculé comme
-     * une variable séparée ici : {@code loanStatus == RETURNED}
-     * inconditionnellement (jamais un statut distinct pour un retour
-     * tardif), et le retard reste entièrement dérivable de
-     * {@code Loan.dueDate}/{@code Loan.returnDate}, tous deux déjà exposés
-     * par {@link LoanResponse} — aucune branche de ce workflow ne dépend de
-     * la lateness (ni Fine, différée à DEV-09, ni Notification, différée à
-     * DEV-10), introduire une variable non utilisée serait un artefact mort.
+     * <p>{@code loanStatus == RETURNED} inconditionnellement, qu'il y ait
+     * retard ou non (jamais un statut distinct pour un retour tardif) : le
+     * retard reste entièrement dérivable de {@code Loan.dueDate}/
+     * {@code Loan.returnDate}, tous deux déjà exposés par
+     * {@link LoanResponse}. Depuis DEV-09.6, {@code returnDate} est fixée
+     * <em>avant</em> l'appel à {@link FineService#createForLateReturnIfApplicable}
+     * (DEV-DEC-0048) — la seule branche de ce workflow qui dépend
+     * désormais de la lateness, entièrement déléguée à {@link FineService}
+     * (aucun calcul de retard dupliqué ici). Notification toujours
+     * différée à DEV-10.
      *
      * <p><b>« Copy cohérent » (§5 de la mission) est scopé à
      * {@code GOOD}/{@code DAMAGED}</b>, jamais à {@code LOST}/{@code
@@ -364,6 +370,8 @@ public class LoanService {
         loan.setReturnDate(LocalDate.now(clock));
         loan.setLoanStatus(LoanStatus.RETURNED);
         loan.setUpdatedAt(now);
+
+        fineService.createForLateReturnIfApplicable(loan, now);
 
         if (copyUnusable) {
             copy.setAvailabilityStatus(AvailabilityStatus.UNAVAILABLE);
