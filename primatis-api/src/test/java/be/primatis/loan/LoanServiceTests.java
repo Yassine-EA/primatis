@@ -244,7 +244,13 @@ class LoanServiceTests {
 
         LoanResponse response = loanService.registerLoan(new CreateLoanRequest(borrower.getId(), copy.getId()));
 
-        LocalDate expectedDueDate = LocalDate.now().plusDays(21);
+        // LocalDate.now(clock) — pas LocalDate.now() brut : registerLoan calcule
+        // dueDate via LocalDate.now(clock) (UTC, ClockConfig). LocalDate.now() nu
+        // utilise le fuseau par défaut de la JVM (local) ; les deux ne
+        // coïncident pas pendant la fenêtre quotidienne où minuit local est déjà
+        // franchi mais pas minuit UTC (DEV-DEC-0035, même correctif que
+        // response.returnDate() ci-dessous, DEV-07.10).
+        LocalDate expectedDueDate = LocalDate.now(clock).plusDays(21);
         assertThat(response.dueDate()).isEqualTo(expectedDueDate);
     }
 

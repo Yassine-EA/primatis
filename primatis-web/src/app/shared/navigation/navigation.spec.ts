@@ -136,6 +136,30 @@ describe('Navigation', () => {
     expect(linkLabels()).not.toContain('Mes prêts');
   });
 
+  it('should show the Mes réservations link for ROLE_MEMBER (DEV-08.14)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(linkLabels()).toContain('Mes réservations');
+  });
+
+  it('should point the Mes réservations link at /member/reservations (DEV-08.14)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/member/reservations"]')).not.toBeNull();
+  });
+
+  it('should hide the Mes réservations link for a user without ROLE_MEMBER (DEV-08.14)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(linkLabels()).not.toContain('Mes réservations');
+  });
+
   it('should show the Prêts link for LOAN_READ (DEV-07.9)', () => {
     authServiceMock.authenticated.mockReturnValue(true);
     authServiceMock.permissions.mockReturnValue(['LOAN_READ']);
@@ -159,6 +183,39 @@ describe('Navigation', () => {
     render();
 
     expect(linkLabels()).not.toContain('Prêts');
+  });
+
+  it('should show the Réservations link for RESERVATION_READ (DEV-08.14)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['RESERVATION_READ']);
+    render();
+
+    expect(linkLabels()).toContain('Réservations');
+  });
+
+  it('should point the Réservations link at /staff/reservations (DEV-08.14)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['RESERVATION_READ']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/staff/reservations"]')).not.toBeNull();
+  });
+
+  it('should hide the Réservations link for a user without RESERVATION_READ (DEV-08.14)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    authServiceMock.permissions.mockReturnValue([]);
+    render();
+
+    expect(linkLabels()).not.toContain('Réservations');
+  });
+
+  it('should hide the Réservations link for a user with only RESERVATION_MANAGE, without RESERVATION_READ (DEV-08.14)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['RESERVATION_MANAGE']);
+    render();
+
+    expect(linkLabels()).not.toContain('Réservations');
   });
 
   it('should show the Administration link for ROLE_ADMIN', () => {

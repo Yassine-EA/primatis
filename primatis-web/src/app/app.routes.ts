@@ -72,6 +72,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./member/loans/pages/member-loans-page/member-loans-page').then((m) => m.MemberLoansPage),
       },
+      {
+        // DEV-08.14 : consultation + annulation + création self-service des
+        // réservations du membre authentifié, aucun guard propre — hérite du
+        // roleGuard ROLE_MEMBER porté par la zone /member (même principe
+        // exact que 'loans'). Aucune permission RESERVATION_READ ici :
+        // l'ownership self-service passe uniquement par l'identité JWT
+        // (endpoints /me/**), jamais par une permission frontend
+        // (DEV-DEC-0041).
+        path: 'reservations',
+        loadComponent: () =>
+          import('./member/reservations/pages/member-reservations-page/member-reservations-page').then(
+            (m) => m.MemberReservationsPage,
+          ),
+      },
     ],
   },
   {
@@ -148,6 +162,28 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import('./staff/loans/pages/staff-loans-page/staff-loans-page').then((m) => m.StaffLoansPage),
+          },
+        ],
+      },
+      {
+        // Segment 'reservations' (DEV-08.14, RESERVATION_READ) — sibling de
+        // 'users'/'catalogue'/'loans', même structure : la route ne
+        // demande que la consultation, l'action mutatrice (annulation,
+        // création) est déjà contrôlée dans StaffReservationsPage via
+        // AuthService.hasPermission('RESERVATION_MANAGE') (DEV-08.12/.13),
+        // jamais au niveau du guard de route. Un seul écran (liste +
+        // annulation + création) : aucun GET /api/v1/reservations/{id}
+        // (DEV-DEC-0036), donc aucune route ':id' comme pour 'loans'.
+        path: 'reservations',
+        canActivate: [permissionGuard],
+        data: { permissions: ['RESERVATION_READ'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./staff/reservations/pages/staff-reservations-page/staff-reservations-page').then(
+                (m) => m.StaffReservationsPage,
+              ),
           },
         ],
       },

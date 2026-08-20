@@ -3,7 +3,9 @@ import { permissionGuard } from './core/guards/permission.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { routes } from './app.routes';
 import { MemberLoansPage } from './member/loans/pages/member-loans-page/member-loans-page';
+import { MemberReservationsPage } from './member/reservations/pages/member-reservations-page/member-reservations-page';
 import { StaffLoansPage } from './staff/loans/pages/staff-loans-page/staff-loans-page';
+import { StaffReservationsPage } from './staff/reservations/pages/staff-reservations-page/staff-reservations-page';
 
 describe('Application routes', () => {
   it('should expose the expected application zones', () => {
@@ -144,6 +146,40 @@ describe('Application routes', () => {
     expect(loadedComponent).toBe(StaffLoansPage);
   });
 
+  it('should protect /staff/reservations with permissionGuard and RESERVATION_READ (DEV-08.14)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const reservationsRoute = staffRoute?.children?.find((child) => child.path === 'reservations');
+
+    expect(reservationsRoute?.canActivate).toContain(permissionGuard);
+    expect(reservationsRoute?.data?.['permissions']).toEqual(['RESERVATION_READ']);
+  });
+
+  it('should never require RESERVATION_MANAGE at the /staff/reservations route level (DEV-08.14)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const reservationsRoute = staffRoute?.children?.find((child) => child.path === 'reservations');
+
+    expect(reservationsRoute?.data?.['permissions']).not.toContain('RESERVATION_MANAGE');
+  });
+
+  it('should expose a single list route as the only child of /staff/reservations, no :id route (DEV-DEC-0036, DEV-08.14)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const reservationsRoute = staffRoute?.children?.find((child) => child.path === 'reservations');
+    const childPaths = reservationsRoute?.children?.map((child) => child.path) ?? [];
+
+    expect(childPaths).toEqual(['']);
+  });
+
+  it('should lazy-load StaffReservationsPage for /staff/reservations (DEV-08.14)', async () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const reservationsRoute = staffRoute?.children?.find((child) => child.path === 'reservations');
+    const listRoute = reservationsRoute?.children?.find((child) => child.path === '');
+
+    expect(listRoute?.loadComponent).toBeDefined();
+    const loadedComponent = await listRoute!.loadComponent!();
+
+    expect(loadedComponent).toBe(StaffReservationsPage);
+  });
+
   it('should redirect the bare /admin zone to /admin/users (DEV-05.12)', () => {
     const adminRoute = routes.find((candidate) => candidate.path === 'admin');
     const redirectChild = adminRoute?.children?.find((child) => child.path === '');
@@ -224,6 +260,33 @@ describe('Application routes', () => {
     const loadedComponent = await loansRoute!.loadComponent!();
 
     expect(loadedComponent).toBe(MemberLoansPage);
+  });
+
+  it('should expose /member/reservations as a child of /member, accessible for ROLE_MEMBER via the zone-level roleGuard (DEV-08.14)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const childPaths = memberRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('reservations');
+    expect(memberRoute?.canActivate).toContain(roleGuard);
+    expect(memberRoute?.data?.['roles']).toEqual(['ROLE_MEMBER']);
+  });
+
+  it('should never add its own guard to /member/reservations — it inherits the zone-level roleGuard (DEV-08.14)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const reservationsRoute = memberRoute?.children?.find((child) => child.path === 'reservations');
+
+    expect(reservationsRoute?.canActivate).toBeUndefined();
+    expect(reservationsRoute?.data).toBeUndefined();
+  });
+
+  it('should lazy-load MemberReservationsPage for /member/reservations (DEV-08.14)', async () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const reservationsRoute = memberRoute?.children?.find((child) => child.path === 'reservations');
+
+    expect(reservationsRoute?.loadComponent).toBeDefined();
+    const loadedComponent = await reservationsRoute!.loadComponent!();
+
+    expect(loadedComponent).toBe(MemberReservationsPage);
   });
 
   it('should never add roleGuard to /staff or /admin (DEV-05.13)', () => {

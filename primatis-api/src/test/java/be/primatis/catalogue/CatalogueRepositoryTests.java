@@ -461,6 +461,40 @@ class CatalogueRepositoryTests {
     }
 
     // ---------------------------------------------------------------
+    // CopyRepository.existsByTitleIdAndAvailabilityStatus (DEV-08.5, OD-DEV08-02)
+    // ---------------------------------------------------------------
+
+    @Test
+    void existsByTitleIdAndAvailabilityStatusIsTrueWhenAnAvailableCopyExists() {
+        Title title = persistTitle("Availability Exists Title CRT", null, Language.FR, TitleStatus.ACTIVE);
+        persistCopy(title, "CRT-AVAIL-EXISTS-1");
+        entityManager.flush();
+
+        assertThat(copyRepository.existsByTitleIdAndAvailabilityStatus(title.getId(), AvailabilityStatus.AVAILABLE))
+                .isTrue();
+    }
+
+    @Test
+    void existsByTitleIdAndAvailabilityStatusIsFalseWhenNoCopyHasThatStatus() {
+        Title title = persistTitle("Availability Absent Title CRT", null, Language.FR, TitleStatus.ACTIVE);
+        Copy copy = persistCopy(title, "CRT-AVAIL-ABSENT-1");
+        copy.setAvailabilityStatus(AvailabilityStatus.ON_LOAN);
+        entityManager.flush();
+
+        assertThat(copyRepository.existsByTitleIdAndAvailabilityStatus(title.getId(), AvailabilityStatus.AVAILABLE))
+                .isFalse();
+    }
+
+    @Test
+    void existsByTitleIdAndAvailabilityStatusIsFalseWhenTitleHasNoCopies() {
+        Title title = persistTitle("Availability No Copy Title CRT", null, Language.FR, TitleStatus.ACTIVE);
+        entityManager.flush();
+
+        assertThat(copyRepository.existsByTitleIdAndAvailabilityStatus(title.getId(), AvailabilityStatus.AVAILABLE))
+                .isFalse();
+    }
+
+    // ---------------------------------------------------------------
     // TitleAuthorRepository.findByIdTitleId / TitleGenreRepository.findByIdTitleId (DEV-06.5)
     // ---------------------------------------------------------------
 
