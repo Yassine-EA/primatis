@@ -2,6 +2,8 @@ package be.primatis.reservation;
 
 import be.primatis.catalogue.Copy;
 import be.primatis.catalogue.CopyRepository;
+import be.primatis.notification.NotificationService;
+import be.primatis.notification.NotificationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
@@ -52,16 +54,19 @@ public class ReservationExpirationService {
     private final ReservationRepository reservationRepository;
     private final CopyRepository copyRepository;
     private final ReservationAssignmentService reservationAssignmentService;
+    private final NotificationService notificationService;
     private final ReservationExpirationService self;
 
     public ReservationExpirationService(
             ReservationRepository reservationRepository,
             CopyRepository copyRepository,
             ReservationAssignmentService reservationAssignmentService,
+            NotificationService notificationService,
             @Lazy ReservationExpirationService self) {
         this.reservationRepository = reservationRepository;
         this.copyRepository = copyRepository;
         this.reservationAssignmentService = reservationAssignmentService;
+        this.notificationService = notificationService;
         this.self = self;
     }
 
@@ -142,6 +147,14 @@ public class ReservationExpirationService {
      * délégation obligatoire à {@link
      * ReservationAssignmentService#assignNextAdmissibleWaitingReservationOrMakeAvailable}
      * — aucune duplication de la logique FIFO (OD-DEV08-08).
+     *
+     * <p><b>{@code RESERVATION_EXPIRED}</b> (DEV-10.6) : émise juste après
+     * la mutation {@code EXPIRED}, <em>avant</em> la délégation FIFO — si
+     * celle-ci promeut une {@code Reservation WAITING} suivante, {@code
+     * RESERVATION_READY} est alors émise séparément par {@link
+     * ReservationAssignmentService} (DEV-DEC-0056), dans cette même
+     * transaction candidate (aucun {@code REQUIRES_NEW} sur aucun des deux
+     * appels).
      */
     @Transactional
     public void expireReservationIfStillDue(Long reservationId, Instant referenceInstant) {
@@ -176,6 +189,8 @@ public class ReservationExpirationService {
 
         reservation.setReservationStatus(ReservationStatus.EXPIRED);
         reservation.setUpdatedAt(referenceInstant);
+        notificationService.createForReservation(reservation, NotificationType.RESERVATION_EXPIRED,
+                "Réservation expirée", "Le délai de retrait de votre réservation est expiré.");
         reservationAssignmentService.assignNextAdmissibleWaitingReservationOrMakeAvailable(copy, referenceInstant);
         copy.setUpdatedAt(referenceInstant);
     }

@@ -11,6 +11,9 @@ import be.primatis.exception.ResourceNotFoundException;
 import be.primatis.fine.dto.FineResponse;
 import be.primatis.loan.Loan;
 import be.primatis.loan.LoanStatus;
+import be.primatis.notification.Notification;
+import be.primatis.notification.NotificationStatus;
+import be.primatis.notification.NotificationType;
 import be.primatis.setting.ApplicationSetting;
 import be.primatis.setting.ApplicationSettingRepository;
 import be.primatis.user.AccountStatus;
@@ -272,6 +275,15 @@ class FineServiceTests {
         FineResponse response = fineService.confirmExternalPayment(fine.getId());
 
         assertThat(response.fineStatus()).isEqualTo(FineStatus.PAID);
+
+        // DEV-10.7 : FINE_PAID persistée, recipient = borrower du Loan, UNREAD.
+        Notification notification = entityManager
+                .createQuery("SELECT n FROM Notification n WHERE n.fine.id = :id", Notification.class)
+                .setParameter("id", fine.getId())
+                .getSingleResult();
+        assertThat(notification.getNotificationType()).isEqualTo(NotificationType.FINE_PAID);
+        assertThat(notification.getNotificationStatus()).isEqualTo(NotificationStatus.UNREAD);
+        assertThat(notification.getRecipientUser().getId()).isEqualTo(loan.getUser().getId());
     }
 
     @Test
@@ -333,6 +345,13 @@ class FineServiceTests {
         assertThatThrownBy(() -> fineService.confirmExternalPayment(fine.getId()))
                 .isInstanceOf(BusinessRuleException.class)
                 .satisfies(ex -> assertThat(((BusinessRuleException) ex).getCode()).isEqualTo("FINE_NOT_PAYABLE"));
+
+        // DEV-10.7 : transition refusée → aucune FINE_PAID persistée.
+        List<Notification> notifications = entityManager
+                .createQuery("SELECT n FROM Notification n WHERE n.fine.id = :id", Notification.class)
+                .setParameter("id", fine.getId())
+                .getResultList();
+        assertThat(notifications).isEmpty();
     }
 
     @Test
@@ -359,6 +378,15 @@ class FineServiceTests {
         FineResponse response = fineService.cancelFine(fine.getId());
 
         assertThat(response.fineStatus()).isEqualTo(FineStatus.CANCELLED);
+
+        // DEV-10.7 : FINE_CANCELLED persistée, recipient = borrower du Loan, UNREAD.
+        Notification notification = entityManager
+                .createQuery("SELECT n FROM Notification n WHERE n.fine.id = :id", Notification.class)
+                .setParameter("id", fine.getId())
+                .getSingleResult();
+        assertThat(notification.getNotificationType()).isEqualTo(NotificationType.FINE_CANCELLED);
+        assertThat(notification.getNotificationStatus()).isEqualTo(NotificationStatus.UNREAD);
+        assertThat(notification.getRecipientUser().getId()).isEqualTo(loan.getUser().getId());
     }
 
     @Test
@@ -420,6 +448,13 @@ class FineServiceTests {
         assertThatThrownBy(() -> fineService.cancelFine(fine.getId()))
                 .isInstanceOf(BusinessRuleException.class)
                 .satisfies(ex -> assertThat(((BusinessRuleException) ex).getCode()).isEqualTo("FINE_NOT_CANCELLABLE"));
+
+        // DEV-10.7 : transition refusée → aucune FINE_CANCELLED persistée.
+        List<Notification> notifications = entityManager
+                .createQuery("SELECT n FROM Notification n WHERE n.fine.id = :id", Notification.class)
+                .setParameter("id", fine.getId())
+                .getResultList();
+        assertThat(notifications).isEmpty();
     }
 
     @Test

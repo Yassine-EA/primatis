@@ -98,6 +98,19 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./member/fines/pages/member-fines-page/member-fines-page').then((m) => m.MemberFinesPage),
       },
+      {
+        // DEV-10.10, DEV-DEC-0053 : consultation + mark-as-read/mark-all
+        // des Notifications du membre authentifié, aucun guard propre —
+        // hérite du roleGuard ROLE_MEMBER porté par la zone /member (même
+        // principe exact que 'loans'/'reservations'/'fines'). Aucune
+        // permission NOTIFICATION_READ/NOTIFICATION_MANAGE : ownership
+        // self-service par identité JWT uniquement (endpoints /me/notifications).
+        path: 'notifications',
+        loadComponent: () =>
+          import('./member/notifications/pages/member-notifications-page/member-notifications-page').then(
+            (m) => m.MemberNotificationsPage,
+          ),
+      },
     ],
   },
   {

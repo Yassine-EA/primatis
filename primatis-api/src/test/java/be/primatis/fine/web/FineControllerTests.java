@@ -115,6 +115,13 @@ class FineControllerTests {
     void cleanupFixtures() {
         transactionTemplate().executeWithoutResult(status -> {
             for (Long fineId : createdFineIds) {
+                // DEV-10.7 : payment-confirmation/cancel créent désormais FINE_PAID/
+                // FINE_CANCELLED (fk_notification_fine_id, ON DELETE RESTRICT) —
+                // supprimée avant la Fine.
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.fine.id = :id")
+                        .setParameter("id", fineId).executeUpdate();
+            }
+            for (Long fineId : createdFineIds) {
                 entityManager.createQuery("DELETE FROM Fine f WHERE f.id = :id")
                         .setParameter("id", fineId).executeUpdate();
             }

@@ -13,6 +13,9 @@ import be.primatis.fine.Fine;
 import be.primatis.fine.FineStatus;
 import be.primatis.loan.Loan;
 import be.primatis.loan.LoanStatus;
+import be.primatis.notification.Notification;
+import be.primatis.notification.NotificationStatus;
+import be.primatis.notification.NotificationType;
 import be.primatis.reservation.dto.CreateOwnReservationRequest;
 import be.primatis.reservation.dto.CreateReservationRequest;
 import be.primatis.reservation.dto.ReservationResponse;
@@ -219,6 +222,17 @@ class ReservationServiceTests {
         assertThat(response.assignedCopy()).isNull();
         assertThat(response.expirationDate()).isNull();
         assertThat(response.fulfilledByLoanId()).isNull();
+
+        // DEV-10.6 §22 : RESERVATION_CREATED persistée, recipient correct,
+        // origine Reservation, UNREAD.
+        Notification notification = entityManager
+                .createQuery("SELECT n FROM Notification n WHERE n.reservation.id = :id", Notification.class)
+                .setParameter("id", response.id())
+                .getSingleResult();
+        assertThat(notification.getNotificationType()).isEqualTo(NotificationType.RESERVATION_CREATED);
+        assertThat(notification.getNotificationStatus()).isEqualTo(NotificationStatus.UNREAD);
+        assertThat(notification.getRecipientUser().getId()).isEqualTo(self.getId());
+        assertThat(notification.getReservation().getId()).isEqualTo(response.id());
     }
 
     @Test
@@ -603,6 +617,16 @@ class ReservationServiceTests {
 
         assertThat(response.reservationStatus()).isEqualTo(ReservationStatus.CANCELLED);
         assertThat(response.assignedCopy()).isNull();
+
+        // DEV-10.6 §24 : WAITING cancel → RESERVATION_CANCELLED, aucune promotion
+        // (aucun Copy impliqué pour une WAITING).
+        Notification notification = entityManager
+                .createQuery("SELECT n FROM Notification n WHERE n.reservation.id = :id", Notification.class)
+                .setParameter("id", reservation.getId())
+                .getSingleResult();
+        assertThat(notification.getNotificationType()).isEqualTo(NotificationType.RESERVATION_CANCELLED);
+        assertThat(notification.getNotificationStatus()).isEqualTo(NotificationStatus.UNREAD);
+        assertThat(notification.getRecipientUser().getId()).isEqualTo(self.getId());
     }
 
     @Test
@@ -759,6 +783,21 @@ class ReservationServiceTests {
         assertThat(reloadedWaiting.getReservationStatus()).isEqualTo(ReservationStatus.READY);
         assertThat(reloadedWaiting.getAssignedCopy().getId()).isEqualTo(copy.getId());
         assertThat(reloadedWaiting.getExpirationDate()).isNotNull();
+
+        // DEV-10.6 §15 — cas central : une seule transaction produit à la fois
+        // RESERVATION_CANCELLED (propriétaire de la READY annulée) et
+        // RESERVATION_READY (bénéficiaire de la promotion FIFO suivante), toutes
+        // deux persistées, UNREAD, recipients corrects.
+        List<Notification> notifications = entityManager
+                .createQuery("SELECT n FROM Notification n WHERE n.reservation.id IN :ids", Notification.class)
+                .setParameter("ids", List.of(readyReservation.getId(), waitingReservation.getId()))
+                .getResultList();
+        assertThat(notifications).hasSize(2);
+        assertThat(notifications).allMatch(n -> n.getNotificationStatus() == NotificationStatus.UNREAD);
+        assertThat(notifications).filteredOn(n -> n.getNotificationType() == NotificationType.RESERVATION_CANCELLED)
+                .extracting(n -> n.getRecipientUser().getId()).containsExactly(readyOwner.getId());
+        assertThat(notifications).filteredOn(n -> n.getNotificationType() == NotificationType.RESERVATION_READY)
+                .extracting(n -> n.getRecipientUser().getId()).containsExactly(nextMember.getId());
     }
 
     @Test

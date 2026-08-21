@@ -4,6 +4,8 @@ import be.primatis.exception.BusinessRuleException;
 import be.primatis.exception.ResourceNotFoundException;
 import be.primatis.fine.dto.FineResponse;
 import be.primatis.loan.Loan;
+import be.primatis.notification.NotificationService;
+import be.primatis.notification.NotificationType;
 import be.primatis.setting.ApplicationSettingService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,12 +66,17 @@ public class FineService {
 
     private final FineRepository fineRepository;
     private final ApplicationSettingService applicationSettingService;
+    private final NotificationService notificationService;
     private final Clock clock;
 
     public FineService(
-            FineRepository fineRepository, ApplicationSettingService applicationSettingService, Clock clock) {
+            FineRepository fineRepository,
+            ApplicationSettingService applicationSettingService,
+            NotificationService notificationService,
+            Clock clock) {
         this.fineRepository = fineRepository;
         this.applicationSettingService = applicationSettingService;
+        this.notificationService = notificationService;
         this.clock = clock;
     }
 
@@ -124,6 +131,14 @@ public class FineService {
      * ReservationAssignmentService} pour ce type d'anomalie structurelle.
      * {@code uq_fine_loan_id} (V001) reste la protection structurelle
      * ultime en base, en filet de sécurité.
+     *
+     * <p><b>{@code FINE_ISSUED}</b> (DEV-10.5, DEV-DEC-0055) : {@link
+     * NotificationService#createForFine} appelé <em>après</em> {@code
+     * fineRepository.save(fine)} — uniquement si une Fine est réellement
+     * créée (aucune Notification si {@code overdueDays <= 0}). Même
+     * transaction que l'appelant ({@code LoanService.registerReturn}),
+     * jamais {@code REQUIRES_NEW} — {@code createForFine} ne porte pas sa
+     * propre frontière transactionnelle (DEV-10.4).
      */
     public void createForLateReturnIfApplicable(Loan loan, Instant now) {
         LocalDate dueDate = loan.getDueDate();
@@ -159,6 +174,9 @@ public class FineService {
         fine.setIssuedAt(now);
         fine.setFineStatus(FineStatus.UNPAID);
         fineRepository.save(fine);
+
+        notificationService.createForFine(fine, NotificationType.FINE_ISSUED,
+                "Amende générée", "Une amende a été générée à la suite du retour tardif de votre prêt.");
     }
 
     /**
@@ -193,6 +211,12 @@ public class FineService {
      * <p>{@code paidAt = clock.instant()} (même {@link Clock} injecté que
      * {@code LoanService}/{@code ReservationService}, jamais {@code
      * Instant.now()} direct) — déterministe en test.
+     *
+     * <p><b>{@code FINE_PAID}</b> (DEV-10.7, DEV-DEC-0055) : {@link
+     * NotificationService#createForFine} appelé après la mutation {@code
+     * PAID}/{@code paidAt}, dans cette même transaction autonome (jamais
+     * {@code REQUIRES_NEW}) — jamais atteint si la transition est refusée
+     * ({@code FINE_NOT_PAYABLE}).
      */
     @PreAuthorize("hasAuthority('FINE_MANAGE')")
     @Transactional
@@ -208,6 +232,9 @@ public class FineService {
 
         fine.setFineStatus(FineStatus.PAID);
         fine.setPaidAt(clock.instant());
+
+        notificationService.createForFine(fine, NotificationType.FINE_PAID,
+                "Amende payée", "Le paiement de votre amende a bien été enregistré.");
 
         return FineResponse.from(fine);
     }
@@ -249,6 +276,12 @@ public class FineService {
      * simultanément non-null (garanti applicativement ici, et
      * structurellement par {@code ck_fine_status_consistency}, V001, en
      * filet de sécurité ultime).
+     *
+     * <p><b>{@code FINE_CANCELLED}</b> (DEV-10.7, DEV-DEC-0055) : {@link
+     * NotificationService#createForFine} appelé après la mutation {@code
+     * CANCELLED}/{@code cancelledAt}, dans cette même transaction autonome
+     * (jamais {@code REQUIRES_NEW}) — jamais atteint si la transition est
+     * refusée ({@code FINE_NOT_CANCELLABLE}).
      */
     @PreAuthorize("hasAuthority('FINE_MANAGE')")
     @Transactional
@@ -264,6 +297,9 @@ public class FineService {
 
         fine.setFineStatus(FineStatus.CANCELLED);
         fine.setCancelledAt(clock.instant());
+
+        notificationService.createForFine(fine, NotificationType.FINE_CANCELLED,
+                "Amende annulée", "Votre amende a été annulée.");
 
         return FineResponse.from(fine);
     }

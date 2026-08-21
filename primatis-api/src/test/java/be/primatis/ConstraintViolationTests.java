@@ -238,6 +238,68 @@ class ConstraintViolationTests {
     }
 
     // ---------------------------------------------------------------
+    // ux_notification_loan_due_soon (V007, DEV-10.3, DEV-DEC-0054)
+    // ---------------------------------------------------------------
+
+    @Test
+    void secondLoanDueSoonNotificationForSameLoanIsRejected() {
+        AppUser user = persistUser("cv-notif-due-soon-dup-user@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "CV-NOTIF-DUE-SOON-DUP-COPY-1");
+        Loan loan = persistLoan(user, copy, LoanStatus.ACTIVE);
+
+        Notification firstDueSoon = buildNotification(
+                user, NotificationType.LOAN_DUE_SOON, NotificationStatus.UNREAD, null);
+        firstDueSoon.setLoan(loan);
+        entityManager.persist(firstDueSoon);
+        entityManager.flush();
+
+        Notification secondDueSoon = buildNotification(
+                user, NotificationType.LOAN_DUE_SOON, NotificationStatus.UNREAD, null);
+        secondDueSoon.setLoan(loan);
+        // Même Loan, même NotificationType LOAN_DUE_SOON : rejet attendu,
+        // même si le futur scheduler (DEV-10.6+) rejoue la détection.
+
+        assertThatExceptionOfType(ConstraintViolationException.class)
+                .isThrownBy(() -> {
+                    entityManager.persist(secondDueSoon);
+                    entityManager.flush();
+                });
+    }
+
+    @Test
+    void loanDueSoonAndOtherLoanNotificationTypesCoexistForSameLoan() {
+        AppUser user = persistUser("cv-notif-due-soon-coexist-user@primatis.test");
+        Title title = persistTitle();
+        Copy copy = persistCopy(title, "CV-NOTIF-DUE-SOON-COEXIST-COPY-1");
+        Loan loan = persistLoan(user, copy, LoanStatus.RETURNED);
+
+        Notification dueSoon = buildNotification(
+                user, NotificationType.LOAN_DUE_SOON, NotificationStatus.UNREAD, null);
+        dueSoon.setLoan(loan);
+        entityManager.persist(dueSoon);
+
+        Notification overdue = buildNotification(
+                user, NotificationType.LOAN_OVERDUE, NotificationStatus.UNREAD, null);
+        overdue.setLoan(loan);
+        entityManager.persist(overdue);
+
+        Notification returned = buildNotification(
+                user, NotificationType.LOAN_RETURNED, NotificationStatus.UNREAD, null);
+        returned.setLoan(loan);
+        entityManager.persist(returned);
+
+        // Index unique partiel scopé sur notification_type = 'LOAN_DUE_SOON'
+        // uniquement : LOAN_OVERDUE/LOAN_RETURNED pour le même Loan ne sont
+        // jamais concernés par cette unicité.
+        entityManager.flush();
+
+        assertThat(dueSoon.getId()).isNotNull();
+        assertThat(overdue.getId()).isNotNull();
+        assertThat(returned.getId()).isNotNull();
+    }
+
+    // ---------------------------------------------------------------
     // ck_fine_status_consistency
     // ---------------------------------------------------------------
 

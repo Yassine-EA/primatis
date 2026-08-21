@@ -21,6 +21,8 @@ import be.primatis.user.AccountStatus;
 import be.primatis.user.AppUser;
 import be.primatis.user.AppUserRepository;
 import be.primatis.user.MemberStatus;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -113,6 +115,9 @@ class LoanServiceConcurrencyTests {
 
     @Autowired
     private PlatformTransactionManager transactionManager;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Test
     void concurrentRegisterLoanOnTheSameCopyYieldsExactlyOneSuccessAndOneCleanRejection()
@@ -319,6 +324,16 @@ class LoanServiceConcurrencyTests {
             assertThat(fines).hasSize(1);
         } finally {
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.5 : registerReturn crée désormais LOAN_RETURNED (n.loan) et,
+                // le cas échéant, FINE_ISSUED (n.fine) — supprimées avant Fine/Loan
+                // (fk_notification_loan_id/fk_notification_fine_id, ON DELETE RESTRICT).
+                // Deux instructions distinctes plutôt qu'un unique OR : Hibernate ne
+                // garantit pas la traduction SQL correcte d'un bulk DELETE combinant
+                // par OR deux chemins d'association implicites différents.
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.loan.id = :loanId")
+                        .setParameter("loanId", loanId).executeUpdate();
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.fine.loan.id = :loanId")
+                        .setParameter("loanId", loanId).executeUpdate();
                 fineRepository.findByLoanId(loanId).ifPresent(fineRepository::delete);
                 fineRepository.flush();
                 loanRepository.deleteById(loanId);
@@ -430,6 +445,13 @@ class LoanServiceConcurrencyTests {
             assertThat(finalReservation.getAssignedCopy().getId()).isEqualTo(reservedCopyId);
         } finally {
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.5/10.6 : registerReturn crée désormais LOAN_RETURNED et la
+                // promotion FIFO crée RESERVATION_READY — supprimées avant Loan/Reservation
+                // (fk_notification_loan_id/fk_notification_reservation_id, ON DELETE RESTRICT).
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.loan.id IN :loanIds")
+                        .setParameter("loanIds", loanIds).executeUpdate();
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.id = :reservationId")
+                        .setParameter("reservationId", reservationId).executeUpdate();
                 reservationRepository.deleteById(reservationId);
                 reservationRepository.flush();
                 loanIds.forEach(loanRepository::deleteById);
@@ -539,6 +561,13 @@ class LoanServiceConcurrencyTests {
                     .containsExactlyInAnyOrder(copyOneId, copyTwoId);
         } finally {
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.5/10.6 : registerReturn crée désormais LOAN_RETURNED et la
+                // promotion FIFO crée RESERVATION_READY — supprimées avant Loan/Reservation
+                // (fk_notification_loan_id/fk_notification_reservation_id, ON DELETE RESTRICT).
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.loan.id IN :loanIds")
+                        .setParameter("loanIds", loanIds).executeUpdate();
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.id IN :reservationIds")
+                        .setParameter("reservationIds", List.of(reservationOneId, reservationTwoId)).executeUpdate();
                 reservationRepository.deleteById(reservationOneId);
                 reservationRepository.deleteById(reservationTwoId);
                 reservationRepository.flush();
@@ -658,6 +687,13 @@ class LoanServiceConcurrencyTests {
         } finally {
             executor.shutdown();
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.5/10.6 : registerReturn crée désormais LOAN_RETURNED et la
+                // promotion FIFO crée RESERVATION_READY — supprimées avant Loan/Reservation
+                // (fk_notification_loan_id/fk_notification_reservation_id, ON DELETE RESTRICT).
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.loan.id = :loanId")
+                        .setParameter("loanId", loanId).executeUpdate();
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.id IN :reservationIds")
+                        .setParameter("reservationIds", List.of(reservationOneId, reservationTwoId)).executeUpdate();
                 reservationRepository.deleteById(reservationOneId);
                 reservationRepository.deleteById(reservationTwoId);
                 reservationRepository.flush();
@@ -867,9 +903,31 @@ class LoanServiceConcurrencyTests {
                     reservationIds.stream().map(id -> reservationRepository.findById(id).orElseThrow()).toList());
             assertThat(finalReservations).allSatisfy(reservation ->
                     assertThat(reservation.getReservationStatus()).isEqualTo(ReservationStatus.CANCELLED));
+
+            // DEV-10.6 §20/§37 — point de contrôle critique : RESERVATION_ASSIGNMENT_CONTENTION
+            // force le rollback complet de la transaction registerReturn après la 20e
+            // tentative. Ni LOAN_RETURNED (créée avant la tentative FIFO) ni aucune
+            // RESERVATION_READY (jamais atteinte, la file est épuisée en échec) ne
+            // doivent survivre — preuve réelle (transaction committée pour de vrai,
+            // classe volontairement sans @Transactional), pas un rollback de test simulé.
+            Long notificationCount = transactionTemplate.execute(status -> ((Number) entityManager
+                    .createQuery("SELECT count(n) FROM Notification n WHERE n.loan.id = :loanId "
+                            + "OR n.reservation.id IN :reservationIds")
+                    .setParameter("loanId", loanId)
+                    .setParameter("reservationIds", reservationIds)
+                    .getSingleResult()).longValue());
+            assertThat(notificationCount).isZero();
         } finally {
             executor.shutdown();
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.5/10.6 : rollback complet attendu (RESERVATION_ASSIGNMENT_CONTENTION)
+                // — aucune Notification ne devrait exister, nettoyage défensif néanmoins pour
+                // rester cohérent avec les autres blocs (fk_notification_loan_id/
+                // fk_notification_reservation_id, ON DELETE RESTRICT).
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.loan.id = :loanId")
+                        .setParameter("loanId", loanId).executeUpdate();
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.id IN :reservationIds")
+                        .setParameter("reservationIds", reservationIds).executeUpdate();
                 reservationIds.forEach(reservationRepository::deleteById);
                 reservationRepository.flush();
                 loanRepository.deleteById(loanId);
@@ -970,8 +1028,29 @@ class LoanServiceConcurrencyTests {
             assertThat(finalLoan.getLoanStatus()).isEqualTo(LoanStatus.ACTIVE);
             assertThat(finalLoan.getReturnDate()).isNull();
             assertThat(finalCopy.getAvailabilityStatus()).isEqualTo(AvailabilityStatus.ON_LOAN);
+
+            // DEV-10.5 — point critique §11/§30 : la Notification LOAN_RETURNED,
+            // créée par NotificationService.createForLoan (sans transaction propre,
+            // participant à celle de registerReturn) AVANT l'échec de
+            // FineService.createForLateReturnIfApplicable, ne doit PAS survivre au
+            // rollback complet de la transaction — même atomicité que Loan/Copy.
+            Long notificationCount = transactionTemplate.execute(status -> ((Number) entityManager
+                    .createQuery("SELECT count(n) FROM Notification n WHERE n.loan.id = :loanId")
+                    .setParameter("loanId", loanId)
+                    .getSingleResult()).longValue());
+            assertThat(notificationCount).isZero();
         } finally {
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.5 : registerReturn crée désormais LOAN_RETURNED (n.loan) et,
+                // le cas échéant, FINE_ISSUED (n.fine) — supprimées avant Fine/Loan
+                // (fk_notification_loan_id/fk_notification_fine_id, ON DELETE RESTRICT).
+                // Deux instructions distinctes plutôt qu'un unique OR : Hibernate ne
+                // garantit pas la traduction SQL correcte d'un bulk DELETE combinant
+                // par OR deux chemins d'association implicites différents.
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.loan.id = :loanId")
+                        .setParameter("loanId", loanId).executeUpdate();
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.fine.loan.id = :loanId")
+                        .setParameter("loanId", loanId).executeUpdate();
                 fineRepository.findByLoanId(loanId).ifPresent(fineRepository::delete);
                 fineRepository.flush();
                 loanRepository.deleteById(loanId);

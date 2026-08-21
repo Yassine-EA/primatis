@@ -8,6 +8,8 @@ import be.primatis.catalogue.TitleRepository;
 import be.primatis.exception.BusinessRuleException;
 import be.primatis.exception.ConflictException;
 import be.primatis.exception.ResourceNotFoundException;
+import be.primatis.notification.NotificationService;
+import be.primatis.notification.NotificationType;
 import be.primatis.reservation.dto.CreateOwnReservationRequest;
 import be.primatis.reservation.dto.CreateReservationRequest;
 import be.primatis.reservation.dto.ReservationResponse;
@@ -53,9 +55,10 @@ import java.util.Set;
  * la règle métier. Une nouvelle Reservation est toujours créée
  * {@code WAITING} (jamais directement {@code READY}) : {@code assignedCopy}/
  * {@code fulfilledByLoan}/{@code expirationDate} restent {@code null}.
- * Aucune création/annulation/expiration de Fine ou de Notification —
- * strictement hors périmètre DEV-08.5 (DEV-09/DEV-10 futurs, RESERVATION_CREATED
- * différée). Aucun {@code @Scheduled}.
+ * Aucune création/annulation/expiration de Fine. Aucun {@code @Scheduled}.
+ * Depuis DEV-10.6 : {@code RESERVATION_CREATED} émise via {@link
+ * NotificationService#createForReservation} juste après persistance
+ * effective (recipient dérivé, jamais fourni par l'appelant).
  *
  * <p><b>Annulation</b> ({@link #cancelOwnReservation}/{@link #cancelReservation},
  * DEV-08.6, DEV-DEC-0038) : {@code WAITING → CANCELLED} et
@@ -66,9 +69,13 @@ import java.util.Set;
  * verrouillé en premier. La réaffectation FIFO consécutive à une annulation
  * {@code READY} délègue à {@link ReservationAssignmentService} — primitive
  * partagée avec {@code LoanService.registerReturn} (OD-DEV08-08), aucune
- * duplication. Aucune Notification (ni {@code RESERVATION_CANCELLED}, ni
- * {@code RESERVATION_READY}), aucune expiration automatique — strictement
- * hors périmètre DEV-08.6 (DEV-10/DEV-08.7 futurs).
+ * duplication. Aucune expiration automatique ici (DEV-08.7,
+ * {@code ReservationExpirationService}). Depuis DEV-10.6 :
+ * {@code RESERVATION_CANCELLED} émise dans les deux branches ({@code
+ * WAITING}/{@code READY}) juste après la mutation effective vers {@code
+ * CANCELLED}, avant toute réaffectation FIFO — {@code RESERVATION_READY}
+ * n'est jamais émise ici mais dans {@link ReservationAssignmentService},
+ * seul point réel de mutation {@code WAITING → READY} (DEV-DEC-0056).
  */
 @Service
 public class ReservationService {
@@ -115,6 +122,7 @@ public class ReservationService {
     private final ApplicationSettingService applicationSettingService;
     private final MemberExpirationPolicy memberExpirationPolicy;
     private final ReservationAssignmentService reservationAssignmentService;
+    private final NotificationService notificationService;
     private final Clock clock;
 
     public ReservationService(
@@ -125,6 +133,7 @@ public class ReservationService {
             ApplicationSettingService applicationSettingService,
             MemberExpirationPolicy memberExpirationPolicy,
             ReservationAssignmentService reservationAssignmentService,
+            NotificationService notificationService,
             Clock clock) {
         this.reservationRepository = reservationRepository;
         this.appUserRepository = appUserRepository;
@@ -133,6 +142,7 @@ public class ReservationService {
         this.applicationSettingService = applicationSettingService;
         this.memberExpirationPolicy = memberExpirationPolicy;
         this.reservationAssignmentService = reservationAssignmentService;
+        this.notificationService = notificationService;
         this.clock = clock;
     }
 
@@ -258,6 +268,9 @@ public class ReservationService {
             throw ex;
         }
 
+        notificationService.createForReservation(reservation, NotificationType.RESERVATION_CREATED,
+                "Réservation créée", "Votre réservation a bien été enregistrée.");
+
         return ReservationResponse.from(reservation);
     }
 
@@ -364,6 +377,8 @@ public class ReservationService {
 
                 reservation.setReservationStatus(ReservationStatus.CANCELLED);
                 reservation.setUpdatedAt(now);
+                notificationService.createForReservation(reservation, NotificationType.RESERVATION_CANCELLED,
+                        "Réservation annulée", "Votre réservation a été annulée.");
                 reservationAssignmentService.assignNextAdmissibleWaitingReservationOrMakeAvailable(copy, now);
                 copy.setUpdatedAt(now);
 
@@ -380,6 +395,8 @@ public class ReservationService {
             if (reservation.getReservationStatus() == ReservationStatus.WAITING) {
                 reservation.setReservationStatus(ReservationStatus.CANCELLED);
                 reservation.setUpdatedAt(now);
+                notificationService.createForReservation(reservation, NotificationType.RESERVATION_CANCELLED,
+                        "Réservation annulée", "Votre réservation a été annulée.");
                 return ReservationResponse.from(reservation);
             }
 
