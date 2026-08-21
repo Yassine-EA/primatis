@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { vi } from 'vitest';
 
 import { AuthService } from '../../../auth/services/auth.service';
+import { NotificationUnreadStateService } from '../../../notifications/services/notification-unread-state.service';
 import { PublicLayout } from './public-layout';
 
 describe('PublicLayout', () => {
@@ -15,10 +16,15 @@ describe('PublicLayout', () => {
       permissions: vi.fn().mockReturnValue([]),
       logout: vi.fn(),
     };
+    const unreadStateMock = { unreadCount: vi.fn().mockReturnValue(0), refresh: vi.fn(), decrement: vi.fn(), reset: vi.fn() };
 
     TestBed.configureTestingModule({
       imports: [PublicLayout],
-      providers: [provideRouter([]), { provide: AuthService, useValue: authServiceMock }],
+      providers: [
+        provideRouter([]),
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: NotificationUnreadStateService, useValue: unreadStateMock },
+      ],
     });
 
     fixture = TestBed.createComponent(PublicLayout);

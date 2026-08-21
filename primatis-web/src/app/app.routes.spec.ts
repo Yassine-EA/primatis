@@ -4,6 +4,7 @@ import { roleGuard } from './core/guards/role.guard';
 import { routes } from './app.routes';
 import { MemberFinesPage } from './member/fines/pages/member-fines-page/member-fines-page';
 import { MemberLoansPage } from './member/loans/pages/member-loans-page/member-loans-page';
+import { MemberNotificationsPage } from './member/notifications/pages/member-notifications-page/member-notifications-page';
 import { MemberReservationsPage } from './member/reservations/pages/member-reservations-page/member-reservations-page';
 import { StaffFinesPage } from './staff/fines/pages/staff-fines-page/staff-fines-page';
 import { StaffLoansPage } from './staff/loans/pages/staff-loans-page/staff-loans-page';
@@ -350,6 +351,33 @@ describe('Application routes', () => {
     const loadedComponent = await finesRoute!.loadComponent!();
 
     expect(loadedComponent).toBe(MemberFinesPage);
+  });
+
+  it('should expose /member/notifications as a child of /member, accessible for ROLE_MEMBER via the zone-level roleGuard (DEV-10.10)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const childPaths = memberRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('notifications');
+    expect(memberRoute?.canActivate).toContain(roleGuard);
+    expect(memberRoute?.data?.['roles']).toEqual(['ROLE_MEMBER']);
+  });
+
+  it('should never add its own guard to /member/notifications — it inherits the zone-level roleGuard (DEV-10.10)', () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const notificationsRoute = memberRoute?.children?.find((child) => child.path === 'notifications');
+
+    expect(notificationsRoute?.canActivate).toBeUndefined();
+    expect(notificationsRoute?.data).toBeUndefined();
+  });
+
+  it('should lazy-load MemberNotificationsPage for /member/notifications (DEV-10.10)', async () => {
+    const memberRoute = routes.find((candidate) => candidate.path === 'member');
+    const notificationsRoute = memberRoute?.children?.find((child) => child.path === 'notifications');
+
+    expect(notificationsRoute?.loadComponent).toBeDefined();
+    const loadedComponent = await notificationsRoute!.loadComponent!();
+
+    expect(loadedComponent).toBe(MemberNotificationsPage);
   });
 
   it('should never add roleGuard to /staff or /admin (DEV-05.13)', () => {

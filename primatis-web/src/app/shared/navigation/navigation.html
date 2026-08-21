@@ -11,6 +11,15 @@
 
   <div class="nav-auth">
     @if (authenticated()) {
+      <a routerLink="/member/notifications" class="nav-bell" aria-label="Notifications" title="Notifications">
+        @if (unreadCount() > 0) {
+          <p-overlaybadge [value]="unreadCount().toString()" severity="danger">
+            <span aria-hidden="true">🔔</span>
+          </p-overlaybadge>
+        } @else {
+          <span aria-hidden="true">🔔</span>
+        }
+      </a>
       <button type="button" class="nav-logout" (click)="logout()">Déconnexion</button>
     } @else {
       <a routerLink="/login">Connexion</a>

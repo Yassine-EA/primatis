@@ -18,6 +18,15 @@
 .nav-auth {
   display: flex;
   align-items: center;
+  gap: 1rem;
+}
+
+.nav-bell {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1rem;
+  text-decoration: none;
+  color: inherit;
 }
 
 .nav-logout {

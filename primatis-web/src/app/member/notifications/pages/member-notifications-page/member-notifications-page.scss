@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+// Distinction visuelle discrète UNREAD/READ (mission §10) : poids de
+// police uniquement, aucune Notification n'est jamais masquée après
+// lecture (mission §10, §23).
+.notification-row-unread {
+  font-weight: 600;
+}
