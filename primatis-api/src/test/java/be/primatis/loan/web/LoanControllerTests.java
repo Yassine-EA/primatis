@@ -118,8 +118,21 @@ class LoanControllerTests {
     void cleanupFixtures() {
         transactionTemplate().executeWithoutResult(status -> {
             for (Long reservationId : createdReservationIds) {
+                // DEV-10.6 : la promotion FIFO déclenchée par registerReturn crée désormais
+                // une Notification RESERVATION_READY (fk_notification_reservation_id,
+                // ON DELETE RESTRICT) — supprimée avant la Reservation.
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.id = :id")
+                        .setParameter("id", reservationId).executeUpdate();
+            }
+            for (Long reservationId : createdReservationIds) {
                 entityManager.createQuery("DELETE FROM Reservation r WHERE r.id = :id")
                         .setParameter("id", reservationId).executeUpdate();
+            }
+            for (Long loanId : createdLoanIds) {
+                // DEV-10.5 : registerReturn crée désormais une Notification LOAN_RETURNED
+                // (fk_notification_loan_id, ON DELETE RESTRICT) — supprimée avant le Loan.
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.loan.id = :id")
+                        .setParameter("id", loanId).executeUpdate();
             }
             for (Long loanId : createdLoanIds) {
                 entityManager.createQuery("DELETE FROM Loan l WHERE l.id = :id")

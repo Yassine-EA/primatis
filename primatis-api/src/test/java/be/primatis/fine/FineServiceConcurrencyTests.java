@@ -12,9 +12,14 @@ import be.primatis.exception.BusinessRuleException;
 import be.primatis.loan.Loan;
 import be.primatis.loan.LoanRepository;
 import be.primatis.loan.LoanStatus;
+import be.primatis.notification.Notification;
+import be.primatis.notification.NotificationStatus;
+import be.primatis.notification.NotificationType;
 import be.primatis.user.AccountStatus;
 import be.primatis.user.AppUser;
 import be.primatis.user.AppUserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -83,6 +88,9 @@ class FineServiceConcurrencyTests {
     @Autowired
     private PlatformTransactionManager transactionManager;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     /**
      * Mission §12 point 10 : preuve qu'après confirmation, une relecture
      * depuis une transaction totalement séparée (nouvelle connexion
@@ -107,6 +115,20 @@ class FineServiceConcurrencyTests {
             assertThat(reloaded.getFineStatus()).isEqualTo(FineStatus.PAID);
             assertThat(reloaded.getPaidAt()).isNotNull();
             assertThat(reloaded.getCancelledAt()).isNull();
+
+            // DEV-10.7 §14 — point de contrôle critique : FINE_PAID committée avec la
+            // mutation Fine dans la même transaction autonome (aucun REQUIRES_NEW),
+            // visible depuis une transaction séparée après commit réel.
+            transactionTemplate.executeWithoutResult(status -> {
+                Notification notification = entityManager
+                        .createQuery("SELECT n FROM Notification n WHERE n.fine.id = :id", Notification.class)
+                        .setParameter("id", fineId)
+                        .getSingleResult();
+                Long borrowerId = fineRepository.findById(fineId).orElseThrow().getLoan().getUser().getId();
+                assertThat(notification.getNotificationType()).isEqualTo(NotificationType.FINE_PAID);
+                assertThat(notification.getNotificationStatus()).isEqualTo(NotificationStatus.UNREAD);
+                assertThat(notification.getRecipientUser().getId()).isEqualTo(borrowerId);
+            });
         } finally {
             cleanup(transactionTemplate, fineId);
         }
@@ -192,6 +214,19 @@ class FineServiceConcurrencyTests {
             assertThat(reloaded.getFineStatus()).isEqualTo(FineStatus.CANCELLED);
             assertThat(reloaded.getCancelledAt()).isNotNull();
             assertThat(reloaded.getPaidAt()).isNull();
+
+            // DEV-10.7 §14 — même preuve que confirmExternalPaymentIsVisibleFromASeparateTransactionAfterCommit,
+            // pour FINE_CANCELLED.
+            transactionTemplate.executeWithoutResult(status -> {
+                Notification notification = entityManager
+                        .createQuery("SELECT n FROM Notification n WHERE n.fine.id = :id", Notification.class)
+                        .setParameter("id", fineId)
+                        .getSingleResult();
+                Long borrowerId = fineRepository.findById(fineId).orElseThrow().getLoan().getUser().getId();
+                assertThat(notification.getNotificationType()).isEqualTo(NotificationType.FINE_CANCELLED);
+                assertThat(notification.getNotificationStatus()).isEqualTo(NotificationStatus.UNREAD);
+                assertThat(notification.getRecipientUser().getId()).isEqualTo(borrowerId);
+            });
         } finally {
             cleanup(transactionTemplate, fineId);
         }
@@ -327,6 +362,18 @@ class FineServiceConcurrencyTests {
             }
             // Jamais les deux timestamps simultanément, quel que soit le gagnant.
             assertThat(finalFine.getPaidAt() != null && finalFine.getCancelledAt() != null).isFalse();
+
+            // DEV-10.7 : exactement une Notification (celle du gagnant), jamais deux —
+            // le perdant est rejeté avant toute mutation, donc avant tout appel
+            // createForFine.
+            List<Notification> notifications = transactionTemplate.execute(status -> entityManager
+                    .createQuery("SELECT n FROM Notification n WHERE n.fine.id = :id", Notification.class)
+                    .setParameter("id", fineId)
+                    .getResultList());
+            assertThat(notifications).hasSize(1);
+            NotificationType expectedType = "SUCCESS".equals(paymentOutcome)
+                    ? NotificationType.FINE_PAID : NotificationType.FINE_CANCELLED;
+            assertThat(notifications.get(0).getNotificationType()).isEqualTo(expectedType);
         } finally {
             cleanup(transactionTemplate, fineId);
         }
@@ -390,6 +437,11 @@ class FineServiceConcurrencyTests {
             Copy copy = loan.getCopy();
             Long titleId = copy.getTitle().getId();
             Long userId = loan.getUser().getId();
+            // DEV-10.7 : confirmExternalPayment/cancelFine créent désormais
+            // FINE_PAID/FINE_CANCELLED (fk_notification_fine_id, ON DELETE RESTRICT)
+            // — supprimée avant la Fine.
+            entityManager.createQuery("DELETE FROM Notification n WHERE n.fine.id = :id")
+                    .setParameter("id", fine.getId()).executeUpdate();
             fineRepository.delete(fine);
             fineRepository.flush();
             loanRepository.delete(loan);

@@ -10,6 +10,9 @@ import be.primatis.fine.Fine;
 import be.primatis.fine.FineStatus;
 import be.primatis.loan.Loan;
 import be.primatis.loan.LoanStatus;
+import be.primatis.notification.Notification;
+import be.primatis.notification.NotificationStatus;
+import be.primatis.notification.NotificationType;
 import be.primatis.user.AccountStatus;
 import be.primatis.user.AppUser;
 import be.primatis.user.MemberStatus;
@@ -25,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -245,6 +249,21 @@ class ReservationExpirationServiceTests {
         assertThat(reloadedWaiting.getReservationStatus()).isEqualTo(ReservationStatus.READY);
         assertThat(reloadedWaiting.getAssignedCopy().getId()).isEqualTo(copy.getId());
         assertThat(reloadedWaiting.getExpirationDate()).isNotNull();
+
+        // DEV-10.6 §16 — cas central : une seule transaction candidate produit à la
+        // fois RESERVATION_EXPIRED (propriétaire de la READY expirée) et
+        // RESERVATION_READY (bénéficiaire de la promotion FIFO suivante), toutes
+        // deux persistées, UNREAD, recipients corrects.
+        List<Notification> notifications = entityManager
+                .createQuery("SELECT n FROM Notification n WHERE n.reservation.id IN :ids", Notification.class)
+                .setParameter("ids", List.of(reservation.getId(), waitingReservation.getId()))
+                .getResultList();
+        assertThat(notifications).hasSize(2);
+        assertThat(notifications).allMatch(n -> n.getNotificationStatus() == NotificationStatus.UNREAD);
+        assertThat(notifications).filteredOn(n -> n.getNotificationType() == NotificationType.RESERVATION_EXPIRED)
+                .extracting(n -> n.getRecipientUser().getId()).containsExactly(expiredOwner.getId());
+        assertThat(notifications).filteredOn(n -> n.getNotificationType() == NotificationType.RESERVATION_READY)
+                .extracting(n -> n.getRecipientUser().getId()).containsExactly(nextMember.getId());
     }
 
     @Test

@@ -38,3 +38,13 @@ primatis:
     expiration:
       fixed-delay-ms: 3600000
       initial-delay-ms: 3600000
+  # DEV-10.8 : même neutralisation exacte que ci-dessus, pour les deux
+  # traitements périodiques Loan (due-soon/overdue) — cadence métier par
+  # défaut (une minute) inchangée en production.
+  loan:
+    due-soon:
+      fixed-delay-ms: 3600000
+      initial-delay-ms: 3600000
+    overdue:
+      fixed-delay-ms: 3600000
+      initial-delay-ms: 3600000

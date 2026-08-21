@@ -19,6 +19,8 @@ import be.primatis.user.AccountStatus;
 import be.primatis.user.AppUser;
 import be.primatis.user.AppUserRepository;
 import be.primatis.user.MemberStatus;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -101,6 +103,9 @@ class ReservationServiceConcurrencyTests {
     @Autowired
     private PlatformTransactionManager transactionManager;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     private static void authenticateWithLoanManage() {
         List<GrantedAuthority> grantedAuthorities = List.of(new SimpleGrantedAuthority("LOAN_MANAGE"));
         Authentication authentication = new TestingAuthenticationToken("1", null, grantedAuthorities);
@@ -180,6 +185,11 @@ class ReservationServiceConcurrencyTests {
             assertThat(finalReservations).hasSize(1);
         } finally {
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.6 : la création réussie crée désormais RESERVATION_CREATED
+                // (fk_notification_reservation_id, ON DELETE RESTRICT) — supprimée avant
+                // la Reservation.
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.user.id = :userId")
+                        .setParameter("userId", userId).executeUpdate();
                 reservationRepository.findByUserIdAndTitleIdAndReservationStatusIn(
                                 userId, titleId, List.of(
                                         ReservationStatus.WAITING, ReservationStatus.READY,
@@ -301,6 +311,11 @@ class ReservationServiceConcurrencyTests {
         } finally {
             Long finalCopyId = copyId;
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.6 : annulation/expiration READY crée désormais
+                // RESERVATION_CANCELLED/RESERVATION_EXPIRED (fk_notification_reservation_id,
+                // ON DELETE RESTRICT) — supprimée avant la Reservation.
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.id = :id")
+                        .setParameter("id", reservationId).executeUpdate();
                 reservationRepository.deleteById(reservationId);
                 reservationRepository.flush();
                 copyRepository.deleteById(finalCopyId);
@@ -436,6 +451,11 @@ class ReservationServiceConcurrencyTests {
         } finally {
             Long finalCopyId = copyId;
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.6 : annulation/expiration READY crée désormais
+                // RESERVATION_CANCELLED/RESERVATION_EXPIRED (fk_notification_reservation_id,
+                // ON DELETE RESTRICT) — supprimée avant la Reservation.
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.id = :id")
+                        .setParameter("id", reservationId).executeUpdate();
                 reservationRepository.deleteById(reservationId);
                 reservationRepository.flush();
                 copyRepository.deleteById(finalCopyId);
@@ -579,6 +599,11 @@ class ReservationServiceConcurrencyTests {
         } finally {
             Long finalCopyId = copyId;
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.6 : expiration/promotion crée désormais RESERVATION_EXPIRED/
+                // RESERVATION_READY (fk_notification_reservation_id, ON DELETE RESTRICT) —
+                // supprimées avant Loan/Reservation.
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.id IN :ids")
+                        .setParameter("ids", List.of(waitingReservationId, reservationId)).executeUpdate();
                 loanRepository.findByCopyIdAndLoanStatusIn(
                                 finalCopyId, List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE, LoanStatus.RETURNED))
                         .forEach(loanRepository::delete);
@@ -805,6 +830,14 @@ class ReservationServiceConcurrencyTests {
         } finally {
             Long finalCopyId = copyId;
             transactionTemplate.executeWithoutResult(status -> {
+                // DEV-10.5/10.6 : registerReturn crée désormais LOAN_RETURNED et
+                // l'annulation/promotion crée RESERVATION_CANCELLED/RESERVATION_READY —
+                // supprimées avant Loan/Reservation (fk_notification_loan_id/
+                // fk_notification_reservation_id, ON DELETE RESTRICT).
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.loan.copy.id = :copyId")
+                        .setParameter("copyId", finalCopyId).executeUpdate();
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.id = :id")
+                        .setParameter("id", reservationId).executeUpdate();
                 loanRepository.findByCopyIdAndLoanStatusIn(
                                 finalCopyId, List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE, LoanStatus.RETURNED))
                         .forEach(loanRepository::delete);

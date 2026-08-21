@@ -117,6 +117,13 @@ class ReservationControllerTests {
     void cleanupFixtures() {
         transactionTemplate().executeWithoutResult(status -> {
             for (Long reservationId : createdReservationIds) {
+                // DEV-10.6 : création/annulation crée désormais RESERVATION_CREATED/
+                // RESERVATION_CANCELLED (fk_notification_reservation_id, ON DELETE RESTRICT)
+                // — supprimée avant la Reservation.
+                entityManager.createQuery("DELETE FROM Notification n WHERE n.reservation.id = :id")
+                        .setParameter("id", reservationId).executeUpdate();
+            }
+            for (Long reservationId : createdReservationIds) {
                 entityManager.createQuery("DELETE FROM Reservation r WHERE r.id = :id")
                         .setParameter("id", reservationId).executeUpdate();
             }

@@ -4,6 +4,8 @@ import be.primatis.catalogue.AvailabilityStatus;
 import be.primatis.catalogue.Copy;
 import be.primatis.catalogue.CopyCondition;
 import be.primatis.exception.ConflictException;
+import be.primatis.notification.NotificationService;
+import be.primatis.notification.NotificationType;
 import be.primatis.setting.ApplicationSettingService;
 import be.primatis.user.AppUser;
 import be.primatis.user.MemberExpirationPolicy;
@@ -65,14 +67,17 @@ public class ReservationAssignmentService {
     private final ReservationRepository reservationRepository;
     private final ApplicationSettingService applicationSettingService;
     private final MemberExpirationPolicy memberExpirationPolicy;
+    private final NotificationService notificationService;
 
     public ReservationAssignmentService(
             ReservationRepository reservationRepository,
             ApplicationSettingService applicationSettingService,
-            MemberExpirationPolicy memberExpirationPolicy) {
+            MemberExpirationPolicy memberExpirationPolicy,
+            NotificationService notificationService) {
         this.reservationRepository = reservationRepository;
         this.applicationSettingService = applicationSettingService;
         this.memberExpirationPolicy = memberExpirationPolicy;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -113,6 +118,18 @@ public class ReservationAssignmentService {
      * ConflictException} ({@code RESERVATION_ASSIGNMENT_CONTENTION}, 409),
      * rollback complet — jamais un {@code AVAILABLE} silencieux masquant
      * une Reservation potentiellement encore satisfaisable.
+     *
+     * <p><b>{@code RESERVATION_READY}</b> (DEV-10.6, DEV-DEC-0056) : émise
+     * ici, au point unique réel de mutation {@code WAITING → READY},
+     * plutôt que dupliquée dans chacun des trois appelants ({@code
+     * LoanService.registerReturn}, {@code ReservationService.
+     * cancelReservationForUser}, {@code ReservationExpirationService.
+     * expireReservationIfStillDue}) — garantit mécaniquement l'invariant
+     * pour tout appelant présent ou futur. Aucune frontière transactionnelle
+     * propre introduite (cette classe n'en a jamais porté) : {@code
+     * NotificationService.createForReservation} participe donc à la
+     * transaction déjà ouverte par l'appelant, jamais {@code REQUIRES_NEW}.
+     * Jamais émise lorsque la file est vide (branche {@link #releaseCopy}).
      */
     public void assignNextAdmissibleWaitingReservationOrMakeAvailable(Copy copy, Instant now) {
         Set<Long> excludedIds = new LinkedHashSet<>();
@@ -153,6 +170,9 @@ public class ReservationAssignmentService {
             reservation.setAssignedCopy(copy);
             reservation.setExpirationDate(now.plus(holdHours, ChronoUnit.HOURS));
             reservation.setUpdatedAt(now);
+
+            notificationService.createForReservation(reservation, NotificationType.RESERVATION_READY,
+                    "Réservation disponible", "Votre réservation est prête à être retirée.");
 
             copy.setAvailabilityStatus(AvailabilityStatus.RESERVED);
             return;

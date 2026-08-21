@@ -11,6 +11,8 @@ import be.primatis.fine.FineService;
 import be.primatis.fine.FineStatus;
 import be.primatis.loan.dto.CreateLoanRequest;
 import be.primatis.loan.dto.LoanResponse;
+import be.primatis.notification.NotificationService;
+import be.primatis.notification.NotificationType;
 import be.primatis.reservation.Reservation;
 import be.primatis.reservation.ReservationAssignmentService;
 import be.primatis.reservation.ReservationRepository;
@@ -91,6 +93,7 @@ public class LoanService {
     private final ApplicationSettingService applicationSettingService;
     private final MemberExpirationPolicy memberExpirationPolicy;
     private final ReservationAssignmentService reservationAssignmentService;
+    private final NotificationService notificationService;
     private final Clock clock;
 
     public LoanService(
@@ -103,6 +106,7 @@ public class LoanService {
             ApplicationSettingService applicationSettingService,
             MemberExpirationPolicy memberExpirationPolicy,
             ReservationAssignmentService reservationAssignmentService,
+            NotificationService notificationService,
             Clock clock) {
         this.loanRepository = loanRepository;
         this.appUserRepository = appUserRepository;
@@ -113,6 +117,7 @@ public class LoanService {
         this.applicationSettingService = applicationSettingService;
         this.memberExpirationPolicy = memberExpirationPolicy;
         this.reservationAssignmentService = reservationAssignmentService;
+        this.notificationService = notificationService;
         this.clock = clock;
     }
 
@@ -323,8 +328,17 @@ public class LoanService {
      * <em>avant</em> l'appel à {@link FineService#createForLateReturnIfApplicable}
      * (DEV-DEC-0048) — la seule branche de ce workflow qui dépend
      * désormais de la lateness, entièrement déléguée à {@link FineService}
-     * (aucun calcul de retard dupliqué ici). Notification toujours
-     * différée à DEV-10.
+     * (aucun calcul de retard dupliqué ici).
+     *
+     * <p><b>{@code LOAN_RETURNED}</b> (DEV-10.5, DEV-DEC-0055) : {@link
+     * NotificationService#createForLoan} appelé inconditionnellement, juste
+     * après que {@code loanStatus} ait réellement basculé à {@code
+     * RETURNED} et <em>avant</em> {@link
+     * FineService#createForLateReturnIfApplicable} (ordre cosmétique reflétant
+     * la mutation métier — le retour est toujours acquis, la Fine ne l'est
+     * que conditionnellement). Même transaction que {@code registerReturn}
+     * (jamais {@code REQUIRES_NEW}) : {@code createForLoan} ne porte pas sa
+     * propre frontière transactionnelle (DEV-10.4).
      *
      * <p><b>« Copy cohérent » (§5 de la mission) est scopé à
      * {@code GOOD}/{@code DAMAGED}</b>, jamais à {@code LOST}/{@code
@@ -370,6 +384,9 @@ public class LoanService {
         loan.setReturnDate(LocalDate.now(clock));
         loan.setLoanStatus(LoanStatus.RETURNED);
         loan.setUpdatedAt(now);
+
+        notificationService.createForLoan(loan, NotificationType.LOAN_RETURNED,
+                "Prêt retourné", "Le retour de votre prêt a bien été enregistré.");
 
         fineService.createForLateReturnIfApplicable(loan, now);
 
