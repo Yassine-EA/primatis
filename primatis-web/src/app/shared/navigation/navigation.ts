@@ -84,6 +84,16 @@ export class Navigation {
     // entrées pour un sous-concept d'une même permission.
     { label: 'Gestion des articles', routerLink: '/staff/articles', requiredPermissions: ['ARTICLE_MANAGE'] },
     { label: 'Administration', routerLink: '/admin/users', requiredRoles: ['ROLE_ADMIN'] },
+    // DEV-12.3 : même principe exact que 'Prêts'/'Réservations'/'Amendes'/
+    // 'Gestion des articles' — SETTING_READ pilote la visibilité de
+    // l'entrée, comme le guard réel de la route ; l'action mutatrice
+    // SETTING_MANAGE reste contrôlée dans AdminSettingsPage elle-même.
+    // Entrée dédiée (pas de sous-menu) : aucune source n'impose une forme
+    // de navigation Admin unique (DEV-12.1 §22.4, IMPLEMENTATION FREEDOM) ;
+    // 'Administration'/'Paramètres' coexistent, précédent transposé de
+    // 'Espace personnel'/'Gestion du catalogue' (deux entrées staff
+    // distinctes plutôt qu'un sous-menu).
+    { label: 'Paramètres', routerLink: '/admin/settings', requiredPermissions: ['SETTING_READ'] },
   ];
 
   constructor() {

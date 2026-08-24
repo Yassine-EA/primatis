@@ -1,0 +1,64 @@
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  header="Modifier le paramètre"
+  [closable]="!submitting()"
+  (onHide)="cancel()"
+>
+  @if (setting(); as current) {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      @if (errorMessage(); as message) {
+        <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+      }
+
+      <div class="form-field form-field-readonly">
+        <span class="form-field-label">Clé</span>
+        <span>{{ current.settingKey }}</span>
+      </div>
+
+      <div class="form-field form-field-readonly">
+        <span class="form-field-label">Type</span>
+        <span>{{ current.valueType }}</span>
+      </div>
+
+      <div class="form-field form-field-readonly">
+        <span class="form-field-label">Description</span>
+        <span>{{ current.description }}</span>
+      </div>
+
+      <div class="form-field">
+        <label for="setting-value">Valeur</label>
+        <input pInputText id="setting-value" formControlName="settingValue" />
+        @if (form.controls.settingValue.invalid && form.controls.settingValue.touched) {
+          @if (form.controls.settingValue.hasError('required')) {
+            <p-message severity="error" text="La valeur est requise." />
+          }
+          @if (form.controls.settingValue.hasError('notInteger')) {
+            <p-message severity="error" text="La valeur doit être un nombre entier." />
+          }
+          @if (form.controls.settingValue.hasError('notDecimal')) {
+            <p-message severity="error" text="La valeur doit être un nombre décimal." />
+          }
+          @if (form.controls.settingValue.hasError('notPositive')) {
+            <p-message severity="error" text="La valeur doit être strictement positive." />
+          }
+        }
+        @if (fieldError('settingValue'); as message) {
+          <p-message severity="error" [text]="message" />
+        }
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          pButton
+          label="Annuler"
+          severity="secondary"
+          [disabled]="submitting()"
+          (click)="cancel()"
+        ></button>
+        <button type="submit" pButton label="Enregistrer" [disabled]="submitting()"></button>
+      </div>
+    </form>
+  }
+</p-dialog>
