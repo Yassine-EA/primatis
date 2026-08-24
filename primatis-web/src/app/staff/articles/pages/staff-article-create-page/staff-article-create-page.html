@@ -1,0 +1,38 @@
+<h1>Créer un article</h1>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  @if (errorMessage(); as message) {
+    <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+  }
+
+  <div class="form-field">
+    <label for="article-title">Titre</label>
+    <input pInputText id="article-title" formControlName="title" maxlength="255" />
+    @if (form.controls.title.invalid && form.controls.title.touched) {
+      <p-message severity="error" text="Le titre est requis (255 caractères maximum)." />
+    }
+    @if (fieldError('title'); as message) {
+      <p-message severity="error" [text]="message" />
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="article-summary">Résumé</label>
+    <input pInputText id="article-summary" formControlName="summary" />
+  </div>
+
+  <div class="form-field">
+    <label for="article-content">Contenu</label>
+    <textarea pTextarea id="article-content" formControlName="content" rows="12"></textarea>
+    @if (form.controls.content.invalid && form.controls.content.touched) {
+      <p-message severity="error" text="Le contenu est requis." />
+    }
+    @if (fieldError('content'); as message) {
+      <p-message severity="error" [text]="message" />
+    }
+  </div>
+
+  <div class="form-actions">
+    <button pButton type="submit" label="Créer l'article" [disabled]="submitting()"></button>
+  </div>
+</form>

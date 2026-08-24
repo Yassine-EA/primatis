@@ -71,12 +71,13 @@ describe('Navigation + real AuthService integration', () => {
     return anchors.map((anchor) => anchor.textContent?.trim() ?? '');
   }
 
-  it('should show only Accueil, Catalogue and Connexion for a real anonymous AuthService', () => {
+  it('should show only Accueil, Catalogue, Articles and Connexion for a real anonymous AuthService', () => {
     const { fixture } = renderWithClaims(null);
 
-    // DEV-06.8 : Catalogue est désormais toujours visible (aucun requiredRoles),
-    // même statut qu'Accueil — déviation mécanique, pas une régression.
-    expect(linkLabels(fixture)).toEqual(['Accueil', 'Catalogue']);
+    // DEV-06.8/DEV-11.11 : Catalogue et Articles sont désormais toujours
+    // visibles (aucun requiredRoles), même statut qu'Accueil — déviation
+    // mécanique, pas une régression.
+    expect(linkLabels(fixture)).toEqual(['Accueil', 'Catalogue', 'Articles']);
     expect(fixture.nativeElement.textContent).toContain('Connexion');
   });
 

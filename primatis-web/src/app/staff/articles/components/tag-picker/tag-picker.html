@@ -1,0 +1,20 @@
+@if (loading()) {
+  <app-loading-state message="Chargement des tags…" />
+} @else if (error(); as currentError) {
+  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+} @else {
+  <div class="tag-picker">
+    <p-multiselect
+      inputId="tag-picker-select"
+      [options]="allTags()"
+      [ngModel]="selectedIds()"
+      (ngModelChange)="onSelectionChange($event)"
+      optionLabel="label"
+      optionValue="id"
+      [filter]="true"
+      filterBy="label,code"
+      [disabled]="disabled()"
+      placeholder="Sélectionner des tags"
+    />
+  </div>
+}
