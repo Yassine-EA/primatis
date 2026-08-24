@@ -2,6 +2,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { permissionGuard } from './core/guards/permission.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { routes } from './app.routes';
+import { AdminSettingsPage } from './admin/settings/pages/admin-settings-page/admin-settings-page';
 import { MemberFinesPage } from './member/fines/pages/member-fines-page/member-fines-page';
 import { MemberLoansPage } from './member/loans/pages/member-loans-page/member-loans-page';
 import { MemberNotificationsPage } from './member/notifications/pages/member-notifications-page/member-notifications-page';
@@ -302,6 +303,47 @@ describe('Application routes', () => {
     const childPaths = usersRoute?.children?.map((child) => child.path) ?? [];
 
     expect(childPaths.indexOf('new')).toBeLessThan(childPaths.indexOf(':id'));
+  });
+
+  it('should protect /admin/settings with permissionGuard and SETTING_READ (DEV-12.3)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const settingsRoute = adminRoute?.children?.find((child) => child.path === 'settings');
+
+    expect(settingsRoute?.canActivate).toContain(permissionGuard);
+    expect(settingsRoute?.data?.['permissions']).toEqual(['SETTING_READ']);
+  });
+
+  it('should never require SETTING_MANAGE at the /admin/settings route level (DEV-12.3)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const settingsRoute = adminRoute?.children?.find((child) => child.path === 'settings');
+
+    expect(settingsRoute?.data?.['permissions']).not.toContain('SETTING_MANAGE');
+  });
+
+  it('should expose a single list route as the only child of /admin/settings, no :id route (DEV-12.3)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const settingsRoute = adminRoute?.children?.find((child) => child.path === 'settings');
+    const childPaths = settingsRoute?.children?.map((child) => child.path) ?? [];
+
+    expect(childPaths).toEqual(['']);
+  });
+
+  it('should lazy-load AdminSettingsPage for /admin/settings (DEV-12.3)', async () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const settingsRoute = adminRoute?.children?.find((child) => child.path === 'settings');
+    const listRoute = settingsRoute?.children?.find((child) => child.path === '');
+
+    expect(listRoute?.loadComponent).toBeDefined();
+    const loadedComponent = await listRoute!.loadComponent!();
+
+    expect(loadedComponent).toBe(AdminSettingsPage);
+  });
+
+  it('should never change the existing /admin redirect to /admin/users (DEV-12.3)', () => {
+    const adminRoute = routes.find((candidate) => candidate.path === 'admin');
+    const redirectChild = adminRoute?.children?.find((child) => child.path === '');
+
+    expect(redirectChild?.redirectTo).toBe('users');
   });
 
   it('should redirect the bare /member zone to /member/profile (DEV-05.13)', () => {

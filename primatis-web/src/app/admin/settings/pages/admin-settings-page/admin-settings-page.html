@@ -1,0 +1,52 @@
+<h1>Paramètres applicatifs</h1>
+
+@if (loading() && rows().length === 0 && !error()) {
+  <app-loading-state message="Chargement des paramètres…" />
+} @else if (error(); as currentError) {
+  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+} @else if (rows().length === 0) {
+  <app-empty-state title="Aucun paramètre" message="Aucun paramètre applicatif n'est disponible." />
+} @else {
+  <p-table [value]="rows()" [paginator]="false">
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Clé</th>
+        <th scope="col">Valeur actuelle</th>
+        <th scope="col">Type</th>
+        <th scope="col">Description</th>
+        <th scope="col">Dernière modification</th>
+        @if (canManageSettings) {
+          <th scope="col">Actions</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-setting>
+      <tr>
+        <td>{{ setting.settingKey }}</td>
+        <td>{{ setting.settingValue }}</td>
+        <td>{{ valueTypeLabel(setting) }}</td>
+        <td>{{ setting.description }}</td>
+        <td>{{ auditLabel(setting) }}</td>
+        @if (canManageSettings) {
+          <td>
+            <button
+              type="button"
+              pButton
+              severity="secondary"
+              label="Modifier"
+              [attr.aria-label]="'Modifier ' + setting.settingKey"
+              (click)="edit(setting)"
+            ></button>
+          </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+}
+
+<app-setting-value-edit-dialog
+  [visible]="editingSetting() !== null"
+  [setting]="editingSetting()"
+  (closed)="closeDialog()"
+  (saved)="onSaved($event)"
+/>

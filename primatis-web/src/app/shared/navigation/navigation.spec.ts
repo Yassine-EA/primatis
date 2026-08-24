@@ -442,6 +442,48 @@ describe('Navigation', () => {
     expect(fixture.nativeElement.querySelector('a[href="/staff/users"]')).not.toBeNull();
   });
 
+  it('should show the Paramètres link for SETTING_READ (DEV-12.3)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['SETTING_READ']);
+    render();
+
+    expect(linkLabels()).toContain('Paramètres');
+  });
+
+  it('should point the Paramètres link at /admin/settings (DEV-12.3)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['SETTING_READ']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/admin/settings"]')).not.toBeNull();
+  });
+
+  it('should hide the Paramètres link for a user without SETTING_READ (DEV-12.3)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
+    authServiceMock.permissions.mockReturnValue([]);
+    render();
+
+    expect(linkLabels()).not.toContain('Paramètres');
+  });
+
+  it('should hide the Paramètres link for a user with only SETTING_MANAGE, without SETTING_READ (DEV-12.3)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['SETTING_MANAGE']);
+    render();
+
+    expect(linkLabels()).not.toContain('Paramètres');
+  });
+
+  it('should never break the existing Administration (/admin/users) link (DEV-12.3)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
+    render();
+
+    expect(linkLabels()).toContain('Administration');
+    expect(fixture.nativeElement.querySelector('a[href="/admin/users"]')).not.toBeNull();
+  });
+
   it('should call AuthService.logout() and navigate to "/" when logging out', () => {
     authServiceMock.authenticated.mockReturnValue(true);
     render();

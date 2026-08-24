@@ -1,9 +1,16 @@
 package be.primatis.setting;
 
+import be.primatis.exception.BusinessRuleException;
+import be.primatis.exception.ResourceNotFoundException;
+import be.primatis.setting.web.SettingResponse;
+import be.primatis.user.AppUserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.util.List;
 
 /**
  * Point d'accès métier unique à {@code application_setting} (backend.md
@@ -25,14 +32,31 @@ import java.math.BigDecimal;
  * configuration serveur, jamais masquée par une valeur codée en dur ici —
  * traduite en 500 {@code INTERNAL_ERROR} par {@code GlobalExceptionHandler}
  * (le client n'est jamais responsable d'une configuration manquante).
+ *
+ * <p>{@link #listSettings()}/{@link #updateSettingValue(String, String, Long)}
+ * (DEV-12.2) exposent l'administration ({@code SETTING_READ}/{@code
+ * SETTING_MANAGE}, {@code ROLE_ADMIN} uniquement — bootstrap V002) —
+ * {@code @PreAuthorize} au niveau Service, jamais au niveau Controller,
+ * même précédent que {@code UserService} (DEV-12.1 §11).
  */
 @Service
 public class ApplicationSettingService {
 
-    private final ApplicationSettingRepository applicationSettingRepository;
+    private static final String SETTING_NOT_FOUND_CODE = "SETTING_NOT_FOUND";
+    private static final String INTEGER_TYPE = "INTEGER";
+    private static final String DECIMAL_TYPE = "DECIMAL";
 
-    public ApplicationSettingService(ApplicationSettingRepository applicationSettingRepository) {
+    private final ApplicationSettingRepository applicationSettingRepository;
+    private final AppUserRepository appUserRepository;
+    private final Clock clock;
+
+    public ApplicationSettingService(
+            ApplicationSettingRepository applicationSettingRepository,
+            AppUserRepository appUserRepository,
+            Clock clock) {
         this.applicationSettingRepository = applicationSettingRepository;
+        this.appUserRepository = appUserRepository;
+        this.clock = clock;
     }
 
     @Transactional(readOnly = true)
@@ -70,6 +94,98 @@ public class ApplicationSettingService {
         } catch (NumberFormatException e) {
             throw new IllegalStateException("Paramètre applicatif " + key
                     + " contient une valeur DECIMAL invalide : " + setting.getSettingValue(), e);
+        }
+    }
+
+    /**
+     * Consultation administrative (DEV-12.2, {@code GET /api/v1/settings}) :
+     * les six paramètres existants, triés par {@code settingKey} (ordre
+     * déterministe, {@link ApplicationSettingRepository#findAllByOrderBySettingKeyAsc}).
+     */
+    @PreAuthorize("hasAuthority('SETTING_READ')")
+    @Transactional(readOnly = true)
+    public List<SettingResponse> listSettings() {
+        return applicationSettingRepository.findAllByOrderBySettingKeyAsc().stream()
+                .map(SettingResponse::from)
+                .toList();
+    }
+
+    /**
+     * Modification administrative (DEV-12.2, {@code PATCH
+     * /api/v1/settings/{settingKey}}) de la seule {@code settingValue} d'une
+     * clé existante. {@code settingKey}/{@code valueType}/{@code
+     * description} ne sont jamais modifiés par ce workflow — hors scope
+     * DEV-12.2 (mandat §5 : aucune modification de clé, aucune modification
+     * de type, aucune modification de description). Aucune création de clé
+     * : une clé absente échoue en {@link ResourceNotFoundException} (404),
+     * jamais une création implicite.
+     *
+     * <p>{@code rawValue} est normalisé (trim) avant validation/persistance
+     * — normalisation purement technique, aucune règle métier nouvelle
+     * (mandat §9). La validation dépend du {@code value_type} déjà persisté
+     * de la clé : entier ou décimal strictement positif pour les six clés
+     * réelles actuelles ; tout autre {@code value_type} (schéma autorisant
+     * {@code BOOLEAN}/{@code STRING}, aucune clé V1 réelle) échoue
+     * explicitement, jamais un fallback silencieux (mandat §9, même
+     * principe que {@link #getInteger(String)}/{@link #getDecimal(String)}).
+     *
+     * <p>Aucun verrou pessimiste : mutation administrative mono-ligne, même
+     * précédent que {@code UserService#updateAccountStatus} (aucun invariant
+     * multi-lignes à protéger, contrairement à Copy/Loan/Reservation —
+     * backend.md « Concurrency » ne cite que ces trois domaines critiques).
+     */
+    @PreAuthorize("hasAuthority('SETTING_MANAGE')")
+    @Transactional
+    public SettingResponse updateSettingValue(String settingKey, String rawValue, Long actingUserId) {
+        ApplicationSetting setting = applicationSettingRepository.findBySettingKey(settingKey)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        SETTING_NOT_FOUND_CODE, "Aucun paramètre applicatif pour la clé " + settingKey + "."));
+
+        String normalizedValue = rawValue.trim();
+        validateValueForType(settingKey, setting.getValueType(), normalizedValue);
+
+        setting.setSettingValue(normalizedValue);
+        setting.setUpdatedAt(clock.instant());
+        setting.setUpdatedByUser(appUserRepository.getReferenceById(actingUserId));
+
+        return SettingResponse.from(setting);
+    }
+
+    private void validateValueForType(String settingKey, String valueType, String value) {
+        switch (valueType) {
+            case INTEGER_TYPE -> validatePositiveInteger(settingKey, value);
+            case DECIMAL_TYPE -> validatePositiveDecimal(settingKey, value);
+            default -> throw new BusinessRuleException("SETTING_VALUE_TYPE_NOT_SUPPORTED",
+                    "Le paramètre " + settingKey + " est de type " + valueType
+                            + ", non pris en charge par la modification administrative en V1.");
+        }
+    }
+
+    private void validatePositiveInteger(String settingKey, String value) {
+        int parsed;
+        try {
+            parsed = Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            throw new BusinessRuleException("SETTING_VALUE_NOT_INTEGER",
+                    "La valeur de " + settingKey + " doit être un entier : " + value + ".");
+        }
+        if (parsed <= 0) {
+            throw new BusinessRuleException("SETTING_VALUE_NOT_POSITIVE",
+                    "La valeur de " + settingKey + " doit être strictement positive.");
+        }
+    }
+
+    private void validatePositiveDecimal(String settingKey, String value) {
+        BigDecimal parsed;
+        try {
+            parsed = new BigDecimal(value);
+        } catch (NumberFormatException e) {
+            throw new BusinessRuleException("SETTING_VALUE_NOT_DECIMAL",
+                    "La valeur de " + settingKey + " doit être un nombre décimal : " + value + ".");
+        }
+        if (parsed.signum() <= 0) {
+            throw new BusinessRuleException("SETTING_VALUE_NOT_POSITIVE",
+                    "La valeur de " + settingKey + " doit être strictement positive.");
         }
     }
 }

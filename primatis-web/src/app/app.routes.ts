@@ -332,6 +332,28 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        // Segment 'settings' (DEV-12.3, SETTING_READ) — sibling de 'users',
+        // même structure (segment guardé par permissionGuard, un seul
+        // enfant liste). SETTING_READ pilote la route, comme pour
+        // /staff/loans|reservations|fines : SETTING_MANAGE n'est vérifiée
+        // qu'à l'intérieur d'AdminSettingsPage (bouton "Modifier"), jamais
+        // au niveau du guard de route. Un seul écran (liste + modification
+        // de valeur via dialog) : aucune création/suppression de clé,
+        // aucune route ':id' (six paramètres fixes, DEV-12.1/DEV-12.2).
+        path: 'settings',
+        canActivate: [permissionGuard],
+        data: { permissions: ['SETTING_READ'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./admin/settings/pages/admin-settings-page/admin-settings-page').then(
+                (m) => m.AdminSettingsPage,
+              ),
+          },
+        ],
+      },
     ],
   },
   {
