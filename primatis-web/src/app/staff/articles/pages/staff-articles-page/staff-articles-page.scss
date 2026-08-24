@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-block-end: 1rem;
+}
+
+.create-link,
+.tags-link {
+  display: inline-block;
+}

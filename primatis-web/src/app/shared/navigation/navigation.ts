@@ -43,6 +43,9 @@ export class Navigation {
     // Catalogue public (DEV-06.8) : toujours visible, aucun requiredRoles —
     // surface backend permitAll (DEV-DEC-0027), même statut qu'Accueil.
     { label: 'Catalogue', routerLink: '/catalogue' },
+    // Articles public (DEV-11.11) : toujours visible, aucun requiredRoles —
+    // surface backend permitAll, même statut exact que Catalogue.
+    { label: 'Articles', routerLink: '/articles' },
     { label: 'Espace membre', routerLink: '/member/profile', requiredRoles: ['ROLE_MEMBER'] },
     { label: 'Mes prêts', routerLink: '/member/loans', requiredRoles: ['ROLE_MEMBER'] },
     // DEV-08.14 : ownership self-service par identité JWT, jamais par
@@ -72,6 +75,14 @@ export class Navigation {
     // route ; l'action mutatrice FINE_MANAGE reste contrôlée dans la page
     // elle-même.
     { label: 'Amendes', routerLink: '/staff/fines', requiredPermissions: ['FINE_READ'] },
+    // DEV-11.12 : même principe exact que 'Prêts'/'Réservations'/'Amendes'
+    // — ARTICLE_MANAGE pilote la visibilité de l'entrée, comme le guard
+    // réel de la route (même permission que la lecture staff tous statuts,
+    // DEV-11.12A). La gestion des Tags (/staff/articles/tags) n'a pas sa
+    // propre entrée de navigation : atteinte depuis un lien dans
+    // StaffArticlesPage, cohérent avec le principe de ne pas multiplier les
+    // entrées pour un sous-concept d'une même permission.
+    { label: 'Gestion des articles', routerLink: '/staff/articles', requiredPermissions: ['ARTICLE_MANAGE'] },
     { label: 'Administration', routerLink: '/admin/users', requiredRoles: ['ROLE_ADMIN'] },
   ];
 

@@ -64,6 +64,20 @@
     </dependency>
 
     <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <!-- Sanitization HTML d'Article.content (DEV-11.4, business-rules.md
+           §7.6/§11.6, coding-conventions.md §65) : bibliothèque Java
+           spécialisée et maintenue, API Safelist dédiée à l'allowlist HTML,
+           zéro dépendance transitive (contrairement à owasp-java-html-sanitizer,
+           qui dépend de Guava) — choix documenté dans le log DEV-11.4 §6
+           (IMPLEMENTATION FREEDOM encadrée, aucune DEV-DEC requise). Non
+           gérée par le BOM spring-boot-starter-parent, version déclarée
+           explicitement (dernière version stable sur repo1.maven.org). -->
+      <version>1.23.1</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>

@@ -1,0 +1,30 @@
+@if (loading()) {
+  <app-loading-state message="Chargement de l’article…" />
+} @else if (error(); as currentError) {
+  <app-error-state [message]="currentError.message" />
+} @else if (article(); as currentArticle) {
+  <article class="article-detail">
+    <h1>{{ currentArticle.title }}</h1>
+
+    <p class="article-detail-meta">
+      {{ authorName(currentArticle) }}
+      @if (currentArticle.publishedAt) {
+        <span> — {{ currentArticle.publishedAt }}</span>
+      }
+    </p>
+
+    @if (currentArticle.tags.length > 0) {
+      <div class="article-detail-tags">
+        @for (tag of currentArticle.tags; track tag.id) {
+          <p-tag [value]="tag.label" />
+        }
+      </div>
+    }
+
+    @if (currentArticle.summary) {
+      <p class="article-detail-summary">{{ currentArticle.summary }}</p>
+    }
+
+    <div class="article-detail-content" [innerHTML]="currentArticle.content"></div>
+  </article>
+}

@@ -1,0 +1,51 @@
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  [header]="isCreate ? 'Nouveau tag' : 'Modifier le tag'"
+  [closable]="!submitting()"
+  (onHide)="cancel()"
+>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    @if (errorMessage(); as message) {
+      <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+    }
+
+    <div class="form-field">
+      <label for="tag-code">Code</label>
+      <input pInputText id="tag-code" formControlName="code" maxlength="50" />
+      @if (form.controls.code.invalid && form.controls.code.touched) {
+        <p-message severity="error" text="Le code est requis (50 caractères maximum)." />
+      }
+      @if (fieldError('code'); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+      @if (!isCreate) {
+        <p class="form-hint">Le code est stable et ne peut plus être modifié après création.</p>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="tag-label">Libellé</label>
+      <input pInputText id="tag-label" formControlName="label" maxlength="100" />
+      @if (form.controls.label.invalid && form.controls.label.touched) {
+        <p-message severity="error" text="Le libellé est requis (100 caractères maximum)." />
+      }
+      @if (fieldError('label'); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="tag-description">Description</label>
+      <input pInputText id="tag-description" formControlName="description" maxlength="255" />
+      @if (fieldError('description'); as message) {
+        <p-message severity="error" [text]="message" />
+      }
+    </div>
+
+    <div class="form-actions">
+      <button type="button" pButton label="Annuler" severity="secondary" [disabled]="submitting()" (click)="cancel()"></button>
+      <button type="submit" pButton label="Enregistrer" [disabled]="submitting()"></button>
+    </div>
+  </form>
+</p-dialog>

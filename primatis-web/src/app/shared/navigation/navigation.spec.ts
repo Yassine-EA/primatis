@@ -60,10 +60,10 @@ describe('Navigation', () => {
     vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
   });
 
-  it('should show only Accueil, Catalogue and a Connexion link for an anonymous user', () => {
+  it('should show only Accueil, Catalogue, Articles and a Connexion link for an anonymous user', () => {
     render();
 
-    expect(linkLabels()).toEqual(['Accueil', 'Catalogue']);
+    expect(linkLabels()).toEqual(['Accueil', 'Catalogue', 'Articles']);
     expect(fixture.nativeElement.textContent).toContain('Connexion');
     expect(fixture.nativeElement.textContent).not.toContain('Déconnexion');
   });
@@ -72,6 +72,36 @@ describe('Navigation', () => {
     render();
 
     expect(fixture.nativeElement.querySelector('a[href="/catalogue"]')).not.toBeNull();
+  });
+
+  it('should show the Articles link pointing at /articles for an anonymous user (DEV-11.11)', () => {
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/articles"]')).not.toBeNull();
+  });
+
+  it('should show the Articles link for ROLE_MEMBER (DEV-11.11)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_MEMBER']);
+    render();
+
+    expect(linkLabels()).toContain('Articles');
+  });
+
+  it('should show the Articles link for ROLE_LIBRARIAN (DEV-11.11)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    render();
+
+    expect(linkLabels()).toContain('Articles');
+  });
+
+  it('should show the Articles link for ROLE_ADMIN (DEV-11.11)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_ADMIN']);
+    render();
+
+    expect(linkLabels()).toContain('Articles');
   });
 
   it('should show the Catalogue link for ROLE_MEMBER (DEV-06.8)', () => {
@@ -369,6 +399,39 @@ describe('Navigation', () => {
     render();
 
     expect(linkLabels()).not.toContain('Gestion du catalogue');
+  });
+
+  it('should show the Gestion des articles link for ARTICLE_MANAGE (DEV-11.12)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['ARTICLE_MANAGE']);
+    render();
+
+    expect(linkLabels()).toContain('Gestion des articles');
+  });
+
+  it('should point the Gestion des articles link at /staff/articles (DEV-11.12)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['ARTICLE_MANAGE']);
+    render();
+
+    expect(fixture.nativeElement.querySelector('a[href="/staff/articles"]')).not.toBeNull();
+  });
+
+  it('should hide the Gestion des articles link for a user without ARTICLE_MANAGE (DEV-11.12)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.roles.mockReturnValue(['ROLE_LIBRARIAN']);
+    authServiceMock.permissions.mockReturnValue([]);
+    render();
+
+    expect(linkLabels()).not.toContain('Gestion des articles');
+  });
+
+  it('should hide the Gestion des articles link for a user with only ARTICLE_PUBLISH, without ARTICLE_MANAGE (DEV-11.12)', () => {
+    authServiceMock.authenticated.mockReturnValue(true);
+    authServiceMock.permissions.mockReturnValue(['ARTICLE_PUBLISH']);
+    render();
+
+    expect(linkLabels()).not.toContain('Gestion des articles');
   });
 
   it('should point the Espace personnel link at /staff/users (DEV-05.11)', () => {

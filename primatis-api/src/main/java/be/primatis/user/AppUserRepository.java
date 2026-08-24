@@ -82,4 +82,18 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
      */
     Page<AppUser> findByMemberNumberContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
             String memberNumber, String firstName, String lastName, String email, Pageable pageable);
+
+    /**
+     * Population destinataire de la diffusion {@code ARTICLE_PUBLISHED}
+     * (DEV-11.7, business-rules.md §6.5/§6.10 : « recipient population →
+     * AppUser where MemberStatus = ACTIVE »). Filtre strictement sur
+     * {@code memberStatus} — jamais {@code AccountStatus}, rôles ou
+     * permissions (mission DEV-11.7 §11 : aucune source ne l'exige).
+     * Chargement complet (pas de {@link Pageable}) : la baseline exige un
+     * fanout transactionnel synchrone (architecture.md §7.2), le volume
+     * réel visé par PRIMATIS (bibliothèque, adhérents V1) ne justifie pas
+     * un batching — IMPLEMENTATION FREEDOM documentée au log DEV-11.7 §25,
+     * pas une limite arbitraire.
+     */
+    List<AppUser> findByMemberStatus(MemberStatus memberStatus);
 }

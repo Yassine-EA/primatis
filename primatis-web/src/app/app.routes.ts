@@ -42,6 +42,21 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./catalogue/pages/title-detail-page/title-detail-page').then((m) => m.TitleDetailPage),
       },
+      {
+        // Articles public (DEV-11.11) : surface backend permitAll
+        // (Article.articleStatus = PUBLISHED uniquement) — aucun guard,
+        // même principe exact que 'catalogue'/'catalogue/:id'. Deux routes
+        // distinctes (pas de segment parent avec redirectTo), même
+        // raisonnement que Catalogue.
+        path: 'articles',
+        loadComponent: () =>
+          import('./articles/pages/article-list-page/article-list-page').then((m) => m.ArticleListPage),
+      },
+      {
+        path: 'articles/:slug',
+        loadComponent: () =>
+          import('./articles/pages/article-detail-page/article-detail-page').then((m) => m.ArticleDetailPage),
+      },
     ],
   },
   {
@@ -170,6 +185,50 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./staff/catalogue/pages/staff-title-detail-page/staff-title-detail-page').then(
                 (m) => m.StaffTitleDetailPage,
+              ),
+          },
+        ],
+      },
+      {
+        // Segment 'articles' (DEV-11.12, ARTICLE_MANAGE) — sibling de
+        // 'users'/'catalogue', même structure : 'new' et 'tags' déclarés
+        // avant ':id' pour que le routing statique l'emporte sur le
+        // paramétrique (même précédent que 'catalogue'). 'tags' hérite du
+        // même guard/permission ARTICLE_MANAGE que le reste du segment —
+        // le CRUD Tag (DEV-11.9) ne justifie pas une permission ou un
+        // segment /staff/tags séparés (business-rules.md §7.13,
+        // DEV-DEC-0060 : pas de nouvelle permission RBAC). Aucune route
+        // Copy-like séparée n'est nécessaire ici (Tags gérés inline dans
+        // le détail Article via association, sauf pour leur CRUD propre
+        // qui vit sur cette route dédiée).
+        path: 'articles',
+        canActivate: [permissionGuard],
+        data: { permissions: ['ARTICLE_MANAGE'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./staff/articles/pages/staff-articles-page/staff-articles-page').then(
+                (m) => m.StaffArticlesPage,
+              ),
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import('./staff/articles/pages/staff-article-create-page/staff-article-create-page').then(
+                (m) => m.StaffArticleCreatePage,
+              ),
+          },
+          {
+            path: 'tags',
+            loadComponent: () =>
+              import('./staff/articles/pages/staff-tags-page/staff-tags-page').then((m) => m.StaffTagsPage),
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./staff/articles/pages/staff-article-detail-page/staff-article-detail-page').then(
+                (m) => m.StaffArticleDetailPage,
               ),
           },
         ],

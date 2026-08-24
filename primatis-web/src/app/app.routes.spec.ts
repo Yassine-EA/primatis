@@ -49,6 +49,23 @@ describe('Application routes', () => {
     expect(titleDetailRoute?.canActivate).toBeUndefined();
   });
 
+  it('should expose public /articles and /articles/:slug routes under the public layout (DEV-11.11)', () => {
+    const publicRoute = routes.find((route) => route.path === '');
+    const childPaths = publicRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('articles');
+    expect(childPaths).toContain('articles/:slug');
+  });
+
+  it('should never guard /articles or /articles/:slug (DEV-11.11, backend permitAll)', () => {
+    const publicRoute = routes.find((route) => route.path === '');
+    const articleListRoute = publicRoute?.children?.find((child) => child.path === 'articles');
+    const articleDetailRoute = publicRoute?.children?.find((child) => child.path === 'articles/:slug');
+
+    expect(articleListRoute?.canActivate).toBeUndefined();
+    expect(articleDetailRoute?.canActivate).toBeUndefined();
+  });
+
   it('should protect /member, /staff and /admin with authGuard', () => {
     for (const path of ['member', 'staff', 'admin']) {
       const route = routes.find((candidate) => candidate.path === path);
@@ -120,6 +137,43 @@ describe('Application routes', () => {
     expect(childPaths.some((path) => path?.includes('copies'))).toBe(false);
     expect(childPaths).not.toContain('authors');
     expect(childPaths).not.toContain('genres');
+  });
+
+  it('should protect /staff/articles with permissionGuard and ARTICLE_MANAGE (DEV-11.12)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const articlesRoute = staffRoute?.children?.find((child) => child.path === 'articles');
+
+    expect(articlesRoute?.canActivate).toContain(permissionGuard);
+    expect(articlesRoute?.data?.['permissions']).toEqual(['ARTICLE_MANAGE']);
+  });
+
+  it('should expose the staff articles list, create, tags and detail routes as children of /staff/articles (DEV-11.12)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const articlesRoute = staffRoute?.children?.find((child) => child.path === 'articles');
+    const childPaths = articlesRoute?.children?.map((child) => child.path);
+
+    expect(childPaths).toContain('');
+    expect(childPaths).toContain('new');
+    expect(childPaths).toContain('tags');
+    expect(childPaths).toContain(':id');
+  });
+
+  it('should declare /staff/articles/new and /staff/articles/tags before /staff/articles/:id (DEV-11.12)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const articlesRoute = staffRoute?.children?.find((child) => child.path === 'articles');
+    const childPaths = articlesRoute?.children?.map((child) => child.path) ?? [];
+
+    expect(childPaths.indexOf('new')).toBeLessThan(childPaths.indexOf(':id'));
+    expect(childPaths.indexOf('tags')).toBeLessThan(childPaths.indexOf(':id'));
+  });
+
+  it('should never add a separate guard to /staff/articles/tags — it inherits ARTICLE_MANAGE from /staff/articles (DEV-11.12)', () => {
+    const staffRoute = routes.find((candidate) => candidate.path === 'staff');
+    const articlesRoute = staffRoute?.children?.find((child) => child.path === 'articles');
+    const tagsRoute = articlesRoute?.children?.find((child) => child.path === 'tags');
+
+    expect(tagsRoute?.canActivate).toBeUndefined();
+    expect(tagsRoute?.data).toBeUndefined();
   });
 
   it('should protect /staff/loans with permissionGuard and LOAN_READ (DEV-07.9)', () => {

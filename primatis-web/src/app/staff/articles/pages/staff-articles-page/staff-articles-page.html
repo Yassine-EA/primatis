@@ -1,0 +1,49 @@
+<h1>Articles</h1>
+
+<div class="page-actions">
+  <a routerLink="/staff/articles/new" class="create-link">Créer un article</a>
+  <a routerLink="/staff/articles/tags" class="tags-link">Gérer les tags</a>
+</div>
+
+@if (loading() && rows().length === 0 && !error()) {
+  <app-loading-state message="Chargement des articles…" />
+} @else if (error(); as currentError) {
+  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+} @else if (rows().length === 0) {
+  <app-empty-state title="Aucun article" message="Aucun article n'a encore été créé." />
+} @else {
+  <p-table
+    [value]="rows()"
+    [lazy]="true"
+    [lazyLoadOnInit]="false"
+    [paginator]="true"
+    [rows]="20"
+    [first]="0"
+    [totalRecords]="totalRecords()"
+    [loading]="loading()"
+    (onLazyLoad)="onLazyLoad($event)"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Titre</th>
+        <th scope="col">Statut</th>
+        <th scope="col">Auteur</th>
+        <th scope="col">Modifié le</th>
+        <th scope="col">Publié le</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>
+          <a [routerLink]="['/staff/articles', row.id]" [attr.aria-label]="'Voir l\'article ' + row.title">{{ row.title }}</a>
+        </td>
+        <td>
+          <p-tag [value]="row.articleStatus" [severity]="articleStatusSeverity(row.articleStatus)" />
+        </td>
+        <td>{{ authorName(row.author) }}</td>
+        <td>{{ row.updatedAt }}</td>
+        <td>{{ row.publishedAt ?? '—' }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+}

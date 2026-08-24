@@ -1,0 +1,55 @@
+<h1>Tags</h1>
+
+<div class="page-actions">
+  <a routerLink="/staff/articles" class="back-link">← Retour aux articles</a>
+  <button pButton type="button" label="Créer un tag" severity="secondary" (click)="openCreateDialog()"></button>
+</div>
+
+@if (loading() && rows().length === 0 && !error()) {
+  <app-loading-state message="Chargement des tags…" />
+} @else if (error(); as currentError) {
+  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+} @else if (rows().length === 0) {
+  <app-empty-state title="Aucun tag" message="Aucun tag n'a encore été créé." />
+} @else {
+  <p-table
+    [value]="rows()"
+    [lazy]="true"
+    [lazyLoadOnInit]="false"
+    [paginator]="true"
+    [rows]="20"
+    [first]="0"
+    [totalRecords]="totalRecords()"
+    [loading]="loading()"
+    (onLazyLoad)="onLazyLoad($event)"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Code</th>
+        <th scope="col">Libellé</th>
+        <th scope="col">Description</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>{{ row.code }}</td>
+        <td>{{ row.label }}</td>
+        <td>{{ row.description ?? '—' }}</td>
+        <td>
+          <button type="button" class="link-button" (click)="openEditDialog(row)">Modifier</button>
+          <button
+            type="button"
+            class="link-button"
+            [disabled]="deletingTagId() === row.id"
+            (click)="confirmDelete(row)"
+          >
+            Supprimer
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+}
+
+<app-tag-form-dialog [visible]="dialogVisible()" [tag]="dialogTag()" (closed)="closeDialog()" (saved)="onDialogSaved($event)" />
