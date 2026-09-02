@@ -68,6 +68,7 @@ def _write_selected(
     languages=SMALL_LANGUAGES,
     *,
     duplicate_edition: bool = False,
+    cover_id_for_first: int | None = None,
 ) -> None:
     rows = []
     ordinal = 1
@@ -94,6 +95,7 @@ def _write_selected(
                 "publish_date": "2020",
                 "publish_year": 2020,
                 "number_of_pages": 100 + ordinal,
+                "cover_id": cover_id_for_first if ordinal == 1 else None,
             })
             ordinal += 1
 
@@ -112,7 +114,9 @@ def _write_bpost(path: Path) -> None:
         writer.writerow({"postal_code": "6000", "locality": "Charleroi"})
 
 
-def _candidate(*, isbn=(), isbn_10=(), isbn_13=()) -> SelectedEdition:
+def _candidate(
+    *, isbn=(), isbn_10=(), isbn_13=(), number_of_pages=None, cover_id=None
+) -> SelectedEdition:
     return SelectedEdition(
         language="FR",
         language_code="fre",
@@ -129,7 +133,8 @@ def _candidate(*, isbn=(), isbn_10=(), isbn_13=()) -> SelectedEdition:
         publishers=(),
         publish_date=None,
         publish_year=None,
-        number_of_pages=None,
+        number_of_pages=number_of_pages,
+        cover_id=cover_id,
     )
 
 
@@ -198,6 +203,119 @@ def test_normalize_selected_catalogue_name_with_slash_is_not_split() -> None:
     )
 
     assert authors[0].full_name == "Charlotte Brontë / Currer Bell"
+
+
+def test_normalize_selected_catalogue_cover_id_is_propagated_from_candidate() -> None:
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(cover_id=258027)]
+    )
+
+    assert editions[0].cover_id == 258027
+
+
+def test_normalize_selected_catalogue_cover_id_absent_is_none() -> None:
+    _authors, editions, _subjects = normalize_selected_catalogue([_candidate()])
+
+    assert editions[0].cover_id is None
+
+
+def test_normalize_selected_catalogue_never_derives_cover_id_from_isbn() -> None:
+    # A real ISBN must never be used as a substitute cover identity: only
+    # a real cover_i from the Search API can ever produce a cover_id.
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(isbn=("9780306406157",))]
+    )
+
+    assert editions[0].cover_id is None
+
+
+def test_normalize_selected_catalogue_summary_from_exact_work_key() -> None:
+    work_records = {
+        "/works/OL1W": {"key": "/works/OL1W", "description": "Un résumé réel."}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate()], work_records=work_records
+    )
+
+    assert editions[0].summary == "Un résumé réel."
+
+
+def test_normalize_selected_catalogue_summary_never_matched_by_other_work_key() -> None:
+    # A Work record filed under a DIFFERENT work_key must never leak in.
+    work_records = {
+        "/works/OL999W": {"key": "/works/OL999W", "description": "Autre œuvre."}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate()], work_records=work_records
+    )
+
+    assert editions[0].summary is None
+
+
+def test_normalize_selected_catalogue_summary_without_work_records_is_none() -> None:
+    _authors, editions, _subjects = normalize_selected_catalogue([_candidate()])
+
+    assert editions[0].summary is None
+
+
+def test_normalize_selected_catalogue_page_count_from_exact_edition_key() -> None:
+    edition_records = {
+        "/books/OL1M": {"key": "/books/OL1M", "number_of_pages": 342}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(number_of_pages=None)], edition_records=edition_records
+    )
+
+    assert editions[0].page_count == 342
+
+
+def test_normalize_selected_catalogue_page_count_never_uses_another_edition() -> None:
+    # A detailed Edition record filed under a DIFFERENT edition_key must
+    # never be used as a fallback/estimate for this edition.
+    edition_records = {
+        "/books/OL999M": {"key": "/books/OL999M", "number_of_pages": 999}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(number_of_pages=None)], edition_records=edition_records
+    )
+
+    assert editions[0].page_count is None
+
+
+def test_normalize_selected_catalogue_page_count_falls_back_to_search_api() -> None:
+    # Without a matching Edition detail record, historical behavior
+    # (Search API number_of_pages) is preserved.
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(number_of_pages=250)]
+    )
+
+    assert editions[0].page_count == 250
+
+
+def test_normalize_selected_catalogue_page_count_invalid_detail_is_none() -> None:
+    edition_records = {
+        "/books/OL1M": {"key": "/books/OL1M", "number_of_pages": "not-a-number"}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(number_of_pages=None)], edition_records=edition_records
+    )
+
+    assert editions[0].page_count is None
+
+
+def test_normalize_selected_catalogue_page_count_absent_detail_is_none() -> None:
+    edition_records = {"/books/OL1M": {"key": "/books/OL1M"}}
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(number_of_pages=None)], edition_records=edition_records
+    )
+
+    assert editions[0].page_count is None
 
 
 def test_small_profile_targets_are_stable() -> None:
@@ -363,6 +481,8 @@ def test_build_bundle_exports_exact_targets(
     assert report["scenarios"]["enabled"] is False
     assert report["catalogue"]["isbn_present"] == title_target
     assert report["catalogue"]["authors_enriched"] == 0
+    assert report["catalogue"]["summary_present"] == 0
+    assert report["catalogue"]["cover_image_present"] == 0
 
 
 def _write_authors_snapshot(path: Path, records: list[dict]) -> None:
@@ -427,6 +547,102 @@ def test_build_bundle_enriches_authors_from_snapshot_and_preserves_others(
     # Nationality is never populated, even on an enriched Author (rule: NULL always).
     for row in rows.values():
         assert row["nationality"] == ""
+
+
+def _write_records_snapshot(path: Path, records: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as handle:
+        for record in sorted(records, key=lambda item: item["key"]):
+            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def test_build_bundle_enriches_titles_from_snapshots_and_preserves_others(
+    tmp_path: Path,
+) -> None:
+    selected = tmp_path / "selected.jsonl"
+    bpost = tmp_path / "bpost.csv"
+    work_snapshot = tmp_path / "works_selected.jsonl"
+    edition_snapshot = tmp_path / "editions_selected.jsonl"
+    covers_assets_dir = tmp_path / "covers"
+    output = tmp_path / "bundle"
+
+    _write_selected(selected, SMALL_LANGUAGES, cover_id_for_first=258027)
+    _write_bpost(bpost)
+    _write_records_snapshot(
+        work_snapshot,
+        [{"key": "/works/OL1W", "description": "Un résumé réel."}],
+    )
+    _write_records_snapshot(
+        edition_snapshot,
+        [{"key": "/books/OL1M", "number_of_pages": 342}],
+    )
+    covers_assets_dir.mkdir(parents=True)
+    (covers_assets_dir / "ol-cover-258027.jpg").write_bytes(b"fake-jpeg-bytes")
+
+    report = build_bundle(
+        profile=SMALL_PROFILE,
+        selected_jsonl=selected,
+        bpost_csv=bpost,
+        output_dir=output,
+        seed=13014,
+        reference_date=date(2026, 8, 25),
+        raw_password="DemoPassword!2026",
+        work_snapshot_jsonl=work_snapshot,
+        edition_snapshot_jsonl=edition_snapshot,
+        covers_assets_dir=covers_assets_dir,
+    )
+
+    assert report["catalogue"]["summary_present"] == 1
+    assert report["catalogue"]["cover_image_present"] == 1
+    # page_count remains present for every Title: either the Edition-detail
+    # override for /books/OL1M, or the historical Search-API fallback.
+    assert report["catalogue"]["page_count_present"] == 100
+
+    with (output / "titles.csv").open(encoding="utf-8", newline="") as handle:
+        rows = {row["source_key"]: row for row in csv.DictReader(handle)}
+
+    enriched = rows["/books/OL1M"]
+    assert enriched["summary"] == "Un résumé réel."
+    assert enriched["page_count"] == "342"
+    assert enriched["cover_image_url"] == "/covers/catalogue/ol-cover-258027.jpg"
+
+    unenriched = rows["/books/OL2M"]
+    assert unenriched["summary"] == ""
+    assert unenriched["page_count"] == "102"
+    assert unenriched["cover_image_url"] == ""
+
+
+def test_build_bundle_cover_id_present_but_asset_missing_stays_null(
+    tmp_path: Path,
+) -> None:
+    selected = tmp_path / "selected.jsonl"
+    bpost = tmp_path / "bpost.csv"
+    covers_assets_dir = tmp_path / "covers"
+    output = tmp_path / "bundle"
+
+    _write_selected(selected, SMALL_LANGUAGES, cover_id_for_first=258027)
+    _write_bpost(bpost)
+    # covers_assets_dir is provided but the asset was never materialized.
+
+    report = build_bundle(
+        profile=SMALL_PROFILE,
+        selected_jsonl=selected,
+        bpost_csv=bpost,
+        output_dir=output,
+        seed=13014,
+        reference_date=date(2026, 8, 25),
+        raw_password="DemoPassword!2026",
+        covers_assets_dir=covers_assets_dir,
+    )
+
+    assert report["catalogue"]["cover_image_present"] == 0
+
+    with (output / "titles.csv").open(encoding="utf-8", newline="") as handle:
+        rows = {row["source_key"]: row for row in csv.DictReader(handle)}
+
+    # Fail-closed: cover_id existed but no local asset -> NULL, never a
+    # guessed/external URL.
+    assert rows["/books/OL1M"]["cover_image_url"] == ""
 
 
 @pytest.mark.parametrize(

@@ -4,6 +4,7 @@ import pytest
 
 from primatis_data_seeding.acquisition.openlibrary import (
     PROFILE_LANGUAGE_QUOTAS,
+    SEARCH_FIELDS,
     build_search_url,
     save_raw_payload,
     select_candidates,
@@ -19,12 +20,14 @@ def edition_work(
     language_code: str,
     *,
     author: bool = True,
+    cover_i: int | None = None,
 ) -> dict:
     work = {
         "key": f"/works/OL{index}W",
         "author_key": [f"OL{index}A"] if author else [],
         "author_name": [f"Author {index}"] if author else [],
         "subject": ["Fiction"],
+        "cover_i": cover_i,
         "editions": {
             "docs": [
                 {
@@ -123,3 +126,39 @@ def test_raw_payload_is_snapshot_with_stable_hash(tmp_path: Path) -> None:
 
     assert first == second
     assert len(first) == 64
+
+
+def test_search_fields_requests_cover_i_explicitly() -> None:
+    assert "cover_i" in SEARCH_FIELDS
+
+
+def test_search_fields_never_uses_wildcard() -> None:
+    assert "*" not in SEARCH_FIELDS
+
+
+def test_cover_id_is_propagated_from_search_payload() -> None:
+    payloads = payloads_for_quotas(SMALL_QUOTAS)
+    code, quota = SMALL_QUOTAS["LA"]
+    payloads["LA"]["docs"][0] = edition_work(999999, code, cover_i=258027)
+
+    selected = select_candidates(payloads, quotas=SMALL_QUOTAS)
+    by_key = {row.edition_key: row for row in selected}
+
+    assert by_key["/books/OL999999M"].cover_id == 258027
+
+
+def test_cover_id_absent_is_none() -> None:
+    selected = select_candidates(payloads_for_quotas(SMALL_QUOTAS), quotas=SMALL_QUOTAS)
+
+    assert all(row.cover_id is None for row in selected)
+
+
+def test_cover_id_non_positive_is_none() -> None:
+    payloads = payloads_for_quotas(SMALL_QUOTAS)
+    code, quota = SMALL_QUOTAS["LA"]
+    payloads["LA"]["docs"][0] = edition_work(999999, code, cover_i=0)
+
+    selected = select_candidates(payloads, quotas=SMALL_QUOTAS)
+    by_key = {row.edition_key: row for row in selected}
+
+    assert by_key["/books/OL999999M"].cover_id is None

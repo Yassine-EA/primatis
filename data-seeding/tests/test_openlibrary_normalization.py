@@ -5,6 +5,8 @@ from primatis_data_seeding.normalization.openlibrary import (
     normalize_biography,
     normalize_edition_record,
     normalize_publication_year,
+    normalize_summary,
+    normalize_work_record,
 )
 
 
@@ -110,3 +112,54 @@ def test_normalize_biography_accepts_open_library_text_object() -> None:
 def test_normalize_biography_returns_none_for_missing_value() -> None:
     assert normalize_biography(None) is None
     assert normalize_biography({"type": "/type/text", "value": None}) is None
+
+
+def test_normalize_summary_accepts_plain_string() -> None:
+    assert normalize_summary("  Un résumé réel.  ") == "Un résumé réel."
+
+
+def test_normalize_summary_accepts_open_library_text_object() -> None:
+    assert (
+        normalize_summary({"type": "/type/text", "value": "Un résumé réel."})
+        == "Un résumé réel."
+    )
+
+
+def test_normalize_summary_returns_none_for_missing_value() -> None:
+    assert normalize_summary(None) is None
+    assert normalize_summary({"type": "/type/text", "value": None}) is None
+
+
+def test_normalize_summary_does_not_rewrite_content() -> None:
+    raw = "Texte   avec   espaces   multiples."
+    # normalize_text collapses whitespace but never rewrites wording.
+    assert normalize_summary(raw) == "Texte avec espaces multiples."
+
+
+def test_normalize_work_record_extracts_description() -> None:
+    assert (
+        normalize_work_record({"key": "/works/OL1W", "description": "Un résumé réel."})
+        == "Un résumé réel."
+    )
+
+
+def test_normalize_work_record_extracts_text_object_description() -> None:
+    record = {
+        "key": "/works/OL1W",
+        "description": {"type": "/type/text", "value": "Un résumé réel."},
+    }
+    assert normalize_work_record(record) == "Un résumé réel."
+
+
+def test_normalize_work_record_without_description_is_none() -> None:
+    assert normalize_work_record({"key": "/works/OL1W"}) is None
+
+
+def test_normalize_work_record_invalid_description_is_none() -> None:
+    # A /type/text object missing its "value" key is unusable -> None.
+    record = {"key": "/works/OL1W", "description": {"type": "/type/text"}}
+    assert normalize_work_record(record) is None
+
+
+def test_normalize_work_record_none_record_is_none() -> None:
+    assert normalize_work_record(None) is None

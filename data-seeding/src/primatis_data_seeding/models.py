@@ -23,6 +23,8 @@ class NormalizedEdition:
     page_count: int | None
     publisher: str | None
     author_keys: tuple[str, ...]
+    cover_id: int | None = None
+    summary: str | None = None
 
 
 @dataclass(frozen=True)

@@ -17,6 +17,10 @@ from primatis_data_seeding.acquisition.openlibrary import (
 from primatis_data_seeding.acquisition.openlibrary_authors import (
     acquire_authors_snapshot,
 )
+from primatis_data_seeding.acquisition.openlibrary_details import (
+    acquire_records,
+    write_records_snapshot,
+)
 from primatis_data_seeding.acquisition.provenance import archive_source_file
 from primatis_data_seeding.reference.bpost import load_bpost_localities
 
@@ -45,6 +49,10 @@ def build_acquisition_bundle(
     refresh_openlibrary: bool = False,
     authors_dump: Path | None = None,
     refresh_authors: bool = False,
+    fetch_work_summaries: bool = False,
+    refresh_works: bool = False,
+    fetch_edition_details: bool = False,
+    refresh_editions: bool = False,
 ) -> dict:
     quotas = PROFILE_LANGUAGE_QUOTAS.get(profile)
     if quotas is None:
@@ -89,6 +97,36 @@ def build_acquisition_bundle(
             refresh=refresh_authors,
         )
 
+    works_manifest: dict | None = None
+    if fetch_work_summaries:
+        # Exact work_key match only, against the keys actually referenced
+        # by the selected editions of this profile.
+        required_work_keys = {
+            candidate.work_key for candidate in selected if candidate.work_key
+        }
+        work_records, works_manifest = acquire_records(
+            required_work_keys,
+            cache_dir=data_dir / "raw" / "openlibrary" / profile / "works",
+            contact=contact,
+            refresh=refresh_works,
+        )
+        write_records_snapshot(work_records, validated / "works_selected.jsonl")
+
+    editions_manifest: dict | None = None
+    if fetch_edition_details:
+        # Exact edition_key match only, against the keys actually selected
+        # for this profile.
+        required_edition_keys = {candidate.edition_key for candidate in selected}
+        edition_records, editions_manifest = acquire_records(
+            required_edition_keys,
+            cache_dir=data_dir / "raw" / "openlibrary" / profile / "editions",
+            contact=contact,
+            refresh=refresh_editions,
+        )
+        write_records_snapshot(
+            edition_records, validated / "editions_selected.jsonl"
+        )
+
     bpost_provenance = archive_source_file(
         bpost_xlsx,
         raw_bpost,
@@ -121,6 +159,24 @@ def build_acquisition_bundle(
             if authors_manifest is not None
             else None
         ),
+        "work_records": (
+            {
+                "requested": len(works_manifest.get("requested_keys", ())),
+                "reused": len(works_manifest.get("reused_keys", ())),
+                "fetched": len(works_manifest.get("fetched_keys", ())),
+            }
+            if works_manifest is not None
+            else None
+        ),
+        "edition_records": (
+            {
+                "requested": len(editions_manifest.get("requested_keys", ())),
+                "reused": len(editions_manifest.get("reused_keys", ())),
+                "fetched": len(editions_manifest.get("fetched_keys", ())),
+            }
+            if editions_manifest is not None
+            else None
+        ),
         "outputs": {
             "openlibrary_selected": str(
                 validated / "openlibrary_selected.jsonl"
@@ -131,6 +187,16 @@ def build_acquisition_bundle(
             **(
                 {"authors_selected": str(validated / "authors_selected.jsonl")}
                 if authors_manifest is not None
+                else {}
+            ),
+            **(
+                {"works_selected": str(validated / "works_selected.jsonl")}
+                if works_manifest is not None
+                else {}
+            ),
+            **(
+                {"editions_selected": str(validated / "editions_selected.jsonl")}
+                if editions_manifest is not None
                 else {}
             ),
         },
@@ -188,6 +254,39 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Force re-extraction from --authors-dump even if a matching snapshot exists.",
     )
+    parser.add_argument(
+        "--fetch-work-summaries",
+        action="store_true",
+        help=(
+            "Fetch each selected edition's Open Library Work record (exact "
+            "work_key match) for Title.summary, into "
+            "data/validated/<profile>/works_selected.jsonl. A rerun without "
+            "--refresh-works reuses the existing per-key cache and performs "
+            "no network call. Omit entirely to keep summary=NULL."
+        ),
+    )
+    parser.add_argument(
+        "--refresh-works",
+        action="store_true",
+        help="Force re-fetching every required Work record even if already cached.",
+    )
+    parser.add_argument(
+        "--fetch-edition-details",
+        action="store_true",
+        help=(
+            "Fetch each selected edition's Open Library Edition record "
+            "(exact edition_key match) for Title.page_count, into "
+            "data/validated/<profile>/editions_selected.jsonl. A rerun "
+            "without --refresh-editions reuses the existing per-key cache "
+            "and performs no network call. Omit entirely to keep the "
+            "Search-API-only baseline."
+        ),
+    )
+    parser.add_argument(
+        "--refresh-editions",
+        action="store_true",
+        help="Force re-fetching every required Edition record even if already cached.",
+    )
     return parser
 
 
@@ -199,6 +298,11 @@ def main() -> int:
         raise SystemExit(
             "PRIMATIS_OPENLIBRARY_CONTACT is required with --refresh-openlibrary."
         )
+    if (args.fetch_work_summaries or args.fetch_edition_details) and not contact:
+        raise SystemExit(
+            "PRIMATIS_OPENLIBRARY_CONTACT is required with "
+            "--fetch-work-summaries/--fetch-edition-details."
+        )
 
     report = build_acquisition_bundle(
         profile=args.profile,
@@ -208,6 +312,10 @@ def main() -> int:
         refresh_openlibrary=args.refresh_openlibrary,
         authors_dump=args.authors_dump,
         refresh_authors=args.refresh_authors,
+        fetch_work_summaries=args.fetch_work_summaries,
+        refresh_works=args.refresh_works,
+        fetch_edition_details=args.fetch_edition_details,
+        refresh_editions=args.refresh_editions,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0

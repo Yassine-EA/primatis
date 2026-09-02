@@ -58,6 +58,7 @@ SEARCH_FIELDS = (
     "author_name",
     "author_key",
     "subject",
+    "cover_i",
     "editions",
     *(f"editions.{field}" for field in EDITION_FIELDS),
 )
@@ -81,6 +82,7 @@ class OpenLibraryEditionCandidate:
     publish_date: str | None
     publish_year: int | None
     number_of_pages: int | None
+    cover_id: int | None
 
 
 def _as_tuple(value) -> tuple[str, ...]:
@@ -148,10 +150,19 @@ def load_raw_payload(path: Path) -> dict:
     return payload
 
 
+def _normalize_cover_id(value: object) -> int | None:
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, int):
+        return value if value > 0 else None
+    return None
+
+
 def _extract_candidate(work: dict, *, language: str, language_code: str):
     work_key = str(work.get("key") or "")
     author_keys = _as_tuple(work.get("author_key"))
     author_names = _as_tuple(work.get("author_name"))
+    cover_id = _normalize_cover_id(work.get("cover_i"))
 
     editions = work.get("editions")
     docs = editions.get("docs") if isinstance(editions, dict) else None
@@ -216,6 +227,7 @@ def _extract_candidate(work: dict, *, language: str, language_code: str):
         ),
         publish_year=publish_year,
         number_of_pages=pages if pages and pages > 0 else None,
+        cover_id=cover_id,
     )
 
 

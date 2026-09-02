@@ -68,6 +68,26 @@ def normalize_biography(value: object) -> str | None:
     return normalize_text(value)
 
 
+def normalize_summary(value: object) -> str | None:
+    # Open Library Work `description` uses the same two representations as
+    # Author `bio`: a plain string, or a `/type/text` object. The content
+    # itself is never rewritten — only whitespace/Unicode normalized.
+    if isinstance(value, dict):
+        value = value.get("value")
+    return normalize_text(value)
+
+
+def normalize_work_record(record: dict[str, object]) -> str | None:
+    """Résumé réel d'un Work Open Library identifié par work_key exact.
+
+    Retourne None si le record est invalide, absent, ou sans description
+    utilisable — jamais de résumé fabriqué.
+    """
+    if not isinstance(record, dict):
+        return None
+    return normalize_summary(record.get("description"))
+
+
 def normalize_author_record(record: dict[str, object]) -> NormalizedAuthor | None:
     source_key = normalize_text(record.get("key"))
     # The canonical `name` is used as-is: it is never split (e.g. on "/"),

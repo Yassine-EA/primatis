@@ -20,9 +20,11 @@ def map_catalogue(
     editions: list[NormalizedEdition],
     *,
     subjects_by_work_key: Mapping[str, list[str] | tuple[str, ...]] | None = None,
+    cover_image_urls: Mapping[str, str] | None = None,
 ) -> CatalogueMappingResult:
     result = CatalogueMappingResult()
     subjects_by_work_key = subjects_by_work_key or {}
+    cover_image_urls = cover_image_urls or {}
 
     author_by_key = {author.source_key: author for author in authors}
 
@@ -81,12 +83,16 @@ def map_catalogue(
                 isbn=edition.isbn,
                 title=edition.title,
                 subtitle=edition.subtitle,
-                summary=None,
+                # Real Open Library Work description when available; NULL
+                # otherwise. Never fabricated.
+                summary=edition.summary,
                 publication_year=edition.publication_year,
                 language=edition.language,
                 page_count=edition.page_count,
                 publisher=edition.publisher,
-                cover_image_url=None,
+                # Fail-closed: only a URL whose local asset was actually
+                # confirmed to exist (resolved upstream) is ever assigned.
+                cover_image_url=cover_image_urls.get(edition.source_key),
                 title_status="ACTIVE",
             )
         )

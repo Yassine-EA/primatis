@@ -24,6 +24,8 @@ def edition(
     *,
     work_key: str | None = "/works/W1",
     author_keys: tuple[str, ...] = ("/authors/A1",),
+    cover_id: int | None = None,
+    summary: str | None = None,
 ) -> NormalizedEdition:
     return NormalizedEdition(
         source_key=source_key,
@@ -36,6 +38,8 @@ def edition(
         page_count=250,
         publisher="Éditeur",
         author_keys=author_keys,
+        cover_id=cover_id,
+        summary=summary,
     )
 
 
@@ -168,3 +172,37 @@ def test_all_titles_default_to_active_not_withdrawn() -> None:
     result = map_catalogue([author()], [edition()])
 
     assert {item.title_status for item in result.titles} == {"ACTIVE"}
+
+
+def test_maps_summary_from_normalized_edition() -> None:
+    result = map_catalogue([author()], [edition(summary="Un résumé réel.")])
+
+    assert result.titles[0].summary == "Un résumé réel."
+
+
+def test_cover_image_url_is_none_without_cover_image_urls_map() -> None:
+    result = map_catalogue([author()], [edition(cover_id=258027)])
+
+    assert result.titles[0].cover_image_url is None
+
+
+def test_cover_image_url_is_assigned_when_resolved_upstream() -> None:
+    result = map_catalogue(
+        [author()],
+        [edition(cover_id=258027)],
+        cover_image_urls={"/books/B1": "/covers/catalogue/ol-cover-258027.jpg"},
+    )
+
+    assert result.titles[0].cover_image_url == "/covers/catalogue/ol-cover-258027.jpg"
+
+
+def test_cover_image_url_is_none_when_not_in_resolved_map() -> None:
+    # Fail-closed: a cover_id alone is never enough — only an entry that
+    # was actually resolved upstream (asset confirmed on disk) is used.
+    result = map_catalogue(
+        [author()],
+        [edition(cover_id=258027)],
+        cover_image_urls={},
+    )
+
+    assert result.titles[0].cover_image_url is None

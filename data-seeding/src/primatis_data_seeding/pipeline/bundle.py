@@ -14,6 +14,12 @@ import re
 from primatis_data_seeding.acquisition.openlibrary_authors import (
     load_authors_snapshot,
 )
+from primatis_data_seeding.acquisition.openlibrary_covers import (
+    resolve_cover_image_url,
+)
+from primatis_data_seeding.acquisition.openlibrary_details import (
+    load_records_snapshot,
+)
 from primatis_data_seeding.acquisition.provenance import sha256_file
 from primatis_data_seeding.config import SeedProfile, load_profiles
 from primatis_data_seeding.deduplication.catalogue import (
@@ -36,6 +42,7 @@ from primatis_data_seeding.normalization.openlibrary import (
     normalize_author_record,
     normalize_page_count,
     normalize_publication_year,
+    normalize_work_record,
 )
 from primatis_data_seeding.normalization.text import truncate_or_none
 from primatis_data_seeding.reference.bpost import BpostLocality
@@ -63,6 +70,7 @@ class SelectedEdition:
     publish_date: str | None
     publish_year: int | None
     number_of_pages: int | None
+    cover_id: int | None = None
 
 
 def _tuple_of_strings(value: object) -> tuple[str, ...]:
@@ -154,6 +162,11 @@ def load_selected_editions(
                             if raw.get("number_of_pages") not in (None, "")
                             else None
                         ),
+                        cover_id=(
+                            int(raw["cover_id"])
+                            if raw.get("cover_id") not in (None, "")
+                            else None
+                        ),
                     )
                 )
             except (KeyError, TypeError, ValueError) as exc:
@@ -202,12 +215,16 @@ def normalize_selected_catalogue(
     selected: list[SelectedEdition],
     *,
     author_records: Mapping[str, dict] | None = None,
+    work_records: Mapping[str, dict] | None = None,
+    edition_records: Mapping[str, dict] | None = None,
 ) -> tuple[
     list[NormalizedAuthor],
     list[NormalizedEdition],
     dict[str, tuple[str, ...]],
 ]:
     author_records = author_records or {}
+    work_records = work_records or {}
+    edition_records = edition_records or {}
     authors: list[NormalizedAuthor] = []
     editions: list[NormalizedEdition] = []
     subjects_by_work_key: dict[str, tuple[str, ...]] = {}
@@ -277,6 +294,27 @@ def normalize_selected_catalogue(
             if publisher is not None:
                 break
 
+        # page_count: an Edition detail record is used ONLY when it matches
+        # this edition's exact edition_key. It never falls back to another
+        # edition of the same Work, and never to an estimate/average.
+        edition_detail = edition_records.get(candidate.edition_key)
+        page_count = (
+            normalize_page_count(edition_detail.get("number_of_pages"))
+            if isinstance(edition_detail, dict)
+            else None
+        )
+        if page_count is None:
+            page_count = normalize_page_count(candidate.number_of_pages)
+
+        # summary: only a Work record matching this edition's exact
+        # work_key may supply it. No description anywhere -> summary=None.
+        work_detail = (
+            work_records.get(candidate.work_key) if candidate.work_key else None
+        )
+        summary = (
+            normalize_work_record(work_detail) if work_detail is not None else None
+        )
+
         edition = NormalizedEdition(
             source_key=candidate.edition_key,
             work_key=candidate.work_key or None,
@@ -285,9 +323,11 @@ def normalize_selected_catalogue(
             isbn=_select_isbn(candidate),
             language=candidate.language,
             publication_year=normalize_publication_year(publication_source),
-            page_count=normalize_page_count(candidate.number_of_pages),
+            page_count=page_count,
             publisher=publisher,
             author_keys=tuple(dict.fromkeys(author_keys)),
+            cover_id=candidate.cover_id,
+            summary=summary,
         )
         validation = validate_edition(edition)
         if not validation.valid:
@@ -321,6 +361,9 @@ def build_bundle(
     reference_date: date,
     raw_password: str | None = None,
     authors_snapshot_jsonl: Path | None = None,
+    work_snapshot_jsonl: Path | None = None,
+    edition_snapshot_jsonl: Path | None = None,
+    covers_assets_dir: Path | None = None,
 ) -> dict:
     if raw_password is None or not raw_password.strip():
         raise ValueError(
@@ -367,8 +410,23 @@ def build_bundle(
         if authors_snapshot_jsonl is not None
         else {}
     )
+    work_records = (
+        load_records_snapshot(work_snapshot_jsonl)
+        if work_snapshot_jsonl is not None
+        else {}
+    )
+    edition_records = (
+        load_records_snapshot(edition_snapshot_jsonl)
+        if edition_snapshot_jsonl is not None
+        else {}
+    )
     normalized_authors, normalized_editions, subjects = (
-        normalize_selected_catalogue(selected, author_records=author_records)
+        normalize_selected_catalogue(
+            selected,
+            author_records=author_records,
+            work_records=work_records,
+            edition_records=edition_records,
+        )
     )
 
     author_dedup = deduplicate_authors(normalized_authors)
@@ -388,10 +446,25 @@ def build_bundle(
             f"duplicates={len(edition_dedup.duplicates)}."
         )
 
+    # Fail-closed: a cover_image_url is only ever attached to a Title when
+    # the corresponding local asset file has actually been materialized
+    # under `covers_assets_dir` (see acquisition/openlibrary_covers.py).
+    # Without `covers_assets_dir`, no cover is ever resolved (historical
+    # behavior preserved).
+    cover_image_urls: dict[str, str] = {}
+    if covers_assets_dir is not None:
+        for edition in edition_dedup.kept:
+            resolved = resolve_cover_image_url(
+                edition.cover_id, assets_dir=covers_assets_dir
+            )
+            if resolved is not None:
+                cover_image_urls[edition.source_key] = resolved
+
     mapping = map_catalogue(
         author_dedup.kept,
         edition_dedup.kept,
         subjects_by_work_key=subjects,
+        cover_image_urls=cover_image_urls,
     )
 
     if mapping.rejections:
@@ -439,6 +512,13 @@ def build_bundle(
         for author in author_dedup.kept
         if author.birth_date or author.death_date or author.biography
     )
+    summary_present = sum(1 for title in mapping.titles if title.summary is not None)
+    page_count_present = sum(
+        1 for title in mapping.titles if title.page_count is not None
+    )
+    cover_image_present = sum(
+        1 for title in mapping.titles if title.cover_image_url is not None
+    )
 
     report = {
         "profile": profile.name,
@@ -467,6 +547,9 @@ def build_bundle(
             "mapping_rejections": len(mapping.rejections),
             "isbn_present": isbn_present,
             "isbn_absent": len(mapping.titles) - isbn_present,
+            "summary_present": summary_present,
+            "page_count_present": page_count_present,
+            "cover_image_present": cover_image_present,
             "language_counts": language_counts,
         },
         "copies": {
@@ -555,6 +638,35 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--work-snapshot",
+        type=Path,
+        default=None,
+        help=(
+            "Optional Open Library Work records snapshot (JSONL, exact "
+            "work_key match) used for Title.summary. Omit to keep summary=NULL."
+        ),
+    )
+    parser.add_argument(
+        "--edition-snapshot",
+        type=Path,
+        default=None,
+        help=(
+            "Optional Open Library Edition records snapshot (JSONL, exact "
+            "edition_key match) used for Title.page_count. Omit to keep "
+            "the Search-API-only baseline (page_count=NULL today)."
+        ),
+    )
+    parser.add_argument(
+        "--covers-assets-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Directory already containing materialized local cover assets "
+            "(see acquisition/openlibrary_covers.py). Omit to keep "
+            "cover_image_url=NULL for every Title (fail-closed default)."
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         default=None,
@@ -604,6 +716,9 @@ def main() -> int:
         reference_date=args.reference_date,
         raw_password=password,
         authors_snapshot_jsonl=args.authors_snapshot,
+        work_snapshot_jsonl=args.work_snapshot,
+        edition_snapshot_jsonl=args.edition_snapshot,
+        covers_assets_dir=args.covers_assets_dir,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0
