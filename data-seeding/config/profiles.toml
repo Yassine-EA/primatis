@@ -1,0 +1,24 @@
+[profiles.small]
+database = "primatis_dev"
+title_target = 100
+user_target = 25
+include_demo_scenarios = false
+
+[profiles.medium]
+database = "primatis_dev"
+title_target = 1000
+user_target = 100
+include_demo_scenarios = false
+
+[profiles.large]
+database = "primatis_dev"
+title_target = 5000
+user_target = 500
+include_demo_scenarios = false
+
+[profiles.full]
+database = "primatis_preview"
+title_target = 15000
+copy_target = 24000
+user_target = 1500
+include_demo_scenarios = true

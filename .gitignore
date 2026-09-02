@@ -15,6 +15,13 @@ data-seeding/data/normalized/
 data-seeding/data/validated/
 data-seeding/output/
 data-seeding/logs/
+data-seeding/data/bundles/
+data-seeding/data/backups/
+data-seeding/src/primatis_data_seeding.egg-info/
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
 
 # Local secrets / environment
 .env
