@@ -645,6 +645,36 @@ def test_build_bundle_cover_id_present_but_asset_missing_stays_null(
     assert rows["/books/OL1M"]["cover_image_url"] == ""
 
 
+def test_build_bundle_copies_csv_is_byte_identical_on_rerun(tmp_path: Path) -> None:
+    selected = tmp_path / "selected.jsonl"
+    bpost = tmp_path / "bpost.csv"
+    output_first = tmp_path / "bundle_first"
+    output_second = tmp_path / "bundle_second"
+    _write_selected(selected, SMALL_LANGUAGES)
+    _write_bpost(bpost)
+
+    for output in (output_first, output_second):
+        build_bundle(
+            profile=SMALL_PROFILE,
+            selected_jsonl=selected,
+            bpost_csv=bpost,
+            output_dir=output,
+            seed=13014,
+            reference_date=date(2026, 8, 25),
+            raw_password="DemoPassword!2026",
+        )
+
+    first_bytes = (output_first / "copies.csv").read_bytes()
+    second_bytes = (output_second / "copies.csv").read_bytes()
+    assert first_bytes == second_bytes
+
+    with (output_first / "copies.csv").open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 160
+    for row in rows:
+        assert row["location"] != ""
+
+
 @pytest.mark.parametrize(
     ("profile", "languages", "title_target", "copy_target", "user_target"),
     BUNDLE_PROFILES,
@@ -693,6 +723,42 @@ def test_bundle_exports_all_loader_contract_files(
         "deduplication_report.json",
     }
     assert expected <= {path.name for path in output.iterdir()}
+
+
+@pytest.mark.parametrize(
+    ("profile", "languages", "title_target", "copy_target", "user_target"),
+    BUNDLE_PROFILES,
+)
+def test_bundle_copies_all_have_a_non_null_location(
+    tmp_path: Path,
+    profile: SeedProfile,
+    languages,
+    title_target: int,
+    copy_target: int,
+    user_target: int,
+) -> None:
+    selected = tmp_path / "selected.jsonl"
+    bpost = tmp_path / "bpost.csv"
+    output = tmp_path / "bundle"
+    _write_selected(selected, languages)
+    _write_bpost(bpost)
+
+    build_bundle(
+        profile=profile,
+        selected_jsonl=selected,
+        bpost_csv=bpost,
+        output_dir=output,
+        seed=13014,
+        reference_date=date(2026, 8, 25),
+        raw_password="DemoPassword!2026",
+    )
+
+    with (output / "copies.csv").open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == copy_target
+    for row in rows:
+        assert row["location"] != ""
 
 
 @pytest.mark.parametrize(

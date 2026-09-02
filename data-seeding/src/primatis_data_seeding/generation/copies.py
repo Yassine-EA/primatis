@@ -33,6 +33,37 @@ class CopyDistribution:
         )
 
 
+# Physical location convention: <level>-A<aisle>-E<shelf>, e.g. "RDC-A01-E01".
+# Ground floor is "RDC"; higher floors are "ET1", "ET2", ... (unbounded, so
+# capacity is never artificially capped). Several Copies legitimately share
+# the same shelf (a real library does not give each exemplar its own exact
+# slot) — see DEV-13.19.D §9.
+LOCATION_AISLES_PER_LEVEL = 20
+LOCATION_SHELVES_PER_AISLE = 10
+LOCATION_COPIES_PER_SHELF = 20
+_SHELF_CAPACITY = LOCATION_SHELVES_PER_AISLE * LOCATION_COPIES_PER_SHELF
+_LEVEL_CAPACITY = LOCATION_AISLES_PER_LEVEL * _SHELF_CAPACITY
+
+
+def _level_name(level: int) -> str:
+    return "RDC" if level == 0 else f"ET{level}"
+
+
+def location_for_copy(index: int) -> str:
+    """Deterministic physical location for the Copy at global `index`
+    (0-based). A PURE function of `index` alone — never of the profile's
+    total Copy count — so the same index always yields the same location
+    regardless of profile size (small/medium/large/full)."""
+    if index < 0:
+        raise ValueError(f"Copy index must be non-negative, got {index}.")
+
+    level, remainder = divmod(index, _LEVEL_CAPACITY)
+    aisle, remainder = divmod(remainder, _SHELF_CAPACITY)
+    shelf, _ = divmod(remainder, LOCATION_COPIES_PER_SHELF)
+
+    return f"{_level_name(level)}-A{aisle + 1:02d}-E{shelf + 1:02d}"
+
+
 PROFILE_COPY_DISTRIBUTIONS: dict[str, CopyDistribution] = {
     # Intermediate profiles preserve the same 1.6 Copies/Title average while
     # staying very close to the proportions of the final dataset.
@@ -119,6 +150,7 @@ def generate_copies(
     result = CopyGenerationResult()
 
     inventory_codes: set[str] = set()
+    copy_index = 0
 
     for title in sorted(titles, key=lambda item: item.source_key):
         copy_count = counts_by_title[title.source_key]
@@ -138,11 +170,12 @@ def generate_copies(
                 PrimatisCopyRow(
                     title_source_key=title.source_key,
                     inventory_code=inventory_code,
-                    location=None,
+                    location=location_for_copy(copy_index),
                     copy_condition="GOOD",
                     availability_status="AVAILABLE",
                 )
             )
+            copy_index += 1
 
     result.titles_by_copy_count = dict(
         sorted(Counter(counts_by_title.values()).items())
