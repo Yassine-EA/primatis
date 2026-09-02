@@ -8,12 +8,14 @@ def author(
     source_key: str = "/authors/A1",
     *,
     full_name: str = "Auteur Exemple",
+    biography: str | None = None,
 ) -> NormalizedAuthor:
     return NormalizedAuthor(
         source_key=source_key,
         full_name=full_name,
         birth_date=date(1900, 1, 2),
         death_date=None,
+        biography=biography,
     )
 
 
@@ -45,6 +47,22 @@ def test_maps_author_without_inventing_optional_metadata() -> None:
     assert mapped.birth_date == date(1900, 1, 2)
     assert mapped.nationality is None
     assert mapped.biography is None
+
+
+def test_maps_biography_from_normalized_author() -> None:
+    result = map_catalogue(
+        [author(biography="Notice biographique enrichie.")], []
+    )
+
+    assert result.authors[0].biography == "Notice biographique enrichie."
+
+
+def test_nationality_is_always_null_even_when_author_is_enriched() -> None:
+    result = map_catalogue(
+        [author(biography="Notice biographique enrichie.")], []
+    )
+
+    assert result.authors[0].nationality is None
 
 
 def test_maps_title_to_primatis_fields_and_active_status() -> None:

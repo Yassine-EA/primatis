@@ -1,5 +1,8 @@
+from datetime import date
+
 from primatis_data_seeding.normalization.openlibrary import (
     normalize_author_record,
+    normalize_biography,
     normalize_edition_record,
     normalize_publication_year,
 )
@@ -57,3 +60,53 @@ def test_author_year_only_does_not_fabricate_exact_date() -> None:
 
     assert author is not None
     assert author.birth_date is None
+
+
+def test_author_record_uses_canonical_name_and_exact_dates() -> None:
+    author = normalize_author_record(
+        {
+            "key": "/authors/OL1A",
+            "name": "Victor Exemple",
+            "birth_date": "26 February 1802",
+            "death_date": "22 May 1885",
+            "bio": "Écrivain et poète français.",
+        }
+    )
+
+    assert author is not None
+    assert author.full_name == "Victor Exemple"
+    assert author.birth_date == date(1802, 2, 26)
+    assert author.death_date == date(1885, 5, 22)
+    assert author.biography == "Écrivain et poète français."
+
+
+def test_author_record_without_bio_has_no_biography() -> None:
+    author = normalize_author_record({"key": "/authors/OL1A", "name": "Victor Exemple"})
+
+    assert author is not None
+    assert author.biography is None
+
+
+def test_author_record_name_containing_slash_is_never_split() -> None:
+    author = normalize_author_record(
+        {"key": "/authors/OL1A", "name": "Charlotte Brontë / Currer Bell"}
+    )
+
+    assert author is not None
+    assert author.full_name == "Charlotte Brontë / Currer Bell"
+
+
+def test_normalize_biography_accepts_plain_string() -> None:
+    assert normalize_biography("  Notice biographique.  ") == "Notice biographique."
+
+
+def test_normalize_biography_accepts_open_library_text_object() -> None:
+    assert (
+        normalize_biography({"type": "/type/text", "value": "Notice biographique."})
+        == "Notice biographique."
+    )
+
+
+def test_normalize_biography_returns_none_for_missing_value() -> None:
+    assert normalize_biography(None) is None
+    assert normalize_biography({"type": "/type/text", "value": None}) is None

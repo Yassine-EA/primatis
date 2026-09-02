@@ -60,8 +60,18 @@ def normalize_exact_date(value: object) -> date | None:
     return None
 
 
+def normalize_biography(value: object) -> str | None:
+    # Open Library represents `bio` either as a plain string or as a
+    # `/type/text` object ({"type": "/type/text", "value": "..."}).
+    if isinstance(value, dict):
+        value = value.get("value")
+    return normalize_text(value)
+
+
 def normalize_author_record(record: dict[str, object]) -> NormalizedAuthor | None:
     source_key = normalize_text(record.get("key"))
+    # The canonical `name` is used as-is: it is never split (e.g. on "/"),
+    # since Open Library sometimes concatenates alternate name forms there.
     full_name = truncate_or_none(record.get("name"), 255)
 
     if source_key is None or full_name is None:
@@ -72,6 +82,7 @@ def normalize_author_record(record: dict[str, object]) -> NormalizedAuthor | Non
         full_name=full_name,
         birth_date=normalize_exact_date(record.get("birth_date")),
         death_date=normalize_exact_date(record.get("death_date")),
+        biography=normalize_biography(record.get("bio")),
     )
 
 

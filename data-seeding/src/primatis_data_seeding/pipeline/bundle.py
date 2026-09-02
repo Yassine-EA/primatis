@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from datetime import date
 import csv
@@ -10,6 +11,9 @@ import os
 from pathlib import Path
 import re
 
+from primatis_data_seeding.acquisition.openlibrary_authors import (
+    load_authors_snapshot,
+)
 from primatis_data_seeding.acquisition.provenance import sha256_file
 from primatis_data_seeding.config import SeedProfile, load_profiles
 from primatis_data_seeding.deduplication.catalogue import (
@@ -29,6 +33,7 @@ from primatis_data_seeding.mapping.catalogue import map_catalogue
 from primatis_data_seeding.models import NormalizedAuthor, NormalizedEdition
 from primatis_data_seeding.normalization.isbn import select_valid_isbn
 from primatis_data_seeding.normalization.openlibrary import (
+    normalize_author_record,
     normalize_page_count,
     normalize_publication_year,
 )
@@ -195,11 +200,14 @@ def load_validated_localities(path: Path) -> list[BpostLocality]:
 
 def normalize_selected_catalogue(
     selected: list[SelectedEdition],
+    *,
+    author_records: Mapping[str, dict] | None = None,
 ) -> tuple[
     list[NormalizedAuthor],
     list[NormalizedEdition],
     dict[str, tuple[str, ...]],
 ]:
+    author_records = author_records or {}
     authors: list[NormalizedAuthor] = []
     editions: list[NormalizedEdition] = []
     subjects_by_work_key: dict[str, tuple[str, ...]] = {}
@@ -225,11 +233,25 @@ def normalize_selected_catalogue(
             if not author_key or author_name is None:
                 continue
             author_keys.append(author_key)
+
+            # Enrichment is looked up strictly by exact author_key. When no
+            # Authors dump record is available, behavior is unchanged from
+            # the Search-API-only baseline (name only, no dates, no bio).
+            enriched_record = author_records.get(author_key)
+            enriched = (
+                normalize_author_record(enriched_record)
+                if enriched_record is not None
+                else None
+            )
+
             author = NormalizedAuthor(
                 source_key=author_key,
-                full_name=author_name,
-                birth_date=None,
-                death_date=None,
+                # The Author dump's canonical name is preferred when the
+                # record exists; it is never split (e.g. on "/").
+                full_name=enriched.full_name if enriched else author_name,
+                birth_date=enriched.birth_date if enriched else None,
+                death_date=enriched.death_date if enriched else None,
+                biography=enriched.biography if enriched else None,
             )
             validation = validate_author(author)
             if not validation.valid:
@@ -298,6 +320,7 @@ def build_bundle(
     seed: int,
     reference_date: date,
     raw_password: str | None = None,
+    authors_snapshot_jsonl: Path | None = None,
 ) -> dict:
     if raw_password is None or not raw_password.strip():
         raise ValueError(
@@ -339,8 +362,13 @@ def build_bundle(
     )
     localities = load_validated_localities(bpost_csv)
 
+    author_records = (
+        load_authors_snapshot(authors_snapshot_jsonl)
+        if authors_snapshot_jsonl is not None
+        else {}
+    )
     normalized_authors, normalized_editions, subjects = (
-        normalize_selected_catalogue(selected)
+        normalize_selected_catalogue(selected, author_records=author_records)
     )
 
     author_dedup = deduplicate_authors(normalized_authors)
@@ -406,6 +434,11 @@ def build_bundle(
     language_counts = dict(
         sorted(Counter(title.language for title in mapping.titles).items())
     )
+    authors_enriched = sum(
+        1
+        for author in author_dedup.kept
+        if author.birth_date or author.death_date or author.biography
+    )
 
     report = {
         "profile": profile.name,
@@ -422,6 +455,7 @@ def build_bundle(
             "normalized_authors": len(normalized_authors),
             "normalized_editions": len(normalized_editions),
             "authors_kept": len(author_dedup.kept),
+            "authors_enriched": authors_enriched,
             "author_duplicates": len(author_dedup.duplicates),
             "author_candidates": len(author_dedup.candidates),
             "titles_kept": len(edition_dedup.kept),
@@ -511,6 +545,16 @@ def build_parser() -> argparse.ArgumentParser:
         help="Defaults to data/validated/<profile>/bpost_localities.csv",
     )
     parser.add_argument(
+        "--authors-snapshot",
+        type=Path,
+        default=None,
+        help=(
+            "Optional Open Library Authors dump snapshot (JSONL, exact "
+            "author_key match). When omitted, Authors keep the "
+            "Search-API-only baseline (no dates, no biography)."
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         default=None,
@@ -559,6 +603,7 @@ def main() -> int:
         seed=args.seed,
         reference_date=args.reference_date,
         raw_password=password,
+        authors_snapshot_jsonl=args.authors_snapshot,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0

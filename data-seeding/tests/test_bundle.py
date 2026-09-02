@@ -14,6 +14,7 @@ from primatis_data_seeding.pipeline.bundle import (
     build_bundle,
     load_selected_editions,
     load_validated_localities,
+    normalize_selected_catalogue,
 )
 
 
@@ -130,6 +131,73 @@ def _candidate(*, isbn=(), isbn_10=(), isbn_13=()) -> SelectedEdition:
         publish_year=None,
         number_of_pages=None,
     )
+
+
+def test_normalize_selected_catalogue_without_author_records_is_unchanged() -> None:
+    authors, _editions, _subjects = normalize_selected_catalogue([_candidate()])
+
+    assert len(authors) == 1
+    assert authors[0].full_name == "Author"
+    assert authors[0].birth_date is None
+    assert authors[0].death_date is None
+    assert authors[0].biography is None
+
+
+def test_normalize_selected_catalogue_enriches_by_exact_author_key() -> None:
+    author_records = {
+        "/authors/OL1A": {
+            "key": "/authors/OL1A",
+            "name": "Canonical Author Name",
+            "birth_date": "1900-01-01",
+            "death_date": "1980-01-01",
+            "bio": "Notice biographique.",
+        }
+    }
+
+    authors, _editions, _subjects = normalize_selected_catalogue(
+        [_candidate()], author_records=author_records
+    )
+
+    assert len(authors) == 1
+    enriched = authors[0]
+    assert enriched.full_name == "Canonical Author Name"
+    assert enriched.birth_date == date(1900, 1, 1)
+    assert enriched.death_date == date(1980, 1, 1)
+    assert enriched.biography == "Notice biographique."
+
+
+def test_normalize_selected_catalogue_never_enriches_by_name(tmp_path: Path) -> None:
+    # A record keyed by a DIFFERENT author_key must never be applied, even
+    # if its name happens to match the Search-API author_name.
+    author_records = {
+        "/authors/OL999A": {
+            "key": "/authors/OL999A",
+            "name": "Author",
+            "birth_date": "1900-01-01",
+        }
+    }
+
+    authors, _editions, _subjects = normalize_selected_catalogue(
+        [_candidate()], author_records=author_records
+    )
+
+    assert authors[0].full_name == "Author"
+    assert authors[0].birth_date is None
+
+
+def test_normalize_selected_catalogue_name_with_slash_is_not_split() -> None:
+    author_records = {
+        "/authors/OL1A": {
+            "key": "/authors/OL1A",
+            "name": "Charlotte Brontë / Currer Bell",
+        }
+    }
+
+    authors, _editions, _subjects = normalize_selected_catalogue(
+        [_candidate()], author_records=author_records
+    )
+
+    assert authors[0].full_name == "Charlotte Brontë / Currer Bell"
 
 
 def test_small_profile_targets_are_stable() -> None:
@@ -294,6 +362,71 @@ def test_build_bundle_exports_exact_targets(
     assert report["users"]["count"] == user_target
     assert report["scenarios"]["enabled"] is False
     assert report["catalogue"]["isbn_present"] == title_target
+    assert report["catalogue"]["authors_enriched"] == 0
+
+
+def _write_authors_snapshot(path: Path, records: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as handle:
+        for record in sorted(records, key=lambda item: item["key"]):
+            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def test_build_bundle_enriches_authors_from_snapshot_and_preserves_others(
+    tmp_path: Path,
+) -> None:
+    selected = tmp_path / "selected.jsonl"
+    bpost = tmp_path / "bpost.csv"
+    authors_snapshot = tmp_path / "authors_selected.jsonl"
+    output = tmp_path / "bundle"
+    _write_selected(selected, SMALL_LANGUAGES)
+    _write_bpost(bpost)
+    _write_authors_snapshot(
+        authors_snapshot,
+        [
+            {
+                "key": "/authors/OL1A",
+                "name": "Canonical Author One",
+                "birth_date": "1900-01-01",
+                "death_date": "1980-01-01",
+                "bio": "Notice biographique enrichie.",
+            }
+        ],
+    )
+
+    report = build_bundle(
+        profile=SMALL_PROFILE,
+        selected_jsonl=selected,
+        bpost_csv=bpost,
+        output_dir=output,
+        seed=13014,
+        reference_date=date(2026, 8, 25),
+        raw_password="DemoPassword!2026",
+        authors_snapshot_jsonl=authors_snapshot,
+    )
+
+    assert report["catalogue"]["authors_enriched"] == 1
+
+    with (output / "authors.csv").open(encoding="utf-8", newline="") as handle:
+        rows = {row["source_key"]: row for row in csv.DictReader(handle)}
+
+    enriched = rows["/authors/OL1A"]
+    assert enriched["full_name"] == "Canonical Author One"
+    assert enriched["birth_date"] == "1900-01-01"
+    assert enriched["death_date"] == "1980-01-01"
+    assert enriched["biography"] == "Notice biographique enrichie."
+    assert enriched["nationality"] == ""
+
+    unenriched = rows["/authors/OL2A"]
+    assert unenriched["full_name"] == "Author 2"
+    assert unenriched["birth_date"] == ""
+    assert unenriched["death_date"] == ""
+    assert unenriched["biography"] == ""
+    assert unenriched["nationality"] == ""
+
+    # Nationality is never populated, even on an enriched Author (rule: NULL always).
+    for row in rows.values():
+        assert row["nationality"] == ""
 
 
 @pytest.mark.parametrize(

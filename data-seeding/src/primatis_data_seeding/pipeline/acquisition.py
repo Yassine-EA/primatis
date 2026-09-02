@@ -14,6 +14,9 @@ from primatis_data_seeding.acquisition.openlibrary import (
     reuse_openlibrary_snapshot,
     write_selected_jsonl,
 )
+from primatis_data_seeding.acquisition.openlibrary_authors import (
+    acquire_authors_snapshot,
+)
 from primatis_data_seeding.acquisition.provenance import archive_source_file
 from primatis_data_seeding.reference.bpost import load_bpost_localities
 
@@ -40,6 +43,8 @@ def build_acquisition_bundle(
     bpost_xlsx: Path,
     contact: str,
     refresh_openlibrary: bool = False,
+    authors_dump: Path | None = None,
+    refresh_authors: bool = False,
 ) -> dict:
     quotas = PROFILE_LANGUAGE_QUOTAS.get(profile)
     if quotas is None:
@@ -70,6 +75,20 @@ def build_acquisition_bundle(
         validated / "openlibrary_selected.jsonl",
     )
 
+    authors_manifest: dict | None = None
+    if authors_dump is not None:
+        # Exact author_key match only — never a name search — against the
+        # keys actually referenced by the selected editions of this profile.
+        required_author_keys = {
+            key for candidate in selected for key in candidate.author_keys
+        }
+        authors_manifest = acquire_authors_snapshot(
+            dump_path=authors_dump,
+            required_keys=required_author_keys,
+            snapshot_path=validated / "authors_selected.jsonl",
+            refresh=refresh_authors,
+        )
+
     bpost_provenance = archive_source_file(
         bpost_xlsx,
         raw_bpost,
@@ -93,12 +112,26 @@ def build_acquisition_bundle(
         "openlibrary_language_counts": ol_manifest["language_counts"],
         "bpost_localities": len(localities),
         "bpost_sha256": bpost_provenance.sha256,
+        "authors_dump": (
+            {
+                "matched": len(authors_manifest.get("matched_keys", ())),
+                "requested": len(authors_manifest.get("requested_keys", ())),
+                "missing": len(authors_manifest.get("missing_keys", ())),
+            }
+            if authors_manifest is not None
+            else None
+        ),
         "outputs": {
             "openlibrary_selected": str(
                 validated / "openlibrary_selected.jsonl"
             ),
             "bpost_localities": str(
                 validated / "bpost_localities.csv"
+            ),
+            **(
+                {"authors_selected": str(validated / "authors_selected.jsonl")}
+                if authors_manifest is not None
+                else {}
             ),
         },
     }
@@ -138,6 +171,23 @@ def build_parser() -> argparse.ArgumentParser:
             "Without this flag, a complete existing snapshot is reused."
         ),
     )
+    parser.add_argument(
+        "--authors-dump",
+        type=Path,
+        default=None,
+        help=(
+            "Optional local Open Library Authors bulk dump (.txt or .txt.gz). "
+            "When provided, records matching the selected editions' "
+            "author_key (exact match only) are extracted into "
+            "data/validated/<profile>/authors_selected.jsonl. Omit to keep "
+            "the current Search-API-only Author baseline unchanged."
+        ),
+    )
+    parser.add_argument(
+        "--refresh-authors",
+        action="store_true",
+        help="Force re-extraction from --authors-dump even if a matching snapshot exists.",
+    )
     return parser
 
 
@@ -156,6 +206,8 @@ def main() -> int:
         bpost_xlsx=args.bpost_xlsx,
         contact=contact,
         refresh_openlibrary=args.refresh_openlibrary,
+        authors_dump=args.authors_dump,
+        refresh_authors=args.refresh_authors,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0

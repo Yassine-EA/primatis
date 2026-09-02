@@ -32,8 +32,10 @@ def map_catalogue(
             full_name=author.full_name,
             birth_date=author.birth_date,
             death_date=author.death_date,
+            # nationality is never sourced: PRIMATIS has no reliable/verified
+            # nationality data source, so this column always stays NULL.
             nationality=None,
-            biography=None,
+            biography=author.biography,
         )
         for author in sorted(authors, key=lambda item: item.source_key)
     ]

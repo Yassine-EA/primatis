@@ -8,6 +8,7 @@ class NormalizedAuthor:
     full_name: str
     birth_date: date | None
     death_date: date | None
+    biography: str | None = None
 
 
 @dataclass(frozen=True)
