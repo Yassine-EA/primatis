@@ -36,8 +36,8 @@ def test_extracts_only_exact_author_key_matches(tmp_path: Path) -> None:
 
     matched = extract_authors_by_key(dump, {"/authors/OL1A"})
 
-    assert set(matched) == {"/authors/OL1A"}
-    assert matched["/authors/OL1A"]["name"] == "Victor Exemple"
+    assert set(matched) == {"OL1A"}
+    assert matched["OL1A"]["name"] == "Victor Exemple"
 
 
 def test_never_matches_by_name_only_by_exact_key(tmp_path: Path) -> None:
@@ -67,7 +67,7 @@ def test_missing_required_keys_are_not_an_error(tmp_path: Path) -> None:
 
     matched = extract_authors_by_key(dump, {"/authors/OL1A", "/authors/OL404A"})
 
-    assert set(matched) == {"/authors/OL1A"}
+    assert set(matched) == {"OL1A"}
 
 
 def test_non_author_dump_lines_are_ignored(tmp_path: Path) -> None:
@@ -99,7 +99,7 @@ def test_malformed_lines_are_skipped_without_raising(tmp_path: Path) -> None:
 
     matched = extract_authors_by_key(dump, {"/authors/OL1A", "/authors/OL2A"})
 
-    assert set(matched) == {"/authors/OL1A"}
+    assert set(matched) == {"OL1A"}
 
 
 def test_gzip_dump_is_supported(tmp_path: Path) -> None:
@@ -110,7 +110,7 @@ def test_gzip_dump_is_supported(tmp_path: Path) -> None:
 
     matched = extract_authors_by_key(dump, {"/authors/OL1A"})
 
-    assert set(matched) == {"/authors/OL1A"}
+    assert set(matched) == {"OL1A"}
 
 
 def test_missing_dump_file_raises(tmp_path: Path) -> None:
@@ -136,9 +136,12 @@ def test_snapshot_is_written_in_deterministic_sorted_order(tmp_path: Path) -> No
     )
 
     lines = snapshot_path.read_text(encoding="utf-8").splitlines()
+    # The snapshot preserves each record's own raw "key" field (the
+    # dump's prefixed form) — only the pipeline-internal *index* into
+    # matched/manifest is canonicalized (bare).
     keys_in_order = [json.loads(line)["key"] for line in lines]
     assert keys_in_order == ["/authors/OL1A", "/authors/OL2A"]
-    assert manifest["matched_keys"] == ["/authors/OL1A", "/authors/OL2A"]
+    assert manifest["matched_keys"] == ["OL1A", "OL2A"]
     assert manifest["missing_keys"] == []
 
 
@@ -157,8 +160,8 @@ def test_snapshot_reports_missing_keys_in_manifest(tmp_path: Path) -> None:
         snapshot_path=snapshot_path,
     )
 
-    assert manifest["missing_keys"] == ["/authors/OL404A"]
-    assert manifest["matched_keys"] == ["/authors/OL1A"]
+    assert manifest["missing_keys"] == ["OL404A"]
+    assert manifest["matched_keys"] == ["OL1A"]
 
 
 def test_rebuilding_snapshot_twice_is_byte_identical(tmp_path: Path) -> None:
@@ -207,7 +210,7 @@ def test_reuse_is_idempotent_and_does_not_rescan_dump(tmp_path: Path) -> None:
     )
     snapshot = load_authors_snapshot(snapshot_path)
 
-    assert snapshot["/authors/OL1A"]["name"] == "A"
+    assert snapshot["OL1A"]["name"] == "A"
     assert manifest == load_authors_manifest(snapshot_path)
 
 
@@ -225,14 +228,14 @@ def test_changed_required_keys_forces_regeneration(tmp_path: Path) -> None:
     acquire_authors_snapshot(
         dump_path=dump, required_keys={"/authors/OL1A"}, snapshot_path=snapshot_path
     )
-    assert set(load_authors_snapshot(snapshot_path)) == {"/authors/OL1A"}
+    assert set(load_authors_snapshot(snapshot_path)) == {"OL1A"}
 
     acquire_authors_snapshot(
         dump_path=dump,
         required_keys={"/authors/OL1A", "/authors/OL2A"},
         snapshot_path=snapshot_path,
     )
-    assert set(load_authors_snapshot(snapshot_path)) == {"/authors/OL1A", "/authors/OL2A"}
+    assert set(load_authors_snapshot(snapshot_path)) == {"OL1A", "OL2A"}
 
 
 def test_load_snapshot_rejects_duplicate_keys(tmp_path: Path) -> None:
@@ -249,9 +252,36 @@ def test_load_snapshot_rejects_duplicate_keys(tmp_path: Path) -> None:
         load_authors_snapshot(snapshot_path)
 
 
+def test_load_snapshot_detects_duplicates_across_key_representations(tmp_path: Path) -> None:
+    # Bare and prefixed forms of the SAME Author identity must be treated
+    # as one duplicate key, not two distinct entries.
+    snapshot_path = tmp_path / "authors_selected.jsonl"
+    snapshot_path.write_text(
+        json.dumps({"key": "OL1A", "name": "A"})
+        + "\n"
+        + json.dumps({"key": "/authors/OL1A", "name": "A duplicate"})
+        + "\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError):
+        load_authors_snapshot(snapshot_path)
+
+
 def test_load_snapshot_rejects_invalid_json_line(tmp_path: Path) -> None:
     snapshot_path = tmp_path / "authors_selected.jsonl"
     snapshot_path.write_text("not-json\n", encoding="utf-8")
+
+    with pytest.raises(ValueError):
+        load_authors_snapshot(snapshot_path)
+
+
+def test_load_snapshot_rejects_invalid_author_key(tmp_path: Path) -> None:
+    snapshot_path = tmp_path / "authors_selected.jsonl"
+    snapshot_path.write_text(
+        json.dumps({"key": "/works/OL1W", "name": "Not an author"}) + "\n",
+        encoding="utf-8",
+    )
 
     with pytest.raises(ValueError):
         load_authors_snapshot(snapshot_path)
@@ -272,3 +302,70 @@ def test_empty_required_keys_yields_empty_snapshot(tmp_path: Path) -> None:
     matched = extract_authors_by_key(dump, set())
 
     assert matched == {}
+
+
+# --- DEV-13.19.F: real Search-API-vs-dump key format reconciliation ---
+
+
+def test_bare_search_api_key_matches_prefixed_dump_key(tmp_path: Path) -> None:
+    """Reproduces the exact real bug found in DEV-13.19.E: the Open
+    Library Search API returns author_key bare ("OL1098039A"), while the
+    Authors bulk dump uses the canonical prefixed key
+    ("/authors/OL1098039A"). Both must resolve to the SAME Author via
+    canonicalization — never via name matching, never via a "/" split.
+    """
+    dump = tmp_path / "authors_dump.txt"
+    _write_dump(
+        dump,
+        [
+            _dump_line(
+                key="/authors/OL1098039A",
+                record={
+                    "key": "/authors/OL1098039A",
+                    "name": "Carl Maria von Weber",
+                    "bio": {
+                        "type": "/type/text",
+                        "value": "Deutscher Komponist, Dirigent und Pianist",
+                    },
+                },
+            ),
+        ],
+    )
+
+    # required_keys as they REALLY come out of the Search API: bare.
+    matched = extract_authors_by_key(dump, {"OL1098039A"})
+
+    assert len(matched) == 1
+    assert set(matched) == {"OL1098039A"}
+    assert matched["OL1098039A"]["name"] == "Carl Maria von Weber"
+    assert (
+        matched["OL1098039A"]["bio"]["value"]
+        == "Deutscher Komponist, Dirigent und Pianist"
+    )
+
+
+def test_bare_search_api_key_end_to_end_snapshot_has_zero_missing(tmp_path: Path) -> None:
+    dump = tmp_path / "authors_dump.txt"
+    _write_dump(
+        dump,
+        [
+            _dump_line(
+                key="/authors/OL1098039A",
+                record={"key": "/authors/OL1098039A", "name": "Carl Maria von Weber"},
+            ),
+        ],
+    )
+    snapshot_path = tmp_path / "authors_selected.jsonl"
+
+    manifest = acquire_authors_snapshot(
+        dump_path=dump,
+        required_keys={"OL1098039A"},
+        snapshot_path=snapshot_path,
+    )
+
+    assert manifest["requested_keys"] == ["OL1098039A"]
+    assert manifest["matched_keys"] == ["OL1098039A"]
+    assert manifest["missing_keys"] == []
+
+    snapshot = load_authors_snapshot(snapshot_path)
+    assert snapshot["OL1098039A"]["name"] == "Carl Maria von Weber"

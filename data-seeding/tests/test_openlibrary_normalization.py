@@ -1,6 +1,7 @@
 from datetime import date
 
 from primatis_data_seeding.normalization.openlibrary import (
+    canonical_author_key,
     normalize_author_record,
     normalize_biography,
     normalize_edition_record,
@@ -163,3 +164,55 @@ def test_normalize_work_record_invalid_description_is_none() -> None:
 
 def test_normalize_work_record_none_record_is_none() -> None:
     assert normalize_work_record(None) is None
+
+
+def test_canonical_author_key_accepts_bare_search_api_form() -> None:
+    assert canonical_author_key("OL1098039A") == "OL1098039A"
+
+
+def test_canonical_author_key_strips_dump_prefix() -> None:
+    assert canonical_author_key("/authors/OL1098039A") == "OL1098039A"
+
+
+def test_canonical_author_key_both_forms_are_equal() -> None:
+    assert canonical_author_key("OL1098039A") == canonical_author_key(
+        "/authors/OL1098039A"
+    )
+
+
+def test_canonical_author_key_rejects_none() -> None:
+    assert canonical_author_key(None) is None
+
+
+def test_canonical_author_key_rejects_empty_string() -> None:
+    assert canonical_author_key("") is None
+
+
+def test_canonical_author_key_rejects_work_key() -> None:
+    assert canonical_author_key("/works/OL1W") is None
+
+
+def test_canonical_author_key_rejects_edition_key() -> None:
+    assert canonical_author_key("/books/OL1M") is None
+
+
+def test_canonical_author_key_rejects_arbitrary_string() -> None:
+    assert canonical_author_key("foo") is None
+
+
+def test_canonical_author_key_rejects_malformed_prefixed_value() -> None:
+    assert canonical_author_key("/authors/foo") is None
+
+
+def test_canonical_author_key_rejects_key_missing_trailing_letter() -> None:
+    assert canonical_author_key("OL1098039") is None
+
+
+def test_canonical_author_key_never_splits_on_slash_generically() -> None:
+    # A value with a "/" that is NOT the literal "/authors/" prefix must
+    # never be guessed at via a generic split.
+    assert canonical_author_key("Charlotte Bronte/Currer Bell") is None
+
+
+def test_canonical_author_key_rejects_non_string_type_gracefully() -> None:
+    assert canonical_author_key(123) is None

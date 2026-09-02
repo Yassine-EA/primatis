@@ -9,6 +9,13 @@ from primatis_data_seeding.normalization.text import normalize_text, truncate_or
 
 _YEAR_RE = re.compile(r"(?<!\d)(1[0-9]{3}|20[0-9]{2}|2100)(?!\d)")
 
+# Open Library Author identifiers. The Search API returns a bare form
+# ("OL1098039A") in the `author_key` field, while the Authors bulk dump
+# uses the canonical prefixed form ("/authors/OL1098039A") as its own
+# `key`. Both designate the same Author and must compare equal.
+_AUTHOR_KEY_PREFIX = "/authors/"
+_AUTHOR_KEY_RE = re.compile(r"^OL\d+A$")
+
 
 def _extract_key(value: object) -> str | None:
     if isinstance(value, dict):
@@ -66,6 +73,36 @@ def normalize_biography(value: object) -> str | None:
     if isinstance(value, dict):
         value = value.get("value")
     return normalize_text(value)
+
+
+def canonical_author_key(value: object) -> str | None:
+    """Canonical internal form of an Open Library author_key: the bare
+    form without the "/authors/" prefix (e.g. "OL1098039A").
+
+    This reconciles the two real Open Library representations of the
+    exact same Author identity:
+      - Search API `author_key` field  -> "OL1098039A" (bare)
+      - Authors bulk dump `key` column -> "/authors/OL1098039A" (prefixed)
+
+    This is exact-identity normalization, never approximate matching:
+    only the literal "/authors/" prefix is stripped (no generic split on
+    "/", no heuristic), and the remainder must strictly match the real
+    Open Library Author key shape (OL<digits>A). Anything else — other
+    entity kinds ("/works/...", "/books/..."), malformed values, missing
+    values — returns None rather than being guessed at.
+    """
+    text = normalize_text(value)
+    if text is None:
+        return None
+
+    candidate = (
+        text[len(_AUTHOR_KEY_PREFIX):]
+        if text.startswith(_AUTHOR_KEY_PREFIX)
+        else text
+    )
+    if _AUTHOR_KEY_RE.fullmatch(candidate):
+        return candidate
+    return None
 
 
 def normalize_summary(value: object) -> str | None:

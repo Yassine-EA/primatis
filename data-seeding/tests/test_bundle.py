@@ -115,7 +115,13 @@ def _write_bpost(path: Path) -> None:
 
 
 def _candidate(
-    *, isbn=(), isbn_10=(), isbn_13=(), number_of_pages=None, cover_id=None
+    *,
+    isbn=(),
+    isbn_10=(),
+    isbn_13=(),
+    number_of_pages=None,
+    cover_id=None,
+    author_keys=("/authors/OL1A",),
 ) -> SelectedEdition:
     return SelectedEdition(
         language="FR",
@@ -124,7 +130,7 @@ def _candidate(
         edition_key="/books/OL1M",
         title="Book",
         subtitle=None,
-        author_keys=("/authors/OL1A",),
+        author_keys=tuple(author_keys),
         author_names=("Author",),
         subjects=(),
         isbn_10=tuple(isbn_10),
@@ -149,8 +155,11 @@ def test_normalize_selected_catalogue_without_author_records_is_unchanged() -> N
 
 
 def test_normalize_selected_catalogue_enriches_by_exact_author_key() -> None:
+    # author_records mirrors load_authors_snapshot()'s real contract: it
+    # is indexed by the CANONICAL (bare) author_key, even though the raw
+    # record's own "key" field keeps the dump's prefixed form.
     author_records = {
-        "/authors/OL1A": {
+        "OL1A": {
             "key": "/authors/OL1A",
             "name": "Canonical Author Name",
             "birth_date": "1900-01-01",
@@ -175,7 +184,7 @@ def test_normalize_selected_catalogue_never_enriches_by_name(tmp_path: Path) -> 
     # A record keyed by a DIFFERENT author_key must never be applied, even
     # if its name happens to match the Search-API author_name.
     author_records = {
-        "/authors/OL999A": {
+        "OL999A": {
             "key": "/authors/OL999A",
             "name": "Author",
             "birth_date": "1900-01-01",
@@ -192,7 +201,7 @@ def test_normalize_selected_catalogue_never_enriches_by_name(tmp_path: Path) -> 
 
 def test_normalize_selected_catalogue_name_with_slash_is_not_split() -> None:
     author_records = {
-        "/authors/OL1A": {
+        "OL1A": {
             "key": "/authors/OL1A",
             "name": "Charlotte Brontë / Currer Bell",
         }
@@ -203,6 +212,49 @@ def test_normalize_selected_catalogue_name_with_slash_is_not_split() -> None:
     )
 
     assert authors[0].full_name == "Charlotte Brontë / Currer Bell"
+
+
+def test_normalize_selected_catalogue_reconciles_bare_search_api_key_with_prefixed_snapshot() -> None:
+    # DEV-13.19.F regression: reproduces the exact real bug found in
+    # DEV-13.19.E. The Search API author_key is bare ("OL1098039A"); the
+    # Authors dump snapshot (via load_authors_snapshot) indexes by the
+    # SAME canonical bare form even though the dump's own record carries
+    # the prefixed "key" field. Enrichment must apply via canonicalization
+    # — never a name match, never a "/" split.
+    author_records = {
+        "OL1098039A": {
+            "key": "/authors/OL1098039A",
+            "name": "Carl Maria von Weber",
+            "bio": {
+                "type": "/type/text",
+                "value": "Deutscher Komponist, Dirigent und Pianist",
+            },
+        }
+    }
+
+    authors, _editions, _subjects = normalize_selected_catalogue(
+        [_candidate(author_keys=("OL1098039A",))],
+        author_records=author_records,
+    )
+
+    assert len(authors) == 1
+    enriched = authors[0]
+    assert enriched.full_name == "Carl Maria von Weber"
+    assert enriched.biography == "Deutscher Komponist, Dirigent und Pianist"
+
+
+def test_normalize_selected_catalogue_reconciles_prefixed_candidate_with_bare_snapshot() -> None:
+    # The reverse direction: candidate carries the prefixed form (as some
+    # fixtures/legacy inputs might), snapshot is indexed bare (the real
+    # load_authors_snapshot contract). Must still match.
+    author_records = {"OL1098039A": {"key": "/authors/OL1098039A", "name": "Carl Maria von Weber"}}
+
+    authors, _editions, _subjects = normalize_selected_catalogue(
+        [_candidate(author_keys=("/authors/OL1098039A",))],
+        author_records=author_records,
+    )
+
+    assert authors[0].full_name == "Carl Maria von Weber"
 
 
 def test_normalize_selected_catalogue_cover_id_is_propagated_from_candidate() -> None:

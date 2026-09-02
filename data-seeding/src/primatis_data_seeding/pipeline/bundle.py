@@ -39,6 +39,7 @@ from primatis_data_seeding.mapping.catalogue import map_catalogue
 from primatis_data_seeding.models import NormalizedAuthor, NormalizedEdition
 from primatis_data_seeding.normalization.isbn import select_valid_isbn
 from primatis_data_seeding.normalization.openlibrary import (
+    canonical_author_key,
     normalize_author_record,
     normalize_page_count,
     normalize_publication_year,
@@ -251,10 +252,18 @@ def normalize_selected_catalogue(
                 continue
             author_keys.append(author_key)
 
-            # Enrichment is looked up strictly by exact author_key. When no
+            # Enrichment is looked up strictly by exact Author identity.
+            # `author_key` (Search API) and the Authors dump snapshot key
+            # are reconciled via the canonical form (bare, no "/authors/"
+            # prefix) before lookup — never a name search. When no
             # Authors dump record is available, behavior is unchanged from
             # the Search-API-only baseline (name only, no dates, no bio).
-            enriched_record = author_records.get(author_key)
+            canonical_key = canonical_author_key(author_key)
+            enriched_record = (
+                author_records.get(canonical_key)
+                if canonical_key is not None
+                else None
+            )
             enriched = (
                 normalize_author_record(enriched_record)
                 if enriched_record is not None
