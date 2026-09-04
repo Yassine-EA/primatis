@@ -53,6 +53,27 @@ def normalize_page_count(value: object) -> int | None:
     return None
 
 
+# Conservative bibliographic pagination parser: accepts ONLY a single exact
+# "<digits> p." form (e.g. "132 p.", "352p"), which unambiguously names one
+# whole-book page count. Deliberately rejects everything with any additional
+# structure — multi-volume ("2 v.", "5 vol."), unpaged ("1 v. (unpaged)"),
+# preliminary-pages prefixes ("xii, 352 p."), or bare physical-description
+# fragments ("p. cm.") — since these cannot be converted to a single page
+# count without guessing.
+_PAGINATION_RE = re.compile(r"^(\d+)\s*p\.?$")
+
+
+def normalize_pagination(value: object) -> int | None:
+    text = normalize_text(value)
+    if text is None:
+        return None
+    match = _PAGINATION_RE.fullmatch(text)
+    if match is None:
+        return None
+    parsed = int(match.group(1))
+    return parsed if parsed > 0 else None
+
+
 def normalize_exact_date(value: object) -> date | None:
     text = normalize_text(value)
     if text is None:

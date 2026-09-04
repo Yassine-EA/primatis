@@ -5,6 +5,7 @@ from primatis_data_seeding.normalization.openlibrary import (
     normalize_author_record,
     normalize_biography,
     normalize_edition_record,
+    normalize_pagination,
     normalize_publication_year,
     normalize_summary,
     normalize_work_record,
@@ -216,3 +217,41 @@ def test_canonical_author_key_never_splits_on_slash_generically() -> None:
 
 def test_canonical_author_key_rejects_non_string_type_gracefully() -> None:
     assert canonical_author_key(123) is None
+
+
+def test_normalize_pagination_accepts_exact_single_volume_form() -> None:
+    assert normalize_pagination("132 p.") == 132
+    assert normalize_pagination("132p") == 132
+    assert normalize_pagination("1 p.") == 1
+
+
+def test_normalize_pagination_rejects_zero() -> None:
+    assert normalize_pagination("0 p.") is None
+
+
+def test_normalize_pagination_rejects_multi_volume() -> None:
+    assert normalize_pagination("2 v. ;") is None
+    assert normalize_pagination("5 vol. ;") is None
+
+
+def test_normalize_pagination_rejects_unpaged() -> None:
+    assert normalize_pagination("1 v. (unpaged)") is None
+    assert normalize_pagination("1 volume (unpaged)") is None
+    assert normalize_pagination("1 v. (unpaged) :") is None
+    assert normalize_pagination("1 v.") is None
+
+
+def test_normalize_pagination_rejects_preliminary_pages_prefix() -> None:
+    # "xii, 352 p." is deliberately NOT reduced to 352 — the prefix makes
+    # the total ambiguous without a bibliographic convention decision.
+    assert normalize_pagination("xii, 352 p.") is None
+
+
+def test_normalize_pagination_rejects_physical_description_without_count() -> None:
+    assert normalize_pagination("p. cm.") is None
+
+
+def test_normalize_pagination_rejects_none_and_blank() -> None:
+    assert normalize_pagination(None) is None
+    assert normalize_pagination("") is None
+    assert normalize_pagination("   ") is None

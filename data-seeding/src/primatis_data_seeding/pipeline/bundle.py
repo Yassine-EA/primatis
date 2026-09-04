@@ -21,6 +21,7 @@ from primatis_data_seeding.acquisition.openlibrary_details import (
     load_records_snapshot,
 )
 from primatis_data_seeding.acquisition.provenance import sha256_file
+from primatis_data_seeding.acquisition.wikidata import load_entities_snapshot
 from primatis_data_seeding.config import SeedProfile, load_profiles
 from primatis_data_seeding.deduplication.catalogue import (
     deduplicate_authors,
@@ -42,10 +43,12 @@ from primatis_data_seeding.normalization.openlibrary import (
     canonical_author_key,
     normalize_author_record,
     normalize_page_count,
+    normalize_pagination,
     normalize_publication_year,
     normalize_work_record,
 )
 from primatis_data_seeding.normalization.text import truncate_or_none
+from primatis_data_seeding.normalization.wikidata import resolve_author_nationality
 from primatis_data_seeding.reference.bpost import BpostLocality
 from primatis_data_seeding.validation.catalogue import (
     validate_author,
@@ -218,6 +221,8 @@ def normalize_selected_catalogue(
     author_records: Mapping[str, dict] | None = None,
     work_records: Mapping[str, dict] | None = None,
     edition_records: Mapping[str, dict] | None = None,
+    wikidata_author_records: Mapping[str, dict] | None = None,
+    wikidata_country_records: Mapping[str, dict] | None = None,
 ) -> tuple[
     list[NormalizedAuthor],
     list[NormalizedEdition],
@@ -226,6 +231,8 @@ def normalize_selected_catalogue(
     author_records = author_records or {}
     work_records = work_records or {}
     edition_records = edition_records or {}
+    wikidata_author_records = wikidata_author_records or {}
+    wikidata_country_records = wikidata_country_records or {}
     authors: list[NormalizedAuthor] = []
     editions: list[NormalizedEdition] = []
     subjects_by_work_key: dict[str, tuple[str, ...]] = {}
@@ -270,6 +277,26 @@ def normalize_selected_catalogue(
                 else None
             )
 
+            # nationality: only ever filled via an EXPLICIT identifier link
+            # already present in the Author's own Open Library record
+            # (`remote_ids.wikidata`) — never derived from name, language,
+            # or biography. See normalization/wikidata.py for the exact
+            # conservative resolution rules (single P27 value, modern
+            # sovereign state only).
+            nationality = None
+            if isinstance(enriched_record, dict):
+                remote_ids = enriched_record.get("remote_ids")
+                wikidata_qid = (
+                    remote_ids.get("wikidata")
+                    if isinstance(remote_ids, dict)
+                    else None
+                )
+                if isinstance(wikidata_qid, str) and wikidata_qid:
+                    author_entity = wikidata_author_records.get(wikidata_qid)
+                    nationality = resolve_author_nationality(
+                        author_entity, wikidata_country_records
+                    )
+
             author = NormalizedAuthor(
                 source_key=author_key,
                 # The Author dump's canonical name is preferred when the
@@ -278,6 +305,7 @@ def normalize_selected_catalogue(
                 birth_date=enriched.birth_date if enriched else None,
                 death_date=enriched.death_date if enriched else None,
                 biography=enriched.biography if enriched else None,
+                nationality=nationality,
             )
             validation = validate_author(author)
             if not validation.valid:
@@ -292,26 +320,62 @@ def normalize_selected_catalogue(
                 f"Edition {candidate.edition_key} has no valid normalized Author."
             )
 
-        publication_source: object = (
-            candidate.publish_date
-            if candidate.publish_date is not None
-            else candidate.publish_year
-        )
-        publisher = None
-        for raw_publisher in candidate.publishers:
-            publisher = truncate_or_none(raw_publisher, 255)
-            if publisher is not None:
-                break
-
-        # page_count: an Edition detail record is used ONLY when it matches
-        # this edition's exact edition_key. It never falls back to another
-        # edition of the same Work, and never to an estimate/average.
+        # isbn/publisher/publication_year/page_count: an Edition detail
+        # record is used ONLY when it matches this edition's exact
+        # edition_key (never another edition of the same Work, never an
+        # estimate/average/invented value). It is checked FIRST — being the
+        # richer, individually-fetched source — with the Search-API-level
+        # candidate fields used only as a fallback, preserving the
+        # historical baseline when no Edition detail was acquired.
         edition_detail = edition_records.get(candidate.edition_key)
-        page_count = (
-            normalize_page_count(edition_detail.get("number_of_pages"))
-            if isinstance(edition_detail, dict)
+        edition_detail = edition_detail if isinstance(edition_detail, dict) else None
+
+        isbn = (
+            select_valid_isbn(
+                edition_detail.get("isbn_13"), edition_detail.get("isbn_10")
+            )
+            if edition_detail is not None
             else None
         )
+        if isbn is None:
+            isbn = _select_isbn(candidate)
+
+        publisher = None
+        detail_publishers = edition_detail.get("publishers") if edition_detail else None
+        if isinstance(detail_publishers, list):
+            for raw_publisher in detail_publishers:
+                publisher = truncate_or_none(raw_publisher, 255)
+                if publisher is not None:
+                    break
+        if publisher is None:
+            for raw_publisher in candidate.publishers:
+                publisher = truncate_or_none(raw_publisher, 255)
+                if publisher is not None:
+                    break
+
+        publication_year = (
+            normalize_publication_year(edition_detail.get("publish_date"))
+            if edition_detail is not None
+            else None
+        )
+        if publication_year is None:
+            publication_source: object = (
+                candidate.publish_date
+                if candidate.publish_date is not None
+                else candidate.publish_year
+            )
+            publication_year = normalize_publication_year(publication_source)
+
+        page_count = (
+            normalize_page_count(edition_detail.get("number_of_pages"))
+            if edition_detail is not None
+            else None
+        )
+        if page_count is None and edition_detail is not None:
+            # Conservative bibliographic pagination fallback: only an exact
+            # "<digits> p." form is convertible (see normalize_pagination).
+            # Multi-volume/unpaged/ambiguous pagination strings stay NULL.
+            page_count = normalize_pagination(edition_detail.get("pagination"))
         if page_count is None:
             page_count = normalize_page_count(candidate.number_of_pages)
 
@@ -329,9 +393,9 @@ def normalize_selected_catalogue(
             work_key=candidate.work_key or None,
             title=title,
             subtitle=truncate_or_none(candidate.subtitle, 500),
-            isbn=_select_isbn(candidate),
+            isbn=isbn,
             language=candidate.language,
-            publication_year=normalize_publication_year(publication_source),
+            publication_year=publication_year,
             page_count=page_count,
             publisher=publisher,
             author_keys=tuple(dict.fromkeys(author_keys)),
@@ -373,6 +437,8 @@ def build_bundle(
     work_snapshot_jsonl: Path | None = None,
     edition_snapshot_jsonl: Path | None = None,
     covers_assets_dir: Path | None = None,
+    wikidata_authors_snapshot_jsonl: Path | None = None,
+    wikidata_countries_snapshot_jsonl: Path | None = None,
 ) -> dict:
     if raw_password is None or not raw_password.strip():
         raise ValueError(
@@ -429,11 +495,23 @@ def build_bundle(
         if edition_snapshot_jsonl is not None
         else {}
     )
+    wikidata_author_records = (
+        load_entities_snapshot(wikidata_authors_snapshot_jsonl)
+        if wikidata_authors_snapshot_jsonl is not None
+        else {}
+    )
+    wikidata_country_records = (
+        load_entities_snapshot(wikidata_countries_snapshot_jsonl)
+        if wikidata_countries_snapshot_jsonl is not None
+        else {}
+    )
     normalized_authors, normalized_editions, subjects = (
         normalize_selected_catalogue(
             selected,
             author_records=author_records,
             work_records=work_records,
+            wikidata_author_records=wikidata_author_records,
+            wikidata_country_records=wikidata_country_records,
             edition_records=edition_records,
         )
     )
@@ -521,6 +599,9 @@ def build_bundle(
         for author in author_dedup.kept
         if author.birth_date or author.death_date or author.biography
     )
+    authors_with_nationality = sum(
+        1 for author in author_dedup.kept if author.nationality
+    )
     summary_present = sum(1 for title in mapping.titles if title.summary is not None)
     page_count_present = sum(
         1 for title in mapping.titles if title.page_count is not None
@@ -545,6 +626,7 @@ def build_bundle(
             "normalized_editions": len(normalized_editions),
             "authors_kept": len(author_dedup.kept),
             "authors_enriched": authors_enriched,
+            "authors_with_nationality": authors_with_nationality,
             "author_duplicates": len(author_dedup.duplicates),
             "author_candidates": len(author_dedup.candidates),
             "titles_kept": len(edition_dedup.kept),
@@ -676,6 +758,27 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--wikidata-authors-snapshot",
+        type=Path,
+        default=None,
+        help=(
+            "Optional Wikidata Author entities snapshot (JSONL, exact QID "
+            "match via each Author's own remote_ids.wikidata field) used "
+            "for Author.nationality. Omit to keep nationality=NULL."
+        ),
+    )
+    parser.add_argument(
+        "--wikidata-countries-snapshot",
+        type=Path,
+        default=None,
+        help=(
+            "Optional Wikidata Country entities snapshot (JSONL, exact QID "
+            "match via the P27 claim of --wikidata-authors-snapshot "
+            "entities) used to resolve Author.nationality's label. Omit to "
+            "keep nationality=NULL."
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         default=None,
@@ -728,6 +831,8 @@ def main() -> int:
         work_snapshot_jsonl=args.work_snapshot,
         edition_snapshot_jsonl=args.edition_snapshot,
         covers_assets_dir=args.covers_assets_dir,
+        wikidata_authors_snapshot_jsonl=args.wikidata_authors_snapshot,
+        wikidata_countries_snapshot_jsonl=args.wikidata_countries_snapshot,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0

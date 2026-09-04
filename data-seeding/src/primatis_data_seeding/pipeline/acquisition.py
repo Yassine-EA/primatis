@@ -16,12 +16,20 @@ from primatis_data_seeding.acquisition.openlibrary import (
 )
 from primatis_data_seeding.acquisition.openlibrary_authors import (
     acquire_authors_snapshot,
+    load_authors_snapshot,
 )
 from primatis_data_seeding.acquisition.openlibrary_details import (
     acquire_records,
     write_records_snapshot,
 )
 from primatis_data_seeding.acquisition.provenance import archive_source_file
+from primatis_data_seeding.acquisition.wikidata import (
+    acquire_entities,
+    write_entities_snapshot,
+)
+from primatis_data_seeding.normalization.wikidata import (
+    extract_country_of_citizenship_qids,
+)
 from primatis_data_seeding.reference.bpost import load_bpost_localities
 
 
@@ -53,6 +61,8 @@ def build_acquisition_bundle(
     refresh_works: bool = False,
     fetch_edition_details: bool = False,
     refresh_editions: bool = False,
+    fetch_wikidata: bool = False,
+    refresh_wikidata: bool = False,
 ) -> dict:
     quotas = PROFILE_LANGUAGE_QUOTAS.get(profile)
     if quotas is None:
@@ -95,6 +105,55 @@ def build_acquisition_bundle(
             required_keys=required_author_keys,
             snapshot_path=validated / "authors_selected.jsonl",
             refresh=refresh_authors,
+        )
+
+    wikidata_authors_manifest: dict | None = None
+    wikidata_countries_manifest: dict | None = None
+    if fetch_wikidata:
+        if authors_manifest is None:
+            raise ValueError(
+                "--fetch-wikidata requires --authors-dump (Author.nationality "
+                "is only ever resolved via the exact remote_ids.wikidata "
+                "field of an already-matched Open Library Author record)."
+            )
+        matched_authors = load_authors_snapshot(validated / "authors_selected.jsonl")
+
+        # Hop 1: exact author_key -> exact Wikidata QID, via the field the
+        # Author's OWN Open Library record explicitly publishes. Never a
+        # name search, never a heuristic guess.
+        required_author_qids: set[str] = set()
+        for record in matched_authors.values():
+            remote_ids = record.get("remote_ids") if isinstance(record, dict) else None
+            qid = remote_ids.get("wikidata") if isinstance(remote_ids, dict) else None
+            if isinstance(qid, str) and qid:
+                required_author_qids.add(qid)
+
+        wikidata_author_entities, wikidata_authors_manifest = acquire_entities(
+            required_author_qids,
+            cache_dir=data_dir / "raw" / "wikidata" / profile / "authors",
+            contact=contact,
+            refresh=refresh_wikidata,
+        )
+        write_entities_snapshot(
+            wikidata_author_entities, validated / "wikidata_authors_selected.jsonl"
+        )
+
+        # Hop 2: exact country-of-citizenship QID(s) (P27), referenced by
+        # the Wikidata Author entities acquired above — again, only exact
+        # identifiers already present in the fetched entities.
+        required_country_qids: set[str] = set()
+        for entity in wikidata_author_entities.values():
+            required_country_qids.update(extract_country_of_citizenship_qids(entity))
+
+        wikidata_country_entities, wikidata_countries_manifest = acquire_entities(
+            required_country_qids,
+            cache_dir=data_dir / "raw" / "wikidata" / profile / "countries",
+            contact=contact,
+            refresh=refresh_wikidata,
+        )
+        write_entities_snapshot(
+            wikidata_country_entities,
+            validated / "wikidata_countries_selected.jsonl",
         )
 
     works_manifest: dict | None = None
@@ -159,6 +218,24 @@ def build_acquisition_bundle(
             if authors_manifest is not None
             else None
         ),
+        "wikidata_authors": (
+            {
+                "requested": len(wikidata_authors_manifest.get("requested_qids", ())),
+                "reused": len(wikidata_authors_manifest.get("reused_qids", ())),
+                "fetched": len(wikidata_authors_manifest.get("fetched_qids", ())),
+            }
+            if wikidata_authors_manifest is not None
+            else None
+        ),
+        "wikidata_countries": (
+            {
+                "requested": len(wikidata_countries_manifest.get("requested_qids", ())),
+                "reused": len(wikidata_countries_manifest.get("reused_qids", ())),
+                "fetched": len(wikidata_countries_manifest.get("fetched_qids", ())),
+            }
+            if wikidata_countries_manifest is not None
+            else None
+        ),
         "work_records": (
             {
                 "requested": len(works_manifest.get("requested_keys", ())),
@@ -187,6 +264,18 @@ def build_acquisition_bundle(
             **(
                 {"authors_selected": str(validated / "authors_selected.jsonl")}
                 if authors_manifest is not None
+                else {}
+            ),
+            **(
+                {
+                    "wikidata_authors_selected": str(
+                        validated / "wikidata_authors_selected.jsonl"
+                    ),
+                    "wikidata_countries_selected": str(
+                        validated / "wikidata_countries_selected.jsonl"
+                    ),
+                }
+                if wikidata_authors_manifest is not None
                 else {}
             ),
             **(
@@ -287,6 +376,23 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Force re-fetching every required Edition record even if already cached.",
     )
+    parser.add_argument(
+        "--fetch-wikidata",
+        action="store_true",
+        help=(
+            "Fetch Wikidata Author/Country entities for Author.nationality, "
+            "strictly via the exact remote_ids.wikidata field already "
+            "present in matched --authors-dump records (requires "
+            "--authors-dump). A rerun without --refresh-wikidata reuses the "
+            "existing per-QID cache and performs no network call. Omit "
+            "entirely to keep nationality=NULL."
+        ),
+    )
+    parser.add_argument(
+        "--refresh-wikidata",
+        action="store_true",
+        help="Force re-fetching every required Wikidata entity even if already cached.",
+    )
     return parser
 
 
@@ -298,10 +404,14 @@ def main() -> int:
         raise SystemExit(
             "PRIMATIS_OPENLIBRARY_CONTACT is required with --refresh-openlibrary."
         )
-    if (args.fetch_work_summaries or args.fetch_edition_details) and not contact:
+    if (
+        args.fetch_work_summaries
+        or args.fetch_edition_details
+        or args.fetch_wikidata
+    ) and not contact:
         raise SystemExit(
             "PRIMATIS_OPENLIBRARY_CONTACT is required with "
-            "--fetch-work-summaries/--fetch-edition-details."
+            "--fetch-work-summaries/--fetch-edition-details/--fetch-wikidata."
         )
 
     report = build_acquisition_bundle(
@@ -316,6 +426,8 @@ def main() -> int:
         refresh_works=args.refresh_works,
         fetch_edition_details=args.fetch_edition_details,
         refresh_editions=args.refresh_editions,
+        fetch_wikidata=args.fetch_wikidata,
+        refresh_wikidata=args.refresh_wikidata,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0

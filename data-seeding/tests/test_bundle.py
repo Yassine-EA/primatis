@@ -122,6 +122,9 @@ def _candidate(
     number_of_pages=None,
     cover_id=None,
     author_keys=("/authors/OL1A",),
+    publishers=(),
+    publish_date=None,
+    publish_year=None,
 ) -> SelectedEdition:
     return SelectedEdition(
         language="FR",
@@ -136,9 +139,9 @@ def _candidate(
         isbn_10=tuple(isbn_10),
         isbn_13=tuple(isbn_13),
         isbn=tuple(isbn),
-        publishers=(),
-        publish_date=None,
-        publish_year=None,
+        publishers=tuple(publishers),
+        publish_date=publish_date,
+        publish_year=publish_year,
         number_of_pages=number_of_pages,
         cover_id=cover_id,
     )
@@ -368,6 +371,208 @@ def test_normalize_selected_catalogue_page_count_absent_detail_is_none() -> None
     )
 
     assert editions[0].page_count is None
+
+
+def test_normalize_selected_catalogue_page_count_pagination_fallback() -> None:
+    # DEV-13.20: an exact "<digits> p." pagination string in the Edition
+    # detail is convertible when number_of_pages itself is absent/invalid.
+    edition_records = {
+        "/books/OL1M": {
+            "key": "/books/OL1M",
+            "number_of_pages": None,
+            "pagination": "132 p.",
+        }
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(number_of_pages=None)], edition_records=edition_records
+    )
+
+    assert editions[0].page_count == 132
+
+
+def test_normalize_selected_catalogue_page_count_pagination_multivolume_stays_null() -> None:
+    edition_records = {
+        "/books/OL1M": {
+            "key": "/books/OL1M",
+            "number_of_pages": None,
+            "pagination": "2 v. ;",
+        }
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(number_of_pages=None)], edition_records=edition_records
+    )
+
+    assert editions[0].page_count is None
+
+
+def test_normalize_selected_catalogue_isbn_from_exact_edition_detail() -> None:
+    edition_records = {
+        "/books/OL1M": {"key": "/books/OL1M", "isbn_13": ["9780306406157"]}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate()], edition_records=edition_records
+    )
+
+    assert editions[0].isbn == "9780306406157"
+
+
+def test_normalize_selected_catalogue_isbn_never_uses_another_edition() -> None:
+    edition_records = {
+        "/books/OL999M": {"key": "/books/OL999M", "isbn_13": ["9780306406157"]}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate()], edition_records=edition_records
+    )
+
+    assert editions[0].isbn is None
+
+
+def test_normalize_selected_catalogue_isbn_falls_back_to_search_api() -> None:
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(isbn=("9780306406157",))]
+    )
+
+    assert editions[0].isbn == "9780306406157"
+
+
+def test_normalize_selected_catalogue_isbn_invalid_detail_falls_back() -> None:
+    edition_records = {
+        "/books/OL1M": {"key": "/books/OL1M", "isbn_10": ["250350325"]}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(isbn=("9780306406157",))], edition_records=edition_records
+    )
+
+    assert editions[0].isbn == "9780306406157"
+
+
+def test_normalize_selected_catalogue_publisher_from_exact_edition_detail() -> None:
+    edition_records = {
+        "/books/OL1M": {"key": "/books/OL1M", "publishers": ["Detail Publisher"]}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(publishers=("Candidate Publisher",))],
+        edition_records=edition_records,
+    )
+
+    assert editions[0].publisher == "Detail Publisher"
+
+
+def test_normalize_selected_catalogue_publisher_never_uses_another_edition() -> None:
+    edition_records = {
+        "/books/OL999M": {"key": "/books/OL999M", "publishers": ["Other Publisher"]}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(publishers=("Candidate Publisher",))],
+        edition_records=edition_records,
+    )
+
+    assert editions[0].publisher == "Candidate Publisher"
+
+
+def test_normalize_selected_catalogue_publication_year_from_exact_edition_detail() -> None:
+    edition_records = {
+        "/books/OL1M": {"key": "/books/OL1M", "publish_date": "May 1998"}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(publish_date="2020", publish_year=2020)],
+        edition_records=edition_records,
+    )
+
+    assert editions[0].publication_year == 1998
+
+
+def test_normalize_selected_catalogue_publication_year_never_uses_another_edition() -> None:
+    edition_records = {
+        "/books/OL999M": {"key": "/books/OL999M", "publish_date": "1998"}
+    }
+
+    _authors, editions, _subjects = normalize_selected_catalogue(
+        [_candidate(publish_date="2020", publish_year=2020)],
+        edition_records=edition_records,
+    )
+
+    assert editions[0].publication_year == 2020
+
+
+def test_normalize_selected_catalogue_nationality_from_wikidata_chain() -> None:
+    author_records = {
+        "OL1A": {
+            "key": "/authors/OL1A",
+            "name": "Author",
+            "remote_ids": {"wikidata": "Q154812"},
+        }
+    }
+    wikidata_author_records = {
+        "Q154812": {
+            "id": "Q154812",
+            "claims": {
+                "P27": [
+                    {"mainsnak": {"snaktype": "value", "datavalue": {"value": {"id": "Q142"}}}}
+                ]
+            },
+        }
+    }
+    wikidata_country_records = {
+        "Q142": {
+            "id": "Q142",
+            "labels": {"en": {"language": "en", "value": "France"}},
+            "claims": {
+                "P31": [
+                    {"mainsnak": {"snaktype": "value", "datavalue": {"value": {"id": "Q6256"}}}}
+                ]
+            },
+        }
+    }
+
+    authors, _editions, _subjects = normalize_selected_catalogue(
+        [_candidate()],
+        author_records=author_records,
+        wikidata_author_records=wikidata_author_records,
+        wikidata_country_records=wikidata_country_records,
+    )
+
+    assert authors[0].nationality == "France"
+
+
+def test_normalize_selected_catalogue_nationality_none_without_wikidata_snapshots() -> None:
+    author_records = {
+        "OL1A": {
+            "key": "/authors/OL1A",
+            "name": "Author",
+            "remote_ids": {"wikidata": "Q154812"},
+        }
+    }
+
+    authors, _editions, _subjects = normalize_selected_catalogue(
+        [_candidate()], author_records=author_records
+    )
+
+    assert authors[0].nationality is None
+
+
+def test_normalize_selected_catalogue_nationality_none_without_remote_id() -> None:
+    author_records = {"OL1A": {"key": "/authors/OL1A", "name": "Author"}}
+    wikidata_country_records = {
+        "Q142": {"id": "Q142", "labels": {"en": {"value": "France"}}}
+    }
+
+    authors, _editions, _subjects = normalize_selected_catalogue(
+        [_candidate()],
+        author_records=author_records,
+        wikidata_author_records={"Q154812": {"id": "Q154812"}},
+        wikidata_country_records=wikidata_country_records,
+    )
+
+    assert authors[0].nationality is None
 
 
 def test_small_profile_targets_are_stable() -> None:
