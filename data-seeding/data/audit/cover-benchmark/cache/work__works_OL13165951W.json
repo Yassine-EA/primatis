@@ -1,0 +1,37 @@
+{
+  "key": "/works/OL13165951W",
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T08:45:40.501680"
+  },
+  "title": "All together",
+  "id": 48333347,
+  "subject_places": [
+    "Canada"
+  ],
+  "first_publish_date": "1990",
+  "latest_revision": 2,
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2010-01-26T16:40:28.350630"
+  },
+  "authors": [
+    {
+      "type": "/type/author_role",
+      "author": {
+        "key": "/authors/OL6070470A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Juvenile literature",
+    "Multiculturalism",
+    "Study and teaching",
+    "Dwellings",
+    "Family"
+  ],
+  "revision": 2
+}

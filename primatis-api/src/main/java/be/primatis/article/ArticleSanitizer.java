@@ -44,19 +44,43 @@ public class ArticleSanitizer {
      * ({@code h1} volontairement exclu — réservé au titre d'Article rendu
      * par le frontend, jamais dupliqué dans le corps). Protocoles de lien
      * restreints à {@code http}/{@code https} uniquement (retire
-     * {@code ftp}/{@code mailto} du défaut {@code basic()}). Aucune image,
-     * aucun média (Article media hors V1, business-rules.md §7.9), aucun
+     * {@code ftp}/{@code mailto} du défaut {@code basic()}). Aucun
      * {@code script}/{@code style}/{@code iframe}/{@code object}/
      * {@code embed}/{@code form}/{@code input}/{@code button}/
      * {@code audio}/{@code video}/{@code svg}, aucun attribut
      * {@code style} arbitraire, aucun gestionnaire d'événement — absents
      * par construction d'une allowlist (jamais retirés explicitement,
      * jamais présents).
+     *
+     * <p>{@code img} (DEV-ARTICLES-MEDIA, DEV-DEC-0079 — supersède, sur ce
+     * point précis, l'exclusion média de business-rules.md §7.9) :
+     * attributs strictement limités à {@code src}/{@code alt} (jamais
+     * {@code style}/{@code onerror}/{@code onclick}/{@code srcset}/
+     * {@code data-*}/{@code class}/{@code width}/{@code height} — mission
+     * §14, aucune justification réelle ne les rend nécessaires ici).
+     * Protocoles {@code src} : {@code http}/{@code https} uniquement.
+     * {@link Safelist#preserveRelativeLinks} activé : une URL
+     * <em>relative</em> (sans protocole — précisément le cas de
+     * {@code /media/articles/<uuid>.<ext>}) est acceptée sans être résolue
+     * contre une base URI absolue (inexistante ici, {@code
+     * Jsoup.clean(rawHtml, ...)} sans base) — vérifié empiriquement
+     * nécessaire et suffisant : sans cette option, une tentative initiale
+     * d'ajouter explicitement une chaîne vide ({@code ""}) à {@link
+     * Safelist#addProtocols} pour représenter « aucun protocole » a
+     * échoué à l'exécution ({@code ValidationException: String must not
+     * be empty}) — {@code preserveRelativeLinks(true)} est le mécanisme
+     * jsoup réel pour ce besoin, pas une entrée de protocole. {@code
+     * javascript:}/{@code data:}/{@code file:} restent structurellement
+     * exclus (jamais dans la liste de protocoles) — preuve empirique dans
+     * {@code ArticleSanitizerTests} (mission §15, DEV-ARTICLES-MEDIA §28).
      */
     private static final Safelist ARTICLE_CONTENT_ALLOWLIST = Safelist.basic()
-            .addTags("h2", "h3", "h4")
+            .addTags("h2", "h3", "h4", "img")
+            .addAttributes("img", "src", "alt")
             .removeProtocols("a", "href", "ftp", "mailto")
-            .addProtocols("a", "href", "http", "https");
+            .addProtocols("a", "href", "http", "https")
+            .addProtocols("img", "src", "http", "https")
+            .preserveRelativeLinks(true);
 
     /**
      * @param rawHtml HTML brut, jamais {@code null} (précondition de

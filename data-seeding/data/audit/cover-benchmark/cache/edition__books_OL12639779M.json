@@ -1,0 +1,62 @@
+{
+  "publishers": [
+    "Vilo Diffuseur"
+  ],
+  "number_of_pages": 181,
+  "weight": "1 pounds",
+  "title": "Promenades art nouveau à Bruxelles",
+  "physical_format": "Unknown Binding",
+  "identifiers": {
+    "librarything": [
+      "4712078"
+    ]
+  },
+  "isbn_13": [
+    "9782873860363"
+  ],
+  "isbn_10": [
+    "2873860367"
+  ],
+  "publish_date": "1995",
+  "key": "/books/OL12639779M",
+  "authors": [
+    {
+      "key": "/authors/OL3972776A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10006741W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "9.1 x 6.3 x 0.4 inches",
+  "oclc_numbers": [
+    "35561395"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-005.mrc:419949519:1215",
+    "marc:harvard_bibliographic_metadata/ab.bib.10.20150123.full.mrc:55811756:886",
+    "marc:harvard_bibliographic_metadata/20220215_045.bib.mrc:321903825:1928"
+  ],
+  "lc_classifications": [
+    "NA1167.5.A77 M44 1995"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 6,
+  "revision": 6,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-08-20T01:22:52.942826"
+  }
+}

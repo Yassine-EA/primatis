@@ -1,4 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { RouterLink } from '@angular/router';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 
@@ -10,6 +12,10 @@ import { LoanApiService } from '../../../../loans/services/loan-api.service';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  loanStatusSeverity as sharedLoanStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
 
 const DEFAULT_PAGE_SIZE = 20;
 
@@ -28,12 +34,13 @@ const DEFAULT_PAGE_SIZE = 20;
  */
 @Component({
   selector: 'app-member-loans-page',
-  imports: [TableModule, TagModule, LoadingState, EmptyState, ErrorState],
+  imports: [RouterLink, TableModule, TagModule, LoadingState, EmptyState, ErrorState],
   templateUrl: './member-loans-page.html',
   styleUrl: './member-loans-page.scss',
 })
 export class MemberLoansPage {
   private readonly loanApiService = inject(LoanApiService);
+  private readonly titleService = inject(Title);
 
   readonly rows = signal<LoanResponse[]>([]);
   readonly totalRecords = signal(0);
@@ -44,11 +51,21 @@ export class MemberLoansPage {
   // lui-même ce premier appel. Même principe que StaffUsersPage.
   readonly loading = signal(true);
   readonly error = signal<AppError | null>(null);
+  readonly activeCount = computed(
+    () => this.rows().filter((loan) => loan.loanStatus === 'ACTIVE').length,
+  );
+  readonly overdueCount = computed(
+    () => this.rows().filter((loan) => loan.loanStatus === 'OVERDUE').length,
+  );
+  readonly returnedCount = computed(
+    () => this.rows().filter((loan) => loan.loanStatus === 'RETURNED').length,
+  );
 
   private lastPage = 0;
   private lastSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
+    this.titleService.setTitle('Mes prêts — PRIMATIS');
     this.load(0, DEFAULT_PAGE_SIZE);
   }
 
@@ -67,15 +84,39 @@ export class MemberLoansPage {
     this.load(this.lastPage, this.lastSize);
   }
 
-  loanStatusSeverity(status: LoanStatus): 'success' | 'danger' | 'secondary' {
+  loanStatusSeverity(status: LoanStatus): StatusTagSeverity {
+    return sharedLoanStatusSeverity(status);
+  }
+
+  loanStatusLabel(status: LoanStatus): string {
     switch (status) {
       case 'ACTIVE':
-        return 'success';
+        return 'En cours';
       case 'OVERDUE':
-        return 'danger';
+        return 'En retard';
       case 'RETURNED':
-        return 'secondary';
+        return 'Retourné';
     }
+  }
+
+  formatDate(value: string | null): string {
+    if (!value) {
+      return '—';
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return new Intl.DateTimeFormat('fr-BE', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    })
+      .format(date)
+      .replace('.', '');
   }
 
   private load(page: number, size: number): void {

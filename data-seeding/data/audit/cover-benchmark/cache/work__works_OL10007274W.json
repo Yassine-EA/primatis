@@ -1,0 +1,31 @@
+{
+  "title": "Stephane magnin (bilingue anglais)",
+  "key": "/works/OL10007274W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3973337A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Exhibitions",
+    "Installations (Art)"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:28.508302"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2020-12-08T01:19:22.712713"
+  }
+}

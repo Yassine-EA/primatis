@@ -1,0 +1,55 @@
+{
+  "publishers": [
+    "Presses universitaires de Nancy"
+  ],
+  "physical_format": "Unknown Binding",
+  "subtitle": "Serie medievale (Collection \"Archeologie et histoire medievales\")",
+  "title": "Atlas des villes de Franche-Comte",
+  "identifiers": {
+    "goodreads": [
+      "5675083"
+    ]
+  },
+  "isbn_13": [
+    "9782864806424"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_10": [
+    "2864806428"
+  ],
+  "publish_date": "1992",
+  "key": "/books/OL12634948M",
+  "authors": [
+    {
+      "key": "/authors/OL3970580A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10004864W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "oclc_numbers": [
+    "27272589"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-003.mrc:200676923:1798"
+  ],
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-21T23:34:10.722792"
+  }
+}

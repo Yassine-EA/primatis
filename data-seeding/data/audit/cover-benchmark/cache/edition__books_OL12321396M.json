@@ -1,0 +1,58 @@
+{
+  "title": "Qui Mange Quoi (A Mon Tour/My Turn)",
+  "authors": [
+    {
+      "key": "/authors/OL540303A"
+    },
+    {
+      "key": "/authors/OL225620A"
+    }
+  ],
+  "publish_date": "March 2002",
+  "publishers": [
+    "Editions du Carrousel"
+  ],
+  "weight": "8.3 ounces",
+  "physical_format": "Board book",
+  "subjects": [
+    "Cooking",
+    "Readers - Beginner",
+    "Juvenile Nonfiction",
+    "Children's Baby - Cooking",
+    "Children: Kindergarten"
+  ],
+  "edition_name": "Brdbk edition",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_13": [
+    "9781587281730"
+  ],
+  "isbn_10": [
+    "1587281732"
+  ],
+  "oclc_numbers": [
+    "47219577"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "8.8 x 8.6 x 0.3 inches",
+  "source_records": [
+    "amazon:1587281732"
+  ],
+  "key": "/books/OL12321396M",
+  "number_of_pages": 12,
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-04-22T23:47:45.608525"
+  }
+}

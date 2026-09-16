@@ -31,8 +31,8 @@ describe('PublicLayout', () => {
     fixture.detectChanges();
   });
 
-  it('should reuse the shared Navigation component instead of a hardcoded header', () => {
-    expect(fixture.nativeElement.querySelector('app-navigation')).not.toBeNull();
+  it('should render the shared PublicShell instead of a hardcoded header', () => {
+    expect(fixture.nativeElement.querySelector('app-public-shell')).not.toBeNull();
   });
 
   it('should render a router outlet for its children', () => {

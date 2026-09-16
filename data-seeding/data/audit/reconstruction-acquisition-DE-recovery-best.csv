@@ -1,0 +1,31 @@
+target_index,language,category,priority,target_author,target_work,query_mode,work_key,work_title,work_authors,edition_key,edition_title,edition_subtitle,edition_languages,isbn,publisher,publish_date,page_count,cover_id,title_score,author_score,candidate_score,cover_state,cover_width,cover_height,cover_format,cover_local_path,recovery_state
+3,DE,GERMAN_LANGUAGE_CANON,1,Johann Wolfgang von Goethe,Wilhelm Meisters Lehrjahre,TITLE_AUTHOR,/works/OL37823773W,Wilhelm Meisters Lehrjahre,Johann Wolfgang von Goethe,/books/OL51035711M,Wilhelm Meisters Lehrjahre,,ger,9781911495321,"Bollinger, Max",2016,,14670130,1.0,1.0,0.9900000000000001,VALID_COVER,267,400,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-003-OL51035711M.jpeg,RECOVERED
+4,DE,GERMAN_LANGUAGE_CANON,1,Johann Wolfgang von Goethe,Wahlverwandtschaften,TITLE_AUTHOR,/works/OL29845013W,Die Wahlverwandtschaften,Johann Wolfgang von Goethe,/books/OL41607262M,Die Wahlverwandtschaften,Large Print,ger,9781697822137,Independently Published,2019,,13696875,0.95,1.0,0.9635,VALID_COVER,386,500,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-004-OL41607262M.jpeg,RECOVERED
+7,DE,GERMAN_LANGUAGE_CANON,1,Friedrich Schiller,Maria Stuart,TITLE_AUTHOR,/works/OL28461899W,Maria Stuart,Margarethe Müller | Friedrich Schiller | Carla Wenckebach,/books/OL38988824M,Maria Stuart,,ger,9780274121953,"Creative Media Partners, LLC",2018,,13891050,1.0,1.0,0.9900000000000001,VALID_COVER,333,500,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-007-OL38988824M.jpeg,RECOVERED
+32,DE,GERMAN_LANGUAGE_CANON,1,Hermann Hesse,Demian,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+36,DE,TWENTIETH_CENTURY,1,Thomas Mann,Der Zauberberg,TITLE_AUTHOR,/works/OL15381708W,Der Zauberberg. 8 Cassetten,Thomas Mann,/books/OL12985146M,Der Zauberberg. 8 Cassetten.,,ger,9783895848131,HÖR Verlag,"November 30, 2000",,3281186,0.95,1.0,0.9635,VALID_COVER,327,475,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-036-OL12985146M.jpeg,RECOVERED
+38,DE,TWENTIETH_CENTURY,1,Hermann Hesse,Der Steppenwolf,BROAD,/works/OL872773W,Der Steppenwolf,Hermann Hesse,/books/OL32986439M,Der Steppenwolf,,ger,,Suhrkamp,1961,,14851503,1.0,1.0,0.9650000000000001,VALID_COVER,296,500,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-038-OL32986439M.jpeg,RECOVERED
+39,DE,TWENTIETH_CENTURY,1,Hermann Hesse,Das Glasperlenspiel,TITLE_AUTHOR,/works/OL872724W,Das Glasperlenspiel,Hermann Hesse,/books/OL45617050M,Das Glasperlenspiel,,ger,,Suhrkamp,1962,,14941168,1.0,1.0,0.9650000000000001,VALID_COVER,278,500,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-039-OL45617050M.jpeg,RECOVERED
+40,DE,TWENTIETH_CENTURY,1,Alfred Döblin,Berlin Alexanderplatz,TITLE_AUTHOR,/works/OL15681816W,"Oldenbourg Interpretationen, Bd.74, Berlin Alexanderplatz",Alfred Döblin,/books/OL12739745M,"Oldenbourg Interpretationen, Bd.74, Berlin Alexanderplatz",,ger,9783486886733,Oldenbourg Schulbuchverlag,"January 1, 1995",,3214068,0.95,1.0,0.9635,VALID_COVER,311,475,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-040-OL12739745M.jpeg,RECOVERED
+42,DE,TWENTIETH_CENTURY,1,Bertolt Brecht,Mutter Courage und ihre Kinder,TITLE_AUTHOR,/works/OL15117155W,"Mutter Courage und ihre Kinder, 2 Cassetten",Bertolt Brecht,/books/OL9042726M,"Mutter Courage und ihre Kinder, 2 Cassetten",,ger,9783464614587,Cornelsen,"January 1, 2001",,2207304,0.95,1.0,0.9635,VALID_COVER,388,500,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-042-OL9042726M.jpeg,RECOVERED
+52,DE,TWENTIETH_CENTURY,1,Ingeborg Bachmann,Malina,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+56,DE,TWENTIETH_CENTURY,1,Stefan Zweig,Ungeduld des Herzens,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+58,DE,TWENTIETH_CENTURY,1,Joseph Roth,Radetzkymarsch,AUTHOR_ONLY,/works/OL466942W,Radetzkymarsch,Joseph Roth,/books/OL5312884M,The Radetzky march,,eng | ger,0879510153,Overlook Press,1974,,6555394,1.0,1.0,0.9900000000000001,VALID_COVER,327,500,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-058-OL5312884M.jpeg,RECOVERED
+59,DE,TWENTIETH_CENTURY,1,Ödön von Horváth,Jugend ohne Gott,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+69,DE,CONTEMPORARY,2,Daniel Kehlmann,Tyll,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+70,DE,CONTEMPORARY,2,Jenny Erpenbeck,Heimsuchung,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+71,DE,CONTEMPORARY,2,Jenny Erpenbeck,"Gehen, ging, gegangen",,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+72,DE,CONTEMPORARY,2,W. G. Sebald,Austerlitz,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+73,DE,CONTEMPORARY,2,W. G. Sebald,Die Ringe des Saturn,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+75,DE,CONTEMPORARY,2,Herta Müller,Atemschaukel,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+76,DE,CONTEMPORARY,2,Herta Müller,Herztier,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+92,DE,PHILOSOPHY_ESSAYS,1,Theodor W. Adorno,Minima Moralia,AUTHOR_ONLY,/works/OL542175W,Minima moralia; reflections from damaged life,Theodor W. Adorno,/books/OL21197997M,Mi nima moralia,Reflexionen aus dem beschädigten Leben,ger | eng,3518065114,Suhrkamp,1997,,11395718,0.9655172413793104,1.0,0.9717241379310346,VALID_COVER,294,500,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-092-OL21197997M.jpeg,RECOVERED
+96,DE,HISTORY_SOCIETY,2,Sebastian Haffner,Geschichte eines Deutschen,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+97,DE,HISTORY_SOCIETY,2,Victor Klemperer,LTI,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+98,DE,HISTORY_SOCIETY,2,Joachim Fest,Hitler,TITLE_AUTHOR,/works/OL2004994W,Hitler. Die Propyläen- Biographie,Joachim Fest,/books/OL9445890M,Hitler. Die Propyläen- Biographie,,ger,9783549074183,Propyläen,"September 1, 1995",,2230925,0.95,1.0,0.9635,VALID_COVER,300,475,JPEG,data/audit/reconstruction-DE-recovery-covers/DE-recovery-098-OL9445890M.jpeg,RECOVERED
+100,DE,HISTORY_SOCIETY,2,Hannah Arendt,Eichmann in Jerusalem,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+101,DE,HISTORY_SOCIETY,2,Alexander Mitscherlich,Die Unfähigkeit zu trauern,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+103,DE,HISTORY_SOCIETY,2,Willy Brandt,Erinnerungen,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+107,DE,YOUTH,3,Michael Ende,Die unendliche Geschichte,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+110,DE,SCIENCE_CULTURE,3,Carl Friedrich Gauß,Disquisitiones Arithmeticae,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+111,DE,SCIENCE_CULTURE,3,Max Planck,Wissenschaftliche Selbstbiographie,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED

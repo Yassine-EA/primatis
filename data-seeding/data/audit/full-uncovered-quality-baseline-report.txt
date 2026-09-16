@@ -1,0 +1,88 @@
+FULL UNCOVERED — QUALITY BASELINE
+=================================
+
+titles : 7518
+
+QUALITY BUCKETS
+===============
+
+STRONG     :  187 (  2.49%)
+PROMISING  : 3666 ( 48.76%)
+WEAK       : 3460 ( 46.02%)
+VERY_WEAK  :  205 (  2.73%)
+
+SCORE DISTRIBUTION
+==================
+score 7: 187
+score 6: 4
+score 5: 3662
+score 4: 118
+score 3: 4
+score 2: 3338
+score 1: 202
+score 0: 3
+
+BY LANGUAGE
+===========
+
+DE (560)
+  isbn      :  511/ 560 ( 91.25%)
+  year      :  505/ 560 ( 90.18%)
+  publisher :  558/ 560 ( 99.64%)
+  summary   :    6/ 560 (  1.07%)
+  buckets   : STRONG=6 PROMISING=450 WEAK=102 VERY_WEAK=2
+
+EN (1314)
+  isbn      :  948/1314 ( 72.15%)
+  year      : 1310/1314 ( 99.70%)
+  publisher : 1249/1314 ( 95.05%)
+  summary   :   73/1314 (  5.56%)
+  buckets   : STRONG=58 PROMISING=886 WEAK=307 VERY_WEAK=63
+
+ES (439)
+  isbn      :  285/ 439 ( 64.92%)
+  year      :  437/ 439 ( 99.54%)
+  publisher :  434/ 439 ( 98.86%)
+  summary   :   13/ 439 (  2.96%)
+  buckets   : STRONG=12 PROMISING=271 WEAK=152 VERY_WEAK=4
+
+FR (3718)
+  isbn      : 1499/3718 ( 40.32%)
+  year      : 3682/3718 ( 99.03%)
+  publisher : 3635/3718 ( 97.77%)
+  summary   :  111/3718 (  2.99%)
+  buckets   : STRONG=87 PROMISING=1399 WEAK=2132 VERY_WEAK=100
+
+IT (292)
+  isbn      :  152/ 292 ( 52.05%)
+  year      :  291/ 292 ( 99.66%)
+  publisher :  292/ 292 (100.00%)
+  summary   :    4/ 292 (  1.37%)
+  buckets   : STRONG=1 PROMISING=151 WEAK=139 VERY_WEAK=1
+
+LA (68)
+  isbn      :   36/  68 ( 52.94%)
+  year      :   68/  68 (100.00%)
+  publisher :   68/  68 (100.00%)
+  summary   :    2/  68 (  2.94%)
+  buckets   : STRONG=0 PROMISING=36 WEAK=32 VERY_WEAK=0
+
+NL (1127)
+  isbn      :  497/1127 ( 44.10%)
+  year      : 1124/1127 ( 99.73%)
+  publisher : 1092/1127 ( 96.89%)
+  summary   :   29/1127 (  2.57%)
+  buckets   : STRONG=23 PROMISING=473 WEAK=596 VERY_WEAK=35
+
+IMPORTANT
+=========
+
+This score is NOT an editorial decision.
+It only measures metadata richness.
+
+STRONG/PROMISING titles may still be bad books.
+WEAK titles may still be major literary works.
+
+No database or bundle modification performed.
+
+STATUS : PASS

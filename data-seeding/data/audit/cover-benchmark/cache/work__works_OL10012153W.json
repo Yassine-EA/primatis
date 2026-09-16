@@ -1,0 +1,31 @@
+{
+  "title": "Aventures au coeur de la Guyane",
+  "key": "/works/OL10012153W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3978848A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Explorers",
+    "Description and travel"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:59:20.516526"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-12T23:45:59.373494"
+  }
+}

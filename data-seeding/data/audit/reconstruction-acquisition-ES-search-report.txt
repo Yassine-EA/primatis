@@ -1,0 +1,70 @@
+DEV-16 RECONSTRUCTION — ES MASS ACQUISITION SEARCH
+=================================================
+
+Acquisition targets      : 172
+Best candidates found    : 151
+No usable candidate      : 21
+Edition collisions       : 1
+
+SELECTED METADATA
+=================
+
+ISBN       : 132/151
+Publisher  : 148/151
+Date       : 151/151
+Page count : 0/151
+Valid cover: 151/151
+
+BY CATEGORY
+===========
+ESSAYS_PHILOSOPHY                      total= 12 found= 10 missing=  2
+GRAPHIC                                total=  5 found=  4 missing=  1
+HISTORY_SOCIETY                        total=  8 found=  7 missing=  1
+LATIN_AMERICAN_CANON                   total= 45 found= 42 missing=  3
+LATIN_AMERICA_MODERN_CONTEMPORARY      total= 25 found= 20 missing=  5
+SPAIN_MODERN_CONTEMPORARY              total= 25 found= 22 missing=  3
+SPANISH_CANON                          total= 44 found= 39 missing=  5
+YOUTH                                  total=  8 found=  7 missing=  1
+
+EDITION COLLISIONS
+==================
+- /books/OL43384183M: 2 targets
+
+TARGETS WITHOUT USABLE CANDIDATE
+================================
+- #15 Santa Teresa de Jesús / Libro de la vida
+- #16 Francisco de Quevedo / El Buscón
+- #27 Leopoldo Alas Clarín / La Regenta
+- #36 Pío Baroja / Zalacaín el aventurero
+- #38 Ramón del Valle-Inclán / Sonata de otoño
+- #46 Jorge Luis Borges / Ficciones
+- #59 Mario Vargas Llosa / La guerra del fin del mundo
+- #63 Alejo Carpentier / Los pasos perdidos
+- #93 Carmen Laforet / Nada
+- #101 Miguel Delibes / El camino
+- #114 Manuel Vázquez Montalbán / Los mares del Sur
+- #117 Isabel Allende / De amor y de sombra
+- #119 Roberto Bolaño / 2666
+- #129 Laura Restrepo / Delirio
+- #132 Samanta Schweblin / Distancia de rescate
+- #134 Valeria Luiselli / Los ingrávidos
+- #144 María Zambrano / El hombre y lo divino
+- #148 Carlos Fuentes / La nueva novela hispanoamericana
+- #159 Javier Cercas / Anatomía de un instante
+- #168 María Elena Walsh / Cuentopos de Gulubú
+- #171 Paco Roca / Arrugas
+
+POLICY
+======
+
+Search covers all 172 unmatched ES editorial targets.
+Don Quijote is already represented and excluded from acquisition.
+Processing is internally batched and resumable.
+Spanish proof is mandatory at edition level: language=spa.
+A valid physical cover is mandatory.
+BEST_CANDIDATE_FOUND is not final editorial approval.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

@@ -1,0 +1,40 @@
+{
+  "title": "Lettres édifiantes et curieuses des jésuites de l'Inde au XVIIIe siècle",
+  "key": "/works/OL10004571W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3970201A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Missions",
+    "History",
+    "Sources",
+    "Correspondence",
+    "Description and travel",
+    "Histoire",
+    "Correspondance",
+    "Descriptions et voyages",
+    "Ouvrages avant 1800",
+    "Jesuits",
+    "Jésuites"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2023-11-15T14:25:08.397914"
+  }
+}

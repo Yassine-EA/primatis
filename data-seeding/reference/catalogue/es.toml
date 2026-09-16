@@ -1,0 +1,41 @@
+# Socle éditorial ES — voir fr.toml. Élargi DEV-16.5 §4/§5.
+
+[[authors]]
+author_key = "OL66452A"
+full_name = "Miguel de Cervantes Saavedra"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Miguel+de+Cervantes"
+work_count_at_verification = 3190
+period = "classique (XVIe-XVIIe siècle)"
+form = "roman"
+selection_rationale = "Auteur majeur hispanophone (Don Quijote de la Mancha), largement référencé sur Open Library."
+
+[[authors]]
+author_key = "OL3203135A"
+full_name = "Federico García Lorca"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Federico+Garc%C3%ADa+Lorca"
+work_count_at_verification = 1531
+period = "moderne (XXe siècle)"
+form = "poésie, théâtre"
+selection_rationale = "Figure majeure de la poésie et du théâtre espagnols modernes, apporte une diversité de forme au socle ES."
+
+[[authors]]
+author_key = "OL89930A"
+full_name = "Pablo Neruda"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Pablo+Neruda"
+work_count_at_verification = 658
+period = "moderne (XXe siècle)"
+form = "poésie"
+selection_rationale = "Figure majeure de la poésie hispanophone (prix Nobel 1971), apporte une diversité culturelle (Chili) au socle ES."
+
+[[authors]]
+author_key = "OL27363A"
+full_name = "Gabriel García Márquez"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Gabriel+Garcia+Marquez"
+work_count_at_verification = 441
+period = "contemporain (XXe siècle)"
+form = "roman"
+selection_rationale = "Figure majeure du roman hispanophone contemporain (prix Nobel 1982), apporte une diversité chronologique et culturelle (Colombie) au socle ES."

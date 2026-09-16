@@ -1,0 +1,48 @@
+{
+  "publishers": [
+    "Presses Universitaires du Mirail Toulouse (PUM)"
+  ],
+  "physical_format": "Paperback",
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2019-04-09T13:51:01.578601"
+  },
+  "weight": "8.2 ounces",
+  "source_records": [
+    "marc:marc_university_of_toronto/uoft.marc:1778946391:1005"
+  ],
+  "title": "Etat et nation en Allemagne au xxeme siecle",
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "isbn_13": [
+    "9782858162727"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_10": [
+    "2858162727"
+  ],
+  "publish_date": "September 1, 1998",
+  "key": "/books/OL12632079M",
+  "authors": [
+    {
+      "key": "/authors/OL3969285A"
+    }
+  ],
+  "latest_revision": 3,
+  "works": [
+    {
+      "key": "/works/OL10003778W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "7.9 x 5.1 x 0.4 inches",
+  "revision": 3
+}

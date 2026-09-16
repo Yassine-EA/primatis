@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 1360">
+  <defs>
+    <linearGradient id="shade" x1="0" x2="1"><stop offset="0" stop-color="#031B2B" stop-opacity=".74"/><stop offset=".42" stop-color="#031B2B" stop-opacity=".12"/><stop offset=".72" stop-color="#031B2B" stop-opacity=".2"/><stop offset="1" stop-color="#031B2B" stop-opacity=".62"/></linearGradient>
+  </defs>
+  <rect width="1600" height="1360" fill="#FAF9F6"/>
+  <text x="70" y="80" font-family="DejaVu Serif" font-size="42" fill="#082B40">PRIMATIS — Catalogue Asset Pack</text>
+  <text x="70" y="118" font-family="DejaVu Sans" font-size="18" fill="#46515F">ASSET-RESET-02.2 · planche de validation</text>
+
+  <text x="70" y="180" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#082B40">HERO DESKTOP · TEXTE HTML À GAUCHE ET CITATION À DROITE</text>
+  <rect x="70" y="205" width="1460" height="487" rx="16" fill="#082B40"/>
+  <image x="70" y="205" width="1460" height="487" preserveAspectRatio="xMidYMid slice" xlink:href="../hero/catalogue-hero-1920.webp"/>
+  <rect x="70" y="205" width="1460" height="487" rx="16" fill="url(#shade)"/>
+  <text x="120" y="370" font-family="DejaVu Serif" font-size="68" font-weight="bold" fill="#FAF9F6">Catalogue</text>
+  <text x="120" y="425" font-family="DejaVu Serif" font-size="27" font-style="italic" fill="#ECE5DA">Des livres pour comprendre le monde</text>
+  <text x="120" y="461" font-family="DejaVu Serif" font-size="27" font-style="italic" fill="#ECE5DA">et imaginer demain.</text>
+  <text x="1260" y="380" text-anchor="middle" font-family="DejaVu Serif" font-size="20" font-style="italic" fill="#ECE5DA">Citation HTML</text>
+
+  <text x="70" y="770" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#082B40">VARIANTES RESPONSIVES</text>
+  <rect x="70" y="800" width="880" height="352" rx="14" fill="#082B40"/>
+  <image x="70" y="800" width="880" height="352" preserveAspectRatio="xMidYMid slice" xlink:href="../hero/catalogue-hero-1280.webp"/>
+  <rect x="995" y="800" width="500" height="333" rx="14" fill="#082B40"/>
+  <image x="995" y="800" width="500" height="333" preserveAspectRatio="xMidYMid slice" xlink:href="../hero/catalogue-hero-768-mobile.webp"/>
+  <text x="510" y="1185" text-anchor="middle" font-family="DejaVu Sans" font-size="15" fill="#46515F">Tablette · 1280×512</text>
+  <text x="1245" y="1185" text-anchor="middle" font-family="DejaVu Sans" font-size="15" fill="#46515F">Mobile · 768×512</text>
+
+  <rect x="70" y="1240" width="1460" height="70" rx="14" fill="#F6F1E8"/>
+  <text x="100" y="1282" font-family="DejaVu Sans" font-size="15" fill="#082B40">Fond uniquement : aucune interface, aucun texte incorporé, aucune couverture ou disponibilité factice.</text>
+</svg>

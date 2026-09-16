@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -17,6 +18,11 @@ import { FieldError } from '../../../../core/models/field-error';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  accountStatusSeverity as sharedAccountStatusSeverity,
+  memberStatusSeverity as sharedMemberStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
 import { AccountStatus } from '../../../../user/models/account-status';
 import { MemberStatus } from '../../../../user/models/member-status';
 import { ResidenceResponse } from '../../../../user/models/residence-response';
@@ -80,6 +86,7 @@ export class AdminUserDetailPage {
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly titleService = inject(Title);
 
   private userId: number | null = null;
   private roles: RoleCode[] = [];
@@ -173,6 +180,30 @@ export class AdminUserDetailPage {
     return this.user()?.accountStatus === 'ACTIVE' ? 'Désactiver le compte' : 'Réactiver le compte';
   }
 
+  accountStatusSeverity(status: AccountStatus): StatusTagSeverity {
+    return sharedAccountStatusSeverity(status);
+  }
+
+  memberStatusSeverity(status: MemberStatus): StatusTagSeverity {
+    return sharedMemberStatusSeverity(status);
+  }
+
+  // Même précédent exact que StaffUsersPage/AdminUsersPage (DEV-15.6/DEV-15.8).
+  memberStatusLabel(status: MemberStatus): string {
+    switch (status) {
+      case 'ACTIVE':
+        return 'Actif';
+      case 'BLOCKED':
+        return 'Bloqué';
+      case 'EXPIRED':
+        return 'Expiré';
+    }
+  }
+
+  accountStatusLabel(status: AccountStatus): string {
+    return status === 'ACTIVE' ? 'Actif' : 'Désactivé';
+  }
+
   // ---------------------------------------------------------------
   // Chargement
   // ---------------------------------------------------------------
@@ -186,6 +217,7 @@ export class AdminUserDetailPage {
         this.user.set(value.user);
         this.resetFormFromUser(value.user, value.roles);
         this.userLoading.set(false);
+        this.titleService.setTitle(`${value.user.firstName} ${value.user.lastName} — PRIMATIS`);
       },
       error: (err: unknown) => {
         this.userLoading.set(false);

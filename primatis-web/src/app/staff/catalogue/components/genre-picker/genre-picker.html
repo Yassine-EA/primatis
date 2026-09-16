@@ -4,13 +4,16 @@
   <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
 } @else {
   <div class="genre-picker">
+    <label for="genre-picker-select">Genres associés</label>
     <p-multiselect
       inputId="genre-picker-select"
+      appendTo="body"
       [options]="allGenres()"
       [ngModel]="selectedIds()"
       (ngModelChange)="onSelectionChange($event)"
       optionLabel="label"
       optionValue="id"
+      display="chip"
       [filter]="true"
       filterBy="label,code"
       placeholder="Sélectionner des genres"
@@ -27,7 +30,14 @@
       </ng-template>
     </p-multiselect>
 
-    <button type="button" pButton label="Nouveau genre" severity="secondary" (click)="openCreateDialog()"></button>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-plus"
+      label="Nouveau genre"
+      severity="secondary"
+      (click)="openCreateDialog()"
+    ></button>
 
     <app-genre-form-dialog
       [visible]="dialogVisible()"

@@ -1,6 +1,29 @@
-<p-dialog [visible]="visible()" [modal]="true" header="Enregistrer un prêt" [closable]="!submitting()" (onHide)="cancel()">
-  <section aria-labelledby="loan-create-borrower-heading">
-    <h3 id="loan-create-borrower-heading">Emprunteur</h3>
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  header="Enregistrer un prêt"
+  [closable]="!submitting()"
+  styleClass="loan-create-v3-dialog"
+  (onHide)="cancel()"
+>
+  <div class="loan-create-intro">
+    <span class="loan-create-intro-icon" aria-hidden="true"
+      ><i class="pi pi-arrow-right-arrow-left"></i
+    ></span>
+    <div>
+      <strong>Nouveau prêt</strong>
+      <p>Sélectionnez un adhérent puis l’exemplaire à lui confier.</p>
+    </div>
+  </div>
+
+  <section class="loan-create-step" aria-labelledby="loan-create-borrower-heading">
+    <div class="loan-create-step-heading">
+      <span class="loan-create-step-number" aria-hidden="true">1</span>
+      <div>
+        <h3 id="loan-create-borrower-heading">Emprunteur</h3>
+        <p>Recherchez la personne qui emprunte l’ouvrage.</p>
+      </div>
+    </div>
 
     @if (selectedBorrower(); as borrower) {
       <p class="loan-create-selection">
@@ -9,14 +32,17 @@
       </p>
     } @else {
       <label for="loan-create-borrower-search">Rechercher un emprunteur</label>
-      <input
-        pInputText
-        id="loan-create-borrower-search"
-        type="search"
-        [ngModel]="borrowerSearchTerm()"
-        (ngModelChange)="onBorrowerSearchInput($event)"
-        placeholder="Nom, numéro d'adhérent ou email…"
-      />
+      <span class="loan-create-search-field">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <input
+          pInputText
+          id="loan-create-borrower-search"
+          type="search"
+          [ngModel]="borrowerSearchTerm()"
+          (ngModelChange)="onBorrowerSearchInput($event)"
+          placeholder="Nom, numéro d'adhérent ou email…"
+        />
+      </span>
 
       @if (borrowerSearchError(); as currentError) {
         <app-error-state [message]="currentError.message" />
@@ -31,7 +57,9 @@
               <span>{{ result.firstName }} {{ result.lastName }}</span>
               @if (result.memberNumber; as memberNumber) {
                 <span>{{ memberNumber }}</span>
-                <button type="button" class="link-button" (click)="selectBorrower(result)">Sélectionner</button>
+                <button type="button" class="link-button" (click)="selectBorrower(result)">
+                  Sélectionner
+                </button>
               } @else {
                 <span class="loan-create-non-member">Non adhérent</span>
               }
@@ -42,8 +70,14 @@
     }
   </section>
 
-  <section aria-labelledby="loan-create-copy-heading">
-    <h3 id="loan-create-copy-heading">Exemplaire</h3>
+  <section class="loan-create-step" aria-labelledby="loan-create-copy-heading">
+    <div class="loan-create-step-heading">
+      <span class="loan-create-step-number" aria-hidden="true">2</span>
+      <div>
+        <h3 id="loan-create-copy-heading">Exemplaire</h3>
+        <p>Choisissez un titre puis un exemplaire précis.</p>
+      </div>
+    </div>
 
     @if (selectedTitle(); as title) {
       <p class="loan-create-selection">
@@ -54,20 +88,32 @@
       @if (copiesLoading()) {
         <app-loading-state message="Chargement des exemplaires…" />
       } @else if (copiesError(); as currentCopiesError) {
-        <app-error-state [message]="currentCopiesError.message" [showRetry]="true" (retry)="retryCopies()" />
+        <app-error-state
+          [message]="currentCopiesError.message"
+          [showRetry]="true"
+          (retry)="retryCopies()"
+        />
       } @else if (copies().length === 0) {
         <app-empty-state title="Aucun exemplaire" message="Ce titre ne possède aucun exemplaire." />
       } @else {
         <ul class="loan-create-list">
           @for (copy of copies(); track copy.id) {
             <li>
-              <span>{{ copy.inventoryCode }}</span>
-              <p-tag [value]="copy.availabilityStatus" />
-              <p-tag [value]="copy.copyCondition" />
+              <span class="loan-create-copy-code">{{ copy.inventoryCode }}</span>
+              <p-tag
+                [value]="copy.availabilityStatus"
+                [severity]="copyAvailabilitySeverity(copy.availabilityStatus)"
+              />
+              <p-tag
+                [value]="copy.copyCondition"
+                [severity]="copyConditionSeverity(copy.copyCondition)"
+              />
               @if (selectedCopy()?.id === copy.id) {
                 <span>Sélectionné</span>
               } @else {
-                <button type="button" class="link-button" (click)="selectCopy(copy)">Sélectionner</button>
+                <button type="button" class="link-button" (click)="selectCopy(copy)">
+                  Sélectionner
+                </button>
               }
             </li>
           }
@@ -75,14 +121,17 @@
       }
     } @else {
       <label for="loan-create-title-search">Rechercher un titre</label>
-      <input
-        pInputText
-        id="loan-create-title-search"
-        type="search"
-        [ngModel]="titleSearchTerm()"
-        (ngModelChange)="onTitleSearchInput($event)"
-        placeholder="Titre…"
-      />
+      <span class="loan-create-search-field">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <input
+          pInputText
+          id="loan-create-title-search"
+          type="search"
+          [ngModel]="titleSearchTerm()"
+          (ngModelChange)="onTitleSearchInput($event)"
+          placeholder="Titre…"
+        />
+      </span>
 
       @if (titleSearchError(); as currentError) {
         <app-error-state [message]="currentError.message" />
@@ -95,7 +144,9 @@
           @for (result of titleSearchResults(); track result.id) {
             <li>
               <span>{{ result.title }}</span>
-              <button type="button" class="link-button" (click)="selectTitle(result)">Sélectionner</button>
+              <button type="button" class="link-button" (click)="selectTitle(result)">
+                Sélectionner
+              </button>
             </li>
           }
         </ul>
@@ -108,7 +159,20 @@
   }
 
   <div class="form-actions">
-    <button type="button" pButton label="Annuler" severity="secondary" [disabled]="submitting()" (click)="cancel()"></button>
-    <button type="button" pButton label="Enregistrer" [disabled]="!canSubmit" (click)="submit()"></button>
+    <button
+      type="button"
+      pButton
+      label="Annuler"
+      severity="secondary"
+      [disabled]="submitting()"
+      (click)="cancel()"
+    ></button>
+    <button
+      type="button"
+      pButton
+      label="Enregistrer"
+      [disabled]="!canSubmit"
+      (click)="submit()"
+    ></button>
   </div>
 </p-dialog>

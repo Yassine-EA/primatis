@@ -1,0 +1,48 @@
+{
+  "title": "Le Drame de Quatre-vingt-treize: Scènes de la vie révolutionnaire",
+  "subtitle": "Tome 4",
+  "authors": [
+    {
+      "key": "/authors/OL18236A"
+    }
+  ],
+  "publish_date": "March 21, 2001",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "physical_format": "Paperback",
+  "weight": "11.5 ounces",
+  "publishers": [
+    "Adamant Media Corporation"
+  ],
+  "isbn_13": [
+    "9780543865823"
+  ],
+  "isbn_10": [
+    "0543865827"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Fiction / Historical"
+  ],
+  "physical_dimensions": "8.2 x 8 x 5.2 inches",
+  "source_records": [
+    "amazon:0543865827"
+  ],
+  "key": "/books/OL10502859M",
+  "number_of_pages": 134,
+  "latest_revision": 18,
+  "revision": 18,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-08T12:17:02.027606"
+  }
+}

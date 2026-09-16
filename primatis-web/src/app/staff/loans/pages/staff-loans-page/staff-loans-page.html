@@ -1,77 +1,136 @@
-<div class="page-header">
-  <h1>Prêts</h1>
+<div class="page-shell staff-loans-page">
+  <header class="page-header staff-loans-hero">
+    <div class="staff-loans-hero-copy">
+      <span class="staff-page-kicker">Opérations de circulation</span>
+      <h1 class="page-title">Prêts et retours</h1>
+      <p class="page-description">
+        Enregistrez les prêts, consultez les emprunts en cours et traitez les retours des
+        exemplaires.
+      </p>
+    </div>
+    @if (canManageLoans) {
+      <button
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        label="Enregistrer un prêt"
+        class="staff-loans-create-button"
+        (click)="openCreateDialog()"
+      ></button>
+    }
+  </header>
+
   @if (canManageLoans) {
-    <button type="button" pButton label="Enregistrer un prêt" severity="secondary" (click)="openCreateDialog()"></button>
+    <app-loan-create-dialog
+      [visible]="createDialogVisible()"
+      (closed)="closeCreateDialog()"
+      (saved)="onLoanCreated($event)"
+    />
   }
+
+  <section class="staff-loans-register" aria-labelledby="staff-loans-register-title">
+    <div class="staff-loans-register-heading">
+      <div>
+        <span class="staff-page-kicker">Registre</span>
+        <h2 id="staff-loans-register-title">Emprunts enregistrés</h2>
+      </div>
+      @if (!loading() && !error()) {
+        <span class="staff-loans-count"
+          >{{ totalRecords() }} prêt{{ totalRecords() === 1 ? '' : 's' }}</span
+        >
+      }
+    </div>
+
+    @if (loading() && rows().length === 0 && !error()) {
+      <div class="staff-loans-feedback"><app-loading-state message="Chargement des prêts…" /></div>
+    } @else if (error(); as currentError) {
+      <div class="staff-loans-feedback">
+        <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+      </div>
+    } @else if (rows().length === 0) {
+      <div class="staff-loans-empty">
+        <img
+          src="/assets/staff-admin/empty-states/management-empty.svg"
+          alt=""
+          width="210"
+          height="140"
+        />
+        <app-empty-state title="Aucun prêt" message="Aucun prêt ne correspond à cette page." />
+      </div>
+    } @else {
+      <div class="staff-table-container">
+        <p-table
+          [value]="rows()"
+          [lazy]="true"
+          [lazyLoadOnInit]="false"
+          [paginator]="true"
+          [rows]="20"
+          [first]="0"
+          [totalRecords]="totalRecords()"
+          [loading]="loading()"
+          (onLazyLoad)="onLazyLoad($event)"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th scope="col">Emprunteur</th>
+              <th scope="col">N° adhérent</th>
+              <th scope="col">Exemplaire</th>
+              <th scope="col">Échéance</th>
+              <th scope="col">Statut</th>
+              <th scope="col" class="staff-col-muted">Date d'emprunt</th>
+              <th scope="col" class="staff-col-muted">Date de retour</th>
+              @if (canManageLoans) {
+                <th scope="col">Action</th>
+              }
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-loan>
+            <tr>
+              <td data-label="Emprunteur">
+                <strong>{{ loan.borrower.firstName }} {{ loan.borrower.lastName }}</strong>
+              </td>
+              <td data-label="N° adhérent">{{ loan.borrower.memberNumber }}</td>
+              <td data-label="Exemplaire">
+                <span class="staff-inventory-code">{{ loan.copy.inventoryCode }}</span>
+              </td>
+              <td data-label="Échéance" [class.staff-due-overdue]="loan.loanStatus === 'OVERDUE'">
+                {{ loan.dueDate }}
+              </td>
+              <td data-label="Statut">
+                <p-tag
+                  [value]="loanStatusLabel(loan.loanStatus)"
+                  [severity]="loanStatusSeverity(loan.loanStatus)"
+                />
+              </td>
+              <!-- Date compacte (DEV-15.11) : loan.loanDate est un Instant complet
+                 (horodatage + microsecondes) ; affiché brut, cette colonne
+                 secondaire repoussait l'action "Retourner" hors du viewport a
+                 768/1024px, largeurs cibles prioritaires de Staff (§13). -->
+              <td data-label="Date d'emprunt" class="staff-col-muted">
+                {{ loan.loanDate | date: 'dd/MM/yyyy' }}
+              </td>
+              <td data-label="Date de retour" class="staff-col-muted">
+                {{ loan.returnDate ?? '—' }}
+              </td>
+              @if (canManageLoans) {
+                <td data-label="Action" class="staff-loan-action">
+                  @if (isReturnable(loan)) {
+                    <button
+                      type="button"
+                      pButton
+                      severity="secondary"
+                      label="Retourner"
+                      [disabled]="returningLoanId() === loan.id"
+                      [attr.aria-label]="'Retourner l’exemplaire ' + loan.copy.inventoryCode"
+                      (click)="confirmReturn(loan)"
+                    ></button>
+                  }
+                </td>
+              }
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    }
+  </section>
 </div>
-
-@if (canManageLoans) {
-  <app-loan-create-dialog
-    [visible]="createDialogVisible()"
-    (closed)="closeCreateDialog()"
-    (saved)="onLoanCreated($event)"
-  />
-}
-
-@if (loading() && rows().length === 0 && !error()) {
-  <app-loading-state message="Chargement des prêts…" />
-} @else if (error(); as currentError) {
-  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
-} @else if (rows().length === 0) {
-  <app-empty-state title="Aucun prêt" message="Aucun prêt ne correspond à cette page." />
-} @else {
-  <p-table
-    [value]="rows()"
-    [lazy]="true"
-    [lazyLoadOnInit]="false"
-    [paginator]="true"
-    [rows]="20"
-    [first]="0"
-    [totalRecords]="totalRecords()"
-    [loading]="loading()"
-    (onLazyLoad)="onLazyLoad($event)"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th scope="col">Emprunteur</th>
-        <th scope="col">N° adhérent</th>
-        <th scope="col">Exemplaire</th>
-        <th scope="col">Date d'emprunt</th>
-        <th scope="col">Date d'échéance</th>
-        <th scope="col">Date de retour</th>
-        <th scope="col">Statut</th>
-        @if (canManageLoans) {
-          <th scope="col">Action</th>
-        }
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-loan>
-      <tr>
-        <td>{{ loan.borrower.firstName }} {{ loan.borrower.lastName }}</td>
-        <td>{{ loan.borrower.memberNumber }}</td>
-        <td>{{ loan.copy.inventoryCode }}</td>
-        <td>{{ loan.loanDate }}</td>
-        <td>{{ loan.dueDate }}</td>
-        <td>{{ loan.returnDate ?? '—' }}</td>
-        <td>
-          <p-tag [value]="loan.loanStatus" [severity]="loanStatusSeverity(loan.loanStatus)" />
-        </td>
-        @if (canManageLoans) {
-          <td>
-            @if (isReturnable(loan)) {
-              <button
-                type="button"
-                pButton
-                severity="secondary"
-                label="Retourner"
-                [disabled]="returningLoanId() === loan.id"
-                [attr.aria-label]="'Retourner l’exemplaire ' + loan.copy.inventoryCode"
-                (click)="confirmReturn(loan)"
-              ></button>
-            }
-          </td>
-        }
-      </tr>
-    </ng-template>
-  </p-table>
-}

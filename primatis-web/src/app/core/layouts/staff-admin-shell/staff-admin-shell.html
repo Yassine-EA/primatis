@@ -1,0 +1,95 @@
+<ng-template #navList>
+  <ul class="nav-list">
+    @for (item of visibleItems(); track item.routerLink) {
+      <li>
+        <a
+          [routerLink]="item.routerLink"
+          routerLinkActive="nav-link--active"
+          (click)="closeMobileSidebar()"
+        >
+          @if (item.icon) {
+            <i [class]="item.icon" aria-hidden="true"></i>
+          }
+          {{ item.label }}
+        </a>
+      </li>
+    }
+  </ul>
+</ng-template>
+
+<div class="staff-admin-shell">
+  <aside class="staff-admin-sidebar" aria-label="Navigation métier">
+    <a routerLink="/" class="staff-admin-brand">
+      <img
+        src="/assets/brand/primatis-logo-horizontal-light.svg"
+        alt="PRIMATIS"
+        width="176"
+        height="46"
+      />
+    </a>
+    <p class="staff-admin-nav-label">Espace de travail</p>
+    <ng-container [ngTemplateOutlet]="navList" />
+
+    <div class="staff-admin-sidebar-footer">
+      <p class="staff-admin-sidebar-tagline">Science · Culture · Partage · Demain</p>
+      <a routerLink="/" class="staff-admin-sidebar-back">
+        <i class="pi pi-arrow-left" aria-hidden="true"></i>
+        Retour au site public
+      </a>
+    </div>
+  </aside>
+
+  <div class="staff-admin-main">
+    <header class="staff-admin-header">
+      <button
+        type="button"
+        pButton
+        text
+        severity="secondary"
+        icon="pi pi-bars"
+        label="Menu"
+        class="staff-admin-sidebar-toggle"
+        aria-haspopup="true"
+        [attr.aria-expanded]="mobileSidebarOpen()"
+        (click)="openMobileSidebar()"
+      ></button>
+
+      <div class="staff-admin-zone-heading">
+        <span class="staff-admin-zone-kicker">Bibliothèque Georges Lemaître</span>
+        <h2 class="staff-admin-zone-title">{{ zoneTitle() }}</h2>
+      </div>
+
+      <app-account-menu />
+    </header>
+
+    <main class="staff-admin-content">
+      <ng-content />
+    </main>
+  </div>
+</div>
+
+<p-drawer
+  [(visible)]="mobileSidebarOpen"
+  position="left"
+  [header]="zoneTitle()"
+  styleClass="staff-admin-drawer"
+>
+  <a routerLink="/" class="staff-admin-drawer-brand" (click)="closeMobileSidebar()">
+    <img
+      src="/assets/brand/primatis-logo-horizontal-light.svg"
+      alt="PRIMATIS"
+      width="176"
+      height="46"
+    />
+  </a>
+  <p class="staff-admin-nav-label">Espace de travail</p>
+  <ng-container [ngTemplateOutlet]="navList" />
+  <a
+    routerLink="/"
+    class="staff-admin-sidebar-back staff-admin-drawer-back"
+    (click)="closeMobileSidebar()"
+  >
+    <i class="pi pi-arrow-left" aria-hidden="true"></i>
+    Retour au site public
+  </a>
+</p-drawer>

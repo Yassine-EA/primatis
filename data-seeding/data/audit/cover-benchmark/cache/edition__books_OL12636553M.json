@@ -1,0 +1,71 @@
+{
+  "publishers": [
+    "ACR Edition,France"
+  ],
+  "weight": "4.9 pounds",
+  "physical_format": "Hardcover",
+  "key": "/books/OL12636553M",
+  "authors": [
+    {
+      "key": "/authors/OL3971371A"
+    }
+  ],
+  "subjects": [
+    "History of art & design styles: c 1800 to c 1900",
+    "Individual artists",
+    "Painting & paintings"
+  ],
+  "first_sentence": {
+    "type": "/type/text",
+    "value": "La genealogie ne peut tout expliquer, mais souvent elle donne des points de repere et des indications interessantes sur le caractere, la carriere et le mystere d'une vie."
+  },
+  "title": "Octave Morillot",
+  "number_of_pages": 312,
+  "isbn_13": [
+    "9782867701733"
+  ],
+  "isbn_10": [
+    "2867701732"
+  ],
+  "publish_date": "August 1, 2005",
+  "works": [
+    {
+      "key": "/works/OL10005533W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "11.1 x 10.2 x 1 inches",
+  "lccn": [
+    "2005485059"
+  ],
+  "lc_classifications": [
+    "ND553.M877 M87 2005"
+  ],
+  "source_records": [
+    "marc:marc_loc_2016/BooksAll.2016.part33.utf8:49414413:973",
+    "marc:marc_columbia/Columbia-extract-20221130-011.mrc:272900647:1930",
+    "marc:harvard_bibliographic_metadata/ab.bib.09.20150123.full.mrc:735973444:1056",
+    "marc:harvard_bibliographic_metadata/20220215_037.bib.mrc:130920560:2230"
+  ],
+  "oclc_numbers": [
+    "155743647",
+    "61754040"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 6,
+  "revision": 6,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-05-03T12:20:42.227303"
+  }
+}

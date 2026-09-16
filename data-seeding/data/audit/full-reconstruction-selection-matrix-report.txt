@@ -1,0 +1,68 @@
+DEV-16 RECONSTRUCTION — SELECTION MATRIX PHASE 1
+================================================
+
+LANGUAGES
+=========
+
+LA — 54 titles
+  P1 CLASSICAL_LITERATURE                 20
+  P1 PHILOSOPHY_RHETORIC                  14
+  P1 HISTORY                              10
+  P2 LATE_MEDIEVAL_RENAISSANCE             6
+  P2 SCIENCE_CIVILISATION                  4
+
+IT — 165 titles
+  P1 ITALIAN_CANON                        55
+  P1 TWENTIETH_CENTURY                    40
+  P2 CONTEMPORARY                         25
+  P2 ESSAYS_PHILOSOPHY                    15
+  P2 HISTORY_SOCIETY                      10
+  P3 YOUTH                                10
+  P3 GRAPHIC                              10
+
+ES — 173 titles
+  P1 SPANISH_CANON                        45
+  P1 LATIN_AMERICAN_CANON                 45
+  P2 SPAIN_MODERN_CONTEMPORARY            25
+  P2 LATIN_AMERICA_MODERN_CONTEMPORARY    25
+  P2 ESSAYS_PHILOSOPHY                    12
+  P2 HISTORY_SOCIETY                       8
+  P3 YOUTH                                 8
+  P3 GRAPHIC                               5
+
+DE — 113 titles
+  P1 GERMAN_LANGUAGE_CANON                35
+  P1 TWENTIETH_CENTURY                    30
+  P2 CONTEMPORARY                         15
+  P1 PHILOSOPHY_ESSAYS                    15
+  P2 HISTORY_SOCIETY                       8
+  P3 YOUTH                                 5
+  P3 SCIENCE_CULTURE                       5
+
+GLOBAL
+======
+
+LA : 54
+IT : 165
+ES : 173
+DE : 113
+----------------
+TOTAL : 505
+
+ACQUISITION RULES
+=================
+
+Editorial value is selected before edition availability.
+A cover alone never justifies acquisition.
+No filler titles.
+No invented metadata.
+Prefer representative authors and landmark works.
+Avoid duplicates of preserved catalogue titles.
+A usable cover is mandatory for final acquisition.
+page_count is collected when reliably available.
+
+No Open Library request performed.
+No bundle modification.
+No database write.
+
+STATUS : PASS

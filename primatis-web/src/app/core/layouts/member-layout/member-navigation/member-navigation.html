@@ -1,0 +1,40 @@
+<nav class="member-navigation" aria-label="Navigation espace membre">
+  <p class="member-navigation-title">Mon espace</p>
+  <button
+    class="member-navigation-toggle"
+    type="button"
+    aria-controls="member-navigation-links"
+    [attr.aria-expanded]="mobileMenuOpen()"
+    (click)="toggleMobileMenu()"
+  >
+    <span><i class="pi pi-user" aria-hidden="true"></i> Mon espace</span>
+    <i
+      class="pi"
+      [class.pi-chevron-down]="!mobileMenuOpen()"
+      [class.pi-chevron-up]="mobileMenuOpen()"
+      aria-hidden="true"
+    ></i>
+  </button>
+  <ul
+    id="member-navigation-links"
+    class="nav-list"
+    [class.nav-list--mobile-open]="mobileMenuOpen()"
+  >
+    @for (item of items; track item.routerLink) {
+      <li>
+        <a
+          [routerLink]="item.routerLink"
+          routerLinkActive="nav-link--active"
+          [routerLinkActiveOptions]="{ exact: false }"
+          (click)="closeMobileMenu()"
+        >
+          <i class="pi {{ item.icon }}" aria-hidden="true"></i>
+          <span>{{ item.label }}</span>
+          @if (item.label === 'Notifications' && unreadCount() > 0) {
+            <p-badge [value]="unreadCount().toString()" severity="danger" />
+          }
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

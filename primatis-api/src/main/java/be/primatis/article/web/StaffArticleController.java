@@ -1,6 +1,8 @@
 package be.primatis.article.web;
 
+import be.primatis.article.ArticleMediaService;
 import be.primatis.article.ArticleService;
+import be.primatis.article.dto.ArticleMediaUploadResponse;
 import be.primatis.article.dto.ArticleResponse;
 import be.primatis.article.dto.CreateArticleRequest;
 import be.primatis.article.dto.StaffArticleSummaryResponse;
@@ -20,6 +22,7 @@ import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Contrat REST staff de gestion des Articles : création/modification
@@ -64,6 +68,15 @@ import org.springframework.web.bind.annotation.RestController;
  * DEV-11.12A n'ajoutant que la surface de lecture minimale nécessaire au
  * déblocage frontend, jamais une amélioration REST non demandée.
  *
+ * <p>{@code uploadArticleMedia} (DEV-ARTICLES-MEDIA, DEV-DEC-0079) :
+ * {@code POST .../media}, jamais imbriqué sous {@code /{articleId}} —
+ * l'image est uploadée avant d'être insérée dans le contenu d'un Article
+ * en cours de rédaction (brouillon non encore sauvegardé possible),
+ * aucune association à un Article n'est persistée ici. Délègue
+ * entièrement à {@link be.primatis.article.ArticleMediaService}
+ * (validation, stockage, URL) — {@code ARTICLE_MANAGE} porté par le
+ * Service, même convention que le reste de ce Controller.
+ *
  * <p>{@code GET} staff (DEV-11.12A, corrective) : {@code listStaffArticles}/
  * {@code getStaffArticleById} — tous statuts confondus ({@code DRAFT}/
  * {@code PUBLISHED}/{@code ARCHIVED}), contrairement à la surface publique
@@ -81,9 +94,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class StaffArticleController {
 
     private final ArticleService articleService;
+    private final ArticleMediaService articleMediaService;
 
-    public StaffArticleController(ArticleService articleService) {
+    public StaffArticleController(ArticleService articleService, ArticleMediaService articleMediaService) {
         this.articleService = articleService;
+        this.articleMediaService = articleMediaService;
+    }
+
+    @Operation(
+            summary = "Upload d'une image destinée au contenu riche d'un Article",
+            description = "Stocke une image (JPEG/PNG/WebP, 5 Mio maximum, ARTICLE_MANAGE requis) et retourne son "
+                    + "URL publique relative (/media/articles/<uuid>.<ext>), destinée à être insérée dans "
+                    + "Article.content par l'éditeur riche (DEV-ARTICLES-MEDIA). Ne persiste rien en base — "
+                    + "l'association réelle à un Article se fait uniquement via le contenu HTML sauvegardé "
+                    + "ensuite (POST/PATCH). Aucun chemin filesystem n'est jamais exposé.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Image stockée, URL publique retournée."),
+            @ApiResponse(responseCode = "400", description = "Fichier absent, type non autorisé ou taille "
+                    + "excessive (JPEG/PNG/WebP uniquement, 5 Mio maximum).",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Authentification requise ou JWT invalide.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Permission ARTICLE_MANAGE manquante.",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
+    })
+    @PostMapping(path = "/media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ArticleMediaUploadResponse uploadArticleMedia(@RequestParam("file") MultipartFile file) {
+        return new ArticleMediaUploadResponse(articleMediaService.storeImage(file));
     }
 
     @Operation(

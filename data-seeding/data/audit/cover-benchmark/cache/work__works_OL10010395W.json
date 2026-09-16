@@ -1,0 +1,33 @@
+{
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2020-09-13T13:09:59.991822"
+  },
+  "title": "Jean Restout, 1692-1768",
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:57.594996"
+  },
+  "subjects": [
+    "Catalogues raisonnés",
+    "Criticism and interpretation",
+    "Catalogs",
+    "Religion in art"
+  ],
+  "latest_revision": 2,
+  "key": "/works/OL10010395W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3976858A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "revision": 2
+}

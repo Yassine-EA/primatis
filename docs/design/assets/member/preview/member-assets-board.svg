@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1450" viewBox="0 0 1600 1450">
+  <defs>
+    <style>
+      .serif{font-family:Georgia,serif;fill:#082b40}.sans{font-family:Arial,sans-serif;fill:#405268}
+      .label{font-family:Arial,sans-serif;font-weight:700;fill:#082b40;font-size:22px}
+      .small{font-family:Arial,sans-serif;fill:#526276;font-size:17px}
+    </style>
+  </defs>
+  <rect width="1600" height="1450" fill="#faf9f6"/>
+  <text x="80" y="90" class="serif" font-size="52">PRIMATIS — Espace membre</text>
+  <text x="80" y="132" class="sans" font-size="22">ASSET-RESET-03 · planche de validation</text>
+
+  <text x="80" y="205" class="label">HERO PARTAGÉ · DESKTOP</text>
+  <rect x="70" y="230" width="1460" height="300" rx="18" fill="#082b40"/>
+  <image href="../shared/member-hero-1920.webp" x="80" y="240" width="1440" height="270" preserveAspectRatio="xMidYMid slice"/>
+  <text x="130" y="350" font-family="Georgia,serif" font-size="48" fill="#fff">Titre de l’espace membre</text>
+  <text x="130" y="392" font-family="Georgia,serif" font-style="italic" font-size="23" fill="#d8e0e4">Contenu réel en HTML — jamais incorporé dans l’image.</text>
+
+  <text x="80" y="600" class="label">VARIANTES RESPONSIVE</text>
+  <rect x="70" y="625" width="920" height="280" rx="18" fill="#fff" stroke="#e2d8ca"/>
+  <image href="../shared/member-hero-1280.webp" x="90" y="650" width="880" height="206" preserveAspectRatio="xMidYMid slice"/>
+  <text x="90" y="887" class="small">1280 × 300 · tablette / desktop intermédiaire</text>
+  <rect x="1030" y="625" width="500" height="280" rx="18" fill="#fff" stroke="#e2d8ca"/>
+  <image href="../shared/member-hero-768-mobile.webp" x="1050" y="650" width="460" height="180" preserveAspectRatio="xMidYMid slice"/>
+  <text x="1050" y="862" class="small">768 × 300 · mobile</text>
+  <text x="1050" y="888" class="small">Point focal : 82 % 52 %</text>
+
+  <text x="80" y="985" class="label">UN SOCLE POUR QUATRE PAGES</text>
+  <g transform="translate(70 1015)">
+    <rect width="350" height="210" rx="18" fill="#fff" stroke="#e2d8ca"/>
+    <path d="M110 75q55-28 110 0v75q-55-28-110 0z" fill="none" stroke="#b87333" stroke-width="5"/>
+    <circle cx="220" cy="137" r="31" fill="#faf9f6" stroke="#082b40" stroke-width="4"/>
+    <path d="M220 118v20l14 9" fill="none" stroke="#082b40" stroke-width="4" stroke-linecap="round"/>
+    <text x="175" y="192" text-anchor="middle" class="label">Prêts</text>
+  </g>
+  <g transform="translate(440 1015)">
+    <rect width="350" height="210" rx="18" fill="#fff" stroke="#e2d8ca"/>
+    <path d="M125 52h100v105l-50-27-50 27z" fill="none" stroke="#b87333" stroke-width="5"/>
+    <path d="M175 72v42M154 93h42" stroke="#082b40" stroke-width="4"/>
+    <text x="175" y="192" text-anchor="middle" class="label">Réservations</text>
+  </g>
+  <g transform="translate(810 1015)">
+    <rect width="350" height="210" rx="18" fill="#fff" stroke="#e2d8ca"/>
+    <circle cx="175" cy="103" r="55" fill="none" stroke="#b87333" stroke-width="5"/>
+    <path d="M145 87h60M145 104h60M155 121h40" stroke="#082b40" stroke-width="4" stroke-linecap="round"/>
+    <text x="175" y="192" text-anchor="middle" class="label">Amendes</text>
+  </g>
+  <g transform="translate(1180 1015)">
+    <rect width="350" height="210" rx="18" fill="#fff" stroke="#e2d8ca"/>
+    <path d="M135 130h80c-13-16-16-31-16-54a24 24 0 0 0-48 0c0 23-3 38-16 54z" fill="none" stroke="#082b40" stroke-width="5"/>
+    <circle cx="218" cy="67" r="10" fill="#b87333"/>
+    <text x="175" y="192" text-anchor="middle" class="label">Notifications</text>
+  </g>
+
+  <rect x="70" y="1270" width="1460" height="115" rx="18" fill="#f2ece2"/>
+  <text x="100" y="1315" class="label">Réemploi sans duplication</text>
+  <text x="100" y="1352" class="small">États vides et fallback compact : ASSET-RESET-01 · Icônes métier : PrimeIcons · Aucun faux visuel piloté par les DTO.</text>
+</svg>

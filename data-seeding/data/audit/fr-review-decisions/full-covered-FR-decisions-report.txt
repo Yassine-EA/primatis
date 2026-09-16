@@ -1,0 +1,27 @@
+FRENCH DECISIONS — CONSOLIDATED
+================================
+titles           : 3009
+unique           : 3009
+KEEP_CORE        : 1581
+KEEP_TRANSLATION : 1079
+REVIEW           : 126
+REPLACE          : 223
+-------------------------------
+TOTAL            : 3009
+
+KEEP TOTAL       : 2660
+NON-FINAL        : 349
+KEEP RATE        : 88.40%
+
+GROUPS
+======
+FIRST_PASS         CORE=  27 TR=  17 REV=  64 REP=  70 TOTAL= 178
+SECOND_PASS        CORE=  11 TR=   1 REV=   9 REP=   5 TOTAL=  26
+DOMINANT_AUTHORS   CORE= 164 TR=  86 REV=   3 REP=  24 TOTAL= 277
+FINAL              CORE=1379 TR= 975 REV=  50 REP= 124 TOTAL=2528
+
+PARTITION
+=========
+178 + 26 + 277 + 2528 = 3009
+
+STATUS : PASS

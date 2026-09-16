@@ -1,0 +1,37 @@
+{
+  "title": "Mougin freres",
+  "key": "/works/OL10007623W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3973721A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Exhibitions",
+    "Decoration and ornament",
+    "Art nouveau",
+    "French Pottery",
+    "Ecole de Nancy (Group of artists)",
+    "Mougin Frères (Firm)",
+    "History",
+    "Art pottery"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:28.508302"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2023-11-14T02:45:15.228720"
+  }
+}

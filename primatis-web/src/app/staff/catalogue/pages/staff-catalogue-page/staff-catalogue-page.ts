@@ -1,7 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
@@ -13,6 +15,7 @@ import { toAppError } from '../../../../core/errors/api-error.util';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import { titleStatusSeverity as sharedTitleStatusSeverity, StatusTagSeverity } from '../../../../shared/status/status-severity';
 import { Language } from '../../../../catalogue/models/language';
 import { StaffTitleSearchParams } from '../../../../catalogue/models/title-search-params';
 import { TitleResponse } from '../../../../catalogue/models/title-response';
@@ -57,6 +60,7 @@ const TITLE_STATUS_FILTER_OPTIONS: TitleStatusFilterOption[] = [
   imports: [
     ReactiveFormsModule,
     RouterLink,
+    ButtonModule,
     InputTextModule,
     SelectModule,
     TableModule,
@@ -71,6 +75,7 @@ const TITLE_STATUS_FILTER_OPTIONS: TitleStatusFilterOption[] = [
 export class StaffCataloguePage {
   private readonly staffCatalogueApiService = inject(StaffCatalogueApiService);
   private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly titleService = inject(Title);
 
   readonly languageOptions = LANGUAGE_FILTER_OPTIONS;
   readonly titleStatusOptions = TITLE_STATUS_FILTER_OPTIONS;
@@ -90,6 +95,8 @@ export class StaffCataloguePage {
   private lastSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
+    this.titleService.setTitle('Gestion du catalogue — PRIMATIS');
+
     this.filtersForm.controls.q.valueChanges
       .pipe(debounceTime(SEARCH_DEBOUNCE_MS), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe(() => this.load(0, this.lastSize));
@@ -110,8 +117,17 @@ export class StaffCataloguePage {
     this.load(this.lastPage, this.lastSize);
   }
 
-  titleStatusSeverity(status: TitleStatus): 'success' | 'warn' {
-    return status === 'ACTIVE' ? 'success' : 'warn';
+  titleStatusSeverity(status: TitleStatus): StatusTagSeverity {
+    return sharedTitleStatusSeverity(status);
+  }
+
+  titleStatusLabel(status: TitleStatus): string {
+    switch (status) {
+      case 'ACTIVE':
+        return 'Actif';
+      case 'WITHDRAWN':
+        return 'Retiré';
+    }
   }
 
   private load(page: number, size: number): void {

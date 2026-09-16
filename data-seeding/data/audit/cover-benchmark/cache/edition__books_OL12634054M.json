@@ -1,0 +1,64 @@
+{
+  "publishers": [
+    "Presses Universitaires de Saint-Etienne"
+  ],
+  "identifiers": {
+    "goodreads": [
+      "4188664"
+    ]
+  },
+  "subtitle": "(Ier-IIIe siècle apr ès J.-C.)",
+  "key": "/books/OL12634054M",
+  "weight": "12.6 ounces",
+  "title": "Science et vie intellectuelle à Alexandrie",
+  "type": {
+    "key": "/type/edition"
+  },
+  "number_of_pages": 224,
+  "isbn_13": [
+    "9782862720586"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    },
+    {
+      "key": "/languages/eng"
+    }
+  ],
+  "isbn_10": [
+    "2862720585"
+  ],
+  "authors": [
+    {
+      "key": "/authors/OL3970190A"
+    }
+  ],
+  "publish_date": "June 24, 1997",
+  "works": [
+    {
+      "key": "/works/OL10004562W"
+    }
+  ],
+  "physical_format": "Paperback",
+  "physical_dimensions": "9.4 x 6.1 x 0.5 inches",
+  "lc_classifications": [
+    "Q124.95 .S38 1994"
+  ],
+  "oclc_numbers": [
+    "32744291"
+  ],
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/20220215_007.bib.mrc:238468681:2612"
+  ],
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-07-06T05:25:41.015543"
+  }
+}

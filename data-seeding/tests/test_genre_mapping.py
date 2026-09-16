@@ -27,3 +27,32 @@ def test_duplicate_subjects_do_not_duplicate_genre_links() -> None:
     assert map_subjects_to_genre_codes(
         ["fiction", "Fiction", "FICTION"]
     ) == ("FICTION",)
+
+
+# DEV-16.3 Étape E: aliases added after measuring real subject frequency
+# on the 1000-work medium sample (see mapping/genres.py comment + DEV-16.3
+# report §G for the full frequency table).
+def test_maps_subject_aliases_added_from_medium_frequency_measurement() -> None:
+    assert map_subjects_to_genre_codes(["Histoire"]) == ("HISTORY",)
+    assert map_subjects_to_genre_codes(["Politics and government"]) == ("POLITICS",)
+    assert map_subjects_to_genre_codes(["Historical Fiction"]) == ("FICTION",)
+    assert map_subjects_to_genre_codes(
+        ["Fiction, romance, historical, general"]
+    ) == ("ROMANCE",)
+    assert map_subjects_to_genre_codes(
+        ["Fiction, mystery & detective, general"]
+    ) == ("MYSTERY",)
+    assert map_subjects_to_genre_codes(
+        ["Fiction, mystery & detective, police procedural"]
+    ) == ("MYSTERY",)
+    assert map_subjects_to_genre_codes(["Economic conditions"]) == ("BUSINESS",)
+    assert map_subjects_to_genre_codes(["Description and travel"]) == ("TRAVEL",)
+    assert map_subjects_to_genre_codes(["Modern Art"]) == ("ART",)
+
+
+def test_frequent_but_ambiguous_subjects_stay_unmapped() -> None:
+    # Deliberately excluded (DEV-16.3 §G): no unambiguous 1:1 Genre exists.
+    assert map_subjects_to_genre_codes(["Civilization"]) == ()
+    assert map_subjects_to_genre_codes(["Criticism and interpretation"]) == ()
+    assert map_subjects_to_genre_codes(["Folklore"]) == ()
+    assert map_subjects_to_genre_codes(["Dictionaries"]) == ()

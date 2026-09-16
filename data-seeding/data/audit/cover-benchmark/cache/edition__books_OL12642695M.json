@@ -1,0 +1,73 @@
+{
+  "publishers": [
+    "Paris musées"
+  ],
+  "number_of_pages": 419,
+  "subtitle": "Victor Hugo, dessins - Exposition, Paris, maison de Victor Hugo, 12 octobre 2000 - 7 janvier 2001",
+  "weight": "4.8 pounds",
+  "title": "Du chaos dans le pinceau ",
+  "identifiers": {
+    "librarything": [
+      "5097823"
+    ],
+    "goodreads": [
+      "3036138"
+    ]
+  },
+  "isbn_13": [
+    "9782879005140"
+  ],
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "2879005140"
+  ],
+  "publish_date": "October 19, 2000",
+  "key": "/books/OL12642695M",
+  "authors": [
+    {
+      "key": "/authors/OL3141262A"
+    },
+    {
+      "key": "/authors/OL3973922A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL1063446W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "10.8 x 9.4 x 1.1 inches",
+  "lccn": [
+    "2001325332"
+  ],
+  "lc_classifications": [
+    "NC248.H86 A4 2000"
+  ],
+  "source_records": [
+    "marc:marc_loc_2016/BooksAll.2016.part29.utf8:43992578:1201",
+    "marc:marc_columbia/Columbia-extract-20221130-006.mrc:279592139:1612",
+    "marc:harvard_bibliographic_metadata/20220215_041.bib.mrc:336576288:2335"
+  ],
+  "oclc_numbers": [
+    "48450112",
+    "45421497"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 8,
+  "revision": 8,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-06-30T22:25:31.060857"
+  }
+}

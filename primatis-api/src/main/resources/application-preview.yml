@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: primatis-api
+
+  datasource:
+    # DEV-16.5 — profil temporaire pour le smoke test backend du bundle
+    # Full contre primatis_preview (jamais primatis_dev ni primatis_test),
+    # même convention que application-e2e.yml : URL fixe, non surchargeable
+    # par SPRING_DATASOURCE_URL.
+    url: jdbc:postgresql://localhost:5432/primatis_preview
+    username: ${SPRING_DATASOURCE_USERNAME:primatis}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+# DEV-ARTICLES-MEDIA (DEV-DEC-0079) : dossier dédié, même principe
+# d'isolation que primatis_preview vs primatis_dev.
+primatis:
+  article-media:
+    storage-path: ${PRIMATIS_ARTICLE_MEDIA_STORAGE_PATH:./public/media/articles-preview}

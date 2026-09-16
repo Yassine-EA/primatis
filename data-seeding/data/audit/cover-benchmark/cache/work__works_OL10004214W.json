@@ -1,0 +1,36 @@
+{
+  "title": "Le Droit, l'informatique et l'arbitraire",
+  "key": "/works/OL10004214W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3969743A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Information storage and retrieval systems",
+    "Law",
+    "Congresses",
+    "Data processing",
+    "Expert systems (Computer science)",
+    "Information services",
+    "Law and legislation"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-13T20:25:30.449579"
+  }
+}

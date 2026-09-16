@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { Router, provideRouter } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subject, of, throwError } from 'rxjs';
@@ -8,6 +9,7 @@ import { vi } from 'vitest';
 import { ArticleResponse } from '../../../../articles/models/article-response';
 import { CreateArticleRequest } from '../../../../articles/models/create-article-request';
 import { StaffArticleApiService } from '../../../../articles/services/staff-article-api.service';
+import { ArticleContentEditor } from '../../components/article-content-editor/article-content-editor';
 import { StaffArticleCreatePage } from './staff-article-create-page';
 
 function buildArticle(overrides: Partial<ArticleResponse> = {}): ArticleResponse {
@@ -98,7 +100,8 @@ describe('StaffArticleCreatePage', () => {
 
     component.submit();
 
-    const request = staffArticleApiServiceMock.createArticle.mock.calls[0][0] as CreateArticleRequest;
+    const request = staffArticleApiServiceMock.createArticle.mock
+      .calls[0][0] as CreateArticleRequest;
     expect(request).toEqual({ title: 'Nouvel article', content: 'Contenu' });
   });
 
@@ -108,7 +111,8 @@ describe('StaffArticleCreatePage', () => {
 
     component.submit();
 
-    const request = staffArticleApiServiceMock.createArticle.mock.calls[0][0] as CreateArticleRequest;
+    const request = staffArticleApiServiceMock.createArticle.mock
+      .calls[0][0] as CreateArticleRequest;
     expect(request.summary).toBe('Résumé');
   });
 
@@ -118,7 +122,8 @@ describe('StaffArticleCreatePage', () => {
 
     component.submit();
 
-    const request = staffArticleApiServiceMock.createArticle.mock.calls[0][0] as CreateArticleRequest;
+    const request = staffArticleApiServiceMock.createArticle.mock
+      .calls[0][0] as CreateArticleRequest;
     expect(request.title).toBe('Nouvel article');
   });
 
@@ -128,7 +133,8 @@ describe('StaffArticleCreatePage', () => {
 
     component.submit();
 
-    const request = staffArticleApiServiceMock.createArticle.mock.calls[0][0] as CreateArticleRequest;
+    const request = staffArticleApiServiceMock.createArticle.mock
+      .calls[0][0] as CreateArticleRequest;
     expect(request).not.toHaveProperty('tagIds');
   });
 
@@ -138,7 +144,9 @@ describe('StaffArticleCreatePage', () => {
 
     component.submit();
 
-    expect(messageServiceMock.add).toHaveBeenCalledWith(expect.objectContaining({ severity: 'success' }));
+    expect(messageServiceMock.add).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'success' }),
+    );
     expect(router.navigate).toHaveBeenCalledWith(['/staff/articles', 99]);
   });
 
@@ -156,9 +164,49 @@ describe('StaffArticleCreatePage', () => {
     pending.complete();
   });
 
+  it('should use the rich content editor (DEV-ARTICLES-EDITOR, DEV-DEC-0078), never a plain textarea', () => {
+    createComponent();
+
+    expect(fixture.debugElement.query(By.directive(ArticleContentEditor))).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('#article-content textarea')).toBeNull();
+  });
+
+
+  it('should expose the VISUAL-RESET-20 editorial sections and return action', () => {
+    createComponent();
+
+    expect(fixture.nativeElement.textContent).toContain('Informations éditoriales');
+    expect(fixture.nativeElement.textContent).toContain('Contenu de l’article');
+    expect(fixture.nativeElement.textContent).toContain('Retour aux articles');
+  });
+
+  it('should update the content control when the rich editor emits a change, and send it as-is', () => {
+    createComponent();
+    component.form.controls.title.setValue('Nouvel article');
+    const editor = fixture.debugElement.query(By.directive(ArticleContentEditor))
+      .componentInstance as ArticleContentEditor;
+
+    editor.contentChange.emit('<h2>Titre</h2><p>Texte <strong>important</strong>.</p>');
+
+    expect(component.form.controls.content.value).toBe(
+      '<h2>Titre</h2><p>Texte <strong>important</strong>.</p>',
+    );
+
+    component.submit();
+
+    const request = staffArticleApiServiceMock.createArticle.mock
+      .calls[0][0] as CreateArticleRequest;
+    expect(request.content).toBe('<h2>Titre</h2><p>Texte <strong>important</strong>.</p>');
+  });
+
   it('should show the backend error message and field errors on failure', () => {
     staffArticleApiServiceMock.createArticle.mockReturnValue(
-      throwError(() => apiHttpError('ARTICLE_CONTENT_EMPTY', 'Le contenu de l’Article est vide après sanitization.')),
+      throwError(() =>
+        apiHttpError(
+          'ARTICLE_CONTENT_EMPTY',
+          'Le contenu de l’Article est vide après sanitization.',
+        ),
+      ),
     );
     createComponent();
     component.form.setValue({ title: 'Nouvel article', content: '<script></script>', summary: '' });

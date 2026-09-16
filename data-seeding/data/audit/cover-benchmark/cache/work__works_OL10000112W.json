@@ -1,0 +1,35 @@
+{
+  "title": "Les demeures de la distinction. Châteaux et châtelains au XIXe siècle en Haute-Vienne",
+  "key": "/works/OL10000112W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3965096A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Castles",
+    "History",
+    "Châtelains",
+    "Histoire",
+    "Châteaux",
+    "Social conditions"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:19.964652"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-02-13T16:26:43.389117"
+  }
+}

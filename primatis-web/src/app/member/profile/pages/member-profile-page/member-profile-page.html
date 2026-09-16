@@ -1,93 +1,211 @@
-@if (profileLoading()) {
-  <app-loading-state message="Chargement de votre profil…" />
-} @else if (profileError(); as currentProfileError) {
-  <app-error-state [message]="currentProfileError.message" />
-} @else if (profile(); as currentProfile) {
-  <h1>Mon profil</h1>
+<div class="member-profile-v3">
+  <header class="member-profile-v3-hero">
+    <picture aria-hidden="true">
+      <source
+        media="(max-width: 768px)"
+        srcset="/assets/member/shared/member-hero-768-mobile.webp"
+      />
+      <source media="(max-width: 1439px)" srcset="/assets/member/shared/member-hero-1280.webp" />
+      <img src="/assets/member/shared/member-hero-1920.webp" alt="" />
+    </picture>
+    <div class="member-profile-v3-hero-content">
+      <p class="member-profile-v3-kicker">Espace membre</p>
+      <h1>Mon profil</h1>
+      <p>Vos informations personnelles et votre adhésion.</p>
+    </div>
+  </header>
 
-  <section aria-labelledby="identity-heading">
-    <h2 id="identity-heading">Identité</h2>
-    <dl>
-      <dt>Prénom</dt>
-      <dd>{{ currentProfile.firstName }}</dd>
-      <dt>Nom</dt>
-      <dd>{{ currentProfile.lastName }}</dd>
-      <dt>Email</dt>
-      <dd>{{ currentProfile.email }}</dd>
-      <dt>Statut du compte</dt>
-      <dd>
-        <p-tag [value]="currentProfile.accountStatus" [severity]="currentProfile.accountStatus === 'ACTIVE' ? 'success' : 'danger'" />
-      </dd>
-    </dl>
+  <div class="member-profile-v3-content">
+    @if (profileLoading()) {
+      <section class="member-profile-v3-state">
+        <app-loading-state message="Chargement de votre profil…" />
+      </section>
+    } @else if (profileError(); as currentProfileError) {
+      <section class="member-profile-v3-state">
+        <app-error-state [message]="currentProfileError.message" />
+      </section>
+    } @else if (profile(); as currentProfile) {
+      <section class="member-profile-v3-overview" aria-labelledby="profile-overview-title">
+        <div class="member-profile-v3-avatar" aria-hidden="true">
+          {{ initials(currentProfile) }}
+        </div>
+        <div class="member-profile-v3-overview-copy">
+          <p class="member-profile-v3-kicker">Votre compte</p>
+          <h2 id="profile-overview-title">
+            {{ currentProfile.firstName }} {{ currentProfile.lastName }}
+          </h2>
+          <a [href]="'mailto:' + currentProfile.email">{{ currentProfile.email }}</a>
+        </div>
+        <div class="member-profile-v3-overview-statuses">
+          <div>
+            <span>Compte</span>
+            <p-tag
+              [value]="accountStatusLabel(currentProfile.accountStatus)"
+              [severity]="accountStatusSeverity(currentProfile.accountStatus)"
+            />
+          </div>
+          <div>
+            <span>Adhésion</span>
+            @if (currentProfile.memberStatus) {
+              <p-tag
+                [value]="memberStatusLabel(currentProfile.memberStatus)"
+                [severity]="memberStatusSeverity(currentProfile.memberStatus)"
+              />
+            } @else {
+              <strong>—</strong>
+            }
+          </div>
+        </div>
+      </section>
 
-    <form [formGroup]="phoneForm" (ngSubmit)="submitPhone()" novalidate>
-      <div class="field">
-        <label for="phoneNumber">Téléphone</label>
-        <input pInputText id="phoneNumber" formControlName="phoneNumber" />
-        <p class="hint">Laissez le champ vide pour ne pas modifier votre numéro : il ne sera jamais supprimé via cette action.</p>
-      </div>
-      @if (phoneErrorMessage(); as message) {
-        <p-message severity="error" [text]="message" />
-      }
-      <div class="form-actions">
-        <button pButton type="submit" label="Enregistrer le téléphone" [disabled]="isPhoneSubmitDisabled"></button>
-      </div>
-    </form>
-  </section>
-
-  <section aria-labelledby="membership-heading">
-    <h2 id="membership-heading">Adhésion</h2>
-    <dl>
-      <dt>N° adhérent</dt>
-      <dd>{{ currentProfile.memberNumber ?? '—' }}</dd>
-      <dt>Statut d'adhésion</dt>
-      <dd>
-        @if (currentProfile.memberStatus) {
-          <p-tag [value]="currentProfile.memberStatus" [severity]="memberStatusSeverity(currentProfile.memberStatus)" />
-        } @else {
-          —
-        }
-      </dd>
-      <dt>Date d'inscription</dt>
-      <dd>{{ currentProfile.registrationDate ?? '—' }}</dd>
-      <dt>Date d'expiration</dt>
-      <dd>{{ currentProfile.memberExpirationDate ?? '—' }}</dd>
       @if (currentProfile.blockedReason) {
-        <dt>Motif de blocage</dt>
-        <dd>{{ currentProfile.blockedReason }}</dd>
+        <aside class="member-profile-v3-alert" role="status">
+          <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+          <div>
+            <strong>Adhésion bloquée</strong>
+            <p><span>Motif de blocage :</span> {{ currentProfile.blockedReason }}</p>
+          </div>
+        </aside>
       }
-    </dl>
-  </section>
 
-  <section aria-labelledby="residence-heading">
-    <h2 id="residence-heading">Résidence actuelle</h2>
-    @if (residenceLoading()) {
-      <app-loading-state message="Chargement de la résidence…" />
-    } @else if (residenceError(); as currentResidenceError) {
-      <app-error-state [message]="currentResidenceError.message" />
-    } @else if (currentResidence(); as residence) {
-      <dl>
-        <dt>Rue</dt>
-        <dd>{{ residence.address.street }} {{ residence.address.streetNumber }}</dd>
-        @if (residence.address.boxNumber) {
-          <dt>Boîte</dt>
-          <dd>{{ residence.address.boxNumber }}</dd>
-        }
-        @if (residence.address.additionalInfo) {
-          <dt>Complément</dt>
-          <dd>{{ residence.address.additionalInfo }}</dd>
-        }
-        <dt>Code postal</dt>
-        <dd>{{ residence.address.city.postalCode }}</dd>
-        <dt>Ville</dt>
-        <dd>{{ residence.address.city.name }}</dd>
-        <dt>Pays</dt>
-        <dd>{{ residence.address.city.country.name }}</dd>
-        <dt>Depuis le</dt>
-        <dd>{{ residence.startDate }}</dd>
-      </dl>
-    } @else {
-      <p>Aucune résidence actuelle.</p>
+      <div class="member-profile-v3-grid">
+        <section class="member-profile-v3-panel" aria-labelledby="identity-heading">
+          <header>
+            <span><i class="pi pi-user" aria-hidden="true"></i></span>
+            <div>
+              <h2 id="identity-heading">Identité et contact</h2>
+              <p>Les informations associées à votre compte.</p>
+            </div>
+          </header>
+
+          <dl class="member-profile-v3-details">
+            <div>
+              <dt>Prénom</dt>
+              <dd>{{ currentProfile.firstName }}</dd>
+            </div>
+            <div>
+              <dt>Nom</dt>
+              <dd>{{ currentProfile.lastName }}</dd>
+            </div>
+            <div class="member-profile-v3-detail-wide">
+              <dt>Adresse e-mail</dt>
+              <dd>{{ currentProfile.email }}</dd>
+            </div>
+          </dl>
+
+          <form
+            class="member-profile-v3-phone"
+            [formGroup]="phoneForm"
+            (ngSubmit)="submitPhone()"
+            novalidate
+          >
+            <div class="field">
+              <label for="phoneNumber">Numéro de téléphone</label>
+              <span class="member-profile-v3-input">
+                <i class="pi pi-phone" aria-hidden="true"></i>
+                <input
+                  pInputText
+                  id="phoneNumber"
+                  type="tel"
+                  autocomplete="tel"
+                  formControlName="phoneNumber"
+                />
+              </span>
+              <p class="hint">
+                Seul votre numéro de téléphone peut être modifié depuis cette page.
+              </p>
+            </div>
+            @if (phoneErrorMessage(); as message) {
+              <p-message severity="error" [text]="message" />
+            }
+            <div class="form-actions">
+              <button
+                pButton
+                type="submit"
+                icon="pi pi-check"
+                label="Enregistrer le téléphone"
+                [loading]="phoneSubmitting()"
+                [disabled]="isPhoneSubmitDisabled"
+              ></button>
+            </div>
+          </form>
+        </section>
+
+        <section class="member-profile-v3-panel" aria-labelledby="membership-heading">
+          <header>
+            <span><i class="pi pi-id-card" aria-hidden="true"></i></span>
+            <div>
+              <h2 id="membership-heading">Mon adhésion</h2>
+              <p>Votre inscription auprès de la bibliothèque.</p>
+            </div>
+          </header>
+
+          <dl class="member-profile-v3-details">
+            <div class="member-profile-v3-detail-wide">
+              <dt>N° adhérent</dt>
+              <dd class="member-profile-v3-member-number">
+                {{ currentProfile.memberNumber ?? '—' }}
+              </dd>
+            </div>
+            <div>
+              <dt>Date d'inscription</dt>
+              <dd>{{ formatDate(currentProfile.registrationDate) }}</dd>
+            </div>
+            <div>
+              <dt>Date d'expiration</dt>
+              <dd>{{ formatDate(currentProfile.memberExpirationDate) }}</dd>
+            </div>
+          </dl>
+
+          <aside class="member-profile-v3-membership-note">
+            <i class="pi pi-shield" aria-hidden="true"></i>
+            <p>Les changements d’identité ou d’adhésion sont gérés par la bibliothèque.</p>
+          </aside>
+        </section>
+
+        <section
+          class="member-profile-v3-panel member-profile-v3-residence"
+          aria-labelledby="residence-heading"
+        >
+          <header>
+            <span><i class="pi pi-map-marker" aria-hidden="true"></i></span>
+            <div>
+              <h2 id="residence-heading">Résidence actuelle</h2>
+              <p>L’adresse enregistrée dans votre dossier.</p>
+            </div>
+          </header>
+
+          @if (residenceLoading()) {
+            <app-loading-state message="Chargement de la résidence…" />
+          } @else if (residenceError(); as currentResidenceError) {
+            <app-error-state [message]="currentResidenceError.message" />
+          } @else if (currentResidence(); as residence) {
+            <address>
+              <strong>{{ residence.address.street }} {{ residence.address.streetNumber }}</strong>
+              @if (residence.address.boxNumber) {
+                <span>Boîte {{ residence.address.boxNumber }}</span>
+              }
+              @if (residence.address.additionalInfo) {
+                <span>{{ residence.address.additionalInfo }}</span>
+              }
+              <span>{{ residence.address.city.postalCode }} {{ residence.address.city.name }}</span>
+              <span>{{ residence.address.city.country.name }}</span>
+            </address>
+            <p class="member-profile-v3-residence-since">
+              <i class="pi pi-calendar" aria-hidden="true"></i>
+              Enregistrée depuis le {{ formatDate(residence.startDate) }}
+            </p>
+          } @else {
+            <div class="member-profile-v3-residence-empty">
+              <i class="pi pi-map-marker" aria-hidden="true"></i>
+              <div>
+                <strong>Aucune résidence actuelle.</strong>
+                <p>Contactez la bibliothèque si votre dossier doit être complété.</p>
+              </div>
+            </div>
+          }
+        </section>
+      </div>
     }
-  </section>
-}
+  </div>
+</div>

@@ -1,5 +1,26 @@
+@use "../../../../shared/styles/breakpoints";
+
 :host {
   display: block;
+}
+
+.page-header {
+  margin-bottom: var(--primatis-space-md);
+}
+
+dl {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.25rem 1rem;
+  margin-bottom: var(--primatis-space-md);
+
+  @include breakpoints.from-tablet {
+    grid-template-columns: max-content 1fr;
+  }
+}
+
+dt {
+  font-weight: 600;
 }
 
 form {

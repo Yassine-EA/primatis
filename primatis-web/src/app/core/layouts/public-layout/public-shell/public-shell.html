@@ -1,0 +1,75 @@
+<div class="public-shell">
+  <div class="public-shell-institutional">
+    <div class="public-container public-shell-institutional-inner">
+      <span>Une bibliothèque tournée vers un plus grand horizon.</span>
+      <span class="public-shell-institutional-location">Charleroi · Belgique</span>
+    </div>
+  </div>
+
+  <header class="public-shell-header">
+    <div class="public-container public-shell-header-inner">
+      <a routerLink="/" class="public-shell-brand" aria-label="PRIMATIS — Accueil">
+        <img
+          src="/assets/brand/primatis-logo-horizontal-dark.svg"
+          alt="PRIMATIS — Bibliothèque publique Georges Lemaître"
+          width="360"
+          height="72"
+          class="public-shell-brand-logo"
+        />
+        <span class="visually-hidden">PRIMATIS</span>
+      </a>
+
+      <app-public-navigation />
+    </div>
+  </header>
+
+  <main class="public-shell-content">
+    <div class="content-container public-shell-page-frame">
+      <ng-content />
+    </div>
+  </main>
+
+  <footer class="public-shell-footer">
+    <div class="public-container public-shell-footer-grid">
+      <div class="public-shell-footer-brand">
+        <img
+          src="/assets/brand/primatis-logo-horizontal-dark.svg"
+          alt="PRIMATIS — Bibliothèque publique Georges Lemaître"
+          width="360"
+          height="72"
+          class="public-shell-footer-logo"
+        />
+        <p>Bibliothèque publique Georges Lemaître<br />Charleroi, Belgique</p>
+      </div>
+
+      <nav class="public-shell-footer-nav" aria-label="Navigation du pied de page">
+        <h2 class="public-shell-footer-heading">Explorer</h2>
+        <ul>
+          <li><a routerLink="/">Accueil</a></li>
+          <li><a routerLink="/catalogue">Catalogue</a></li>
+          <li><a routerLink="/articles">Articles</a></li>
+          <li><a routerLink="/georges-lemaitre">Georges Lemaître</a></li>
+        </ul>
+      </nav>
+
+      <nav class="public-shell-footer-nav" aria-label="Accès utiles">
+        <h2 class="public-shell-footer-heading">Accès</h2>
+        <ul>
+          <li><a routerLink="/login">Mon compte</a></li>
+          <li><a routerLink="/catalogue">Rechercher un ouvrage</a></li>
+          <li><a routerLink="/articles">Actualités</a></li>
+        </ul>
+      </nav>
+
+      <p class="public-shell-footer-quote">
+        « Le savoir est une lumière qui grandit lorsqu'on la partage. »
+      </p>
+    </div>
+
+    <div class="public-container public-shell-footer-bottom">
+      <p>
+        © {{ currentYear }} PRIMATIS — Bibliothèque publique Georges Lemaître · Charleroi, Belgique
+      </p>
+    </div>
+  </footer>
+</div>

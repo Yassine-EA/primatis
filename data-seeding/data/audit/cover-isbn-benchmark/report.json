@@ -1,0 +1,1821 @@
+{
+  "policy": {
+    "target_cover_coverage": 1.0,
+    "minimum_accepted_cover_coverage": 0.89,
+    "matching_rule": "exact ISBN only",
+    "writes_to_catalogue": false,
+    "downloads_cover_assets": false
+  },
+  "stats": {
+    "sample_size": 100,
+    "openlibrary_isbn_cover": 1,
+    "google_books_cover": 0,
+    "no_cover_found": 99,
+    "google_isbn_mismatch_rejected": 0,
+    "openlibrary_errors": 0,
+    "google_errors": 99,
+    "recoverable_total": 1,
+    "recoverable_pct": 1.0
+  },
+  "results": [
+    {
+      "edition_key": "/books/OL10154567M",
+      "work_key": "/works/OL10154567M",
+      "title": "Approximations Spectrales De Problemes Aux Limites Elliptiques (Mathematiques & Applications, Vol 10)",
+      "language": "FR",
+      "isbn": "9780387595764",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780387595764-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10070873M",
+      "work_key": "/works/OL10070873M",
+      "title": "The Ap Professional Fuzzy Logic Cd-Rom Library/Cd-Rom",
+      "language": "EN",
+      "isbn": "9780120597550",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780120597550-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL11014336M",
+      "work_key": "/works/OL11014336M",
+      "title": "Twee Nederlandse Novellen",
+      "language": "NL",
+      "isbn": "9780627017353",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780627017353-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL1167532M",
+      "work_key": "/works/OL1002211W",
+      "title": "Lob der Oberflächlichkeit",
+      "language": "DE",
+      "isbn": "9783927901360",
+      "openlibrary": {
+        "found": true,
+        "url": "https://covers.openlibrary.org/b/isbn/9783927901360-L.jpg?default=false",
+        "status": 200,
+        "content_type": "image/jpeg",
+        "content_length": null,
+        "final_url": "https://ia802809.us.archive.org/view_archive.php?archive=/18/items/l_covers_0008/l_covers_0008_36.zip&file=0008367024-L.jpg"
+      },
+      "google_books": null,
+      "verdict": "OPENLIBRARY_ISBN_COVER"
+    },
+    {
+      "edition_key": "/books/OL10264694M",
+      "work_key": "/works/OL10264694M",
+      "title": "Time (Como y Por Que)",
+      "language": "ES",
+      "isbn": "9780448050454",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780448050454-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL1232125M",
+      "work_key": "/works/OL1022547W",
+      "title": "Dell'arabico",
+      "language": "IT",
+      "isbn": "9788831759700",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9788831759700-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL109811M",
+      "work_key": "/works/OL16515834W",
+      "title": "Res inauditae, incredulae",
+      "language": "LA",
+      "isbn": "9788879491860",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9788879491860-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10167849M",
+      "work_key": "/works/OL13165951W",
+      "title": "All Together (Hand in Hand)",
+      "language": "FR",
+      "isbn": "9780201546552",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780201546552-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10070899M",
+      "work_key": "/works/OL10070899M",
+      "title": "Genetics and Biology of the Drosophila, Part D (Genetics & Biology of Drosophilia)",
+      "language": "EN",
+      "isbn": "9780120649488",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780120649488-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL1155357M",
+      "work_key": "/works/OL1439608W",
+      "title": "Pastor Bonus",
+      "language": "NL",
+      "isbn": "9789020922684",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789020922684-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12644473M",
+      "work_key": "/works/OL10008413W",
+      "title": "Zur Beschreibung und Klassifizierung von Ubersetzungsverfahren (Travaux du Centre de traduction literaire)",
+      "language": "DE",
+      "isbn": "9782883570177",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9782883570177-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL1244746M",
+      "work_key": "/works/OL1007762W",
+      "title": "Teatro uruguayo, 1808-1994",
+      "language": "ES",
+      "isbn": "9789974613003",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789974613003-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12649229M",
+      "work_key": "/works/OL10010492W",
+      "title": "Le Monde végétal (XIIe-XVIIe siècles)",
+      "language": "IT",
+      "isbn": "9782903981891",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9782903981891-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12770180M",
+      "work_key": "/works/OL10057297W",
+      "title": "Planen Und Bauen Im Fruhen Und Hohen Mittelalter Nach Den Schriftquellen Bis 1250",
+      "language": "LA",
+      "isbn": "9783534154890",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783534154890-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10457208M",
+      "work_key": "/works/OL10457208M",
+      "title": "Le Petit Prince (The Little Prince) in French / Boxed Edition with book and CD",
+      "language": "FR",
+      "isbn": "9780320039164",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780320039164-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10071778M",
+      "work_key": "/works/OL10071778M",
+      "title": "International Review of Cytology",
+      "language": "EN",
+      "isbn": "9780123645098",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780123645098-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL1156501M",
+      "work_key": "/works/OL1224849W",
+      "title": "De ontsnapping",
+      "language": "NL",
+      "isbn": "9789051320404",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789051320404-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12659365M",
+      "work_key": "/works/OL10014890W",
+      "title": "Natchez. Das Sonnenkönigstum am Mississippi.",
+      "language": "DE",
+      "isbn": "9783000098772",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783000098772-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL1244750M",
+      "work_key": "/works/OL1007678W",
+      "title": "Derechos humanos y dictadura terrista, 1933-1938",
+      "language": "ES",
+      "isbn": "9789974570252",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789974570252-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660253M",
+      "work_key": "/works/OL10015144W",
+      "title": "Il Cuore Irrequieto Dei Papi",
+      "language": "IT",
+      "isbn": "9783039103393",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039103393-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12823075M",
+      "work_key": "/works/OL10084053W",
+      "title": "Anthologia Latina, Pars I: Carmina in Codicibus Scripta, fasc. 1",
+      "language": "LA",
+      "isbn": "9783598710308",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783598710308-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10458366M",
+      "work_key": "/works/OL10458366M",
+      "title": "Braque, Georges",
+      "language": "FR",
+      "isbn": "9780320060922",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780320060922-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10072151M",
+      "work_key": "/works/OL10072151M",
+      "title": "Applied Optics and Optical Engineering (Vol 13)",
+      "language": "EN",
+      "isbn": "9780124086135",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780124086135-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL1173087M",
+      "work_key": "/works/OL1343422W",
+      "title": "Ars inveniendi",
+      "language": "NL",
+      "isbn": "9789039105603",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789039105603-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12659775M",
+      "work_key": "/works/OL10014944W",
+      "title": "Totengräber der Demokratie.",
+      "language": "DE",
+      "isbn": "9783034005715",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783034005715-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660269M",
+      "work_key": "/works/OL10015151W",
+      "title": "Puentes Sobre El Mundo",
+      "language": "ES",
+      "isbn": "9783039103591",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039103591-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12828838M",
+      "work_key": "/works/OL10085977W",
+      "title": "Memoria, Regionalismo E Arte Nella Narrativa Ebraica Contemporanea in Italia E Negli U.S.A (Publications Universitaires Europeennes: Serie 18, Litteratu)",
+      "language": "IT",
+      "isbn": "9783631501498",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631501498-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12823140M",
+      "work_key": "/works/OL10084074W",
+      "title": "Antiquitatum Romanarum quae supersunt, vol. I",
+      "language": "LA",
+      "isbn": "9783598712852",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783598712852-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10458378M",
+      "work_key": "/works/OL10458378M",
+      "title": "Andes Toit de L'amerique",
+      "language": "FR",
+      "isbn": "9780320061073",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780320061073-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10072153M",
+      "work_key": "/works/OL10072153M",
+      "title": "Applied Optics and Optical Engineering",
+      "language": "EN",
+      "isbn": "9780124086159",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780124086159-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12698765M",
+      "work_key": "/works/OL10027679W",
+      "title": "Die Architectura Von Hans Vredeman de Vries",
+      "language": "NL",
+      "isbn": "9783422063709",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783422063709-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12659783M",
+      "work_key": "/works/OL10014951W",
+      "title": "Veröffentlichungen der Unabhängigen Expertenkommission Schweiz (UEK) - Zweiter Weltkrieg; Publications de la Commission, Bd.2, Interhandel",
+      "language": "DE",
+      "isbn": "9783034006026",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783034006026-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660350M",
+      "work_key": "/works/OL10015186W",
+      "title": "Memoire (S) De La Ville Dans Les Mondes Hispaniques Et Lusobresilien (Liminaires - Passages Interculturels Italo-Iberiques)",
+      "language": "ES",
+      "isbn": "9783039104932",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039104932-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12829393M",
+      "work_key": "/works/OL10086348W",
+      "title": "Um Novo Jeito De Fazer Teologia",
+      "language": "IT",
+      "isbn": "9783631511978",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631511978-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12823141M",
+      "work_key": "/works/OL10084075W",
+      "title": "Antiquitatum Romanarum quae supersunt, vol. II",
+      "language": "LA",
+      "isbn": "9783598712869",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783598712869-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10458445M",
+      "work_key": "/works/OL10458445M",
+      "title": "Chansons De Geste",
+      "language": "FR",
+      "isbn": "9780320062469",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780320062469-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10072289M",
+      "work_key": "/works/OL10072289M",
+      "title": "Database of Palladium Chemistry (CD-ROM Version 1.1)",
+      "language": "EN",
+      "isbn": "9780124667617",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780124667617-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12797895M",
+      "work_key": "/works/OL10076989W",
+      "title": "Problematisch gedrag onder jongeren",
+      "language": "NL",
+      "isbn": "9789001757212",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789001757212-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660133M",
+      "work_key": "/works/OL10015101W",
+      "title": "Klezmer",
+      "language": "DE",
+      "isbn": "9783039101269",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039101269-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660455M",
+      "work_key": "/works/OL10015226W",
+      "title": "Literatura Y Poder",
+      "language": "ES",
+      "isbn": "9783039106837",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039106837-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12829960M",
+      "work_key": "/works/OL10086727W",
+      "title": "Matelda E Il Paradiso Terretre Nella & Laquo: Commedia Di Dante Alighieri",
+      "language": "IT",
+      "isbn": "9783631521687",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631521687-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12823143M",
+      "work_key": "/works/OL10084078W",
+      "title": "Antiquitatum Romanarum, vol. IV",
+      "language": "LA",
+      "isbn": "9783598712883",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783598712883-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10458446M",
+      "work_key": "/works/OL10458446M",
+      "title": "Aucassin Et Nicolette",
+      "language": "FR",
+      "isbn": "9780320062483",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780320062483-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10072989M",
+      "work_key": "/works/OL10072989M",
+      "title": "The Biochemistry of Plants: A Comprehensive Treatise",
+      "language": "EN",
+      "isbn": "9780126754117",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780126754117-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12797945M",
+      "work_key": "/works/OL10077002W",
+      "title": "Flandriens over hun touren",
+      "language": "NL",
+      "isbn": "9789002205040",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789002205040-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660135M",
+      "work_key": "/works/OL10015103W",
+      "title": "Poetische Gartner Und Phaetonische Himmelsflieger",
+      "language": "DE",
+      "isbn": "9783039101283",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039101283-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660588M",
+      "work_key": "/works/OL10015265W",
+      "title": "Du Roman-Feuilleton a la Serie Televisuelle",
+      "language": "ES",
+      "isbn": "9783039109944",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039109944-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12830093M",
+      "work_key": "/works/OL10086816W",
+      "title": "L'Ultimo Brigante",
+      "language": "IT",
+      "isbn": "9783631523872",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631523872-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12823146M",
+      "work_key": "/works/OL10084077W",
+      "title": "Antiquitatum Romanarum, Supplementum",
+      "language": "LA",
+      "isbn": "9783598712913",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783598712913-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10458655M",
+      "work_key": "/works/OL10458655M",
+      "title": "Poemes Tricolores, a L'occasion Du Cinquantenaire De La Federation",
+      "language": "FR",
+      "isbn": "9780320065521",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780320065521-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10073141M",
+      "work_key": "/works/OL10073141M",
+      "title": "The Mollusca",
+      "language": "EN",
+      "isbn": "9780127514031",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780127514031-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12799557M",
+      "work_key": "/works/OL10077649W",
+      "title": "Geschiedenis van het Ministerie van Justitie",
+      "language": "NL",
+      "isbn": "9789012081313",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789012081313-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660163M",
+      "work_key": "/works/OL10015112W",
+      "title": "Der St. Galler Botanicus Ein Fr¨ Hmittelalterliches Herbar",
+      "language": "DE",
+      "isbn": "9783039101955",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039101955-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12805932M",
+      "work_key": "/works/OL10080276W",
+      "title": "Studia Patristica Vol. XV, 1 - Inaugural Lecture, Editiones, Critica, Biblica, Historica, Theologia, Philosophica, Liturgica",
+      "language": "ES",
+      "isbn": "9789042913288",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789042913288-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12831221M",
+      "work_key": "/works/OL10087467W",
+      "title": "Alchimie Famigliari",
+      "language": "IT",
+      "isbn": "9783631552889",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631552889-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12823232M",
+      "work_key": "/works/OL10084105W",
+      "title": "Naturalis Historiae, vol. IV",
+      "language": "LA",
+      "isbn": "9783598716539",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783598716539-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10502460M",
+      "work_key": "/works/OL10502460M",
+      "title": "Le Vicomte de Bragelonne",
+      "language": "FR",
+      "isbn": "9780543854483",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780543854483-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10073199M",
+      "work_key": "/works/OL10073199M",
+      "title": "Fundamentals of Optical Engineering",
+      "language": "EN",
+      "isbn": "9780127748122",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780127748122-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12799559M",
+      "work_key": "/works/OL10077650W",
+      "title": "Henri Deterding",
+      "language": "NL",
+      "isbn": "9789012083065",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789012083065-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660169M",
+      "work_key": "/works/OL10015118W",
+      "title": "Basler Missionare In Brasilien",
+      "language": "DE",
+      "isbn": "9783039102051",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039102051-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12827404M",
+      "work_key": "/works/OL10085160W",
+      "title": "La Opcion por los Pobres, presentada sobre la base de los documentos de las Conferencias generales del Episcopado Latinoamericano de Medellin (1968), de Puebla (1979) y de Santo Domingo (1992)",
+      "language": "ES",
+      "isbn": "9783631330821",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631330821-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12849652M",
+      "work_key": "/works/OL10101614W",
+      "title": "Hellenica Et Judaica. Hommage Valentin Nikiprowetzky.",
+      "language": "IT",
+      "isbn": "9789068310542",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789068310542-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12823266M",
+      "work_key": "/works/OL10084119W",
+      "title": "Musici Scriptores Graeci",
+      "language": "LA",
+      "isbn": "9783598717765",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783598717765-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10502461M",
+      "work_key": "/works/OL10502461M",
+      "title": "Le Vicomte de Bragelonne",
+      "language": "FR",
+      "isbn": "9780543854544",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780543854544-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10073561M",
+      "work_key": "/works/OL10073561M",
+      "title": "Out of Many",
+      "language": "EN",
+      "isbn": "9780130101440",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780130101440-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12799562M",
+      "work_key": "/works/OL10077653W",
+      "title": "Politieke woorden: Termen & begrippen",
+      "language": "NL",
+      "isbn": "9789012083850",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789012083850-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660194M",
+      "work_key": "/works/OL10015135W",
+      "title": "Die Literarische Identitat Des Drehbuchs",
+      "language": "DE",
+      "isbn": "9783039102464",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039102464-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12827596M",
+      "work_key": "/works/OL10085295W",
+      "title": "Die Kluft Zwischen Kampf Und Kontemplation",
+      "language": "ES",
+      "isbn": "9783631343999",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631343999-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12849720M",
+      "work_key": "/works/OL10101663W",
+      "title": "Histoire Et Conscience Historique Dans Les Civilisations Du Proche-Orient Ancien. Actes Du Colloque de Cartigny 1986. (Cahiers Du Cepoa)",
+      "language": "IT",
+      "isbn": "9789068312164",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789068312164-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12823267M",
+      "work_key": "/works/OL10084120W",
+      "title": "Musici Scriptores Graeci: Supplementum",
+      "language": "LA",
+      "isbn": "9783598717772",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783598717772-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10502463M",
+      "work_key": "/works/OL10502463M",
+      "title": "Le Vicomte de Bragelonne",
+      "language": "FR",
+      "isbn": "9780543854582",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780543854582-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10073593M",
+      "work_key": "/works/OL10073593M",
+      "title": "Out of Many",
+      "language": "EN",
+      "isbn": "9780130105127",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780130105127-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12799563M",
+      "work_key": "/works/OL10077654W",
+      "title": "Van Amerika geleerd",
+      "language": "NL",
+      "isbn": "9789012084383",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789012084383-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660259M",
+      "work_key": "/works/OL10015146W",
+      "title": "Das Kunstlerinterview",
+      "language": "DE",
+      "isbn": "9783039103461",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039103461-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12828165M",
+      "work_key": "/works/OL10085572W",
+      "title": "Zur Ubersetzbarkeit Von Sprachkontaktphanomenen in Der Literatur",
+      "language": "ES",
+      "isbn": "9783631379929",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631379929-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12950684M",
+      "work_key": "/works/OL10141995W",
+      "title": "La Latinite En Question",
+      "language": "IT",
+      "isbn": "9789291220144",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789291220144-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12823268M",
+      "work_key": "/works/OL10084121W",
+      "title": "Scriptores Originum Constantinopolitanarum",
+      "language": "LA",
+      "isbn": "9783598717789",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783598717789-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10502464M",
+      "work_key": "/works/OL10502464M",
+      "title": "Le Vicomte de Bragelonne",
+      "language": "FR",
+      "isbn": "9780543854605",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780543854605-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10073723M",
+      "work_key": "/works/OL10073723M",
+      "title": "Accidental Explosions",
+      "language": "EN",
+      "isbn": "9780130118592",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780130118592-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12799567M",
+      "work_key": "/works/OL10077655W",
+      "title": "Liberalen onder een dak",
+      "language": "NL",
+      "isbn": "9789012085816",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789012085816-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660316M",
+      "work_key": "/works/OL10015170W",
+      "title": "Das Denken Der Hand",
+      "language": "DE",
+      "isbn": "9783039104352",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039104352-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12828453M",
+      "work_key": "/works/OL10085749W",
+      "title": "LA Farsa Tragica En El Teatro De Ennio Flaiano (European University Studies, 9)",
+      "language": "ES",
+      "isbn": "9783631391655",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631391655-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL13030872M",
+      "work_key": "/works/OL10176548W",
+      "title": "Music Ideas and Society",
+      "language": "IT",
+      "isbn": "9789536090013",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789536090013-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12829494M",
+      "work_key": "/works/OL10086420W",
+      "title": "Saeculum Pium",
+      "language": "LA",
+      "isbn": "9783631513651",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631513651-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10502466M",
+      "work_key": "/works/OL10502466M",
+      "title": "Le Vicomte de Bragelonne",
+      "language": "FR",
+      "isbn": "9780543854667",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780543854667-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10073844M",
+      "work_key": "/works/OL10073844M",
+      "title": "Foundation of American Education & Surving the First Year of Teaching",
+      "language": "EN",
+      "isbn": "9780130132864",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780130132864-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12799569M",
+      "work_key": "/works/OL10077657W",
+      "title": "Geschiedenis van de Binnenlandse Veiligheidsdienst",
+      "language": "NL",
+      "isbn": "9789012086479",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789012086479-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660320M",
+      "work_key": "/works/OL10015172W",
+      "title": "Spiegel Des Neuen",
+      "language": "DE",
+      "isbn": "9783039104451",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039104451-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12828837M",
+      "work_key": "/works/OL10085976W",
+      "title": "Estudios Linguisticos Hispanoamericanos",
+      "language": "ES",
+      "isbn": "9783631501443",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631501443-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL13073710M",
+      "work_key": "/works/OL10201476W",
+      "title": "VIA EGNATIA UNDER OTTOMAN RULE (1380-1699) [Series: Halcyon Days in Crete, Vol. 2",
+      "language": "IT",
+      "isbn": "9789605240172",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789605240172-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12830205M",
+      "work_key": "/works/OL10086896W",
+      "title": "Sedecias",
+      "language": "LA",
+      "isbn": "9783631526408",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631526408-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10502551M",
+      "work_key": "/works/OL10502551M",
+      "title": "Le Collier de la Reine",
+      "language": "FR",
+      "isbn": "9780543857163",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780543857163-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10073847M",
+      "work_key": "/works/OL10073847M",
+      "title": "Life on Earth/Science on Earth",
+      "language": "EN",
+      "isbn": "9780130133472",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780130133472-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12799570M",
+      "work_key": "/works/OL10077658W",
+      "title": "De Eerste Kamer",
+      "language": "NL",
+      "isbn": "9789012086899",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9789012086899-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12660340M",
+      "work_key": "/works/OL10015180W",
+      "title": "Sehnsucht Nach Illusion?",
+      "language": "DE",
+      "isbn": "9783039104789",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783039104789-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12829060M",
+      "work_key": "/works/OL10086099W",
+      "title": "Je Ne Me Lasse Point de Te Lire",
+      "language": "ES",
+      "isbn": "9783631506080",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631506080-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL13422374M",
+      "work_key": "/works/OL10301941W",
+      "title": "Campanas",
+      "language": "IT",
+      "isbn": "9788587811035",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9788587811035-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL12830487M",
+      "work_key": "/works/OL10087095W",
+      "title": "Die Rezeption Der Lehre Des Ramon Llull in Der Rhetorica Christiana (Perugia, 1579) Des Franziskaners Fray Diego De Valades (Europaische Hochschulschriften)",
+      "language": "LA",
+      "isbn": "9783631534014",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9783631534014-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10502856M",
+      "work_key": "/works/OL10502856M",
+      "title": "Le Drame de Quatre-vingt-treize: Scènes de la vie révolutionnaire",
+      "language": "FR",
+      "isbn": "9780543865762",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780543865762-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    },
+    {
+      "edition_key": "/books/OL10073849M",
+      "work_key": "/works/OL10073849M",
+      "title": "Essentials of Anatomy and Physiology",
+      "language": "EN",
+      "isbn": "9780130134073",
+      "openlibrary": {
+        "found": false,
+        "url": "https://covers.openlibrary.org/b/isbn/9780130134073-L.jpg?default=false",
+        "error": "HTTP_404"
+      },
+      "google_books": {
+        "found": false,
+        "error": "HTTP_429",
+        "source": null
+      },
+      "verdict": "NO_COVER_FOUND"
+    }
+  ]
+}

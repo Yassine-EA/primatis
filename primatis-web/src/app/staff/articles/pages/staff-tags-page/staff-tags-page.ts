@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -38,6 +39,7 @@ export class StaffTagsPage {
   private readonly staffTagApiService = inject(StaffTagApiService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly titleService = inject(Title);
 
   readonly rows = signal<TagResponse[]>([]);
   readonly totalRecords = signal(0);
@@ -53,6 +55,7 @@ export class StaffTagsPage {
   private lastSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
+    this.titleService.setTitle('Tags — PRIMATIS');
     this.load(0, DEFAULT_PAGE_SIZE);
   }
 

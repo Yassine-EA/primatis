@@ -1,0 +1,64 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "1526738"
+    ]
+  },
+  "title": "Avis Aux Cinq Sens/Sounds Like Smelly (A Mon Tour/My Turn)",
+  "authors": [
+    {
+      "key": "/authors/OL540303A"
+    },
+    {
+      "key": "/authors/OL225620A"
+    }
+  ],
+  "publish_date": "March 2002",
+  "publishers": [
+    "Editions du Carrousel"
+  ],
+  "weight": "8.2 ounces",
+  "physical_format": "Board book",
+  "subjects": [
+    "Concepts - Sense & Sensation",
+    "Science & Technology - General",
+    "Readers - Beginner",
+    "Juvenile Nonfiction",
+    "Children's Baby - Science",
+    "Children: Kindergarten"
+  ],
+  "edition_name": "Brdbk edition",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_13": [
+    "9781587281686"
+  ],
+  "isbn_10": [
+    "1587281686"
+  ],
+  "oclc_numbers": [
+    "47219591"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "8.7 x 8.6 x 0.3 inches",
+  "source_records": [
+    "amazon:1587281686"
+  ],
+  "key": "/books/OL12321391M",
+  "number_of_pages": 12,
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-05T09:33:47.253824"
+  }
+}

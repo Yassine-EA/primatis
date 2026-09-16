@@ -6,6 +6,13 @@ export interface NavigationItem {
   readonly routerLink: string;
   readonly requiredPermissions?: readonly PermissionCode[];
   readonly requiredRoles?: readonly RoleCode[];
+  /**
+   * Classe PrimeIcons optionnelle (DESIGN-V2-A, §33 design-system-v2.md :
+   * la sidebar Staff/Admin affiche une icône par entrée). Optionnel pour
+   * ne pas casser les consommateurs existants (`PublicNavigation`,
+   * `MemberNavigation`) qui n'en affichent pas.
+   */
+  readonly icon?: string;
 }
 
 /**

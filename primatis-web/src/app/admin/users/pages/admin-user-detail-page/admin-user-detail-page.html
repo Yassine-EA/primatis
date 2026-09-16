@@ -3,8 +3,13 @@
 } @else if (userError(); as currentUserError) {
   <app-error-state [message]="currentUserError.message" />
 } @else if (user(); as currentUser) {
-  <h1>{{ currentUser.firstName }} {{ currentUser.lastName }}</h1>
-  <p class="admin-user-detail__subtitle">Utilisateur #{{ currentUser.id }}</p>
+  <div class="page-shell">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ currentUser.firstName }} {{ currentUser.lastName }}</h1>
+      <p class="page-description">Utilisateur #{{ currentUser.id }}</p>
+    </div>
+  </header>
 
   <section aria-labelledby="identity-heading">
     <h2 id="identity-heading">Identité</h2>
@@ -95,10 +100,11 @@
 
   <section aria-labelledby="account-status-heading">
     <h2 id="account-status-heading">Statut du compte</h2>
-    <p><p-tag [value]="currentUser.accountStatus" [severity]="currentUser.accountStatus === 'ACTIVE' ? 'success' : 'danger'" /></p>
+    <p><p-tag [value]="accountStatusLabel(currentUser.accountStatus)" [severity]="accountStatusSeverity(currentUser.accountStatus)" /></p>
     <button
       pButton
       type="button"
+      severity="secondary"
       [label]="accountStatusActionLabel()"
       [disabled]="accountStatusSubmitting()"
       (click)="toggleAccountStatus()"
@@ -108,7 +114,7 @@
   <section aria-labelledby="membership-actions-heading">
     <h2 id="membership-actions-heading">Actions d'adhésion</h2>
     @if (currentUser.memberStatus) {
-      <p><p-tag [value]="currentUser.memberStatus" /></p>
+      <p><p-tag [value]="memberStatusLabel(currentUser.memberStatus)" [severity]="memberStatusSeverity(currentUser.memberStatus)" /></p>
       <div class="membership-actions">
         @if (canBlock) {
           <button
@@ -216,6 +222,7 @@
       </ul>
     }
   </section>
+  </div>
 }
 
 @if (blockDialogVisible()) {

@@ -1,0 +1,219 @@
+{
+  "policy": {
+    "search": "ISBN string only",
+    "writes_catalogue": false,
+    "downloads_assets": false,
+    "acceptance": "benchmark only; no automatic cover acceptance yet"
+  },
+  "stats": {
+    "sample_size": 20,
+    "matches": 0,
+    "preview_found": 0,
+    "match_without_preview": 0,
+    "no_match": 20,
+    "errors": 0,
+    "recovery_pct": 0.0
+  },
+  "results": [
+    {
+      "edition_key": "/books/OL10154567M",
+      "title": "Approximations Spectrales De Problemes Aux Limites Elliptiques (Mathematiques & Applications, Vol 10)",
+      "language": "FR",
+      "isbn": "9780387595764",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL10070873M",
+      "title": "The Ap Professional Fuzzy Logic Cd-Rom Library/Cd-Rom",
+      "language": "EN",
+      "isbn": "9780120597550",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL11014336M",
+      "title": "Twee Nederlandse Novellen",
+      "language": "NL",
+      "isbn": "9780627017353",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL1167532M",
+      "title": "Lob der Oberflächlichkeit",
+      "language": "DE",
+      "isbn": "9783927901360",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL10264694M",
+      "title": "Time (Como y Por Que)",
+      "language": "ES",
+      "isbn": "9780448050454",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL1232125M",
+      "title": "Dell'arabico",
+      "language": "IT",
+      "isbn": "9788831759700",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL109811M",
+      "title": "Res inauditae, incredulae",
+      "language": "LA",
+      "isbn": "9788879491860",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL10167849M",
+      "title": "All Together (Hand in Hand)",
+      "language": "FR",
+      "isbn": "9780201546552",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL10070899M",
+      "title": "Genetics and Biology of the Drosophila, Part D (Genetics & Biology of Drosophilia)",
+      "language": "EN",
+      "isbn": "9780120649488",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL1155357M",
+      "title": "Pastor Bonus",
+      "language": "NL",
+      "isbn": "9789020922684",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12644473M",
+      "title": "Zur Beschreibung und Klassifizierung von Ubersetzungsverfahren (Travaux du Centre de traduction literaire)",
+      "language": "DE",
+      "isbn": "9782883570177",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL1244746M",
+      "title": "Teatro uruguayo, 1808-1994",
+      "language": "ES",
+      "isbn": "9789974613003",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12649229M",
+      "title": "Le Monde végétal (XIIe-XVIIe siècles)",
+      "language": "IT",
+      "isbn": "9782903981891",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12770180M",
+      "title": "Planen Und Bauen Im Fruhen Und Hohen Mittelalter Nach Den Schriftquellen Bis 1250",
+      "language": "LA",
+      "isbn": "9783534154890",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL10457208M",
+      "title": "Le Petit Prince (The Little Prince) in French / Boxed Edition with book and CD",
+      "language": "FR",
+      "isbn": "9780320039164",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL10071778M",
+      "title": "International Review of Cytology",
+      "language": "EN",
+      "isbn": "9780123645098",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL1156501M",
+      "title": "De ontsnapping",
+      "language": "NL",
+      "isbn": "9789051320404",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12659365M",
+      "title": "Natchez. Das Sonnenkönigstum am Mississippi.",
+      "language": "DE",
+      "isbn": "9783000098772",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL1244750M",
+      "title": "Derechos humanos y dictadura terrista, 1933-1938",
+      "language": "ES",
+      "isbn": "9789974570252",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660253M",
+      "title": "Il Cuore Irrequieto Dei Papi",
+      "language": "IT",
+      "isbn": "9783039103393",
+      "source": "network",
+      "error": null,
+      "matches": [],
+      "verdict": "NO_MATCH"
+    }
+  ]
+}

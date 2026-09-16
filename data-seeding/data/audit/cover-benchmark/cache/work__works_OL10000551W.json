@@ -1,0 +1,31 @@
+{
+  "title": "Images D'Irlandae",
+  "key": "/works/OL10000551W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3965596A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Pictorial works",
+    "History"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:19.964652"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-06-02T16:09:50.149828"
+  }
+}

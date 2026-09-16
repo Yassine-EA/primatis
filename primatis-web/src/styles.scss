@@ -1,9 +1,34 @@
 /*
- * Styles globaux PRIMATIS.
+ * Styles globaux PRIMATIS (DEV-15.2).
  *
- * Les composants PrimeNG sont personnalisés prioritairement au moyen
- * des Design Tokens définis dans PrimatisPreset.
+ * Les couleurs sont personnalisées prioritairement au moyen des Design
+ * Tokens PrimeNG (`core/theme/primatis-preset.ts` — primary bleu nuit,
+ * surface ivoire). Ce fichier ne porte que les règles réellement
+ * globales : box-sizing, fond/texte de page, typographie de base,
+ * liens, focus visible. Aucune règle métier ne doit être ajoutée ici.
  */
+
+@use './app/shared/styles/design-tokens';
+@use './app/shared/styles/primitives';
+@use './app/shared/styles/public-reset';
+@use './app/shared/styles/catalogue-reset';
+@use './app/shared/styles/title-detail-reset';
+@use './app/shared/styles/articles-reset';
+@use './app/shared/styles/lemaitre-reset';
+@use './app/shared/styles/login-reset';
+@use './app/shared/styles/member-loans-reset';
+@use './app/shared/styles/member-profile-reset';
+@use './app/shared/styles/member-reservations-reset';
+@use './app/shared/styles/member-fines-reset';
+@use './app/shared/styles/member-notifications-reset';
+@use './app/shared/styles/staff-shell-reset';
+@use './app/shared/styles/staff-loans-reset';
+@use './app/shared/styles/staff-fines-reset';
+@use './app/shared/styles/staff-catalogue-reset';
+@use './app/shared/styles/staff-users-reset';
+@use './app/shared/styles/staff-title-create-reset';
+@use './app/shared/styles/staff-title-detail-reset';
+@use './app/shared/styles/staff-article-editor-reset';
 
 html {
   font-size: 16px;
@@ -17,14 +42,8 @@ body {
 
 body {
   min-height: 100vh;
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-  background: var(--p-surface-0);
+  font-family: var(--primatis-font-ui);
+  background: var(--p-surface-50);
   color: var(--p-text-color);
 }
 
@@ -40,3 +59,32 @@ textarea,
 select {
   font: inherit;
 }
+
+a {
+  color: var(--p-primary-color);
+}
+
+/*
+ * `<a pButton>` (DEV-15.8 — action de navigation stylée comme un bouton,
+ * ex. "Créer un titre") : PrimeNG applique les classes `.p-button-*`
+ * (fond/bordure/couleur) mais ne réinitialise jamais le soulignement de
+ * lien par défaut du navigateur sur un ancre — contrairement à
+ * `<button pButton>`, jamais souligné nativement. Règle générique, pas
+ * propre à une page : tout futur `<a pButton>` en bénéficie sans
+ * dupliquer le correctif.
+ */
+a.p-button {
+  text-decoration: none;
+}
+
+/*
+ * Focus visible cohérent (§10 du cadrage DEV-15) : jamais de
+ * suppression globale d'outline — un seul style, basé sur la couleur
+ * bleu nuit du préset, sans dépendre du CSS interne de chaque
+ * composant PrimeNG.
+ */
+:focus-visible {
+  outline: 2px solid var(--p-primary-color);
+  outline-offset: 2px;
+}
+

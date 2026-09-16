@@ -1,0 +1,34 @@
+{
+  "title": "L'oeuvre d'eliel saarinen en finlande et la question de l'architecture nationale de 1898 a 1909",
+  "key": "/works/OL10004240W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3969779A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Architecture",
+    "History",
+    "Expositions",
+    "Histoire",
+    "Architects"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-07-05T03:13:23.801409"
+  }
+}

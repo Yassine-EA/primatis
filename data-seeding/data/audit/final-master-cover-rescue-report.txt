@@ -1,0 +1,70 @@
+DEV-16 — FINAL MASTER COVER RESCUE ENGINE v1
+============================================
+
+SOURCE CONTRACT
+===============
+
+Rescue targets             : 3862
+Targets with exact authors : 3862
+
+RESULT
+======
+
+Recovered covers           : 364
+Unresolved titles          : 3498
+Recovery rate              : 9.43%
+
+BY LANGUAGE
+===========
+FR: 124/1486 (8.34%)
+EN: 197/944 (20.87%)
+NL: 7/496 (1.41%)
+DE: 18/458 (3.93%)
+ES: 10/284 (3.52%)
+IT: 4/154 (2.60%)
+LA: 4/40 (10.00%)
+
+BY QUALITY
+==========
+STRONG: 29/187 (15.51%)
+PROMISING: 334/3666 (9.11%)
+WEAK: 1/9 (11.11%)
+
+UNRESOLVED STATES
+=================
+NO_MATCHING_EDITION: 3393
+NO_VALID_PHYSICAL_COVER: 105
+
+FINAL COVER GATE
+================
+
+Guaranteed before rescue : 11138
+Recovered now            : 364
+Covered catalogue total  : 11502/15000
+Projected cover rate     : 76.68%
+Required minimum         : 13350/15000 (89%)
+Still required           : 1848
+
+POLICY
+======
+
+Original catalogue works are preserved.
+Only a cover representation is rescued.
+Authors come from the exact Full bundle relation tables.
+Title and author similarity are both mandatory.
+Edition language must explicitly match the catalogue language.
+Study guides and derivative teaching material are rejected.
+Only physically validated local images are accepted.
+No bibliographic value is invented.
+No bundle modification.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/final-master-cover-rescue-recovered.csv
+data/audit/final-master-cover-rescue-unresolved.csv
+data/audit/final-master-cover-rescue-candidates.csv
+data/audit/final-master-cover-rescue-report.txt
+
+STATUS : PARTIAL — COVER GATE NOT YET REACHED

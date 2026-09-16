@@ -1,0 +1,32 @@
+{
+  "title": "Marie bashkirtseff (bilingue fr.-angl.)",
+  "key": "/works/OL10013177W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3979963A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Catalogs",
+    "Painting",
+    "Musée des beaux-arts Jules Chéret"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:59:29.466453"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2020-12-07T11:50:05.922997"
+  }
+}

@@ -1,6 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
+import { Select } from 'primeng/select';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -25,8 +27,17 @@ function buildTitle(overrides: Partial<TitleResponse> = {}): TitleResponse {
   };
 }
 
-function buildPage(content: TitleResponse[], totalElements = content.length): PageResponse<TitleResponse> {
-  return { content, page: 0, size: 20, totalElements, totalPages: Math.max(1, Math.ceil(totalElements / 20)) };
+function buildPage(
+  content: TitleResponse[],
+  totalElements = content.length,
+): PageResponse<TitleResponse> {
+  return {
+    content,
+    page: 0,
+    size: 20,
+    totalElements,
+    totalPages: Math.max(1, Math.ceil(totalElements / 20)),
+  };
 }
 
 function apiHttpError(code: string, message: string): HttpErrorResponse {
@@ -50,11 +61,16 @@ describe('StaffCataloguePage', () => {
   let staffCatalogueApiServiceMock: { searchTitles: ReturnType<typeof vi.fn> };
 
   function configure(): void {
-    staffCatalogueApiServiceMock = { searchTitles: vi.fn().mockReturnValue(of(buildPage([buildTitle()]))) };
+    staffCatalogueApiServiceMock = {
+      searchTitles: vi.fn().mockReturnValue(of(buildPage([buildTitle()]))),
+    };
 
     TestBed.configureTestingModule({
       imports: [StaffCataloguePage],
-      providers: [provideRouter([]), { provide: StaffCatalogueApiService, useValue: staffCatalogueApiServiceMock }],
+      providers: [
+        provideRouter([]),
+        { provide: StaffCatalogueApiService, useValue: staffCatalogueApiServiceMock },
+      ],
     });
   }
 
@@ -65,7 +81,9 @@ describe('StaffCataloguePage', () => {
   }
 
   function lastParams(): StaffTitleSearchParams {
-    return staffCatalogueApiServiceMock.searchTitles.mock.calls.at(-1)?.[0] as StaffTitleSearchParams;
+    return staffCatalogueApiServiceMock.searchTitles.mock.calls.at(
+      -1,
+    )?.[0] as StaffTitleSearchParams;
   }
 
   beforeEach(() => {
@@ -79,6 +97,12 @@ describe('StaffCataloguePage', () => {
     createComponent();
 
     expect(lastParams()).toEqual({ page: 0, size: 20 });
+  });
+
+  it('should set the document title (DEV-15.8)', () => {
+    createComponent();
+
+    expect(document.title).toBe('Gestion du catalogue — PRIMATIS');
   });
 
   it('should reload with the requested page/size on lazy load', () => {
@@ -132,7 +156,9 @@ describe('StaffCataloguePage', () => {
   });
 
   it('should show the loading state before the first response arrives', () => {
-    staffCatalogueApiServiceMock.searchTitles.mockReturnValue({ subscribe: () => ({ unsubscribe: () => {} }) });
+    staffCatalogueApiServiceMock.searchTitles.mockReturnValue({
+      subscribe: () => ({ unsubscribe: () => {} }),
+    });
     createComponent();
 
     expect(component.loading()).toBe(true);
@@ -146,14 +172,18 @@ describe('StaffCataloguePage', () => {
   });
 
   it('should show the error state when the request fails', () => {
-    staffCatalogueApiServiceMock.searchTitles.mockReturnValue(throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')));
+    staffCatalogueApiServiceMock.searchTitles.mockReturnValue(
+      throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')),
+    );
     createComponent();
 
     expect(component.error()?.message).toBe('Erreur serveur.');
   });
 
   it('should retry the last page/size when retry() is called', () => {
-    staffCatalogueApiServiceMock.searchTitles.mockReturnValue(throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')));
+    staffCatalogueApiServiceMock.searchTitles.mockReturnValue(
+      throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')),
+    );
     createComponent();
     component.onLazyLoad({ first: 40, rows: 20 });
     staffCatalogueApiServiceMock.searchTitles.mockClear();
@@ -168,15 +198,30 @@ describe('StaffCataloguePage', () => {
   it('should render the "Créer un titre" link to /staff/catalogue/new', () => {
     createComponent();
 
-    const link: HTMLAnchorElement | null = fixture.nativeElement.querySelector('a[href="/staff/catalogue/new"]');
+    const link: HTMLAnchorElement | null = fixture.nativeElement.querySelector(
+      'a[href="/staff/catalogue/new"]',
+    );
     expect(link).not.toBeNull();
   });
 
-  it('should render a link to the Title detail page', () => {
-    staffCatalogueApiServiceMock.searchTitles.mockReturnValue(of(buildPage([buildTitle({ id: 42 })])));
+  it('should append filter overlays to the body so their options are not clipped', () => {
     createComponent();
 
-    const link: HTMLAnchorElement | null = fixture.nativeElement.querySelector('a[href="/staff/catalogue/42"]');
+    const selects = fixture.debugElement.queryAll(By.directive(Select));
+
+    expect(selects).toHaveLength(2);
+    expect(selects.every((select) => select.componentInstance.appendTo() === 'body')).toBe(true);
+  });
+
+  it('should render a link to the Title detail page', () => {
+    staffCatalogueApiServiceMock.searchTitles.mockReturnValue(
+      of(buildPage([buildTitle({ id: 42 })])),
+    );
+    createComponent();
+
+    const link: HTMLAnchorElement | null = fixture.nativeElement.querySelector(
+      'a[href="/staff/catalogue/42"]',
+    );
     expect(link).not.toBeNull();
   });
 });

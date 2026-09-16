@@ -1,0 +1,29 @@
+DEV-16 RECONSTRUCTION — LA LAST CHANCE
+======================================
+
+Targets         : 2
+Candidate found : 0
+No candidate    : 2
+
+RESULTS
+=======
+- #45 Pétrarque / Secretum -> NO_CANDIDATE
+- #46 Pic de la Mirandole / Oratio de Hominis Dignitate -> NO_CANDIDATE
+
+POLICY
+======
+
+Only the final two unresolved LA targets were searched.
+Previously seen editions are excluded.
+Latin is mandatory at edition level.
+A valid physical cover is mandatory.
+A found candidate still requires editorial confirmation.
+
+If a target remains unresolved after this pass,
+it must be replaced by another editorially significant Latin work
+rather than filled with a weak or cover-driven acquisition.
+
+No bundle modification.
+No database write.
+
+STATUS : PASS

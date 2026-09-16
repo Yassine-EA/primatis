@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { Router, RouterLink } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -30,7 +31,16 @@ import { LANGUAGE_OPTIONS } from '../../language-options';
  */
 @Component({
   selector: 'app-staff-title-create-page',
-  imports: [ReactiveFormsModule, InputTextModule, SelectModule, MessageModule, ButtonModule, AuthorPicker, GenrePicker],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    InputTextModule,
+    SelectModule,
+    MessageModule,
+    ButtonModule,
+    AuthorPicker,
+    GenrePicker,
+  ],
   templateUrl: './staff-title-create-page.html',
   styleUrl: './staff-title-create-page.scss',
 })
@@ -39,6 +49,11 @@ export class StaffTitleCreatePage {
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
+  private readonly titleService = inject(Title);
+
+  constructor() {
+    this.titleService.setTitle('Créer un titre — PRIMATIS');
+  }
 
   readonly languageOptions = LANGUAGE_OPTIONS;
 

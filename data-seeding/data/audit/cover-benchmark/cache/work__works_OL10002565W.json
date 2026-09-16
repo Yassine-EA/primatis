@@ -1,0 +1,31 @@
+{
+  "title": "Histoire du greffier 2000",
+  "key": "/works/OL10002565W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3967963A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Clerks of court",
+    "History"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:38.254267"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-05-19T12:53:42.671127"
+  }
+}

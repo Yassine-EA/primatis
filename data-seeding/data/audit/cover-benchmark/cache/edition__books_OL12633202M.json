@@ -1,0 +1,63 @@
+{
+  "publishers": [
+    "Pub - Publications de la"
+  ],
+  "number_of_pages": 331,
+  "subtitle": "Le syndicalisme en Europe occidentale à la fin du XIXe siècle",
+  "title": "L'invention des syndicalismes",
+  "type": {
+    "key": "/type/edition"
+  },
+  "identifiers": {
+    "goodreads": [
+      "4581264"
+    ]
+  },
+  "isbn_13": [
+    "9782859443252"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_10": [
+    "2859443258"
+  ],
+  "publish_date": "December 12, 1997",
+  "key": "/books/OL12633202M",
+  "authors": [
+    {
+      "key": "/authors/OL3969753A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10004223W"
+    }
+  ],
+  "physical_format": "Paperback",
+  "lccn": [
+    "2001318474"
+  ],
+  "lc_classifications": [
+    "HD6657 .I58 1997"
+  ],
+  "source_records": [
+    "marc:marc_loc_2016/BooksAll.2016.part29.utf8:37603276:1056",
+    "marc:harvard_bibliographic_metadata/20220215_012.bib.mrc:179826138:1982"
+  ],
+  "oclc_numbers": [
+    "38745766"
+  ],
+  "latest_revision": 6,
+  "revision": 6,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-08-03T17:53:31.914220"
+  }
+}

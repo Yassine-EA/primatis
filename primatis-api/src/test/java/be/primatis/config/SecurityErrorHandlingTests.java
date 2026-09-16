@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -205,6 +206,34 @@ class SecurityErrorHandlingTests {
                 .andExpect(jsonPath("$.fieldErrors").isArray())
                 .andExpect(jsonPath("$.fieldErrors").isEmpty())
                 .andExpect(header().string("WWW-Authenticate", "Bearer error=\"invalid_token\""));
+    }
+
+    // ---------------------------------------------------------------
+    // DEV-16.6 — contenu des messages accentués (MockMvc/MockHttpServletResponse
+    // uniquement — voir SecurityErrorResponseEncodingTests pour la preuve
+    // d'encodage réelle, qu'aucun test MockMvc ne peut fournir : voir sa
+    // documentation de classe pour l'explication complète).
+    // ---------------------------------------------------------------
+
+    @Test
+    void authenticationRequiredMessageContentIsCorrect() throws Exception {
+        String body = mockMvc.perform(get("/api/v1/protected/sample"))
+                .andExpect(status().isUnauthorized())
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+
+        assertThat(objectMapper.readTree(body).get("message").asText())
+                .isEqualTo("Une authentification est requise pour accéder à cette ressource.");
+    }
+
+    @Test
+    void invalidTokenMessageContentIsCorrect() throws Exception {
+        String body = mockMvc.perform(get("/api/v1/protected/sample")
+                        .header("Authorization", "Bearer not-a-jwt-at-all"))
+                .andExpect(status().isUnauthorized())
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+
+        assertThat(objectMapper.readTree(body).get("message").asText())
+                .isEqualTo("Le jeton d'authentification fourni est invalide ou a expiré.");
     }
 
     // ---------------------------------------------------------------

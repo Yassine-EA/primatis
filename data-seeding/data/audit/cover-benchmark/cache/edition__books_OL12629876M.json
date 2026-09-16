@@ -1,0 +1,50 @@
+{
+  "physical_format": "Unknown Binding",
+  "publishers": [
+    "H. Veyrier"
+  ],
+  "isbn_10": [
+    "2851995707"
+  ],
+  "number_of_pages": 1053,
+  "isbn_13": [
+    "9782851995704"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publish_date": "1991",
+  "key": "/books/OL12629876M",
+  "authors": [
+    {
+      "key": "/authors/OL3968284A"
+    }
+  ],
+  "title": "Cent ans de peche a Terre-Neuve (Kronos)",
+  "works": [
+    {
+      "key": "/works/OL10002839W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "oclc_numbers": [
+    "25606785"
+  ],
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/ab.bib.02.20150123.full.mrc:329521893:1115"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-21T11:44:38.142926"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "publishers": [
+    "Galerie Ribolzi"
+  ],
+  "title": "Adriano Ribolzi",
+  "physical_format": "Hardcover",
+  "isbn_10": [
+    "2950738206"
+  ],
+  "publish_date": "1993",
+  "key": "/books/OL12658269M",
+  "authors": [
+    {
+      "key": "/authors/OL3981099A"
+    }
+  ],
+  "oclc_numbers": [
+    "81886245"
+  ],
+  "works": [
+    {
+      "key": "/works/OL10014353W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/ab.bib.13.20150123.full.mrc:146591057:621",
+    "marc:harvard_bibliographic_metadata/ab.bib.11.20150123.full.mrc:302602929:626",
+    "marc:harvard_bibliographic_metadata/20220215_044.bib.mrc:96142487:1184"
+  ],
+  "number_of_pages": 79,
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 6,
+  "revision": 6,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-07-29T14:44:23.410671"
+  }
+}

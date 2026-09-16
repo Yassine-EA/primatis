@@ -136,6 +136,33 @@ describe('ReservationCreateDialog', () => {
     expect(staffCatalogueApiServiceMock.searchTitles).not.toHaveBeenCalled();
   });
 
+  it('should re-run the exact same title search across two dialog sessions (DEV-15.8 regression)', () => {
+    // Bug réel identique à LoanCreateDialog (DEV-15.7) : le dialog n'est
+    // jamais détruit entre deux ouvertures (seuls les Signals sont
+    // réinitialisés), un `distinctUntilChanged()` sur le Subject de
+    // recherche supprimait silencieusement une seconde recherche
+    // identique à la première.
+    createComponent();
+    component.onTitleSearchInput('Les Misérables');
+    vi.advanceTimersByTime(300);
+    expect(catalogueApiServiceMock.searchTitles).toHaveBeenCalledTimes(1);
+
+    fixture.componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    catalogueApiServiceMock.searchTitles.mockClear();
+
+    component.onTitleSearchInput('Les Misérables');
+    vi.advanceTimersByTime(300);
+
+    expect(catalogueApiServiceMock.searchTitles).toHaveBeenCalledWith({
+      q: 'Les Misérables',
+      page: 0,
+      size: 20,
+    });
+  });
+
   it('should display title results', () => {
     catalogueApiServiceMock.searchTitles.mockReturnValue(
       of({ content: [buildTitle({ title: 'Notre-Dame de Paris' })], page: 0, size: 20, totalElements: 1, totalPages: 1 }),

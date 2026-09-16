@@ -1,0 +1,52 @@
+{
+  "title": "Spectre automorphe des variétés hyperboliques et applications topologiques",
+  "subjects": [
+    "Hyperbolic spaces",
+    "Automorphic forms",
+    "Topology",
+    "Advanced",
+    "Mathematics",
+    "Science/Mathematics",
+    "Automorfe functies",
+    "Algebraïsche topologie",
+    "Funções automorfas (funções de uma variável complexa)",
+    "Espaços hiperbólicos",
+    "Topologia"
+  ],
+  "key": "/works/OL10003414W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3968867A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL2646917A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "description": {
+    "type": "/type/text",
+    "value": "This book has two parts. The first is concerned with the differential form spectrum of congruence hyperbolic manifolds. The authors prove Selberg type theorems on the first eigenvalue of the laplacian on differential forms. The method of proof is representation-theoretic; the author hope the different chapters also serve as an introduction to the modern theory of automorphic forms and its application to spectral questions. The second part of the book has a more differential geometric flavor; a new kind of lifting of cohomology classes is proved. The main motivation of this work is given by Arthur's conjectures; these conjectures imply strong restrictions on the spectrum of arithmetic manifolds which, in turn, imply conjectural properties on the geometry of hyperbolic manifolds. Together with precise statements of these conjectures, this text gives proofs of weak forms of them in some particular cases."
+  },
+  "latest_revision": 6,
+  "revision": 6,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:52.839053"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-07-25T22:53:12.904992"
+  }
+}

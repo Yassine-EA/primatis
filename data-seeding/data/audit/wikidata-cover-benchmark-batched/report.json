@@ -1,0 +1,831 @@
+{
+  "stats": {
+    "sample_size": 100,
+    "isbn_match": 0,
+    "image_found": 0,
+    "match_without_image": 0,
+    "no_match": 100,
+    "batches": 4,
+    "batch_errors": 4
+  },
+  "errors": [
+    {
+      "batch": 1,
+      "error": "TimeoutError"
+    },
+    {
+      "batch": 2,
+      "error": "TimeoutError"
+    },
+    {
+      "batch": 3,
+      "error": "HTTP_502"
+    },
+    {
+      "batch": 4,
+      "error": "HTTP_429"
+    }
+  ],
+  "results": [
+    {
+      "edition_key": "/books/OL1167532M",
+      "title": "Lob der Oberflächlichkeit",
+      "language": "DE",
+      "isbn": "9783927901360",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12644473M",
+      "title": "Zur Beschreibung und Klassifizierung von Ubersetzungsverfahren (Travaux du Centre de traduction literaire)",
+      "language": "DE",
+      "isbn": "9782883570177",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12659365M",
+      "title": "Natchez. Das Sonnenkönigstum am Mississippi.",
+      "language": "DE",
+      "isbn": "9783000098772",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12659775M",
+      "title": "Totengräber der Demokratie.",
+      "language": "DE",
+      "isbn": "9783034005715",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12659783M",
+      "title": "Veröffentlichungen der Unabhängigen Expertenkommission Schweiz (UEK) - Zweiter Weltkrieg; Publications de la Commission, Bd.2, Interhandel",
+      "language": "DE",
+      "isbn": "9783034006026",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660133M",
+      "title": "Klezmer",
+      "language": "DE",
+      "isbn": "9783039101269",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660135M",
+      "title": "Poetische Gartner Und Phaetonische Himmelsflieger",
+      "language": "DE",
+      "isbn": "9783039101283",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660163M",
+      "title": "Der St. Galler Botanicus Ein Fr¨ Hmittelalterliches Herbar",
+      "language": "DE",
+      "isbn": "9783039101955",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660169M",
+      "title": "Basler Missionare In Brasilien",
+      "language": "DE",
+      "isbn": "9783039102051",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660194M",
+      "title": "Die Literarische Identitat Des Drehbuchs",
+      "language": "DE",
+      "isbn": "9783039102464",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660259M",
+      "title": "Das Kunstlerinterview",
+      "language": "DE",
+      "isbn": "9783039103461",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660316M",
+      "title": "Das Denken Der Hand",
+      "language": "DE",
+      "isbn": "9783039104352",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660320M",
+      "title": "Spiegel Des Neuen",
+      "language": "DE",
+      "isbn": "9783039104451",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660340M",
+      "title": "Sehnsucht Nach Illusion?",
+      "language": "DE",
+      "isbn": "9783039104789",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660426M",
+      "title": "Guan Ren",
+      "language": "DE",
+      "isbn": "9783039106349",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660436M",
+      "title": "Polyphones Erzahlen: Zum Phanomen Der Erlebten Rede in Deutschen Romanen Der Jahrhundertwende (Europaische Hochschulschriften: Reihe 1, Deutsche Sprache Un)",
+      "language": "DE",
+      "isbn": "9783039106455",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660448M",
+      "title": "Ein Kunstwerk Im Dienst Der Republik",
+      "language": "DE",
+      "isbn": "9783039106714",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660497M",
+      "title": "Wie Kinder Witze Erzahlen",
+      "language": "DE",
+      "isbn": "9783039107667",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660505M",
+      "title": "Vom Kulturlosen Volk Zur Europaischen Avantgarde",
+      "language": "DE",
+      "isbn": "9783039107780",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660710M",
+      "title": "Rechtslehre - Schriften Zur Rechtsphilosophie (Philosophiehistorische Texte)",
+      "language": "DE",
+      "isbn": "9783050002279",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660821M",
+      "title": "August Der Starke (Sitzungsberichte Der Saechsischen Akademie Der Wissenschaften Zu Leipzig, Phil.-hist. Klasse)",
+      "language": "DE",
+      "isbn": "9783050010625",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660829M",
+      "title": "Gottfried Wilhelm Leibniz Im Philosophischen Diskurs Ueber Geometrie Und Erfahrung",
+      "language": "DE",
+      "isbn": "9783050011257",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660941M",
+      "title": "Das Sorbische Und Der Stand Seiner Erforschung (Sitzungsberichte Der Saechsischen Akademie Der Wissenschaften Zu Leipzig, Phil.-hist. Klasse)",
+      "language": "DE",
+      "isbn": "9783050017785",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660959M",
+      "title": "Der Semantische Wertbegriff in Sprachtheorien Vom 18. Bis Zum 20. Jahrhundert",
+      "language": "DE",
+      "isbn": "9783050018263",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12660982M",
+      "title": "Der Gehalt Der Sprachform",
+      "language": "DE",
+      "isbn": "9783050019383",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12661092M",
+      "title": "Sowjetische Forschungen (1917 Bis 1991) Zur Geschichte Der Deutsch-Russischen Beziehungen Von Den Anfaengen Bis 1949 (Publikationen Der Historischen Kommission Zu Berlin)",
+      "language": "DE",
+      "isbn": "9783050023847",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12661129M",
+      "title": "Medizin, Effizienz Und Oekonomie Im Griechischen Denken Der Klassischen Zeit (Sitzungsberichte Der Saechsischen Akademie Der Wissenschaften Zu Liepzig, Philologisch-historische Klasse)",
+      "language": "DE",
+      "isbn": "9783050025780",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12661260M",
+      "title": "Kommentar Zu \"De Revolutionibus\"",
+      "language": "DE",
+      "isbn": "9783050031231",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12661537M",
+      "title": "Lichtmikroskopie (Sitzungsberichte Der Saechsischen Akademie Der Wissenschaften Zu Leipzig, Math.-naturwiss. Klasse)",
+      "language": "DE",
+      "isbn": "9783055012761",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12661567M",
+      "title": "Mathematik Und Wirklichkeit",
+      "language": "DE",
+      "isbn": "9783055013492",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12662715M",
+      "title": "Die deutsche Sparkassenorganisation 1924 bis 1934 (Sparkassen in der Geschichte)",
+      "language": "DE",
+      "isbn": "9783093039294",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12663500M",
+      "title": "Handbuch Der Germanischen Philologie",
+      "language": "DE",
+      "isbn": "9783110104974",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12663687M",
+      "title": "Grundlagen Einer Theorie Der Wahrheit (Foundations of Communication)",
+      "language": "DE",
+      "isbn": "9783110120790",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12663779M",
+      "title": "Die Politische Und Soziale Bedeutung Der Naqsbandiyya in Mittelasien Im 15. Jahrhundert (Studien Zur Sprache, Geschichte Und Kultur Des Islamischen Orients, Nf)",
+      "language": "DE",
+      "isbn": "9783110127201",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12664815M",
+      "title": "Theodori Scutariotae Chronica",
+      "language": "DE",
+      "isbn": "9783110189469",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12665878M",
+      "title": "Literarische Kreativität",
+      "language": "DE",
+      "isbn": "9783123113802",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12674906M",
+      "title": "Bartholomäus Zeitblom",
+      "language": "DE",
+      "isbn": "9783170163836",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12674914M",
+      "title": "Geschichte im Fragment. Grundelemente einer Theologie der Geschichte.",
+      "language": "DE",
+      "isbn": "9783170164246",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12675207M",
+      "title": "Durchbruch der Tiefenphänomenologie. Die Neue Vorsokratik.",
+      "language": "DE",
+      "isbn": "9783170173682",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12678459M",
+      "title": "Psychologie und Kunst",
+      "language": "DE",
+      "isbn": "9783211833100",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12679270M",
+      "title": "Mit Leier und Schwert. Die Habsburger und die Musik.",
+      "language": "DE",
+      "isbn": "9783222128165",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12684251M",
+      "title": "Geschichten aus dem Bett.",
+      "language": "DE",
+      "isbn": "9783359009924",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12686919M",
+      "title": "Alkidamas",
+      "language": "DE",
+      "isbn": "9783402054154",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12686921M",
+      "title": "Der Dom von Münster in alten Ansichten.",
+      "language": "DE",
+      "isbn": "9783402054253",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12687077M",
+      "title": "Pädagogisches Handeln bei Hugo Gaudig, Maria Montessori und Peter Petersen.",
+      "language": "DE",
+      "isbn": "9783403021414",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12691899M",
+      "title": "'Nieder mit den schwarzen Paragrafenhengsten!'",
+      "language": "DE",
+      "isbn": "9783406485879",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12696718M",
+      "title": "SCHAUFENSTER KUNST; BERLIN UND NEW YORK",
+      "language": "DE",
+      "isbn": "9783412029036",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12696728M",
+      "title": "Geschichtsbegriff und Historisches Denken bei Hannah Arendt.",
+      "language": "DE",
+      "isbn": "9783412034016",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12696778M",
+      "title": "Die Bürgerbewegung in Dresden 1989/90.",
+      "language": "DE",
+      "isbn": "9783412070014",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12696801M",
+      "title": "Bildung, Militär und Gesellschaft in Deutschland. Studien zur Entwicklung im 19. Jahrhundert.",
+      "language": "DE",
+      "isbn": "9783412087937",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12696813M",
+      "title": "Historische Orientierung.",
+      "language": "DE",
+      "isbn": "9783412094928",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12696854M",
+      "title": "Berufsausbildung im Grossherzogum Baden",
+      "language": "DE",
+      "isbn": "9783412125967",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12698756M",
+      "title": "Künstlerwanderungen nach Berlin. Vor Schinkel und danach.",
+      "language": "DE",
+      "isbn": "9783422063280",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12698758M",
+      "title": "Genealogie als Monument und Argument",
+      "language": "DE",
+      "isbn": "9783422063389",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12703973M",
+      "title": "Natur, Herrschaft, Recht. Das Recht der ersten Natur in der zweiten",
+      "language": "DE",
+      "isbn": "9783428086818",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12704008M",
+      "title": "Wissenschaft und Freiheit in der Risikogesellschaft. Eine grundrechtsdogmatische Untersuchung zum Normbereich von Art. 5 Abs. 3 Satz 1 des Grundgesetzes. (Schriften zum Öffentlichen Recht; SÖR 745)",
+      "language": "DE",
+      "isbn": "9783428092215",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12704031M",
+      "title": "Die Zeitlichkeit des positiven Rechts und die Geschichtlichkeit des Rechtsbewusstseins",
+      "language": "DE",
+      "isbn": "9783428093182",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12704101M",
+      "title": "Rechtsphilosophische Aspekte der \"Mauerschützen\"-Prozesse. (Schriften zur Rechtstheorie; RT 189)",
+      "language": "DE",
+      "isbn": "9783428097487",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12704146M",
+      "title": "Zeitgeschichtliche Forschungen, Bd.8, Vom sozialistischen Realismus zur Kunst im Sozialismus",
+      "language": "DE",
+      "isbn": "9783428100897",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12704307M",
+      "title": "Kritik der Verfassung Deutschlands. Hegels Vermächtnis 1801 und 2001. (Beiträge zur Politischen Wissenschaft; BPW 123)",
+      "language": "DE",
+      "isbn": "9783428108176",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12705944M",
+      "title": "Welten im Kopf. Das 20. Jahrhundert- Projekt",
+      "language": "DE",
+      "isbn": "9783434530541",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12713545M",
+      "title": "Erneuerungsversuch und Ende der Sowjetphilosophie in der Spatphase der Perestroika (Philosophische und soziologische Veroffentlichungen der Freien Universitat Berlin)",
+      "language": "DE",
+      "isbn": "9783447039956",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12714639M",
+      "title": "Gemeinwohl und Gerechtigkeit.",
+      "language": "DE",
+      "isbn": "9783451231858",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12714882M",
+      "title": "Montessori- Pädagogik in der Diskussion. Aktuelle Forschungen und internationale Entwicklungen.",
+      "language": "DE",
+      "isbn": "9783451267642",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12726844M",
+      "title": "Gesprach Eines Philosophen",
+      "language": "DE",
+      "isbn": "9783458167280",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12736136M",
+      "title": "Denker ohne Gott und Vater",
+      "language": "DE",
+      "isbn": "9783476452542",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12741493M",
+      "title": "Allein zu sein bedarf es wenig. Ein Lesebuch für Solitäre.",
+      "language": "DE",
+      "isbn": "9783492224451",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12741943M",
+      "title": "Tropfen auf kalten Stein. Roman.",
+      "language": "DE",
+      "isbn": "9783492236928",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12742688M",
+      "title": "Wissen und Bewerten. Unterwegs zu einer Ethik der Naturwissenschaften.",
+      "language": "DE",
+      "isbn": "9783495480885",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12742758M",
+      "title": "Fluxus - Flirt - Feminismus? Carolee Schneemanns Körperkunst und die Avantgarde.",
+      "language": "DE",
+      "isbn": "9783496012641",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12742759M",
+      "title": "Kunst am Computer. Ästhetik, Bildtheorie und Praxis des Computerbildes.",
+      "language": "DE",
+      "isbn": "9783496012658",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12765484M",
+      "title": "Das Phaenomen Zeit in Kunst Und Wissenschaft (Acta Humaniora S.)",
+      "language": "DE",
+      "isbn": "9783527175635",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12765494M",
+      "title": "Der Abentheuerliche Simplicissimus Teutsch Und Continuatio DES Abentheuerlichen Simplicissimi",
+      "language": "DE",
+      "isbn": "9783527175987",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12765529M",
+      "title": "Peter Behrens in Duesseldorf",
+      "language": "DE",
+      "isbn": "9783527177264",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12766518M",
+      "title": "Vom Wasser Band V90 1998",
+      "language": "DE",
+      "isbn": "9783527288922",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12767683M",
+      "title": "Biographisch-Literarisches Handwoerterbuch Der Exakten Band Viii, Teil 1 Installment 3",
+      "language": "DE",
+      "isbn": "9783527400911",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12770204M",
+      "title": "Moral und Erziehung in der pluralistischen Gesellschaft.",
+      "language": "DE",
+      "isbn": "9783534160266",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12770214M",
+      "title": "Transformation, Reflexion und Heterogenität.",
+      "language": "DE",
+      "isbn": "9783534166718",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12812105M",
+      "title": "Der Brautmörder.",
+      "language": "DE",
+      "isbn": "9783548247960",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12816356M",
+      "title": "Der Klub der sieben Raben und die Petroglyphen. UNDERGROUND- Krimi.",
+      "language": "DE",
+      "isbn": "9783570212035",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12822238M",
+      "title": "Einsatz Neuer Technologien Im Bibliothekswesen",
+      "language": "DE",
+      "isbn": "9783598109706",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827140M",
+      "title": "Bewussteinskonflikte von Madchen im naturwissenschaftlichen Unterricht",
+      "language": "DE",
+      "isbn": "9783631304655",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827158M",
+      "title": "Vergleich von multivariaten statistischen Analyseverfahren und kunstlichen neuronalen Netzen zur Klassifikation bei Entscheidungsproblemen in der Wirtschaft (Schriften zur Wirtschaftsinformatik)",
+      "language": "DE",
+      "isbn": "9783631309919",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827170M",
+      "title": "Social Support und Gesundheit bei alteren Frauen",
+      "language": "DE",
+      "isbn": "9783631313213",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827200M",
+      "title": "Alternativer Landbau Und Feministische Naturwissenschaftskritik",
+      "language": "DE",
+      "isbn": "9783631317358",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827226M",
+      "title": "Europaorientiertes Lernen und transnationale Integration",
+      "language": "DE",
+      "isbn": "9783631319949",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827234M",
+      "title": "Determinanten der Effektivitat der Umweltpolitik",
+      "language": "DE",
+      "isbn": "9783631320716",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827238M",
+      "title": "Sozialwissenschaftliche Methoden in der klinischen Forschung",
+      "language": "DE",
+      "isbn": "9783631320907",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827312M",
+      "title": "Adaptive neuronale Netze zur Losung von Klassifikationsproblemen im Marketing",
+      "language": "DE",
+      "isbn": "9783631324660",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827367M",
+      "title": "Die Akquisition Betriebswirtschaftlichen Wissens Zum Aufbau Von Wissensbasierten Entscheidungsunterstutzungssystemen (Europaische Hochschulschriften. Reihe V, Volks- Und Betriebs)",
+      "language": "DE",
+      "isbn": "9783631328538",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827378M",
+      "title": "Aspekte Des Raumes Und Ihre Bedeutung Im Werk Bernhard Heiligers (Europaische Hochschulschriften. Reihe XXVIII, Kunstgeschicht)",
+      "language": "DE",
+      "isbn": "9783631329313",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827415M",
+      "title": "Die Bekampfung der Steuerumgehung (Finanzwissenschaftliche Schriften)",
+      "language": "DE",
+      "isbn": "9783631331644",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827451M",
+      "title": "Erlebnispadagogik als Moglichkeit zur Kompensation von Verhaltensdefiziten",
+      "language": "DE",
+      "isbn": "9783631334768",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827465M",
+      "title": "Untersuchungen Zu Den Politika Des Aristoteles (Salzburger Studien Zum Europaischen Privatrecht,)",
+      "language": "DE",
+      "isbn": "9783631335857",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827524M",
+      "title": "Christliche Adversus-Judaeos-Bilder",
+      "language": "DE",
+      "isbn": "9783631339893",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827553M",
+      "title": "Die Natur Und Ihr Gegenteil",
+      "language": "DE",
+      "isbn": "9783631341292",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827590M",
+      "title": "Die Staatphilosophie Giovanni Gentiles Und Fie Versuche Ihrer Verwirklichung Im Faschistischen Italien (Frankfurter Kriminalwissenschaftliche Studien,)",
+      "language": "DE",
+      "isbn": "9783631343456",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827616M",
+      "title": "Wirtschaftliche Integration und Kooperation Im Asiatisch-Pazifischen Raum. die APEC",
+      "language": "DE",
+      "isbn": "9783631345047",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827634M",
+      "title": "Tizian in England",
+      "language": "DE",
+      "isbn": "9783631345924",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    },
+    {
+      "edition_key": "/books/OL12827658M",
+      "title": "Eliten",
+      "language": "DE",
+      "isbn": "9783631346877",
+      "matches": [],
+      "verdict": "NO_MATCH"
+    }
+  ]
+}

@@ -6,7 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
-import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Subject, debounceTime } from 'rxjs';
 
 import { TitleResponse } from '../../../../catalogue/models/title-response';
 import { StaffCatalogueApiService } from '../../../../catalogue/services/staff-catalogue-api.service';
@@ -105,12 +105,20 @@ export class StaffReservationCreateDialog {
   private readonly titleSearchInput$ = new Subject<string>();
 
   constructor() {
+    // Jamais `distinctUntilChanged()` ici (DEV-15.8, même bug réel que
+    // LoanCreateDialog, DEV-15.7) : ces Subjects sont créés une seule fois
+    // pour toute la durée de vie du composant — le dialog n'est jamais
+    // détruit entre deux ouvertures, seuls les Signals sont réinitialisés
+    // (`resetState()`). Avec `distinctUntilChanged()`, rechercher deux fois
+    // le même membre/Title lors de deux sessions séparées du dialog
+    // supprimait silencieusement la seconde recherche identique.
+    // `debounceTime` seul suffit à limiter les appels HTTP.
     this.memberSearchInput$
-      .pipe(debounceTime(SEARCH_DEBOUNCE_MS), distinctUntilChanged(), takeUntilDestroyed())
+      .pipe(debounceTime(SEARCH_DEBOUNCE_MS), takeUntilDestroyed())
       .subscribe((value) => this.runMemberSearch(value));
 
     this.titleSearchInput$
-      .pipe(debounceTime(SEARCH_DEBOUNCE_MS), distinctUntilChanged(), takeUntilDestroyed())
+      .pipe(debounceTime(SEARCH_DEBOUNCE_MS), takeUntilDestroyed())
       .subscribe((value) => this.runTitleSearch(value));
 
     // Réinitialise systématiquement à chaque (ré)ouverture : jamais de

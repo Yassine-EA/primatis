@@ -1,6 +1,8 @@
+import { DatePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TagModule } from 'primeng/tag';
 
 import { AppError } from '../../../core/errors/api-error';
@@ -29,13 +31,14 @@ const INVALID_SLUG_ERROR: AppError = { message: 'Slug d’article invalide.', fi
  */
 @Component({
   selector: 'app-article-detail-page',
-  imports: [TagModule, LoadingState, ErrorState],
+  imports: [RouterLink, DatePipe, TagModule, LoadingState, ErrorState],
   templateUrl: './article-detail-page.html',
   styleUrl: './article-detail-page.scss',
 })
 export class ArticleDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly articleApiService = inject(ArticleApiService);
+  private readonly titleService = inject(Title);
 
   readonly article = signal<ArticleResponse | null>(null);
   readonly loading = signal(false);
@@ -71,6 +74,7 @@ export class ArticleDetailPage {
       next: (value) => {
         this.article.set(value);
         this.loading.set(false);
+        this.titleService.setTitle(`${value.title} — PRIMATIS`);
       },
       error: (err: unknown) => {
         this.loading.set(false);

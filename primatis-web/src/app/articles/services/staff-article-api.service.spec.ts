@@ -128,7 +128,11 @@ describe('StaffArticleApiService', () => {
   });
 
   it('should propagate the ArticleResponse returned by the backend on getStaffArticleById, whatever the status', () => {
-    const archived: ArticleResponse = { ...article, articleStatus: 'ARCHIVED', publishedAt: '2026-08-01T10:00:00Z' };
+    const archived: ArticleResponse = {
+      ...article,
+      articleStatus: 'ARCHIVED',
+      publishedAt: '2026-08-01T10:00:00Z',
+    };
     let received: ArticleResponse | undefined;
     service.getStaffArticleById(1).subscribe((value) => (received = value));
 
@@ -142,7 +146,11 @@ describe('StaffArticleApiService', () => {
   // ---------------------------------------------------------------
 
   it('should POST /api/v1/staff/articles with the exact CreateArticleRequest body', () => {
-    const requestBody: CreateArticleRequest = { title: 'Nouveau', content: '<p>Contenu</p>', summary: 'Résumé' };
+    const requestBody: CreateArticleRequest = {
+      title: 'Nouveau',
+      content: '<p>Contenu</p>',
+      summary: 'Résumé',
+    };
     service.createArticle(requestBody).subscribe();
 
     const request = httpTestingController.expectOne('/api/v1/staff/articles');
@@ -154,7 +162,9 @@ describe('StaffArticleApiService', () => {
 
   it('should propagate the ArticleResponse returned by the backend on createArticle', () => {
     let received: ArticleResponse | undefined;
-    service.createArticle({ title: 'Nouveau', content: '<p>Contenu</p>' }).subscribe((value) => (received = value));
+    service
+      .createArticle({ title: 'Nouveau', content: '<p>Contenu</p>' })
+      .subscribe((value) => (received = value));
 
     httpTestingController.expectOne('/api/v1/staff/articles').flush(article);
 
@@ -216,7 +226,11 @@ describe('StaffArticleApiService', () => {
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toBeNull();
 
-    const published: ArticleResponse = { ...article, articleStatus: 'PUBLISHED', publishedAt: '2026-08-01T10:00:00Z' };
+    const published: ArticleResponse = {
+      ...article,
+      articleStatus: 'PUBLISHED',
+      publishedAt: '2026-08-01T10:00:00Z',
+    };
     request.flush(published);
   });
 
@@ -224,7 +238,11 @@ describe('StaffArticleApiService', () => {
     let received: ArticleResponse | undefined;
     service.publishArticle(1).subscribe((value) => (received = value));
 
-    const published: ArticleResponse = { ...article, articleStatus: 'PUBLISHED', publishedAt: '2026-08-01T10:00:00Z' };
+    const published: ArticleResponse = {
+      ...article,
+      articleStatus: 'PUBLISHED',
+      publishedAt: '2026-08-01T10:00:00Z',
+    };
     httpTestingController.expectOne('/api/v1/staff/articles/1/publish').flush(published);
 
     expect(received).toEqual(published);
@@ -241,7 +259,11 @@ describe('StaffArticleApiService', () => {
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toBeNull();
 
-    const archived: ArticleResponse = { ...article, articleStatus: 'ARCHIVED', publishedAt: '2026-08-01T10:00:00Z' };
+    const archived: ArticleResponse = {
+      ...article,
+      articleStatus: 'ARCHIVED',
+      publishedAt: '2026-08-01T10:00:00Z',
+    };
     request.flush(archived);
   });
 
@@ -249,7 +271,11 @@ describe('StaffArticleApiService', () => {
     let received: ArticleResponse | undefined;
     service.archiveArticle(1).subscribe((value) => (received = value));
 
-    const archived: ArticleResponse = { ...article, articleStatus: 'ARCHIVED', publishedAt: '2026-08-01T10:00:00Z' };
+    const archived: ArticleResponse = {
+      ...article,
+      articleStatus: 'ARCHIVED',
+      publishedAt: '2026-08-01T10:00:00Z',
+    };
     httpTestingController.expectOne('/api/v1/staff/articles/1/archive').flush(archived);
 
     expect(received).toEqual(archived);
@@ -295,12 +321,44 @@ describe('StaffArticleApiService', () => {
   });
 
   it('should propagate the ArticleResponse returned by the backend on updateArticleTags', () => {
-    const updated: ArticleResponse = { ...article, tags: [{ id: 1, code: 'a', label: 'A', description: null }] };
+    const updated: ArticleResponse = {
+      ...article,
+      tags: [{ id: 1, code: 'a', label: 'A', description: null }],
+    };
     let received: ArticleResponse | undefined;
     service.updateArticleTags(1, { tagIds: [1] }).subscribe((value) => (received = value));
 
     httpTestingController.expectOne('/api/v1/staff/articles/1/tags').flush(updated);
 
     expect(received).toEqual(updated);
+  });
+
+  // ---------------------------------------------------------------
+  // uploadArticleMedia (DEV-ARTICLES-MEDIA)
+  // ---------------------------------------------------------------
+
+  it('should POST /api/v1/staff/articles/media with the file as multipart/form-data', () => {
+    const file = new File(['fake-image-bytes'], 'photo.png', { type: 'image/png' });
+
+    service.uploadArticleMedia(file).subscribe();
+
+    const request = httpTestingController.expectOne('/api/v1/staff/articles/media');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toBeInstanceOf(FormData);
+    expect((request.request.body as FormData).get('file')).toBe(file);
+
+    request.flush({ url: '/media/articles/abc.png' });
+  });
+
+  it('should propagate the ArticleMediaUploadResponse url returned by the backend', () => {
+    const file = new File(['fake-image-bytes'], 'photo.png', { type: 'image/png' });
+    let receivedUrl: string | undefined;
+    service.uploadArticleMedia(file).subscribe((value) => (receivedUrl = value.url));
+
+    httpTestingController
+      .expectOne('/api/v1/staff/articles/media')
+      .flush({ url: '/media/articles/abc.png' });
+
+    expect(receivedUrl).toBe('/media/articles/abc.png');
   });
 });

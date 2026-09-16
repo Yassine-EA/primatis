@@ -1,0 +1,58 @@
+{
+  "title": "Du Nom Au Nous",
+  "authors": [
+    {
+      "key": "/authors/OL3977491A"
+    }
+  ],
+  "publish_date": "March 11, 1996",
+  "publishers": [
+    "Dis Voir"
+  ],
+  "weight": "6.7 pounds",
+  "isbn_13": [
+    "9782906571495"
+  ],
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "2906571490"
+  ],
+  "oclc_numbers": [
+    "40518294"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Art",
+    "Reference",
+    "Art & Art Instruction"
+  ],
+  "physical_dimensions": "8.4 x 6.5 x 0.4 inches",
+  "source_records": [
+    "amazon:2906571490",
+    "marc:harvard_bibliographic_metadata/20220215_038.bib.mrc:212091826:1114"
+  ],
+  "key": "/books/OL12650380M",
+  "number_of_pages": 127,
+  "works": [
+    {
+      "key": "/works/OL10010918W"
+    }
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-05-06T12:52:04.756247"
+  }
+}

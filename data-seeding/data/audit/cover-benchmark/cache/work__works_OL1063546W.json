@@ -1,0 +1,27 @@
+{
+  "title": "L'Art D'Etre Grand-Pere, Chansons",
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T20:20:25.168304"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2012-06-23T04:28:17.912929"
+  },
+  "latest_revision": 2,
+  "key": "/works/OL1063546W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL107571A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "revision": 2
+}

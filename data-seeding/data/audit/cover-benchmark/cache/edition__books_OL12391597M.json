@@ -1,0 +1,72 @@
+{
+  "publishers": [
+    "Pneu Michelin"
+  ],
+  "number_of_pages": 37,
+  "subtitle": "France (No 915)",
+  "weight": "1.6 ounces",
+  "physical_format": "Map",
+  "key": "/books/OL12391597M",
+  "authors": [
+    {
+      "key": "/authors/OL2727318A"
+    },
+    {
+      "key": "/authors/OL272171A"
+    }
+  ],
+  "subjects": [
+    "Maps, charts & atlases",
+    "Travel / road maps & atlases",
+    "Travel",
+    "Travel - Foreign",
+    "France",
+    "Atlases - General",
+    "Europe - France"
+  ],
+  "edition_name": "21st edition",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "title": "Michelin Road Atlas",
+  "identifiers": {
+    "librarything": [
+      "8489887"
+    ]
+  },
+  "isbn_13": [
+    "9782067009158"
+  ],
+  "isbn_10": [
+    "206700915X"
+  ],
+  "publish_date": "December 1993",
+  "works": [
+    {
+      "key": "/works/OL10782530W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "9.8 x 4.5 x 0.2 inches",
+  "source_records": [
+    "bwb:9782067009158",
+    "promise:bwb_daily_pallets_2022-04-01"
+  ],
+  "local_id": [
+    "urn:bwbsku:O8-AIN-554"
+  ],
+  "latest_revision": 6,
+  "revision": 6,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2022-12-06T21:42:09.251521"
+  }
+}

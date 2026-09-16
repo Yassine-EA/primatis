@@ -84,9 +84,15 @@ describe('StaffArticlesPage', () => {
     );
     createComponent();
 
-    expect(fixture.nativeElement.textContent).toContain('DRAFT');
-    expect(fixture.nativeElement.textContent).toContain('PUBLISHED');
-    expect(fixture.nativeElement.textContent).toContain('ARCHIVED');
+    expect(fixture.nativeElement.textContent).toContain('Brouillon');
+    expect(fixture.nativeElement.textContent).toContain('Publié');
+    expect(fixture.nativeElement.textContent).toContain('Archivé');
+  });
+
+  it('should set the document title (DEV-15.8)', () => {
+    createComponent();
+
+    expect(document.title).toBe('Articles — PRIMATIS');
   });
 
   it('should never render the article content in the list', () => {
@@ -151,4 +157,29 @@ describe('StaffArticlesPage', () => {
     expect(component.error()).toBeNull();
     expect(component.rows()).toEqual([buildSummary()]);
   });
+  it('should render the VISUAL-RESET-19 editorial structure', () => {
+    createComponent();
+
+    const text = fixture.nativeElement.textContent as string;
+    expect(text).toContain('Gestion des articles');
+    expect(text).toContain('Registre éditorial');
+    expect(text).toContain('Articles enregistrés');
+    expect(text).toContain('1 article');
+  });
+
+  it('should expose responsive data labels and a dedicated consult action', () => {
+    createComponent();
+
+    const row = fixture.nativeElement.querySelector('.staff-articles-table tbody tr') as HTMLTableRowElement;
+    expect(row.querySelector('td[data-label="Article"]')).not.toBeNull();
+    expect(row.querySelector('td[data-label="Statut"]')).not.toBeNull();
+    expect(row.querySelector('td[data-label="Auteur"]')).not.toBeNull();
+    expect(row.querySelector('td[data-label="Modifié le"]')).not.toBeNull();
+    expect(row.querySelector('td[data-label="Publié le"]')).not.toBeNull();
+
+    const action = row.querySelector('a[href="/staff/articles/1"]') as HTMLAnchorElement;
+    expect(action).not.toBeNull();
+    expect(action.textContent).toContain('Consulter');
+  });
+
 });

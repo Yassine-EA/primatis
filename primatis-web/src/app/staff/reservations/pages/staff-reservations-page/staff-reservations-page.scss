@@ -2,9 +2,21 @@
   display: block;
 }
 
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+// Colonnes secondaires (même convention que StaffLoansPage, DEV-15.7) :
+// moins proéminentes visuellement, jamais masquées — Staff/desktop reste
+// la cible prioritaire.
+.staff-col-muted {
+  color: var(--p-text-muted-color);
+}
+
+// Expiration mise en évidence uniquement pour une réservation READY (la
+// fenêtre de retrait de 48h est réelle) — jamais un recalcul métier, la
+// date affichée reste celle reçue du backend.
+.staff-reservation-ready {
+  color: var(--primatis-copper-text);
+  font-weight: 750;
+}
+
+.staff-reservation-title {
+  color: var(--primatis-navy-900);
 }

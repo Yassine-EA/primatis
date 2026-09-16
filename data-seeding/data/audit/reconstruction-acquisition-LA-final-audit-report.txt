@@ -1,0 +1,68 @@
+DEV-16 RECONSTRUCTION — LA FINAL CANDIDATE AUDIT
+================================================
+
+Targets              : 50
+Candidate rows       : 46
+No candidate         : 4
+Edition collisions   : 3
+
+COLLISIONS
+==========
+
+/books/OL20299107M
+  - #20 Cicéron / De Re Publica
+  - #21 Cicéron / De Legibus
+
+/books/OL22092465M
+  - #27 Lucrèce / De Rerum Natura
+  - #28 Lucrèce / De Rerum Natura — alternate scholarly edition
+
+/books/OL28754886M
+  - #33 Tite-Live / Ab Urbe Condita
+  - #34 Tite-Live / Ab Urbe Condita — alternate volume or edition
+
+MANUAL AUDIT REQUIRED
+=====================
+- #5 Horace / Carmina -> Carmina, liber Epodon [MULTILINGUAL:eng | NO_ISBN | NO_PAGE_COUNT]
+- #8 Plaute / Menaechmi -> Menaechmi [MULTILINGUAL:eng | NO_ISBN | NO_PAGE_COUNT]
+- #9 Térence / Andria -> Comoediae [MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #10 Sénèque / Medea -> Medea [MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #11 Sénèque / Phaedra -> Phaedra [MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #13 Apulée / Metamorphoses -> The metamorphoses of Apuleius [MULTILINGUAL:eng | NO_ISBN | NO_PAGE_COUNT]
+- #19 Cicéron / De Officiis -> De officiis [MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #20 Cicéron / De Re Publica -> De re publica; De legibus [EDITION_COLLISION | MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #21 Cicéron / De Legibus -> De re publica; De legibus [EDITION_COLLISION | MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #22 Cicéron / De Oratore -> Cicero. [MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #23 Cicéron / Tusculanae Disputationes -> Tusculan disputations [MULTILINGUAL:eng | NO_ISBN | NO_PAGE_COUNT]
+- #24 Sénèque / Epistulae Morales ad Lucilium -> Letters from a Stoic. [MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #25 Sénèque / De Brevitate Vitae -> De otio ; De brevitate vitae [MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #26 Sénèque / De Clementia -> De clementia = [MULTILINGUAL:ger | NO_PAGE_COUNT]
+- #27 Lucrèce / De Rerum Natura -> De rerum natura. [EDITION_COLLISION | NO_ISBN | NO_PAGE_COUNT]
+- #28 Lucrèce / De Rerum Natura — alternate scholarly edition -> De rerum natura. [EDITION_COLLISION | NO_ISBN | NO_PAGE_COUNT]
+- #29 Quintilien / Institutio Oratoria -> The Institutio Oratoria of Quintilian [MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #31 Boèce / De Consolatione Philosophiae -> King Alfred's Anglo-Saxon version of Boethius De consolatione philosophiae [MULTILINGUAL:ang,eng | NO_ISBN | NO_PAGE_COUNT]
+- #33 Tite-Live / Ab Urbe Condita -> Ab urbe condita [EDITION_COLLISION | NO_ISBN | NO_PAGE_COUNT]
+- #34 Tite-Live / Ab Urbe Condita — alternate volume or edition -> Ab urbe condita [EDITION_COLLISION | NO_ISBN | NO_PAGE_COUNT]
+- #36 Tacite / Historiae -> Histoires [MULTILINGUAL:fre | TITLE_MATCH_WEAK | NO_PAGE_COUNT]
+- #37 Tacite / Germania -> Dialogus ; Argicola ; and, Germania [MULTILINGUAL:eng | NO_ISBN | NO_PAGE_COUNT]
+- #38 Salluste / Bellum Catilinae -> Sallust's Bellum Catilinae [MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #39 Salluste / Bellum Iugurthinum -> Bellum Iugurthinum [MULTILINGUAL:ger | NO_PAGE_COUNT]
+- #41 Jules César / De Bello Gallico -> De bello Gallico [MULTILINGUAL:eng | NO_ISBN | NO_PAGE_COUNT]
+- #42 Jules César / De Bello Civili -> De bello civili commentariorum I [MULTILINGUAL:eng | NO_ISBN | NO_PAGE_COUNT]
+- #43 Thomas d'Aquin / Summa Theologiae -> Summa theologiae [MULTILINGUAL:eng,mul | NO_PAGE_COUNT]
+- #44 Érasme / Moriae Encomium -> Moriae encomium, id est, Stulticiae laudatio, ludicra declamatione tractata [MULTILINGUAL:grc | NO_ISBN | NO_PAGE_COUNT]
+- #49 Nicolas Copernic / De Revolutionibus Orbium Coelestium -> De Revolutionibus Orbium Coelestium [MULTILINGUAL:eng | NO_PAGE_COUNT]
+- #50 Isaac Newton / Philosophiae Naturalis Principia Mathematica -> Philosophiae naturalis principia mathematica. [MULTILINGUAL:eng | NO_PAGE_COUNT]
+
+IMPORTANT
+=========
+
+No candidate is approved by this script.
+Colliding edition keys cannot satisfy two acquisition slots.
+Multilingual editions require editorial confirmation.
+page_count remains unresolved at this stage.
+
+No bundle modification.
+No database write.
+
+STATUS : PASS

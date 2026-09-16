@@ -1,0 +1,63 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "7138455"
+    ]
+  },
+  "title": "Réaliser La Scolarisation Primaire Universelle En 2015",
+  "subtitle": "Une Chance Pour Tous Les Enfants Du Monde",
+  "authors": [
+    {
+      "key": "/authors/OL3188928A"
+    },
+    {
+      "key": "/authors/OL1078736A"
+    },
+    {
+      "key": "/authors/OL3188929A"
+    }
+  ],
+  "publish_date": "October 15, 2004",
+  "publishers": [
+    "World Bank Publications"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_13": [
+    "9780821359204"
+  ],
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "0821359207"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Development - Economic Development",
+    "Educational Policy & Reform",
+    "Development - Business Development",
+    "Elementary",
+    "Philosophy & Social Aspects",
+    "Education",
+    "Business / Economics / Finance"
+  ],
+  "source_records": [
+    "amazon:0821359207"
+  ],
+  "key": "/books/OL11416869M",
+  "number_of_pages": 303,
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-31T04:11:32.499187"
+  }
+}

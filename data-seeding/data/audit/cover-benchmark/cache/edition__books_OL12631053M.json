@@ -1,0 +1,79 @@
+{
+  "publishers": [
+    "Amer Mathematical Society"
+  ],
+  "languages": [
+    {
+      "key": "/languages/eng"
+    },
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "identifiers": {
+    "goodreads": [
+      "2639636"
+    ]
+  },
+  "title": "Spectre Automorphe Des Varietes Hyperboliques Et Applications Topologiques",
+  "physical_format": "Paperback",
+  "number_of_pages": 218,
+  "isbn_13": [
+    "9782856291863"
+  ],
+  "isbn_10": [
+    "2856291864"
+  ],
+  "publish_date": "June 6, 2006",
+  "key": "/books/OL12631053M",
+  "authors": [
+    {
+      "key": "/authors/OL3968867A"
+    },
+    {
+      "key": "/authors/OL2646917A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10003414W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Advanced",
+    "Mathematics",
+    "Science/Mathematics"
+  ],
+  "lccn": [
+    "2006490989"
+  ],
+  "lc_classifications": [
+    "QA353.A9 B47 2005"
+  ],
+  "source_records": [
+    "marc:marc_loc_2016/BooksAll.2016.part34.utf8:48856111:1296",
+    "marc:marc_columbia/Columbia-extract-20221130-012.mrc:164263817:1402",
+    "marc:harvard_bibliographic_metadata/ab.bib.10.20150123.full.mrc:26240069:963",
+    "marc:harvard_bibliographic_metadata/20220215_009.bib.mrc:334936640:3483"
+  ],
+  "oclc_numbers": [
+    "70784273"
+  ],
+  "description": {
+    "type": "/type/text",
+    "value": "This book has two parts. The first is concerned with the differential form spectrum of congruence hyperbolic manifolds. The authors prove Selberg type theorems on the first eigenvalue of the laplacian on differential forms. The method of proof is representation-theoretic; the author hope the different chapters also serve as an introduction to the modern theory of automorphic forms and its application to spectral questions. The second part of the book has a more differential geometric flavor; a new kind of lifting of cohomology classes is proved. The main motivation of this work is given by Arthur's conjectures; these conjectures imply strong restrictions on the spectrum of arithmetic manifolds which, in turn, imply conjectural properties on the geometry of hyperbolic manifolds. Together with precise statements of these conjectures, this text gives proofs of weak forms of them in some particular cases."
+  },
+  "latest_revision": 8,
+  "revision": 8,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-07-25T22:53:12.904992"
+  }
+}

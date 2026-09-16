@@ -1,0 +1,31 @@
+{
+  "title": "Autrefois Anglet",
+  "key": "/works/OL10000656W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3965709A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "History",
+    "Pictorial works"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:19.964652"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-07-10T19:30:28.094877"
+  }
+}

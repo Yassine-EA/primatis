@@ -2,16 +2,30 @@
   display: block;
 }
 
-.page-actions {
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--primatis-space-md);
+  margin-bottom: var(--primatis-space-md);
+}
+
+.page-header-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-block-end: 1rem;
+  gap: var(--primatis-space-md);
 }
 
 .back-link {
   display: inline-block;
+}
+
+.staff-table-container {
+  overflow-x: auto;
+}
+
+.staff-col-muted {
+  color: var(--p-text-muted-color);
 }
 
 .link-button {

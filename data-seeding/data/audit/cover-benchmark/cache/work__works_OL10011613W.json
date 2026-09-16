@@ -1,0 +1,34 @@
+{
+  "title": "Awe! Artis Blong Tude",
+  "subjects": [
+    "Vanuatuan Art",
+    "Art, Ni-Vanuatu",
+    "Exhibitions",
+    "Solomon Islands Art",
+    "Modern Art"
+  ],
+  "key": "/works/OL10011613W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3978245A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:59:11.351463"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-15T22:59:28.588338"
+  }
+}

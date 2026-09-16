@@ -1,16 +1,26 @@
 <p-dialog
   [visible]="visible()"
   [modal]="true"
+  appendTo="body"
   [header]="isCreate ? 'Nouvel exemplaire' : 'Modifier l’exemplaire'"
   [closable]="!submitting()"
+  styleClass="staff-copy-dialog"
   (onHide)="cancel()"
 >
-  <form [formGroup]="form" (ngSubmit)="submit()">
+  <form class="staff-copy-dialog-form" [formGroup]="form" (ngSubmit)="submit()">
     @if (errorMessage(); as message) {
       <p-message severity="error" [text]="message" styleClass="form-banner-error" />
     }
 
-    <div class="form-field">
+    <div class="staff-copy-dialog-intro">
+      <span aria-hidden="true"><i class="pi pi-book"></i></span>
+      <div>
+        <strong>{{ isCreate ? 'Ajouter un exemplaire physique' : 'Corriger la fiche de l’exemplaire' }}</strong>
+        <p>Le code d’inventaire, l’état physique et la localisation restent indépendants du titre bibliographique.</p>
+      </div>
+    </div>
+
+    <div class="form-field staff-copy-dialog-wide">
       <label for="copy-inventory-code">Code d'inventaire</label>
       <input pInputText id="copy-inventory-code" formControlName="inventoryCode" />
       @if (form.controls.inventoryCode.invalid && form.controls.inventoryCode.touched) {
@@ -21,7 +31,7 @@
       }
     </div>
 
-    <div class="form-field">
+    <div class="form-field staff-copy-dialog-wide">
       <label for="copy-location">Localisation</label>
       <input pInputText id="copy-location" formControlName="location" />
     </div>
@@ -30,6 +40,7 @@
       <label for="copy-condition">État</label>
       <p-select
         inputId="copy-condition"
+        appendTo="body"
         formControlName="copyCondition"
         [options]="copyConditionOptions"
         optionLabel="label"
@@ -48,6 +59,7 @@
         <label for="copy-availability">Disponibilité</label>
         <p-select
           inputId="copy-availability"
+          appendTo="body"
           formControlName="availabilityStatus"
           [options]="availabilityOptions"
           optionLabel="label"
@@ -59,7 +71,7 @@
       </div>
     }
 
-    <div class="form-actions">
+    <div class="form-actions staff-copy-dialog-actions">
       <button type="button" pButton label="Annuler" severity="secondary" [disabled]="submitting()" (click)="cancel()"></button>
       <button type="submit" pButton label="Enregistrer" [disabled]="submitting()"></button>
     </div>

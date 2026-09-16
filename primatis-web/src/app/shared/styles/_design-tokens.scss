@@ -1,0 +1,197 @@
+/*
+ * Design Tokens PRIMATIS v2 (DESIGN-V2-A).
+ *
+ * Remplace la palette d'accent exploratoire posée en DEV-15.2 (avant
+ * l'arrivée des maquettes validées) par la palette contractuelle du
+ * Design System Maître v2 (`docs/design/design-system-v2.md` §3-§7) :
+ * bleu nuit, cuivre scientifique, ivoire et gris nommés explicitement,
+ * plus les couleurs métier. Décision consolidée dans
+ * `claude-workspace/tracking/decisions.md` (DESIGN-V2-A).
+ *
+ * Complète les tokens de couleur portés par le préset PrimeNG
+ * (`core/theme/primatis-preset.ts` — primary bleu nuit, surface ivoire,
+ * désormais alignés sur les mêmes valeurs) avec ce que le schéma de
+ * thème PrimeNG ne modélise pas nativement : l'accent cuivre, l'échelle
+ * d'espacement, les radius/ombres "maison", l'échelle typographique et
+ * les largeurs de mise en page. Exposés en custom properties CSS
+ * globales (`:root`), utilisables partout via `var(--primatis-*)` sans
+ * dépendre d'un préprocesseur.
+ */
+
+@use "breakpoints";
+
+:root {
+  /*
+   * Bleu nuit (§3) : dupliqué ici en tokens plats pour un usage direct
+   * hors composants PrimeNG (SVG, illustrations, dégradés de section) —
+   * les composants PrimeNG eux-mêmes continuent de piloter leur couleur
+   * via `--p-primary-*` (préset), jamais via ces tokens bruts.
+   */
+  --primatis-navy-900: #082b40;
+  --primatis-navy-800: #0b3650;
+  --primatis-navy-700: #123f5e;
+  --primatis-navy-600: #1a4f72;
+
+  /*
+   * Cuivre scientifique (§4) : jamais une couleur de composant PrimeNG
+   * par défaut (primary/secondary restent bleu nuit et surface) —
+   * réservé aux CTA éditoriaux publics, états actifs, séparateurs et à
+   * l'identité Georges Lemaître.
+   */
+  --primatis-copper-700: #8b4b26;
+  --primatis-copper-600: #a65d2e;
+  --primatis-copper-500: #b87333;
+  --primatis-copper-300: #d7a16e;
+
+  /* Couleur de texte accessible sur fond clair (contraste ≥ 4.5:1) — à
+     utiliser pour tout texte/lien/icône cuivre, jamais copper-300/500. */
+  --primatis-copper-text: var(--primatis-copper-700);
+
+  /*
+   * Alias de compatibilité (DEV-15.2 → v2) : la charte cuivre exploratoire
+   * exposait une rampe complète `--primatis-accent-50..950` déjà
+   * consommée par les écrans DEV-15 (Home, Catalogue, Member, Staff,
+   * Admin — cf. audit DESIGN-V2-A). Migrer ces 31 fichiers vers les
+   * nouveaux noms `--primatis-copper-*` sort du périmètre "fondations
+   * uniquement" de cette phase (§3 de la mission) ; ces alias permettent
+   * aux écrans existants d'hériter immédiatement de la teinte cuivre v2
+   * sans modification de fichier, en attendant leur passage en Phase B/C/D.
+   */
+  --primatis-accent-50: #fcf4ed;
+  --primatis-accent-100: #f8e5d3;
+  --primatis-accent-200: #eac89e;
+  --primatis-accent-300: var(--primatis-copper-300);
+  --primatis-accent-400: #c3823f;
+  --primatis-accent-500: var(--primatis-copper-500);
+  --primatis-accent-600: var(--primatis-copper-600);
+  --primatis-accent-700: var(--primatis-copper-700);
+  --primatis-accent-800: #58310e;
+  --primatis-accent-900: #3e220a;
+  --primatis-accent-950: #281606;
+  --primatis-accent-text: var(--primatis-copper-text);
+
+  /* Ivoire / surfaces (§5) — dupliqué en tokens plats pour le même usage
+     hors composants que le bleu nuit ci-dessus. Les composants PrimeNG
+     pilotent leur fond via `--p-surface-*` (préset, mêmes valeurs). */
+  --primatis-ivory-50: #faf9f6;
+  --primatis-ivory-100: #f6f1e8;
+  --primatis-ivory-200: #ece5da;
+
+  /* Gris (§6) */
+  --primatis-gray-100: #f1f3f5;
+  --primatis-gray-300: #d7dde3;
+  --primatis-gray-500: #7c8795;
+  --primatis-gray-700: #46515f;
+  --primatis-gray-900: #1f2833;
+
+  /*
+   * Couleurs métier (§7) : tokens plats pour un usage hors composants
+   * PrimeNG (ex. pastille personnalisée, illustration). Les composants
+   * PrimeNG (`p-tag`, `p-message`, `p-button` severity) continuent
+   * d'utiliser la palette Aura par défaut du préset
+   * (`success`/`info`/`warn`/`danger`, cf. `primatis-preset.ts`) : ce
+   * choix DEV-15.2 reste valide (aucune redéfinition de composant
+   * démontrée nécessaire) et n'est pas remis en cause par ces tokens.
+   */
+  --primatis-success: #238b45;
+  --primatis-warning: #c27a15;
+  --primatis-danger: #d64545;
+  --primatis-info: #2f6fed;
+
+  /* Typographie (§8) : UI sans-serif partout, serif éditorial disponible
+     pour un usage ponctuel (titres publics). Piles système uniquement
+     (décision DEV-15.2 reconduite pour v2, cf. rapport DESIGN-V2-A
+     §5/§6 de la mission : aucune police externe ne doit être ajoutée
+     "uniquement pour une police") — jamais appliqué globalement aux
+     <h1>. */
+  --primatis-font-ui:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  --primatis-font-editorial:
+    "Playfair Display",
+    Georgia,
+    "Times New Roman",
+    ui-serif,
+    serif;
+
+  /*
+   * Échelle typographique (§9) : une custom property par niveau, valeur
+   * mobile par défaut, override desktop via media query ci-dessous (même
+   * seuils que `breakpoints.scss`, dupliqués ici car une media query ne
+   * peut pas consommer une variable SCSS autrement que par interpolation
+   * de compilation — pas de dépendance circulaire, valeurs littérales).
+   * Usage réservé aux nouveaux écrans (Phase B/C/D) : aucune primitive
+   * existante consommée par les 31 fichiers DEV-15 n'est renommée ici.
+   */
+  --primatis-text-hero: 2.25rem; /* 36px mobile */
+  --primatis-text-page-title-public: 1.875rem; /* 30px mobile */
+  --primatis-text-page-title-business: 1.625rem; /* 26px mobile, seuil bas Staff/Admin */
+  --primatis-text-section-title: 1.375rem; /* 22px mobile */
+  --primatis-text-card-title: 1.125rem; /* 18px */
+  --primatis-text-body: 1rem; /* 16px */
+  --primatis-text-small: 0.875rem; /* 14px */
+  --primatis-text-meta: 0.8125rem; /* 13px */
+
+  /* Espacement (§13) : échelle numérique canonique v2 — remplace/complète
+     l'échelle "t-shirt" DEV-15.2 (ID-07 de l'audit initial), conservée
+     ci-dessous en alias pour ne pas casser les 31 fichiers existants qui
+     la consomment déjà. */
+  --primatis-space-4: 0.25rem;
+  --primatis-space-8: 0.5rem;
+  --primatis-space-12: 0.75rem;
+  --primatis-space-16: 1rem;
+  --primatis-space-24: 1.5rem;
+  --primatis-space-32: 2rem;
+  --primatis-space-40: 2.5rem;
+  --primatis-space-48: 3rem;
+  --primatis-space-64: 4rem;
+  --primatis-space-80: 5rem;
+  --primatis-space-96: 6rem;
+
+  /* Alias "t-shirt" DEV-15.2 (à conserver, cf. audit DESIGN-V2-A). */
+  --primatis-space-3xs: var(--primatis-space-4);
+  --primatis-space-2xs: var(--primatis-space-8);
+  --primatis-space-xs: var(--primatis-space-12);
+  --primatis-space-sm: var(--primatis-space-16);
+  --primatis-space-md: var(--primatis-space-24);
+  --primatis-space-lg: var(--primatis-space-32);
+  --primatis-space-xl: var(--primatis-space-48);
+  --primatis-space-2xl: var(--primatis-space-64);
+
+  /* Radius (§14) : valeurs alignées sur le Design System v2 (angles
+     modérés, jamais de "pillification"). Léger ajustement des valeurs
+     DEV-15.2 (4/8/12 → 6/10/16) : impact visuel mineur, cohérent avec la
+     migration explicite vers v2, `xl` ajouté pour les surfaces publiques
+     généreuses (hero, cartes éditoriales). */
+  --primatis-radius-sm: 6px;
+  --primatis-radius-md: 10px;
+  --primatis-radius-lg: 16px;
+  --primatis-radius-xl: 22px;
+
+  /* Ombres (§15) : inchangées (DEV-15.2) — déjà "très discrètes", conformes
+     à v2, aucune justification à les redéfinir. */
+  --primatis-shadow-sm: 0 1px 2px rgba(6, 12, 19, 0.08);
+  --primatis-shadow-md: 0 4px 10px -2px rgba(6, 12, 19, 0.12);
+
+  /* Layout (§11/§19) : bases pour les shells/primitives de page. */
+  --primatis-content-max-width: 75rem; /* 1200px — resserré Member/Staff */
+  --primatis-public-max-width: 90rem; /* 1440px, §11 design-system-v2.md */
+  --primatis-editorial-max-width: 42rem;
+  --primatis-content-padding-desktop: var(--primatis-space-lg);
+  --primatis-content-padding-tablet: var(--primatis-space-md);
+  --primatis-content-padding-mobile: var(--primatis-space-sm);
+  --primatis-page-section-gap: var(--primatis-space-lg);
+}
+
+@media (min-width: breakpoints.$primatis-bp-desktop) {
+  :root {
+    --primatis-text-hero: 4rem; /* 64px desktop, cible 56-72px */
+    --primatis-text-page-title-public: 3rem; /* 48px desktop, cible 44-56px */
+    --primatis-text-page-title-business: 2.25rem; /* 36px desktop, cible 34-42px */
+    --primatis-text-section-title: 2rem; /* 32px desktop, cible 28-36px */
+  }
+}

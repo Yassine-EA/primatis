@@ -1,0 +1,221 @@
+{
+  "policy": {
+    "matching": "exact ISBN claim only",
+    "isbn13_property": "P212",
+    "isbn10_property": "P957",
+    "image_property": "P18",
+    "writes_catalogue": false
+  },
+  "stats": {
+    "sample_size": 20,
+    "search_hits": 0,
+    "exact_isbn_matches": 0,
+    "images_found": 0,
+    "exact_match_no_image": 0,
+    "no_exact_match": 10,
+    "errors": 10,
+    "recovery_pct": 0.0
+  },
+  "results": [
+    {
+      "edition_key": "/books/OL1167532M",
+      "title": "Lob der Oberflächlichkeit",
+      "language": "DE",
+      "isbn": "9783927901360",
+      "search_source": "network",
+      "error": null,
+      "candidates": [],
+      "verdict": "NO_SEARCH_RESULT"
+    },
+    {
+      "edition_key": "/books/OL12644473M",
+      "title": "Zur Beschreibung und Klassifizierung von Ubersetzungsverfahren (Travaux du Centre de traduction literaire)",
+      "language": "DE",
+      "isbn": "9782883570177",
+      "search_source": "network",
+      "error": null,
+      "candidates": [],
+      "verdict": "NO_SEARCH_RESULT"
+    },
+    {
+      "edition_key": "/books/OL12659365M",
+      "title": "Natchez. Das Sonnenkönigstum am Mississippi.",
+      "language": "DE",
+      "isbn": "9783000098772",
+      "search_source": "network",
+      "error": null,
+      "candidates": [],
+      "verdict": "NO_SEARCH_RESULT"
+    },
+    {
+      "edition_key": "/books/OL12659775M",
+      "title": "Totengräber der Demokratie.",
+      "language": "DE",
+      "isbn": "9783034005715",
+      "search_source": "network",
+      "error": null,
+      "candidates": [],
+      "verdict": "NO_SEARCH_RESULT"
+    },
+    {
+      "edition_key": "/books/OL12659783M",
+      "title": "Veröffentlichungen der Unabhängigen Expertenkommission Schweiz (UEK) - Zweiter Weltkrieg; Publications de la Commission, Bd.2, Interhandel",
+      "language": "DE",
+      "isbn": "9783034006026",
+      "search_source": "network",
+      "error": null,
+      "candidates": [],
+      "verdict": "NO_SEARCH_RESULT"
+    },
+    {
+      "edition_key": "/books/OL12660133M",
+      "title": "Klezmer",
+      "language": "DE",
+      "isbn": "9783039101269",
+      "search_source": "network",
+      "error": null,
+      "candidates": [],
+      "verdict": "NO_SEARCH_RESULT"
+    },
+    {
+      "edition_key": "/books/OL12660135M",
+      "title": "Poetische Gartner Und Phaetonische Himmelsflieger",
+      "language": "DE",
+      "isbn": "9783039101283",
+      "search_source": "network",
+      "error": null,
+      "candidates": [],
+      "verdict": "NO_SEARCH_RESULT"
+    },
+    {
+      "edition_key": "/books/OL12660163M",
+      "title": "Der St. Galler Botanicus Ein Fr¨ Hmittelalterliches Herbar",
+      "language": "DE",
+      "isbn": "9783039101955",
+      "search_source": "network",
+      "error": null,
+      "candidates": [],
+      "verdict": "NO_SEARCH_RESULT"
+    },
+    {
+      "edition_key": "/books/OL12660169M",
+      "title": "Basler Missionare In Brasilien",
+      "language": "DE",
+      "isbn": "9783039102051",
+      "search_source": "network",
+      "error": null,
+      "candidates": [],
+      "verdict": "NO_SEARCH_RESULT"
+    },
+    {
+      "edition_key": "/books/OL12660194M",
+      "title": "Die Literarische Identitat Des Drehbuchs",
+      "language": "DE",
+      "isbn": "9783039102464",
+      "search_source": "network",
+      "error": null,
+      "candidates": [],
+      "verdict": "NO_SEARCH_RESULT"
+    },
+    {
+      "edition_key": "/books/OL12660259M",
+      "title": "Das Kunstlerinterview",
+      "language": "DE",
+      "isbn": "9783039103461",
+      "search_source": null,
+      "error": "HTTP_429",
+      "candidates": [],
+      "verdict": "ERROR"
+    },
+    {
+      "edition_key": "/books/OL12660316M",
+      "title": "Das Denken Der Hand",
+      "language": "DE",
+      "isbn": "9783039104352",
+      "search_source": null,
+      "error": "HTTP_429",
+      "candidates": [],
+      "verdict": "ERROR"
+    },
+    {
+      "edition_key": "/books/OL12660320M",
+      "title": "Spiegel Des Neuen",
+      "language": "DE",
+      "isbn": "9783039104451",
+      "search_source": null,
+      "error": "HTTP_429",
+      "candidates": [],
+      "verdict": "ERROR"
+    },
+    {
+      "edition_key": "/books/OL12660340M",
+      "title": "Sehnsucht Nach Illusion?",
+      "language": "DE",
+      "isbn": "9783039104789",
+      "search_source": null,
+      "error": "HTTP_429",
+      "candidates": [],
+      "verdict": "ERROR"
+    },
+    {
+      "edition_key": "/books/OL12660426M",
+      "title": "Guan Ren",
+      "language": "DE",
+      "isbn": "9783039106349",
+      "search_source": null,
+      "error": "HTTP_429",
+      "candidates": [],
+      "verdict": "ERROR"
+    },
+    {
+      "edition_key": "/books/OL12660436M",
+      "title": "Polyphones Erzahlen: Zum Phanomen Der Erlebten Rede in Deutschen Romanen Der Jahrhundertwende (Europaische Hochschulschriften: Reihe 1, Deutsche Sprache Un)",
+      "language": "DE",
+      "isbn": "9783039106455",
+      "search_source": null,
+      "error": "HTTP_429",
+      "candidates": [],
+      "verdict": "ERROR"
+    },
+    {
+      "edition_key": "/books/OL12660448M",
+      "title": "Ein Kunstwerk Im Dienst Der Republik",
+      "language": "DE",
+      "isbn": "9783039106714",
+      "search_source": null,
+      "error": "HTTP_429",
+      "candidates": [],
+      "verdict": "ERROR"
+    },
+    {
+      "edition_key": "/books/OL12660497M",
+      "title": "Wie Kinder Witze Erzahlen",
+      "language": "DE",
+      "isbn": "9783039107667",
+      "search_source": null,
+      "error": "HTTP_429",
+      "candidates": [],
+      "verdict": "ERROR"
+    },
+    {
+      "edition_key": "/books/OL12660505M",
+      "title": "Vom Kulturlosen Volk Zur Europaischen Avantgarde",
+      "language": "DE",
+      "isbn": "9783039107780",
+      "search_source": null,
+      "error": "HTTP_429",
+      "candidates": [],
+      "verdict": "ERROR"
+    },
+    {
+      "edition_key": "/books/OL12660710M",
+      "title": "Rechtslehre - Schriften Zur Rechtsphilosophie (Philosophiehistorische Texte)",
+      "language": "DE",
+      "isbn": "9783050002279",
+      "search_source": null,
+      "error": "HTTP_429",
+      "candidates": [],
+      "verdict": "ERROR"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+DEV-16 RECONSTRUCTION — LA TARGETED RECOVERY
+============================================
+
+Open targets               : 13
+Recovered candidate found  : 11
+Still unresolved            : 2
+
+RECOVERED METADATA
+==================
+
+ISBN       : 5/11
+Publisher  : 11/11
+Date       : 11/11
+Page count : 0/11
+Valid cover: 11/11
+
+RECOVERED TARGETS
+=================
+- #1 Virgile / Aeneis -> Aeneid [/books/OL30662650M]
+- #6 Horace / Sermones -> Satires [/books/OL25256520M]
+- #13 Apulée / Metamorphoses -> Metamorphoseon, Libri XI [/books/OL23319237M]
+- #18 Properce / Elegiae -> Carmina [/books/OL26222651M]
+- #21 Cicéron / De Legibus -> De legibus libri [/books/OL23293411M]
+- #24 Sénèque / Epistulae Morales ad Lucilium -> Ad Lucilium epistulae morates [/books/OL13439155M]
+- #28 Lucrèce / De Rerum Natura — alternate scholarly edition -> De rerum natura, libri sex [/books/OL23293716M]
+- #31 Boèce / De Consolatione Philosophiae -> Consolatio philosophiae [/books/OL1590858M]
+- #34 Tite-Live / Ab Urbe Condita — alternate volume or edition -> Ab urbe condita liber I [/books/OL24627508M]
+- #35 Tacite / Annales -> The Annals, book IV [/books/OL23277601M]
+- #47 Bède le Vénérable / Historia Ecclesiastica Gentis Anglorum -> Bede's ecclesiastical history of the English people [/books/OL1047579M]
+
+STILL UNRESOLVED
+================
+- #45 Pétrarque / Secretum
+- #46 Pic de la Mirandole / Oratio de Hominis Dignitate
+
+POLICY
+======
+
+Recovery searches only the 13 previously open LA targets.
+Previously seen editions are excluded.
+Search itself is broader than first pass.
+Latin proof remains mandatory at edition level.
+A valid physical cover remains mandatory.
+Recovered candidates are not automatically editorially approved.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

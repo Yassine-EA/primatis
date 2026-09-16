@@ -1,6 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
+import { Dialog } from 'primeng/dialog';
+import { Select } from 'primeng/select';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -74,6 +77,17 @@ describe('CopyFormDialog', () => {
     createComponent(null);
 
     expect(component.availabilityOptions.map((option) => option.value)).toEqual(['AVAILABLE', 'UNAVAILABLE']);
+  });
+
+  it('should append the dialog and its select overlays to body', () => {
+    createComponent(null);
+
+    const dialog = fixture.debugElement.query(By.directive(Dialog));
+    const selects = fixture.debugElement.queryAll(By.directive(Select));
+
+    expect(dialog.componentInstance.appendTo()).toBe('body');
+    expect(selects).toHaveLength(2);
+    expect(selects.every((select) => select.componentInstance.appendTo() === 'body')).toBe(true);
   });
 
   it('should require inventoryCode, copyCondition and availabilityStatus in create mode', () => {

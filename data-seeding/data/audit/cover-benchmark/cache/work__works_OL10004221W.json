@@ -1,0 +1,39 @@
+{
+  "title": "Les manifestations de rue en France, 1918-1968",
+  "key": "/works/OL10004221W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3969751A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Demonstrations",
+    "History",
+    "Manifestations",
+    "Histoire",
+    "Contestation",
+    "Protestmarsen",
+    "Demonstration",
+    "Politische Krise",
+    "Protest movements",
+    "Politics and government"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-07-09T12:52:08.645094"
+  }
+}

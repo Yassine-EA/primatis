@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { PageResponse } from '../../../core/models/page-response';
@@ -48,14 +48,28 @@ describe('CataloguePage', () => {
   let fixture: ComponentFixture<CataloguePage>;
   let component: CataloguePage;
   let catalogueApiServiceMock: { searchTitles: ReturnType<typeof vi.fn> };
+  let queryParamMap$: BehaviorSubject<ReturnType<typeof convertToParamMap>>;
+  let navigateSpy: ReturnType<typeof vi.spyOn>;
 
-  function configure(): void {
+  function configure(initialQuery: Record<string, string> = {}): void {
+    TestBed.resetTestingModule();
+    queryParamMap$ = new BehaviorSubject(convertToParamMap(initialQuery));
     catalogueApiServiceMock = { searchTitles: vi.fn().mockReturnValue(of(buildPage([buildTitle()]))) };
 
     TestBed.configureTestingModule({
       imports: [CataloguePage],
-      providers: [provideRouter([]), { provide: CatalogueApiService, useValue: catalogueApiServiceMock }],
+      providers: [
+        provideRouter([]),
+        { provide: CatalogueApiService, useValue: catalogueApiServiceMock },
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { queryParamMap: queryParamMap$.value }, queryParamMap: queryParamMap$ },
+        },
+      ],
     });
+
+    const router = TestBed.inject(Router);
+    navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
   }
 
   function createComponent(): void {
@@ -94,20 +108,20 @@ describe('CataloguePage', () => {
     expect(component.totalRecords()).toBe(2);
   });
 
-  it('should reload with the requested page/size on lazy load', () => {
+  it('should reload with the requested page/rows on paginator page change', () => {
     createComponent();
     catalogueApiServiceMock.searchTitles.mockClear();
 
-    component.onLazyLoad({ first: 40, rows: 20 });
+    component.onPageChange({ first: 40, rows: 20, page: 2, pageCount: 5 });
 
     expect(lastParams()).toEqual({ page: 2, size: 20 });
   });
 
-  it('should fall back to defaults when the lazy load event omits first/rows', () => {
+  it('should fall back to defaults when the page change event omits first/rows', () => {
     createComponent();
     catalogueApiServiceMock.searchTitles.mockClear();
 
-    component.onLazyLoad({});
+    component.onPageChange({});
 
     expect(lastParams()).toEqual({ page: 0, size: 20 });
   });
@@ -136,7 +150,7 @@ describe('CataloguePage', () => {
 
   it('should reset to page 0 when the q filter changes after paginating', () => {
     createComponent();
-    component.onLazyLoad({ first: 40, rows: 20 });
+    component.onPageChange({ first: 40, rows: 20 });
     catalogueApiServiceMock.searchTitles.mockClear();
 
     component.filtersForm.controls.q.setValue('Zola');
@@ -156,7 +170,7 @@ describe('CataloguePage', () => {
 
   it('should reset to page 0 when the language filter changes after paginating', () => {
     createComponent();
-    component.onLazyLoad({ first: 40, rows: 20 });
+    component.onPageChange({ first: 40, rows: 20 });
     catalogueApiServiceMock.searchTitles.mockClear();
 
     component.filtersForm.controls.language.setValue('EN');
@@ -174,6 +188,17 @@ describe('CataloguePage', () => {
     expect(lastParams()).toEqual({ page: 0, size: 20 });
   });
 
+  it('should keep the active q filter across a page change', () => {
+    createComponent();
+    component.filtersForm.controls.q.setValue('Zola');
+    vi.advanceTimersByTime(300);
+    catalogueApiServiceMock.searchTitles.mockClear();
+
+    component.onPageChange({ first: 20, rows: 20 });
+
+    expect(lastParams()).toEqual({ page: 1, size: 20, q: 'Zola' });
+  });
+
   it('should show the loading state before the first response arrives', () => {
     // Observable never emits synchronously: keeps the component in its initial loading state.
     catalogueApiServiceMock.searchTitles.mockReturnValue({ subscribe: () => ({ unsubscribe: () => {} }) });
@@ -187,7 +212,7 @@ describe('CataloguePage', () => {
     catalogueApiServiceMock.searchTitles.mockReturnValue(of(buildPage([])));
     createComponent();
 
-    expect(fixture.nativeElement.textContent).toContain('Aucun titre');
+    expect(fixture.nativeElement.textContent).toContain('Aucun ouvrage trouvé');
   });
 
   it('should show the error state when the request fails', () => {
@@ -201,7 +226,7 @@ describe('CataloguePage', () => {
   it('should retry the last page/size when retry() is called', () => {
     catalogueApiServiceMock.searchTitles.mockReturnValue(throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')));
     createComponent();
-    component.onLazyLoad({ first: 40, rows: 20 });
+    component.onPageChange({ first: 40, rows: 20 });
     catalogueApiServiceMock.searchTitles.mockClear();
     catalogueApiServiceMock.searchTitles.mockReturnValue(of(buildPage([buildTitle()])));
 
@@ -217,5 +242,166 @@ describe('CataloguePage', () => {
 
     const link: HTMLAnchorElement | null = fixture.nativeElement.querySelector('a[href="/catalogue/42"]');
     expect(link).not.toBeNull();
+  });
+
+  it('should set the document title (DEV-15.5)', () => {
+    createComponent();
+
+    expect(document.title).toBe('Catalogue — PRIMATIS');
+  });
+
+  it('should show a fallback cover when coverImageUrl is null', () => {
+    catalogueApiServiceMock.searchTitles.mockReturnValue(of(buildPage([buildTitle({ coverImageUrl: null })])));
+    createComponent();
+
+    expect(fixture.nativeElement.querySelector('.catalogue-card-cover .cover-fallback')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('.catalogue-card-cover img')).toBeNull();
+  });
+
+  it('should render the real cover image when coverImageUrl is present', () => {
+    catalogueApiServiceMock.searchTitles.mockReturnValue(
+      of(buildPage([buildTitle({ coverImageUrl: 'https://covers.example/1.jpg' })])),
+    );
+    createComponent();
+
+    const img: HTMLImageElement | null = fixture.nativeElement.querySelector('.catalogue-card-cover img');
+    expect(img?.getAttribute('src')).toBe('https://covers.example/1.jpg');
+  });
+
+  it('should clear the q filter and reload when clearSearch() is called', () => {
+    createComponent();
+    component.filtersForm.controls.q.setValue('Zola');
+    vi.advanceTimersByTime(300);
+    catalogueApiServiceMock.searchTitles.mockClear();
+
+    component.clearSearch();
+    vi.advanceTimersByTime(300);
+
+    expect(component.filtersForm.controls.q.value).toBe('');
+    expect(lastParams()).toEqual({ page: 0, size: 20 });
+  });
+
+  it('should show the clear button only when a search term is present', () => {
+    createComponent();
+    expect(fixture.nativeElement.querySelector('.catalogue-search-clear')).toBeNull();
+
+    component.filtersForm.controls.q.setValue('Zola');
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.catalogue-search-clear')).not.toBeNull();
+  });
+
+  it('should reload immediately on form submission, without waiting for the debounce', () => {
+    createComponent();
+    component.filtersForm.controls.q.setValue('Zola');
+    catalogueApiServiceMock.searchTitles.mockClear();
+
+    component.onSubmit();
+
+    expect(lastParams()).toEqual({ page: 0, size: 20, q: 'Zola' });
+  });
+
+  it('should reset both q and language when resetFilters() is called', () => {
+    createComponent();
+    component.filtersForm.controls.q.setValue('Zola');
+    component.filtersForm.controls.language.setValue('FR');
+    vi.advanceTimersByTime(300);
+
+    component.resetFilters();
+    vi.advanceTimersByTime(300);
+
+    expect(component.filtersForm.controls.q.value).toBe('');
+    expect(component.filtersForm.controls.language.value).toBeNull();
+  });
+
+  it('should hide the "Réinitialiser" button when no filter is active', () => {
+    createComponent();
+
+    expect(fixture.nativeElement.querySelector('.catalogue-filters-reset')).toBeNull();
+  });
+
+  it('should show the "Réinitialiser" button once a filter is active', () => {
+    createComponent();
+
+    component.filtersForm.controls.language.setValue('FR');
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.catalogue-filters-reset')).not.toBeNull();
+  });
+
+  describe('synchronisation URL (q)', () => {
+    it('should initialise the search field from the initial ?q= query parameter', () => {
+      configure({ q: 'cosmologie' });
+      createComponent();
+
+      expect(component.filtersForm.controls.q.value).toBe('cosmologie');
+      expect(lastParams()).toEqual({ page: 0, size: 20, q: 'cosmologie' });
+    });
+
+    it('should update the URL (merged, replaceUrl) once the debounced search settles', () => {
+      createComponent();
+      navigateSpy.mockClear();
+
+      component.filtersForm.controls.q.setValue('Zola');
+      vi.advanceTimersByTime(300);
+
+      expect(navigateSpy).toHaveBeenCalledWith(
+        [],
+        expect.objectContaining({ queryParams: { q: 'Zola' }, queryParamsHandling: 'merge', replaceUrl: true }),
+      );
+    });
+
+    it('should remove the q query parameter once the search is cleared', () => {
+      createComponent();
+      component.filtersForm.controls.q.setValue('Zola');
+      vi.advanceTimersByTime(300);
+      navigateSpy.mockClear();
+
+      component.clearSearch();
+      vi.advanceTimersByTime(300);
+
+      expect(navigateSpy).toHaveBeenCalledWith(
+        [],
+        expect.objectContaining({ queryParams: { q: null }, queryParamsHandling: 'merge', replaceUrl: true }),
+      );
+    });
+
+    it('should apply an externally navigated ?q= change (e.g. a link from the Home page)', () => {
+      createComponent();
+      catalogueApiServiceMock.searchTitles.mockClear();
+
+      queryParamMap$.next(convertToParamMap({ q: 'Einstein' }));
+      vi.advanceTimersByTime(300);
+
+      expect(component.filtersForm.controls.q.value).toBe('Einstein');
+      expect(lastParams()).toEqual({ page: 0, size: 20, q: 'Einstein' });
+    });
+
+    it('should never re-trigger a search when the URL merely reflects our own write (no feedback loop)', () => {
+      createComponent();
+      component.filtersForm.controls.q.setValue('Zola');
+      vi.advanceTimersByTime(300);
+      catalogueApiServiceMock.searchTitles.mockClear();
+
+      // The URL now genuinely carries the same value we just wrote — simulates the Router echoing our own navigate().
+      queryParamMap$.next(convertToParamMap({ q: 'Zola' }));
+      vi.advanceTimersByTime(300);
+
+      expect(catalogueApiServiceMock.searchTitles).not.toHaveBeenCalled();
+    });
+
+    it('should allow searching the same term again after it was cleared in between (no distinctUntilChanged swallow, DEV-15)', () => {
+      createComponent();
+      component.filtersForm.controls.q.setValue('Zola');
+      vi.advanceTimersByTime(300);
+      component.clearSearch();
+      vi.advanceTimersByTime(300);
+      catalogueApiServiceMock.searchTitles.mockClear();
+
+      component.filtersForm.controls.q.setValue('Zola');
+      vi.advanceTimersByTime(300);
+
+      expect(lastParams()).toEqual({ page: 0, size: 20, q: 'Zola' });
+    });
   });
 });

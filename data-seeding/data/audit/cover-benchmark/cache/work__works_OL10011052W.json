@@ -1,0 +1,39 @@
+{
+  "title": "Dictionnaire DES Ventes D'Art (Dictionnaire Des Ventes D'art)",
+  "key": "/works/OL10011052W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3977617A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Art",
+    "Prices",
+    "Catalogs",
+    "Art auctions",
+    "History",
+    "Artists",
+    "Biography",
+    "Dictionaries",
+    "French",
+    "Indexes"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:59:11.351463"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2023-11-15T01:25:37.661539"
+  }
+}

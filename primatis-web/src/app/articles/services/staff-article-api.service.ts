@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { API_BASE_URL } from '../../core/api/api-base-url.token';
 import { PageResponse } from '../../core/models/page-response';
+import { ArticleMediaUploadResponse } from '../models/article-media-upload-response';
 import { ArticleResponse } from '../models/article-response';
 import { CreateArticleRequest } from '../models/create-article-request';
 import { StaffArticleSummaryResponse } from '../models/staff-article-summary-response';
@@ -32,7 +33,10 @@ export class StaffArticleApiService {
 
   listStaffArticles(page = 0, size = 20): Observable<PageResponse<StaffArticleSummaryResponse>> {
     const params = new HttpParams().set('page', page).set('size', size);
-    return this.http.get<PageResponse<StaffArticleSummaryResponse>>(`${this.baseUrl}/staff/articles`, { params });
+    return this.http.get<PageResponse<StaffArticleSummaryResponse>>(
+      `${this.baseUrl}/staff/articles`,
+      { params },
+    );
   }
 
   getStaffArticleById(articleId: number): Observable<ArticleResponse> {
@@ -48,18 +52,45 @@ export class StaffArticleApiService {
   }
 
   publishArticle(articleId: number): Observable<ArticleResponse> {
-    return this.http.post<ArticleResponse>(`${this.baseUrl}/staff/articles/${articleId}/publish`, null);
+    return this.http.post<ArticleResponse>(
+      `${this.baseUrl}/staff/articles/${articleId}/publish`,
+      null,
+    );
   }
 
   archiveArticle(articleId: number): Observable<ArticleResponse> {
-    return this.http.post<ArticleResponse>(`${this.baseUrl}/staff/articles/${articleId}/archive`, null);
+    return this.http.post<ArticleResponse>(
+      `${this.baseUrl}/staff/articles/${articleId}/archive`,
+      null,
+    );
   }
 
   deleteArticle(articleId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/staff/articles/${articleId}`);
   }
 
-  updateArticleTags(articleId: number, request: UpdateArticleTagsRequest): Observable<ArticleResponse> {
-    return this.http.patch<ArticleResponse>(`${this.baseUrl}/staff/articles/${articleId}/tags`, request);
+  updateArticleTags(
+    articleId: number,
+    request: UpdateArticleTagsRequest,
+  ): Observable<ArticleResponse> {
+    return this.http.patch<ArticleResponse>(
+      `${this.baseUrl}/staff/articles/${articleId}/tags`,
+      request,
+    );
+  }
+
+  /**
+   * Upload d'une image destinée à être insérée dans le contenu riche d'un
+   * Article (DEV-ARTICLES-MEDIA, `POST /staff/articles/media`,
+   * `ARTICLE_MANAGE`). Ne persiste aucune association à un Article : seule
+   * l'URL retournée est ensuite insérée dans `content` par l'éditeur.
+   */
+  uploadArticleMedia(file: File): Observable<ArticleMediaUploadResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<ArticleMediaUploadResponse>(
+      `${this.baseUrl}/staff/articles/media`,
+      formData,
+    );
   }
 }

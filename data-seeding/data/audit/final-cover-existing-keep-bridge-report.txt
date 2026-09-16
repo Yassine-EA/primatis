@@ -1,0 +1,68 @@
+DEV-16 — EXISTING KEEP COVER BRIDGE AUDIT v2
+=============================================
+
+SOURCE
+======
+
+Covered decisions rows   : 7482
+Covered corpus rows      : 7482
+Unique decision keys     : 7482
+Unique corpus keys       : 7482
+KEEP rows                : 6297
+
+JOIN
+====
+
+Authoritative key        : source_key
+Exact source_key match  : 7482/7482
+Missing source keys      : 0
+Extra source keys        : 0
+Duplicate decision keys  : 0
+Duplicate corpus keys    : 0
+
+KEEP COVER STATE
+================
+LOCAL_FILE_OK            : 6297
+
+BY LANGUAGE
+===========
+DE: 468/468 (100.00%)
+EN: 1861/1861 (100.00%)
+ES: 342/342 (100.00%)
+FR: 2660/2660 (100.00%)
+IT: 143/143 (100.00%)
+LA: 56/56 (100.00%)
+NL: 767/767 (100.00%)
+
+PHYSICAL COVER USAGE
+====================
+
+KEEP rows               : 6297
+Unique physical files   : 6032
+Unique SHA-256 contents : 6027
+Repeated file usages    : 265
+Duplicate content groups: 210
+Repeated content usages : 270
+Missing physical covers : 0
+
+POLICY
+======
+
+source_key is the authoritative bridge.
+The join is exact and deterministic.
+No title/language fuzzy matching is used.
+No row-order assumption is used.
+Historical cover_file is authoritative for physical lookup.
+No cover is copied or deleted.
+No bundle modification.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/final-cover-existing-keep-manifest.csv
+data/audit/final-cover-existing-keep-unresolved.csv
+data/audit/final-cover-existing-keep-duplicate-usage.csv
+data/audit/final-cover-existing-keep-bridge-report.txt
+
+STATUS : PASS

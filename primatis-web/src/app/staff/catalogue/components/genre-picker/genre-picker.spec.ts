@@ -1,6 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
+import { MultiSelect } from 'primeng/multiselect';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -14,7 +16,11 @@ function buildGenre(overrides: Partial<GenreResponse> = {}): GenreResponse {
   return { id: 1, code: 'CLASSIC', label: 'Classique', description: null, ...overrides };
 }
 
-function buildPage(content: GenreResponse[], page: number, totalPages: number): PageResponse<GenreResponse> {
+function buildPage(
+  content: GenreResponse[],
+  page: number,
+  totalPages: number,
+): PageResponse<GenreResponse> {
   return { content, page, size: 100, totalElements: totalPages * 100, totalPages };
 }
 
@@ -45,6 +51,14 @@ describe('GenrePicker', () => {
   }
 
   beforeEach(() => configure());
+
+  it('should append the genre options overlay to the body', () => {
+    createComponent();
+
+    const select = fixture.debugElement.query(By.directive(MultiSelect));
+
+    expect(select.componentInstance.appendTo()).toBe('body');
+  });
 
   it('should load all genres on init with page=0/size=100', () => {
     createComponent();

@@ -1,0 +1,34 @@
+{
+  "title": "Les chevaliers sans nom première epoque",
+  "key": "/works/OL10012172W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3978875A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "French Short stories",
+    "French fiction",
+    "Knights and knighthood",
+    "Fiction",
+    "Grail"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:59:20.516526"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2020-12-07T07:56:59.257074"
+  }
+}

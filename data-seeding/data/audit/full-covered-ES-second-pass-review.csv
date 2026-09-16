@@ -1,0 +1,7 @@
+source_key,title,subtitle,authors,author_count,isbn,publication_year,publisher,genres,duplicate_like_count,decision,reason,spanish_marker_score,best_foreign_language,best_foreign_score,risk_score,second_pass_flags
+/books/OL13223487M,La Ultima Odalisca,,Faycal Bey | Fayçal Bey.,2,9788425337529,2003,Grupo Editorial Random House Mondadori (Grijalbo),Fiction,0,,,1,DE,0,4,EN_PUBLISHER | IT_PUBLISHER
+/books/OL13263794M,Complice,,Iain Banks,1,9788439701996,2001,Grijalbo Mondadori Sa,Fiction,0,,,0,DE,0,2,IT_PUBLISHER
+/books/OL13239133M,Currupaco Papaco,,Ana Maria Machado,1,9788434870550,,,Fiction,0,,,0,DE,0,2,NO_PUBLISHER | NO_YEAR
+/books/OL19144559M,Pasos sobre cristal,,Iain Banks,1,9788439705772,2000,Grijalbo Mondadori,Fiction,0,,,1,DE,0,2,IT_PUBLISHER
+/books/OL26366484M,Poder y terror,Conversaciones y entrevistas tras el 11 de septiembre,Noam Chomsky,1,9781583226209,,,Politique | Sciences sociales,0,,,4,DE,0,2,NO_PUBLISHER | NO_YEAR
+/books/OL19744789M,Una cancion de piedra,,Iain Banks,1,9788439702528,1999,Mondadori,Fiction,0,,,2,DE,0,2,IT_PUBLISHER

@@ -1,0 +1,49 @@
+{
+  "title": "Mon pere ",
+  "subtitle": "itineraire photo./historique/palestine",
+  "authors": [
+    {
+      "key": "/authors/OL3980499A"
+    }
+  ],
+  "publish_date": "September 26, 2002",
+  "physical_format": "Paperback",
+  "weight": "7.4 ounces",
+  "isbn_10": [
+    "2915036055"
+  ],
+  "publishers": [
+    "Osmondes"
+  ],
+  "isbn_13": [
+    "9782915036053"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "8.3 x 5.5 x 0.4 inches",
+  "source_records": [
+    "amazon:2915036055"
+  ],
+  "key": "/books/OL12656732M",
+  "works": [
+    {
+      "key": "/works/OL10013687W"
+    }
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-27T00:50:24.542590"
+  }
+}

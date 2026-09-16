@@ -1,42 +1,192 @@
-<h1>Mes prêts</h1>
+<div class="member-loans-v3">
+  <header class="member-loans-v3-hero">
+    <picture aria-hidden="true">
+      <source
+        media="(max-width: 768px)"
+        srcset="/assets/member/shared/member-hero-768-mobile.webp"
+      />
+      <source media="(max-width: 1439px)" srcset="/assets/member/shared/member-hero-1280.webp" />
+      <img src="/assets/member/shared/member-hero-1920.webp" alt="" />
+    </picture>
+    <div class="member-loans-v3-hero-content">
+      <p class="member-loans-v3-kicker">Espace membre</p>
+      <h1>Mes prêts</h1>
+      <p>Suivez vos emprunts, leurs échéances et leur statut.</p>
+    </div>
+  </header>
 
-@if (loading() && rows().length === 0 && !error()) {
-  <app-loading-state message="Chargement de vos prêts…" />
-} @else if (error(); as currentError) {
-  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
-} @else if (rows().length === 0) {
-  <app-empty-state title="Aucun prêt" message="Aucun prêt à afficher." />
-} @else {
-  <p-table
-    [value]="rows()"
-    [lazy]="true"
-    [lazyLoadOnInit]="false"
-    [paginator]="true"
-    [rows]="20"
-    [first]="0"
-    [totalRecords]="totalRecords()"
-    [loading]="loading()"
-    (onLazyLoad)="onLazyLoad($event)"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th scope="col">Exemplaire</th>
-        <th scope="col">Date d'emprunt</th>
-        <th scope="col">Date d'échéance</th>
-        <th scope="col">Date de retour</th>
-        <th scope="col">Statut</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-loan>
-      <tr>
-        <td>{{ loan.copy.inventoryCode }}</td>
-        <td>{{ loan.loanDate }}</td>
-        <td>{{ loan.dueDate }}</td>
-        <td>{{ loan.returnDate ?? '—' }}</td>
-        <td>
-          <p-tag [value]="loan.loanStatus" [severity]="loanStatusSeverity(loan.loanStatus)" />
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-}
+  <div class="member-loans-v3-content">
+    @if (loading() && rows().length === 0 && !error()) {
+      <app-loading-state message="Chargement de vos prêts…" />
+    } @else if (error(); as currentError) {
+      <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+    } @else if (rows().length === 0) {
+      <section class="member-loans-v3-state">
+        <div class="member-loans-v3-state-content">
+          <img
+            src="/assets/fallbacks/empty-states/loans.svg"
+            alt=""
+            aria-hidden="true"
+          />
+          <app-empty-state title="Aucun prêt" message="Vous n'avez aucun prêt en cours." />
+        </div>
+      </section>
+    } @else {
+      <section class="member-loans-v3-stats" aria-label="Synthèse des prêts affichés">
+        <article>
+          <span class="member-loans-v3-stat-icon"
+            ><i class="pi pi-book" aria-hidden="true"></i
+          ></span>
+          <div>
+            <h2>Prêts recensés</h2>
+            <strong>{{ totalRecords() }}</strong>
+            <p>dans votre historique</p>
+          </div>
+        </article>
+        <article>
+          <span class="member-loans-v3-stat-icon"
+            ><i class="pi pi-calendar" aria-hidden="true"></i
+          ></span>
+          <div>
+            <h2>En cours</h2>
+            <strong>{{ activeCount() }}</strong>
+            <p>sur cette page</p>
+          </div>
+        </article>
+        <article [class.member-loans-v3-stat-alert]="overdueCount() > 0">
+          <span class="member-loans-v3-stat-icon"
+            ><i class="pi pi-exclamation-circle" aria-hidden="true"></i
+          ></span>
+          <div>
+            <h2>En retard</h2>
+            <strong>{{ overdueCount() }}</strong>
+            <p>sur cette page</p>
+          </div>
+        </article>
+        <article>
+          <span class="member-loans-v3-stat-icon"
+            ><i class="pi pi-history" aria-hidden="true"></i
+          ></span>
+          <div>
+            <h2>Retournés</h2>
+            <strong>{{ returnedCount() }}</strong>
+            <p>sur cette page</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="member-loans-v3-list" aria-labelledby="member-loans-list-title">
+        <div class="member-loans-v3-section-heading">
+          <div>
+            <p class="member-loans-v3-kicker">Votre historique</p>
+            <h2 id="member-loans-list-title">Mes emprunts</h2>
+          </div>
+          <span>{{ totalRecords() }} résultat{{ totalRecords() > 1 ? 's' : '' }}</span>
+        </div>
+
+        <div class="member-loans-v3-table">
+          <p-table
+            [value]="rows()"
+            [lazy]="true"
+            [lazyLoadOnInit]="false"
+            [paginator]="true"
+            [rows]="20"
+            [first]="0"
+            [totalRecords]="totalRecords()"
+            [loading]="loading()"
+            (onLazyLoad)="onLazyLoad($event)"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th scope="col">Exemplaire</th>
+                <th scope="col">Emprunté le</th>
+                <th scope="col">Échéance</th>
+                <th scope="col">Retour</th>
+                <th scope="col">Statut</th>
+                <th scope="col"><span class="visually-hidden">Notice</span></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-loan>
+              <tr>
+                <td>
+                  <div class="member-loans-v3-copy">
+                    <img src="/assets/fallbacks/cover-compact.svg" alt="" aria-hidden="true" />
+                    <div>
+                      <strong>{{ loan.copy.inventoryCode }}</strong>
+                      <span>Exemplaire de bibliothèque</span>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ formatDate(loan.loanDate) }}</td>
+                <td [class.member-loans-v3-overdue]="loan.loanStatus === 'OVERDUE'">
+                  {{ formatDate(loan.dueDate) }}
+                </td>
+                <td>{{ formatDate(loan.returnDate) }}</td>
+                <td>
+                  <p-tag
+                    [value]="loanStatusLabel(loan.loanStatus)"
+                    [severity]="loanStatusSeverity(loan.loanStatus)"
+                  />
+                </td>
+                <td>
+                  <a
+                    [routerLink]="['/catalogue', loan.copy.titleId]"
+                    aria-label="Voir la notice de cet exemplaire"
+                  >
+                    <i class="pi pi-arrow-right" aria-hidden="true"></i>
+                  </a>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+        <div class="member-loans-v3-cards">
+          @for (loan of rows(); track loan.id) {
+            <article>
+              <img src="/assets/fallbacks/cover-compact.svg" alt="" aria-hidden="true" />
+              <div class="member-loans-v3-card-content">
+                <div class="member-loans-v3-card-heading">
+                  <div>
+                    <h3>{{ loan.copy.inventoryCode }}</h3>
+                    <p>Exemplaire de bibliothèque</p>
+                  </div>
+                  <a
+                    [routerLink]="['/catalogue', loan.copy.titleId]"
+                    aria-label="Voir la notice de cet exemplaire"
+                  >
+                    <i class="pi pi-chevron-right" aria-hidden="true"></i>
+                  </a>
+                </div>
+                <dl>
+                  <div>
+                    <dt>Emprunté</dt>
+                    <dd>{{ formatDate(loan.loanDate) }}</dd>
+                  </div>
+                  <div>
+                    <dt>Échéance</dt>
+                    <dd [class.member-loans-v3-overdue]="loan.loanStatus === 'OVERDUE'">
+                      {{ formatDate(loan.dueDate) }}
+                    </dd>
+                  </div>
+                </dl>
+                <p-tag
+                  [value]="loanStatusLabel(loan.loanStatus)"
+                  [severity]="loanStatusSeverity(loan.loanStatus)"
+                />
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+
+      <aside class="member-loans-v3-note">
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        <div>
+          <strong>Suivez attentivement vos échéances</strong>
+          <p>Le statut communiqué par la bibliothèque reste la référence pour chaque prêt.</p>
+        </div>
+      </aside>
+    }
+  </div>
+</div>

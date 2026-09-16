@@ -1,0 +1,54 @@
+{
+  "physical_format": "Paperback",
+  "title": "Poetique regard. litterature, perception, identité.",
+  "isbn_10": [
+    "2842871529"
+  ],
+  "publishers": [
+    "Presses Universitaires de Limoges (PULIM)"
+  ],
+  "isbn_13": [
+    "9782842871529"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publish_date": "December 5, 2000",
+  "key": "/books/OL12623024M",
+  "authors": [
+    {
+      "key": "/authors/OL3965101A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10000114W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "oclc_numbers": [
+    "45604710"
+  ],
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/ab.bib.09.20150123.full.mrc:278294727:1189",
+    "marc:harvard_bibliographic_metadata/20220215_020.bib.mrc:39741592:2766"
+  ],
+  "number_of_pages": 408,
+  "lc_classifications": [
+    "PN45 .O9 2000"
+  ],
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-10-24T23:18:46.361645"
+  }
+}

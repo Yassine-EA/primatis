@@ -13,6 +13,7 @@ from primatis_data_seeding.mapping.models import (
     PrimatisTitleRow,
 )
 from primatis_data_seeding.models import NormalizedAuthor, NormalizedEdition
+from primatis_data_seeding.normalization.language_detection import is_confident_french
 
 
 def map_catalogue(
@@ -39,7 +40,13 @@ def map_catalogue(
             # normalization/wikidata.py); otherwise stays NULL. PRIMATIS
             # never derives it from name/language/biography.
             nationality=author.nationality,
-            biography=author.biography,
+            # DEC-16.3-04 (DEV-16.2 §4.2, benchmarked DEV-16.3 §C/§E):
+            # Open Library `bio` carries no language tag and is frequently
+            # NOT French (13/17 real medium biographies were English).
+            # Only a biography confidently detected as French is kept;
+            # everything else — another language, or too ambiguous/short
+            # to call — becomes NULL. Never translated, never guessed.
+            biography=author.biography if is_confident_french(author.biography) else None,
         )
         for author in sorted(authors, key=lambda item: item.source_key)
     ]

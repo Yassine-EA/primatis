@@ -1,0 +1,30 @@
+{
+  "title": "La Sibylle du Rhin",
+  "key": "/works/OL10004219W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3969749A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "History and criticism"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-08-02T00:48:13.716808"
+  }
+}

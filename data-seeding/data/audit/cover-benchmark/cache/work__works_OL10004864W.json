@@ -1,0 +1,35 @@
+{
+  "title": "Atlas des villes de Franche-Comte",
+  "key": "/works/OL10004864W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3970580A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Maps",
+    "Local History",
+    "Antiquities",
+    "Medieval Cities and towns",
+    "Urbanization",
+    "History"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-21T23:34:10.722792"
+  }
+}

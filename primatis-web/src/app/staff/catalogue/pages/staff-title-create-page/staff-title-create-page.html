@@ -1,92 +1,237 @@
-<h1>Créer un titre</h1>
+<div class="page-shell staff-loans-page staff-title-create-page">
+  <header class="page-header staff-loans-hero staff-title-create-hero">
+    <div class="staff-loans-hero-copy">
+      <span class="staff-page-kicker">Enrichissement des collections</span>
+      <h1 class="page-title">Créer un titre</h1>
+      <p class="page-description">
+        Constituez une notice bibliographique complète avant d’y rattacher ses exemplaires.
+      </p>
+    </div>
+    <a
+      pButton
+      type="button"
+      severity="secondary"
+      icon="pi pi-arrow-left"
+      label="Retour au catalogue"
+      class="staff-title-create-back"
+      routerLink="/staff/catalogue"
+    ></a>
+  </header>
 
-<form [formGroup]="form" (ngSubmit)="submit()">
-  @if (errorMessage(); as message) {
-    <p-message severity="error" [text]="message" styleClass="form-banner-error" />
-  }
-
-  <div class="form-field">
-    <label for="title-title">Titre</label>
-    <input pInputText id="title-title" formControlName="title" />
-    @if (form.controls.title.invalid && form.controls.title.touched) {
-      <p-message severity="error" text="Le titre est requis." />
+  <form class="staff-title-create-form" [formGroup]="form" (ngSubmit)="submit()">
+    @if (errorMessage(); as message) {
+      <p-message severity="error" [text]="message" styleClass="form-banner-error" />
     }
-    @if (fieldError('title'); as message) {
-      <p-message severity="error" [text]="message" />
-    }
-  </div>
 
-  <div class="form-field">
-    <label for="title-subtitle">Sous-titre</label>
-    <input pInputText id="title-subtitle" formControlName="subtitle" />
-  </div>
+    <section class="staff-title-form-card" aria-labelledby="title-identity-heading">
+      <div class="staff-title-form-heading">
+        <span class="staff-title-form-step" aria-hidden="true">1</span>
+        <div>
+          <span class="staff-page-kicker">Notice</span>
+          <h2 id="title-identity-heading">Identité bibliographique</h2>
+          <p>Renseignez les informations qui permettent d’identifier clairement l’ouvrage.</p>
+        </div>
+      </div>
 
-  <div class="form-field">
-    <label for="title-isbn">ISBN</label>
-    <input pInputText id="title-isbn" formControlName="isbn" />
-    @if (fieldError('isbn'); as message) {
-      <p-message severity="error" [text]="message" />
-    }
-  </div>
+      <div class="staff-title-form-grid">
+        <div class="form-field staff-title-field-wide">
+          <label for="title-title">Titre <span aria-hidden="true">*</span></label>
+          <input
+            pInputText
+            id="title-title"
+            formControlName="title"
+            placeholder="Titre principal de l’ouvrage"
+            autocomplete="off"
+          />
+          @if (form.controls.title.invalid && form.controls.title.touched) {
+            <p-message severity="error" text="Le titre est requis." />
+          }
+          @if (fieldError('title'); as message) {
+            <p-message severity="error" [text]="message" />
+          }
+        </div>
 
-  <div class="form-field">
-    <label for="title-summary">Résumé</label>
-    <input pInputText id="title-summary" formControlName="summary" />
-  </div>
+        <div class="form-field staff-title-field-wide">
+          <label for="title-subtitle">Sous-titre</label>
+          <input
+            pInputText
+            id="title-subtitle"
+            formControlName="subtitle"
+            placeholder="Complément du titre, si applicable"
+            autocomplete="off"
+          />
+        </div>
 
-  <div class="form-field">
-    <label for="title-publication-year">Année de publication</label>
-    <input pInputText id="title-publication-year" type="number" formControlName="publicationYear" />
-  </div>
+        <div class="form-field">
+          <label for="title-isbn">ISBN</label>
+          <input
+            pInputText
+            id="title-isbn"
+            formControlName="isbn"
+            placeholder="Ex. 9782070409189"
+            inputmode="numeric"
+            autocomplete="off"
+          />
+          @if (fieldError('isbn'); as message) {
+            <p-message severity="error" [text]="message" />
+          }
+        </div>
 
-  <div class="form-field">
-    <label for="title-language">Langue</label>
-    <p-select
-      inputId="title-language"
-      formControlName="language"
-      [options]="languageOptions"
-      optionLabel="label"
-      optionValue="value"
-    />
-    @if (form.controls.language.invalid && form.controls.language.touched) {
-      <p-message severity="error" text="La langue est requise." />
-    }
-    @if (fieldError('language'); as message) {
-      <p-message severity="error" [text]="message" />
-    }
-  </div>
+        <div class="form-field">
+          <label for="title-cover-image-url">URL de couverture</label>
+          <input
+            pInputText
+            id="title-cover-image-url"
+            type="url"
+            formControlName="coverImageUrl"
+            placeholder="https://…"
+            autocomplete="url"
+          />
+        </div>
 
-  <div class="form-field">
-    <label for="title-page-count">Nombre de pages</label>
-    <input pInputText id="title-page-count" type="number" min="1" formControlName="pageCount" />
-    @if (fieldError('pageCount'); as message) {
-      <p-message severity="error" [text]="message" />
-    }
-  </div>
+        <div class="form-field staff-title-field-wide">
+          <label for="title-summary">Résumé</label>
+          <textarea
+            id="title-summary"
+            formControlName="summary"
+            rows="5"
+            placeholder="Présentez brièvement le contenu de l’ouvrage…"
+          ></textarea>
+        </div>
+      </div>
+    </section>
 
-  <div class="form-field">
-    <label for="title-publisher">Éditeur</label>
-    <input pInputText id="title-publisher" formControlName="publisher" />
-  </div>
+    <section class="staff-title-form-card" aria-labelledby="title-publication-heading">
+      <div class="staff-title-form-heading">
+        <span class="staff-title-form-step" aria-hidden="true">2</span>
+        <div>
+          <span class="staff-page-kicker">Édition</span>
+          <h2 id="title-publication-heading">Données de publication</h2>
+          <p>Complétez les caractéristiques matérielles et éditoriales du titre.</p>
+        </div>
+      </div>
 
-  <div class="form-field">
-    <label for="title-cover-image-url">URL de couverture</label>
-    <input pInputText id="title-cover-image-url" formControlName="coverImageUrl" />
-  </div>
+      <div class="staff-title-form-grid staff-title-publication-grid">
+        <div class="form-field">
+          <label for="title-publication-year">Année de publication</label>
+          <input
+            pInputText
+            id="title-publication-year"
+            type="number"
+            formControlName="publicationYear"
+            placeholder="Ex. 2024"
+            inputmode="numeric"
+          />
+        </div>
 
-  <div class="form-field">
-    <app-author-picker (selectionChange)="onAuthorsChange($event)" />
-    @if (authorsInvalid) {
-      <p-message severity="error" text="Au moins un auteur est requis." />
-    }
-  </div>
+        <div class="form-field">
+          <label for="title-language">Langue <span aria-hidden="true">*</span></label>
+          <p-select
+            inputId="title-language"
+            appendTo="body"
+            formControlName="language"
+            [options]="languageOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Sélectionner une langue"
+          />
+          @if (form.controls.language.invalid && form.controls.language.touched) {
+            <p-message severity="error" text="La langue est requise." />
+          }
+          @if (fieldError('language'); as message) {
+            <p-message severity="error" [text]="message" />
+          }
+        </div>
 
-  <div class="form-field">
-    <span class="form-label">Genres</span>
-    <app-genre-picker (selectionChange)="onGenresChange($event)" />
-  </div>
+        <div class="form-field">
+          <label for="title-page-count">Nombre de pages</label>
+          <input
+            pInputText
+            id="title-page-count"
+            type="number"
+            min="1"
+            formControlName="pageCount"
+            placeholder="Ex. 320"
+            inputmode="numeric"
+          />
+          @if (fieldError('pageCount'); as message) {
+            <p-message severity="error" [text]="message" />
+          }
+        </div>
 
-  <div class="form-actions">
-    <button pButton type="submit" label="Créer le titre" [disabled]="submitting()"></button>
-  </div>
-</form>
+        <div class="form-field">
+          <label for="title-publisher">Éditeur</label>
+          <input
+            pInputText
+            id="title-publisher"
+            formControlName="publisher"
+            placeholder="Maison d’édition"
+            autocomplete="organization"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="staff-title-form-card" aria-labelledby="title-classification-heading">
+      <div class="staff-title-form-heading">
+        <span class="staff-title-form-step" aria-hidden="true">3</span>
+        <div>
+          <span class="staff-page-kicker">Contributeurs</span>
+          <h2 id="title-classification-heading">Auteurs et classification</h2>
+          <p>Associez au moins un auteur, puis les genres utiles au classement.</p>
+        </div>
+      </div>
+
+      <div class="staff-title-relations-grid">
+        <div class="staff-title-relation-panel">
+          <div class="staff-title-relation-title">
+            <span class="staff-title-relation-icon" aria-hidden="true">
+              <i class="pi pi-user-edit"></i>
+            </span>
+            <div>
+              <h3>Auteurs <span aria-hidden="true">*</span></h3>
+              <p>Recherchez une personne existante ou créez sa notice.</p>
+            </div>
+          </div>
+          <app-author-picker (selectionChange)="onAuthorsChange($event)" />
+          @if (authorsInvalid) {
+            <p-message severity="error" text="Au moins un auteur est requis." />
+          }
+        </div>
+
+        <div class="staff-title-relation-panel">
+          <div class="staff-title-relation-title">
+            <span class="staff-title-relation-icon" aria-hidden="true">
+              <i class="pi pi-tags"></i>
+            </span>
+            <div>
+              <h3>Genres</h3>
+              <p>Sélectionnez les catégories décrivant le mieux l’ouvrage.</p>
+            </div>
+          </div>
+          <app-genre-picker (selectionChange)="onGenresChange($event)" />
+        </div>
+      </div>
+    </section>
+
+    <div class="staff-title-form-actions">
+      <p class="staff-title-required-note"><span aria-hidden="true">*</span> Champs obligatoires</p>
+      <div class="staff-title-form-buttons">
+        <a
+          pButton
+          type="button"
+          severity="secondary"
+          label="Annuler"
+          routerLink="/staff/catalogue"
+        ></a>
+        <button
+          pButton
+          type="submit"
+          icon="pi pi-check"
+          label="Créer le titre"
+          [disabled]="submitting()"
+        ></button>
+      </div>
+    </div>
+  </form>
+</div>

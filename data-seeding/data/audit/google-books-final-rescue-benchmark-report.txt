@@ -1,0 +1,68 @@
+DEV-16 — GOOGLE BOOKS COVER RESCUE BENCHMARK v1.1
+==================================================
+
+API
+===
+
+Google Books API key: PRESENT
+
+SAMPLE
+======
+
+Input unresolved corpus : 3485
+Benchmark sample         : 300
+
+RESULT
+======
+
+Recovered               : 77/300
+Recovery rate           : 25.67%
+
+STATES
+======
+NO_MATCHING_VOLUME: 164
+NO_VALID_PHYSICAL_COVER: 6
+RECOVERED: 77
+SEARCH_ERROR: 53
+
+BY LANGUAGE
+===========
+FR: 27/100 (27.00%)
+EN: 12/70 (17.14%)
+NL: 6/40 (15.00%)
+DE: 14/35 (40.00%)
+ES: 6/25 (24.00%)
+IT: 10/20 (50.00%)
+LA: 2/10 (20.00%)
+
+DECISION
+========
+
+FAIL — DO NOT SCALE GOOGLE BOOKS ALONE
+
+CONTEXT
+=======
+
+Current catalogue covers : 11515/15000
+Current cover rate        : 76.77%
+Still required for 89%    : 1835
+
+POLICY
+======
+
+Google Books is benchmarked as a secondary source.
+API key is supplied only through the environment.
+The API key is never written to output files.
+Original PRIMATIS works remain unchanged.
+Title and author validation are mandatory.
+Returned volume language must match when provided.
+Only physically downloaded and validated images count.
+No bibliographic value is invented.
+No bundle modification.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/google-books-final-rescue-benchmark-results.csv
+data/audit/google-books-final-rescue-benchmark-report.txt

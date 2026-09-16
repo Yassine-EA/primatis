@@ -1,0 +1,90 @@
+DEV-16 — EN MASS EDITORIAL ENGINE v1
+====================================
+
+BASELINE
+========
+
+Existing EN KEEP        : 1861
+Existing EN REVIEW      : 207
+Policy entries          : 172
+
+DISCOVERY
+=========
+
+Unique discovered       : 8242
+AUTO_ACCEPT            : 1478
+REVIEW                 : 108
+REJECT                 : 2086
+
+FINAL POOLS
+===========
+
+SELECTED                : 697/700
+RESERVE                 : 200/200
+Combined                : 897/900
+
+BY CATEGORY
+===========
+ENGLISH_LANGUAGE_CANON       selected=140/140 reserve= 40/ 40
+TWENTIETH_CENTURY            selected=160/160 reserve= 45/ 45
+CONTEMPORARY                 selected=150/150 reserve= 45/ 45
+YOUTH                        selected= 78/ 80 reserve= 25/ 25
+HISTORY_SOCIETY              selected= 60/ 60 reserve= 15/ 15
+ESSAYS_PHILOSOPHY            selected= 50/ 50 reserve= 12/ 12
+SCIENCE_CULTURE              selected= 35/ 35 reserve= 10/ 10
+GRAPHIC                      selected= 24/ 25 reserve=  8/  8
+
+SELECTED METADATA
+=================
+
+ISBN       : 697/697
+Publisher  : 697/697
+Date       : 697/697
+Page count : 0/697
+Valid cover: 697/697
+
+INTEGRITY
+=========
+
+Duplicate editions      : 0
+Duplicate works         : 0
+Invalid covers          : 0
+Invalid EN languages    : 0
+
+SELECTED SHORTFALLS
+===================
+- YOUTH: 2
+- GRAPHIC: 1
+
+RESERVE SHORTFALLS
+==================
+NONE
+
+POLICY
+======
+
+Selection is author-first and editorially piloted.
+Only explicit English editions (eng) are eligible.
+Existing EN KEEP and REVIEW works are excluded from acquisition.
+Study guides, summaries, workbooks and teaching material are rejected.
+Collected works and ambiguous matches are routed to REVIEW.
+AUTO_ACCEPT requires strong author/title concordance and a validated physical cover.
+Per-author caps prevent catalogue domination by prolific authors.
+SELECTED and RESERVE contain unique works and unique physical editions.
+The reserve is built during the same run to eliminate recovery/final-gap loops.
+No invented ISBN, publisher, date, page count or cover.
+No bundle modification.
+No database write.
+
+FILES
+=====
+
+data/audit/en-mass-engine-policy-authors.csv
+data/audit/en-mass-engine-discovered.csv
+data/audit/en-mass-engine-selected.csv
+data/audit/en-mass-engine-reserve.csv
+data/audit/en-mass-engine-review.csv
+data/audit/en-mass-engine-reject.csv
+data/audit/en-mass-engine-report.txt
+
+STATUS : PARTIAL — SELECTED SHORTFALL

@@ -1,0 +1,63 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "3214573"
+    ]
+  },
+  "title": "The Adventures of an English Terrier in Louisiana - How Barré Terrier helped General Andy Jackson save New Orleans [Book with Read-Along CD in English and French Included]",
+  "authors": [
+    {
+      "key": "/authors/OL2061041A"
+    },
+    {
+      "key": "/authors/OL3737962A"
+    }
+  ],
+  "publish_date": "2000",
+  "publishers": [
+    "MITI-GATORS"
+  ],
+  "languages": [
+    {
+      "key": "/languages/eng"
+    },
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "isbn_13": [
+    "9780970715807"
+  ],
+  "edition_name": "First Printing edition",
+  "physical_format": "Unknown Binding",
+  "isbn_10": [
+    "0970715803"
+  ],
+  "oclc_numbers": [
+    "48934503"
+  ],
+  "contributions": [
+    "Chris Diket (Illustrator)"
+  ],
+  "subjects": [
+    "Juvenile fiction",
+    "New Orleans (La.), Battle of, 1815"
+  ],
+  "source_records": [
+    "amazon:0970715803"
+  ],
+  "key": "/books/OL11776230M",
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-22T23:54:59.912369"
+  }
+}

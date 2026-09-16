@@ -31,8 +31,10 @@ describe('StaffLayout', () => {
     fixture.detectChanges();
   });
 
-  it('should reuse the shared Navigation component instead of a hardcoded header', () => {
-    expect(fixture.nativeElement.querySelector('app-navigation')).not.toBeNull();
+  it('should render the shared StaffAdminShell with the explicit "Espace bibliothécaire" zone title', () => {
+    const shell = fixture.nativeElement.querySelector('app-staff-admin-shell');
+    expect(shell).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('.staff-admin-zone-title')?.textContent).toBe('Espace bibliothécaire');
   });
 
   it('should render a router outlet for its children', () => {

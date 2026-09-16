@@ -1,0 +1,60 @@
+DEV-16 RECONSTRUCTION — EDITORIAL QUOTAS
+========================================
+
+PRINCIPLE
+=========
+
+The current Full language distribution is preserved.
+
+KEEP + UNCOVERED STRONG/PROMISING
+  -> preservation-first pool
+
+REPLACE + UNCOVERED WEAK/VERY_WEAK
+  -> mandatory replacement pool
+
+REVIEW
+  -> unresolved; each future decision moves
+     either to preserve or replacement.
+
+QUOTAS BY LANGUAGE
+==================
+
+FR TARGET=6727 PRESERVE>=4146 REVIEW=126 REPLACE=2455..2581
+EN TARGET=3525 PRESERVE>=2805 REVIEW=207 REPLACE= 513.. 720
+NL TARGET=2120 PRESERVE>=1263 REVIEW=101 REPLACE= 756.. 857
+DE TARGET=1102 PRESERVE>= 924 REVIEW= 65 REPLACE= 113.. 178
+ES TARGET= 849 PRESERVE>= 625 REVIEW= 51 REPLACE= 173.. 224
+IT TARGET= 497 PRESERVE>= 295 REVIEW= 37 REPLACE= 165.. 202
+LA TARGET= 180 PRESERVE>=  92 REVIEW= 34 REPLACE=  54..  88
+
+GLOBAL
+======
+
+Full target               : 15000
+Preservation floor        : 10150
+Review pending            : 621
+Replacement floor         : 4229
+Replacement ceiling       : 4850
+
+Replacement need is therefore 4229..4850 titles.
+
+EDITORIAL POLICY
+================
+
+1. No filler titles.
+2. Preserve recognised works and authors.
+3. Foreign-language corpora must contain
+   significant authors/works of those languages.
+4. Translation is valid but does not replace
+   the language's own editorial foundation.
+5. Replacement candidates require a usable cover.
+6. Prefer the best usable edition/manifestation.
+7. Reliable metadata only; unknown remains NULL.
+8. page_count must be integrated when recoverable.
+9. Covers are ultimately stored locally.
+
+No DB write.
+No bundle modification.
+No acquisition performed.
+
+STATUS : PASS

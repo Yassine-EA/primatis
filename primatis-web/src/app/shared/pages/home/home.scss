@@ -1,0 +1,8 @@
+/*
+ * VISUAL-RESET-01
+ *
+ * La composition Home est portée par `_public-reset.scss`, chargé une
+ * seule fois globalement. Ce choix évite de repousser artificiellement le
+ * budget Angular `anyComponentStyle` et centralise le système full-bleed
+ * du portail public. Toutes les classes restent préfixées `home-`.
+ */

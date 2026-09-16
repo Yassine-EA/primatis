@@ -1,0 +1,26 @@
+source_key,title,subtitle,authors,author_count,isbn,publication_year,publisher,genres,duplicate_like_count,decision,reason,second_pass_score,second_pass_flags
+/books/OL21556051M,Tunga.,,Tunga.,1,,1989,Whitechapel Art Gallery,,0,,,7,ONE_WORD_TITLE_NO_SUBTITLE | TITLE_EQUALS_AUTHOR | SHORT_ART_CATALOGUE_TITLE
+/books/OL44865900M,James Ensor,the complete prints,Joachim Heusinger von Waldegg | Rudolf Schmitz | Xavier Tricot | James Ensor,4,9789057791192,2010,"Frank Deceuninck, Defiac nv",Arts | Biographie,0,,,6,TITLE_EQUALS_AUTHOR | SHORT_ART_CATALOGUE_TITLE | AUTHOR_COUNT_4
+/books/OL27938430M,史努比英汉辞典 = The Snoopy Dictionary,,Charles M. Schulz,1,9787800128660,2003,Zhongguo gong shang chu ban she,Jeunesse,0,,,5,NON_LATIN_SCRIPT_CJK
+/books/OL1917446M,17 letters,,Seneca the Younger,1,9780856683541,1988,Aris & Phillips,,0,,,5,ONE_WORD_TITLE_NO_SUBTITLE | GENERIC_SINGLE_WORD_TITLE
+/books/OL24155635M,Sophocles,,Sophocles,1,,1879,Clarendon Press,Arts | Théâtre,0,,,5,ONE_WORD_TITLE_NO_SUBTITLE | TITLE_EQUALS_AUTHOR
+/books/OL2774704M,Yosl Bergner,"a retrospective exhibition : Banyule Gallery, 11 September-8 December, 1985",Yosl Bergner,1,9780724101115,1985,The Gallery,,0,,,5,TITLE_EQUALS_AUTHOR | SHORT_ART_CATALOGUE_TITLE
+/books/OL12982663M,Jochen Klein,,Helmut Draxler | Jochen Klein | Doug Ashford,3,9783883753348,1998,Verlag der Buchhandlung Walther Konig,,0,,,4,TWO_WORD_TITLE_NO_SUBTITLE | TITLE_EQUALS_AUTHOR
+/books/OL3447683M,Iberê Camargo,,Iberê Camargo,1,9788589680011,2003,Fundação Iberê Camargo,,0,,,4,TWO_WORD_TITLE_NO_SUBTITLE | TITLE_EQUALS_AUTHOR
+/books/OL12926874M,Qin Yufen,,Qin Yufen,1,9783803032027,2002,Wasmuth,,0,,,4,TWO_WORD_TITLE_NO_SUBTITLE | TITLE_EQUALS_AUTHOR
+/books/OL39806707M,Candide,,Voltaire,1,,,Modern Library,Fiction | Histoire | Philosophie | Politique,0,,,4,ONE_WORD_TITLE_NO_SUBTITLE | WEAK_METADATA_2_OF_3
+/books/OL16819140M,Conditions,,Alain Badiou | Badiou | Steven Corcoran | Alain Badiou,4,9780826498274,2008,Continuum,Philosophie,0,,,3,ONE_WORD_TITLE_NO_SUBTITLE | AUTHOR_COUNT_4
+/books/OL43864402M,Anna Bella Geiger,"arte, trabalho e ideal",Anna Bella Geiger,1,9788594932204,2019,Edições SESC São Paulo,Arts,0,,,3,TITLE_EQUALS_AUTHOR
+/books/OL15087924M,Antoni Tàpies,"o, L'escarnidor de diademes.",Antoni Tàpies,1,,1967,G. Wittenborn,Arts | Philosophie,0,,,3,TITLE_EQUALS_AUTHOR
+/books/OL10168902M,Chemistry,,Antony C. Wilbraham | Dennis D. Staley | Edward L. Waterman | Michael S. Matta,4,9780201684087,2000,Addison-Wesley Pub (Sd),,0,,,3,ONE_WORD_TITLE_NO_SUBTITLE | AUTHOR_COUNT_4
+/books/OL12807564M,Preserver L'Art de L'Ennemi ?,"Le Patrimoine Artistique En Belgique Et En France Occupees, 1914-1918 (Comparatisme Et Societe)",Christina Kott,1,9789052013329,2006,Peter Lang Publishing,,0,,,3,FOREIGN_SIGNAL_FR_3
+/books/OL22491184M,Heidelberger Gelehrtenlexicon 1386-1651.,,Dagmar Drüll,1,9783540435303,,,Histoire,0,,,3,TWO_WORD_TITLE_NO_SUBTITLE | WEAK_METADATA_2_OF_3
+/books/OL12851826M,Jeroen Kooijmans,It's About Time,Jeroen Kooijmans,1,9789075380392,2002,Artimo,,0,,,3,TITLE_EQUALS_AUTHOR
+/books/OL396586M,Miguel Rio Branco,,Miguel Rio Branco,1,9780893818012,1998,Aperture,,0,,,3,TITLE_EQUALS_AUTHOR
+/books/OL20290790M,Nedko Solakov,earlier works,Nedko Solakov,1,9783939583073,2006,Kehrer,,0,,,3,TITLE_EQUALS_AUTHOR
+/books/OL12876906M,Nic Hess,51 Views of Mount Matterhorn,Nic Hess,1,9783775791090,2002,Hatje Cantz Publishers,,0,,,3,TITLE_EQUALS_AUTHOR
+/books/OL9073233M,Patrizia Della Porta,,Patrizia della Porta,1,9788881584857,2004,Charta/Galleria Fotografia Italiana,,0,,,3,TITLE_EQUALS_AUTHOR
+/books/OL12981267M,Raoul De Keyser,Oever,Raoul de Keyser,1,9783865600615,2007,Walther Konig,,0,,,3,TITLE_EQUALS_AUTHOR
+/books/OL23690338M,Robin Rhode,who saw who.,Robin Rhode,1,9781853322716,2008,Hayward Pub.,,0,,,3,TITLE_EQUALS_AUTHOR
+/books/OL18566722M,Klaus Born,Malerei,Sibylle Omlin | Klaus Born | Guido Magnaguagno,3,9783858811844,2006,Scheidegger & Spiess,Arts,0,,,3,TITLE_EQUALS_AUTHOR
+/books/OL8289678M,Walter Moorcroft,Memories of Life and Living,Walter Moorcroft,1,9780903685719,2006,Richard Dennis Publications Dist,Biographie,0,,,3,TITLE_EQUALS_AUTHOR

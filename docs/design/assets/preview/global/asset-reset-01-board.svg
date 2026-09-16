@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 1400">
+  <rect width="1600" height="1400" fill="#FAF9F6"/>
+  <text x="80" y="82" font-family="DejaVu Serif" font-size="42" fill="#082B40">PRIMATIS — Socle global</text>
+  <text x="80" y="122" font-family="DejaVu Sans" font-size="18" fill="#46515F">ASSET-RESET-01 · planche de validation</text>
+
+  <rect x="70" y="170" width="710" height="190" rx="18" fill="#FFFFFF" stroke="#ECE5DA"/>
+  <text x="100" y="210" font-family="DejaVu Sans" font-size="15" fill="#7C8795">LOGO SOMBRE · SURFACE CLAIRE</text>
+  <image x="105" y="232" width="600" height="120" xlink:href="../brand/primatis-logo-horizontal-dark.svg"/>
+
+  <rect x="820" y="170" width="710" height="190" rx="18" fill="#082B40"/>
+  <text x="850" y="210" font-family="DejaVu Sans" font-size="15" fill="#D7A16E">LOGO CLAIR · SURFACE NAVY</text>
+  <image x="855" y="232" width="600" height="120" xlink:href="../brand/primatis-logo-horizontal-light.svg"/>
+
+  <text x="80" y="430" font-family="DejaVu Sans" font-size="17" font-weight="bold" fill="#082B40">FALLBACKS</text>
+  <image x="80" y="470" width="216" height="312" xlink:href="../fallbacks/cover.svg"/>
+  <image x="335" y="470" width="192" height="269" xlink:href="../fallbacks/cover-compact.svg"/>
+  <image x="565" y="470" width="416" height="260" xlink:href="../fallbacks/image-error.svg"/>
+
+  <rect x="1030" y="470" width="500" height="312" rx="18" fill="#082B40"/>
+  <image x="1080" y="500" width="190" height="190" xlink:href="../patterns/orbit-copper.svg"/>
+  <image x="1255" y="500" width="240" height="160" xlink:href="../patterns/constellation-light.svg"/>
+  <text x="1080" y="742" font-family="DejaVu Sans" font-size="15" fill="#ECE5DA">Motifs décoratifs sur navy</text>
+
+  <text x="80" y="860" font-family="DejaVu Sans" font-size="17" font-weight="bold" fill="#082B40">ÉTATS VIDES · SANS TEXTE INCORPORÉ</text>
+  <g>
+    <rect x="70" y="900" width="280" height="255" rx="16" fill="#FFFFFF" stroke="#ECE5DA"/><image x="90" y="920" width="240" height="180" xlink:href="../fallbacks/empty-states/catalogue.svg"/><text x="210" y="1130" text-anchor="middle" font-family="DejaVu Sans" font-size="15" fill="#46515F">Catalogue</text>
+    <rect x="365" y="900" width="280" height="255" rx="16" fill="#FFFFFF" stroke="#ECE5DA"/><image x="385" y="920" width="240" height="180" xlink:href="../fallbacks/empty-states/loans.svg"/><text x="505" y="1130" text-anchor="middle" font-family="DejaVu Sans" font-size="15" fill="#46515F">Prêts</text>
+    <rect x="660" y="900" width="280" height="255" rx="16" fill="#FFFFFF" stroke="#ECE5DA"/><image x="680" y="920" width="240" height="180" xlink:href="../fallbacks/empty-states/reservations.svg"/><text x="800" y="1130" text-anchor="middle" font-family="DejaVu Sans" font-size="15" fill="#46515F">Réservations</text>
+    <rect x="955" y="900" width="280" height="255" rx="16" fill="#FFFFFF" stroke="#ECE5DA"/><image x="975" y="920" width="240" height="180" xlink:href="../fallbacks/empty-states/fines.svg"/><text x="1095" y="1130" text-anchor="middle" font-family="DejaVu Sans" font-size="15" fill="#46515F">Amendes</text>
+    <rect x="1250" y="900" width="280" height="255" rx="16" fill="#FFFFFF" stroke="#ECE5DA"/><image x="1270" y="920" width="240" height="180" xlink:href="../fallbacks/empty-states/notifications.svg"/><text x="1390" y="1130" text-anchor="middle" font-family="DejaVu Sans" font-size="15" fill="#46515F">Notifications</text>
+  </g>
+
+  <rect x="70" y="1215" width="1460" height="110" rx="16" fill="#F6F1E8"/>
+  <text x="100" y="1260" font-family="DejaVu Sans" font-size="16" fill="#082B40">Palette : navy #082B40 · cuivre #B87333 · cuivre clair #D7A16E · ivoire #FAF9F6</text>
+  <text x="100" y="1295" font-family="DejaVu Sans" font-size="15" fill="#46515F">Les libellés de cette planche servent uniquement à la validation ; les assets runtime ne contiennent aucun texte éditorial.</text>
+</svg>

@@ -1,13 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { TagModule } from 'primeng/tag';
-import { TextareaModule } from 'primeng/textarea';
 
 import { AppError } from '../../../../core/errors/api-error';
 import { toAppError } from '../../../../core/errors/api-error.util';
@@ -15,6 +15,10 @@ import { FieldError } from '../../../../core/models/field-error';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  articleStatusSeverity as sharedArticleStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
 import { ArticleResponse } from '../../../../articles/models/article-response';
 import { ArticleStatus } from '../../../../articles/models/article-status';
 import { TagResponse } from '../../../../articles/models/tag-response';
@@ -22,9 +26,13 @@ import { UpdateArticleRequest } from '../../../../articles/models/update-article
 import { StaffArticleApiService } from '../../../../articles/services/staff-article-api.service';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { TagPicker } from '../../components/tag-picker/tag-picker';
+import { ArticleContentEditor } from '../../components/article-content-editor/article-content-editor';
 import { normalizeOptional } from '../../form-value-normalization';
 
-const INVALID_ARTICLE_ID_ERROR: AppError = { message: 'Identifiant d’article invalide.', fieldErrors: [] };
+const INVALID_ARTICLE_ID_ERROR: AppError = {
+  message: 'Identifiant d’article invalide.',
+  fieldErrors: [],
+};
 
 function parseArticleId(rawId: string | null): number | null {
   if (rawId === null) {
@@ -59,8 +67,8 @@ function parseArticleId(rawId: string | null): number | null {
   selector: 'app-staff-article-detail-page',
   imports: [
     ReactiveFormsModule,
+    RouterLink,
     InputTextModule,
-    TextareaModule,
     MessageModule,
     ButtonModule,
     TagModule,
@@ -68,6 +76,7 @@ function parseArticleId(rawId: string | null): number | null {
     EmptyState,
     ErrorState,
     TagPicker,
+    ArticleContentEditor,
   ],
   templateUrl: './staff-article-detail-page.html',
   styleUrl: './staff-article-detail-page.scss',
@@ -80,6 +89,7 @@ export class StaffArticleDetailPage {
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly titleService = inject(Title);
 
   private articleId: number | null = null;
 
@@ -133,14 +143,20 @@ export class StaffArticleDetailPage {
     return status === 'DRAFT' || status === 'PUBLISHED';
   }
 
-  articleStatusSeverity(status: ArticleStatus): 'success' | 'warn' | 'secondary' {
-    if (status === 'PUBLISHED') {
-      return 'success';
+  articleStatusSeverity(status: ArticleStatus): StatusTagSeverity {
+    return sharedArticleStatusSeverity(status);
+  }
+
+  // Même précédent exact que StaffArticlesPage.articleStatusLabel (DEV-15.10).
+  articleStatusLabel(status: ArticleStatus): string {
+    switch (status) {
+      case 'DRAFT':
+        return 'Brouillon';
+      case 'PUBLISHED':
+        return 'Publié';
+      case 'ARCHIVED':
+        return 'Archivé';
     }
-    if (status === 'DRAFT') {
-      return 'warn';
-    }
-    return 'secondary';
   }
 
   fieldError(field: string): string | undefined {
@@ -163,6 +179,7 @@ export class StaffArticleDetailPage {
         this.article.set(value);
         this.resetFormFromArticle(value);
         this.articleLoading.set(false);
+        this.titleService.setTitle(`${value.title} — PRIMATIS`);
       },
       error: (err: unknown) => {
         this.articleLoading.set(false);
@@ -206,7 +223,11 @@ export class StaffArticleDetailPage {
 
     const request = this.buildUpdateRequest();
     if (Object.keys(request).length === 0) {
-      this.messageService.add({ severity: 'info', summary: 'Aucune modification', detail: "Aucun champ n'a été modifié." });
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Aucune modification',
+        detail: "Aucun champ n'a été modifié.",
+      });
       return;
     }
 
@@ -219,7 +240,12 @@ export class StaffArticleDetailPage {
         this.updateSubmitting.set(false);
         this.article.set(response);
         this.resetFormFromArticle(response);
-        this.messageService.add({ severity: 'success', summary: 'Article modifié', detail: response.title });
+        this.titleService.setTitle(`${response.title} — PRIMATIS`);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Article modifié',
+          detail: response.title,
+        });
       },
       error: (err: unknown) => {
         this.updateSubmitting.set(false);
@@ -262,18 +288,28 @@ export class StaffArticleDetailPage {
       return;
     }
     this.tagsSubmitting.set(true);
-    this.staffArticleApiService.updateArticleTags(this.articleId, { tagIds: this.selectedTags().map((tag) => tag.id) }).subscribe({
-      next: (response) => {
-        this.tagsSubmitting.set(false);
-        this.article.set(response);
-        this.selectedTags.set(response.tags);
-        this.messageService.add({ severity: 'success', summary: 'Tags mis à jour', detail: response.title });
-      },
-      error: (err: unknown) => {
-        this.tagsSubmitting.set(false);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: toAppError(err).message });
-      },
-    });
+    this.staffArticleApiService
+      .updateArticleTags(this.articleId, { tagIds: this.selectedTags().map((tag) => tag.id) })
+      .subscribe({
+        next: (response) => {
+          this.tagsSubmitting.set(false);
+          this.article.set(response);
+          this.selectedTags.set(response.tags);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Tags mis à jour',
+            detail: response.title,
+          });
+        },
+        error: (err: unknown) => {
+          this.tagsSubmitting.set(false);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail: toAppError(err).message,
+          });
+        },
+      });
   }
 
   // ---------------------------------------------------------------
@@ -283,7 +319,10 @@ export class StaffArticleDetailPage {
   confirmPublish(): void {
     this.confirmationService.confirm({
       header: 'Publier l’article',
-      message: 'Voulez-vous vraiment publier cet article ? Une notification sera envoyée à chaque membre actif.',
+      acceptLabel: 'Oui',
+      rejectLabel: 'Non',
+      message:
+        'Voulez-vous vraiment publier cet article ? Une notification sera envoyée à chaque membre actif.',
       accept: () => this.performPublish(),
     });
   }
@@ -298,11 +337,19 @@ export class StaffArticleDetailPage {
         this.publishSubmitting.set(false);
         this.article.set(response);
         this.resetFormFromArticle(response);
-        this.messageService.add({ severity: 'success', summary: 'Article publié', detail: response.title });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Article publié',
+          detail: response.title,
+        });
       },
       error: (err: unknown) => {
         this.publishSubmitting.set(false);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: toAppError(err).message });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: toAppError(err).message,
+        });
       },
     });
   }
@@ -314,6 +361,8 @@ export class StaffArticleDetailPage {
   confirmArchive(): void {
     this.confirmationService.confirm({
       header: 'Archiver l’article',
+      acceptLabel: 'Oui',
+      rejectLabel: 'Non',
       message: 'Voulez-vous vraiment archiver cet article ? Cette action est définitive.',
       accept: () => this.performArchive(),
     });
@@ -329,11 +378,19 @@ export class StaffArticleDetailPage {
         this.archiveSubmitting.set(false);
         this.article.set(response);
         this.resetFormFromArticle(response);
-        this.messageService.add({ severity: 'success', summary: 'Article archivé', detail: response.title });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Article archivé',
+          detail: response.title,
+        });
       },
       error: (err: unknown) => {
         this.archiveSubmitting.set(false);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: toAppError(err).message });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: toAppError(err).message,
+        });
       },
     });
   }
@@ -345,7 +402,10 @@ export class StaffArticleDetailPage {
   confirmDelete(): void {
     this.confirmationService.confirm({
       header: 'Supprimer l’article',
-      message: 'Voulez-vous vraiment supprimer définitivement ce brouillon ? Cette action est irréversible.',
+      acceptLabel: 'Oui',
+      rejectLabel: 'Non',
+      message:
+        'Voulez-vous vraiment supprimer définitivement ce brouillon ? Cette action est irréversible.',
       accept: () => this.performDelete(),
     });
   }
@@ -363,7 +423,11 @@ export class StaffArticleDetailPage {
       },
       error: (err: unknown) => {
         this.deleteSubmitting.set(false);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: toAppError(err).message });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: toAppError(err).message,
+        });
       },
     });
   }

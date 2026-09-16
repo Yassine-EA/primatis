@@ -1,5 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
@@ -11,6 +12,10 @@ import { toAppError } from '../../../../core/errors/api-error.util';
 import { FineResponse } from '../../../../fines/models/fine-response';
 import { FineStatus } from '../../../../fines/models/fine-status';
 import { FineApiService } from '../../../../fines/services/fine-api.service';
+import {
+  fineStatusSeverity as sharedFineStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
@@ -63,6 +68,7 @@ export class StaffFinesPage {
   private readonly authService = inject(AuthService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly titleService = inject(Title);
 
   readonly rows = signal<FineResponse[]>([]);
   readonly totalRecords = signal(0);
@@ -78,6 +84,7 @@ export class StaffFinesPage {
   private lastSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
+    this.titleService.setTitle('Amendes — PRIMATIS');
     this.load(0, DEFAULT_PAGE_SIZE);
   }
 
@@ -100,15 +107,11 @@ export class StaffFinesPage {
     this.load(this.lastPage, this.lastSize);
   }
 
-  fineStatusSeverity(status: FineStatus): 'danger' | 'success' | 'secondary' {
-    switch (status) {
-      case 'UNPAID':
-        return 'danger';
-      case 'PAID':
-        return 'success';
-      case 'CANCELLED':
-        return 'secondary';
-    }
+  // Délègue désormais à shared/status/status-severity.ts (DEV-15.8) : même
+  // mapping exact que la fonction locale précédente, non centralisée par
+  // omission lors de DEV-15.2 (member-fines-page.ts l'était déjà).
+  fineStatusSeverity(status: FineStatus): StatusTagSeverity {
+    return sharedFineStatusSeverity(status);
   }
 
   fineStatusLabel(status: FineStatus): string {

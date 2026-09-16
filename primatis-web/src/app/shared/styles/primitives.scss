@@ -1,0 +1,218 @@
+/*
+ * Primitives visuelles transverses PRIMATIS (DEV-15.2, §7 du cadrage
+ * DEV-15). Un nombre volontairement restreint de classes à valeur
+ * immédiatement transverse — pas un système utilitaire façon Tailwind.
+ *
+ * Ces classes ne sont pas encore consommées par les pages existantes :
+ * les rebrancher sur Home/Catalogue/Member/Loans appartient aux étapes
+ * dédiées (DEV-15.3+), pas à DEV-15.2 (§15 du cadrage : ne pas
+ * anticiper la refonte de ces écrans).
+ */
+
+@use "breakpoints";
+
+.content-container {
+  width: 100%;
+  max-width: var(--primatis-content-max-width);
+  margin-inline: auto;
+  padding-inline: var(--primatis-content-padding-mobile);
+
+  @include breakpoints.from-tablet {
+    padding-inline: var(--primatis-content-padding-tablet);
+  }
+
+  @include breakpoints.from-desktop {
+    padding-inline: var(--primatis-content-padding-desktop);
+  }
+}
+
+.page-shell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primatis-page-section-gap);
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--primatis-space-sm);
+}
+
+.page-title {
+  margin: 0;
+  font-family: var(--primatis-font-ui);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--p-text-color);
+}
+
+.page-description {
+  margin: 0;
+  color: var(--p-text-muted-color);
+}
+
+.section-title {
+  margin: 0;
+  font-family: var(--primatis-font-ui);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--p-text-color);
+}
+
+/*
+ * Titre éditorial (public, DEV-15.4) : seule classe du projet à opter
+ * pour la famille serif — jamais appliquée par défaut à un <h1>/<h2>
+ * (§4.2 du cadrage : la serif reste un choix explicite, pas une règle
+ * globale de titre).
+ */
+.editorial-title {
+  margin: 0;
+  font-family: var(--primatis-font-editorial);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--p-text-color);
+}
+
+/*
+ * Échelle typographique v2 (DESIGN-V2-A, §7/§9 design-system-v2.md).
+ * Primitives dédiées aux futurs écrans (Phase B/C/D) — n'entrent pas en
+ * conflit avec `.page-title`/`.section-title` ci-dessus, déjà consommées
+ * par les 31 fichiers DEV-15 existants (cf. audit DESIGN-V2-A) : ceux-ci
+ * ne sont ni renommés ni redimensionnés par cette étape de fondations.
+ */
+.hero-title {
+  margin: 0;
+  font-family: var(--primatis-font-editorial);
+  font-size: var(--primatis-text-hero);
+  font-weight: 400;
+  line-height: 1.1;
+  color: inherit;
+}
+
+.page-title-public {
+  margin: 0;
+  font-family: var(--primatis-font-editorial);
+  font-size: var(--primatis-text-page-title-public);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--p-text-color);
+}
+
+.page-title-business {
+  margin: 0;
+  font-family: var(--primatis-font-ui);
+  font-size: var(--primatis-text-page-title-business);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--p-text-color);
+}
+
+.section-title-lg {
+  margin: 0;
+  font-family: var(--primatis-font-ui);
+  font-size: var(--primatis-text-section-title);
+  font-weight: 700;
+  color: var(--p-text-color);
+}
+
+.card-title {
+  margin: 0;
+  font-family: var(--primatis-font-ui);
+  font-size: var(--primatis-text-card-title);
+  font-weight: 700;
+  color: var(--p-text-color);
+}
+
+.text-body {
+  font-size: var(--primatis-text-body);
+  color: var(--p-text-color);
+}
+
+.text-small {
+  font-size: var(--primatis-text-small);
+  color: var(--p-text-muted-color);
+}
+
+.text-meta {
+  font-size: var(--primatis-text-meta);
+  color: var(--p-text-muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+// CTA éditorial public (DESIGN-V2-B1, §13/§25 design-system-v2.md) —
+// réutilisable par toute page publique (Home, Catalogue, Articles...).
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--primatis-space-2xs);
+  padding: var(--primatis-space-xs) var(--primatis-space-md);
+  border-radius: var(--primatis-radius-sm);
+  font-weight: 600;
+  text-decoration: none;
+  min-height: 44px;
+}
+
+.cta--primary {
+  background: var(--primatis-copper-500);
+  color: var(--p-surface-0);
+  border: 1px solid transparent;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--primatis-copper-600);
+  }
+}
+
+.cta--secondary {
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--primatis-ivory-200);
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+// En-tête de section publique (titre + lien "voir tout") — même usage
+// transverse que `.cta` ci-dessus.
+.section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primatis-space-sm);
+  border-bottom: 2px solid var(--primatis-copper-300);
+  padding-bottom: var(--primatis-space-xs);
+}
+
+.section-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--primatis-space-3xs);
+  color: var(--primatis-copper-text);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+  }
+}
+
+// Repris de 2 usages quasi identiques (`title-detail-page`,
+// `catalogue-page`) : icône centrée pour une couverture/illustration
+// absente — jamais une image fabriquée à la place.
+.cover-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--p-text-muted-color);
+  background: var(--p-surface-100);
+}

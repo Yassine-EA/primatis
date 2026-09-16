@@ -1,0 +1,56 @@
+{
+  "publishers": [
+    "Pub - Publications de la"
+  ],
+  "weight": "3 pounds",
+  "isbn_10": [
+    "285944307X"
+  ],
+  "number_of_pages": 869,
+  "isbn_13": [
+    "9782859443078"
+  ],
+  "physical_format": "Paperback",
+  "publish_date": "January 1, 1997",
+  "key": "/books/OL12633199M",
+  "authors": [
+    {
+      "key": "/authors/OL3969751A"
+    }
+  ],
+  "title": "Les manifestations de rue en France, 1918-1968",
+  "works": [
+    {
+      "key": "/works/OL10004221W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "9.3 x 6.5 x 1.9 inches",
+  "lc_classifications": [
+    "DC55 .T37 1997"
+  ],
+  "oclc_numbers": [
+    "39500826"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-016.mrc:149230119:1871",
+    "marc:harvard_bibliographic_metadata/20220215_007.bib.mrc:332406876:1434"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-07-09T12:52:08.645094"
+  }
+}

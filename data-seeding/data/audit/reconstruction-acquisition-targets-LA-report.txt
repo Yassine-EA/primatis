@@ -1,0 +1,35 @@
+DEV-16 RECONSTRUCTION — LA ACQUISITION TARGETS
+==============================================
+
+Editorial targets  : 54
+Already satisfied  : 4
+To acquire         : 50
+
+SATISFIED
+=========
+- Ovide / Metamorphoses -> Metamorphoses
+- Ovide / Tristia -> Tristia, III
+- Thomas More / Utopia -> The Utopia of Sir Thomas More
+- Pline l'Ancien / Naturalis Historia -> Naturalis Historiae, vol. I
+
+MANUAL RESOLUTION
+=================
+
+Thomas More / Utopia
+  -> SATISFIED_EXISTING
+  -> 1895 Clarendon edition contains Latin text.
+
+Boèce / De Consolatione Philosophiae
+  -> ACQUIRE
+  -> 1897 D. Nutt edition is an English translation.
+
+ACQUISITION QUOTA
+=================
+
+LA acquisition target : 50
+
+No Open Library acquisition performed.
+No bundle modification.
+No database write.
+
+STATUS : PASS

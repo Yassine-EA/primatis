@@ -1,0 +1,31 @@
+{
+  "title": "La cuisine des huîtres",
+  "key": "/works/OL10003236W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3968680A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "History",
+    "Social life and customs"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:52.839053"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-31T06:42:43.260315"
+  }
+}

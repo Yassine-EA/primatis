@@ -1,0 +1,58 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "5808036"
+    ]
+  },
+  "title": "Approximations Spectrales De Problemes Aux Limites Elliptiques (Mathematiques & Applications, Vol 10)",
+  "authors": [
+    {
+      "key": "/authors/OL1548058A"
+    },
+    {
+      "key": "/authors/OL3178338A"
+    }
+  ],
+  "publish_date": "November 1992",
+  "publishers": [
+    "Springer-Verlag"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "weight": "15.2 ounces",
+  "isbn_13": [
+    "9780387595764"
+  ],
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "0387595767"
+  ],
+  "oclc_numbers": [
+    "232535646"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Approximation Theory",
+    "Science/Mathematics"
+  ],
+  "physical_dimensions": "9.8 x 6.8 x 1 inches",
+  "source_records": [
+    "amazon:0387595767"
+  ],
+  "key": "/books/OL10154567M",
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-28T18:39:11.784949"
+  }
+}

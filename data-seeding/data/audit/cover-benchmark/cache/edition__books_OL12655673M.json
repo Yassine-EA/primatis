@@ -1,0 +1,57 @@
+{
+  "publishers": [
+    "Regie Autonome Comptoirs"
+  ],
+  "physical_format": "Paperback",
+  "title": "Marie bashkirtseff (bilingue fr.-angl.)",
+  "identifiers": {
+    "goodreads": [
+      "3086874"
+    ]
+  },
+  "isbn_13": [
+    "9782913548305"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_10": [
+    "291354830X"
+  ],
+  "publish_date": "January 1, 2001",
+  "key": "/books/OL12655673M",
+  "authors": [
+    {
+      "key": "/authors/OL3979963A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10013177W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "lccn": [
+    "2002450759"
+  ],
+  "lc_classifications": [
+    "ND955.U473 B372 2001"
+  ],
+  "source_records": [
+    "marc:marc_loc_2016/BooksAll.2016.part30.utf8:89280170:986"
+  ],
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2020-12-07T11:50:05.922997"
+  }
+}

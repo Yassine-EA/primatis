@@ -1,0 +1,34 @@
+DEV-16 RECONSTRUCTION — LA CANDIDATE SEARCH
+===========================================
+
+Acquisition targets      : 50
+Best candidates found    : 46
+No usable candidate      : 4
+
+SELECTED METADATA
+=================
+
+ISBN       : 21/46
+Publisher  : 46/46
+Date       : 46/46
+Page count : 0/46
+Valid cover: 46/46
+
+IMPORTANT
+=========
+
+BEST_CANDIDATE_FOUND is not yet final acquisition approval.
+Every selected edition is explicitly tagged language:lat.
+Every selected candidate has a validated edition-level cover.
+No metadata is invented.
+No bundle modification.
+No database write.
+
+TARGETS WITHOUT USABLE CANDIDATE
+================================
+- Tacite / Annales
+- Pétrarque / Secretum
+- Pic de la Mirandole / Oratio de Hominis Dignitate
+- Bède le Vénérable / Historia Ecclesiastica Gentis Anglorum
+
+STATUS : PASS

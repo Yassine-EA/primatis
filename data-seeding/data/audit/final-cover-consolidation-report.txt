@@ -1,0 +1,68 @@
+DEV-16 — FINAL COVER CONSOLIDATION ENGINE v1
+============================================
+
+SOURCE MAPPINGS
+===============
+
+KEEP mappings          : 6297
+Acquisition mappings   : 4576
+Total mappings         : 10873
+
+BY LANGUAGE
+===========
+DE: 579
+EN: 2561
+ES: 514
+FR: 5240
+IT: 306
+LA: 106
+NL: 1567
+
+CONTENT CONSOLIDATION
+=====================
+
+Catalogue mappings      : 10873
+Unique SHA-256 contents : 10579
+Duplicate groups        : 231
+Duplicate occurrences   : 294
+Cross KEEP/acquisition  : 8
+Same-source dup groups  : 223
+
+FINAL DIRECTORY
+===============
+
+Directory               : data/covers/final
+Unique targets verified : 10579
+Files copied this run   : 10579
+Existing files reused   : 0
+
+STORAGE
+=======
+
+Logical source bytes    : 333539011
+Consolidated bytes      : 324341699
+Deduplication saving    : 9197312
+
+POLICY
+======
+
+Every source image is re-hashed before consolidation.
+SHA-256 is the canonical physical-content identity.
+Identical content is stored once.
+Multiple catalogue titles may intentionally share one cover asset.
+Historical data/covers/full is preserved.
+Audit/cache cover directories are preserved.
+No cover source is deleted.
+No bundle is modified.
+No database write.
+cover_image_url is NOT assigned yet.
+The consolidated manifest will feed the final 15000-title master.
+
+OUTPUTS
+=======
+
+data/audit/final-cover-consolidated-manifest.csv
+data/audit/final-cover-global-content-duplicates.csv
+data/audit/final-cover-consolidation-report.txt
+
+STATUS : PASS

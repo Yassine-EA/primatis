@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -24,8 +25,17 @@ function buildLoan(overrides: Partial<LoanResponse> = {}): LoanResponse {
   };
 }
 
-function buildPage(content: LoanResponse[], totalElements = content.length): PageResponse<LoanResponse> {
-  return { content, page: 0, size: 20, totalElements, totalPages: Math.max(1, Math.ceil(totalElements / 20)) };
+function buildPage(
+  content: LoanResponse[],
+  totalElements = content.length,
+): PageResponse<LoanResponse> {
+  return {
+    content,
+    page: 0,
+    size: 20,
+    totalElements,
+    totalPages: Math.max(1, Math.ceil(totalElements / 20)),
+  };
 }
 
 function apiHttpError(code: string, message: string): HttpErrorResponse {
@@ -45,14 +55,17 @@ function apiHttpError(code: string, message: string): HttpErrorResponse {
 
 describe('MemberLoansPage', () => {
   let fixture: ComponentFixture<MemberLoansPage>;
-  let loanApiServiceMock: { listOwnLoans: ReturnType<typeof vi.fn>; listLoans: ReturnType<typeof vi.fn> };
+  let loanApiServiceMock: {
+    listOwnLoans: ReturnType<typeof vi.fn>;
+    listLoans: ReturnType<typeof vi.fn>;
+  };
 
   function configure(): void {
     loanApiServiceMock = { listOwnLoans: vi.fn(), listLoans: vi.fn() };
 
     TestBed.configureTestingModule({
       imports: [MemberLoansPage],
-      providers: [{ provide: LoanApiService, useValue: loanApiServiceMock }],
+      providers: [provideRouter([]), { provide: LoanApiService, useValue: loanApiServiceMock }],
     });
   }
 
@@ -74,6 +87,15 @@ describe('MemberLoansPage', () => {
     expect(loanApiServiceMock.listOwnLoans).toHaveBeenCalledWith(0, 20);
   });
 
+  it('should set the document title (DEV-15.6)', () => {
+    configure();
+    loanApiServiceMock.listOwnLoans.mockReturnValue(of(buildPage([buildLoan()])));
+
+    createComponent();
+
+    expect(document.title).toBe('Mes prêts — PRIMATIS');
+  });
+
   it('should render the loans returned by the API', () => {
     configure();
     loanApiServiceMock.listOwnLoans.mockReturnValue(
@@ -84,8 +106,8 @@ describe('MemberLoansPage', () => {
 
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(text).toContain('INV-000099');
-    expect(text).toContain('2026-08-01T09:00:00Z');
-    expect(text).toContain('2026-08-22');
+    expect(text).toContain('01 août 2026');
+    expect(text).toContain('22 août 2026');
   });
 
   it('should map a PrimeNG lazy load event to page/size and call listOwnLoans again', () => {
@@ -116,20 +138,24 @@ describe('MemberLoansPage', () => {
 
   it('should render ACTIVE loans', () => {
     configure();
-    loanApiServiceMock.listOwnLoans.mockReturnValue(of(buildPage([buildLoan({ loanStatus: 'ACTIVE' })])));
+    loanApiServiceMock.listOwnLoans.mockReturnValue(
+      of(buildPage([buildLoan({ loanStatus: 'ACTIVE' })])),
+    );
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('ACTIVE');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('En cours');
   });
 
   it('should render OVERDUE loans', () => {
     configure();
-    loanApiServiceMock.listOwnLoans.mockReturnValue(of(buildPage([buildLoan({ loanStatus: 'OVERDUE' })])));
+    loanApiServiceMock.listOwnLoans.mockReturnValue(
+      of(buildPage([buildLoan({ loanStatus: 'OVERDUE' })])),
+    );
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('OVERDUE');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('En retard');
   });
 
   it('should render RETURNED loans', () => {
@@ -140,7 +166,7 @@ describe('MemberLoansPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('RETURNED');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Retourné');
   });
 
   it('should never recompute LoanStatus from dueDate — it renders exactly what the backend returns', () => {
@@ -154,8 +180,11 @@ describe('MemberLoansPage', () => {
     createComponent();
 
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
-    expect(text).toContain('ACTIVE');
-    expect(text).not.toContain('OVERDUE');
+    expect(text).toContain('En cours');
+    const renderedStatuses = Array.from<HTMLElement>(
+      fixture.nativeElement.querySelectorAll('.p-tag'),
+    ).map((tag) => tag.textContent?.trim());
+    expect(renderedStatuses).toEqual(['En cours', 'En cours']);
   });
 
   // ---------------------------------------------------------------
@@ -170,12 +199,14 @@ describe('MemberLoansPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('2026-08-19');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('19 août 2026');
   });
 
   it('should render a placeholder, not a raw null, when returnDate is absent', () => {
     configure();
-    loanApiServiceMock.listOwnLoans.mockReturnValue(of(buildPage([buildLoan({ returnDate: null })])));
+    loanApiServiceMock.listOwnLoans.mockReturnValue(
+      of(buildPage([buildLoan({ returnDate: null })])),
+    );
 
     createComponent();
 
@@ -190,7 +221,9 @@ describe('MemberLoansPage', () => {
 
   it('should show the loading state before the first response arrives', () => {
     configure();
-    loanApiServiceMock.listOwnLoans.mockReturnValue({ subscribe: () => ({ unsubscribe: () => {} }) });
+    loanApiServiceMock.listOwnLoans.mockReturnValue({
+      subscribe: () => ({ unsubscribe: () => {} }),
+    });
 
     createComponent();
 
@@ -205,12 +238,16 @@ describe('MemberLoansPage', () => {
 
     const emptyState = fixture.nativeElement.querySelector('app-empty-state');
     expect(emptyState).not.toBeNull();
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Aucun prêt à afficher.');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
+      "Vous n'avez aucun prêt en cours.",
+    );
   });
 
   it('should show the error state on a failed request', () => {
     configure();
-    loanApiServiceMock.listOwnLoans.mockReturnValue(throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')));
+    loanApiServiceMock.listOwnLoans.mockReturnValue(
+      throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')),
+    );
 
     createComponent();
 
@@ -219,7 +256,9 @@ describe('MemberLoansPage', () => {
 
   it('should retry the last request when retry is triggered', () => {
     configure();
-    loanApiServiceMock.listOwnLoans.mockReturnValue(throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')));
+    loanApiServiceMock.listOwnLoans.mockReturnValue(
+      throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')),
+    );
     createComponent();
     loanApiServiceMock.listOwnLoans.mockClear();
     loanApiServiceMock.listOwnLoans.mockReturnValue(of(buildPage([buildLoan()])));
@@ -261,7 +300,9 @@ describe('MemberLoansPage', () => {
 
     createComponent();
 
-    const buttons: HTMLButtonElement[] = Array.from(fixture.nativeElement.querySelectorAll('button'));
+    const buttons: HTMLButtonElement[] = Array.from(
+      fixture.nativeElement.querySelectorAll('button'),
+    );
     const nonPaginatorButtons = buttons.filter((button) => !button.closest('.p-paginator'));
     expect(nonPaginatorButtons).toHaveLength(0);
   });
@@ -275,6 +316,25 @@ describe('MemberLoansPage', () => {
     fixture.componentInstance.retry();
 
     expect(loanApiServiceMock.listLoans).not.toHaveBeenCalled();
+  });
+
+  it('should compute the visible status counters from backend statuses without changing them', () => {
+    configure();
+    loanApiServiceMock.listOwnLoans.mockReturnValue(
+      of(
+        buildPage([
+          buildLoan({ id: 1, loanStatus: 'ACTIVE' }),
+          buildLoan({ id: 2, loanStatus: 'OVERDUE' }),
+          buildLoan({ id: 3, loanStatus: 'RETURNED', returnDate: '2026-08-19' }),
+        ]),
+      ),
+    );
+
+    createComponent();
+
+    expect(fixture.componentInstance.activeCount()).toBe(1);
+    expect(fixture.componentInstance.overdueCount()).toBe(1);
+    expect(fixture.componentInstance.returnedCount()).toBe(1);
   });
 
   it('should never expose the borrower on its own consultation page (redundant on /me/loans)', () => {

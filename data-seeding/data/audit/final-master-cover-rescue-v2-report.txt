@@ -1,0 +1,73 @@
+DEV-16 — FINAL MASTER COVER RESCUE ENGINE v2
+============================================
+
+INPUT
+=====
+
+v1 recovered            : 364
+v1 unresolved           : 3498
+additional needed       : 1848
+
+V2 — FULL WORK EDITIONS
+=======================
+
+v2 recovered            : 13
+v2 unresolved           : 3485
+v2 recovery rate        : 0.37%
+
+edition records examined: 4827
+matching editions found : 128
+
+V2 STATES
+=========
+NO_LANGUAGE_EDITION_WITH_COVER: 3304
+NO_MATCHING_WORK: 84
+NO_VALID_PHYSICAL_COVER: 97
+RECOVERED: 13
+
+BY LANGUAGE
+===========
+FR: 8/1362 (0.59%)
+EN: 4/747 (0.54%)
+NL: 0/489 (0.00%)
+DE: 0/440 (0.00%)
+ES: 0/274 (0.00%)
+IT: 0/150 (0.00%)
+LA: 1/36 (2.78%)
+
+CUMULATIVE COVER GATE
+=====================
+
+Guaranteed base        : 11138
+v1 rescued            : 364
+v2 rescued            : 13
+Total rescue          : 377
+
+Covered catalogue     : 11515/15000
+Projected cover rate  : 76.77%
+Required minimum      : 13350/15000
+Still required        : 1835
+
+POLICY
+======
+
+The original catalogue title/work is preserved.
+Work identity requires both title and author agreement.
+Full Open Library Work edition lists are inspected.
+Up to 300 editions per candidate Work are inspected.
+Edition language must explicitly match the catalogue language.
+Only editions with a physical cover candidate are eligible.
+Every accepted image is downloaded and physically validated.
+No bibliographic value is invented.
+No bundle modification.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/final-master-cover-rescue-v2-recovered.csv
+data/audit/final-master-cover-rescue-v2-unresolved.csv
+data/audit/final-master-cover-rescue-v2-work-audit.csv
+data/audit/final-master-cover-rescue-v2-report.txt
+
+STATUS : PARTIAL — COVER GATE NOT YET REACHED

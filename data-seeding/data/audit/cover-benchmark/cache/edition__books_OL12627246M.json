@@ -1,0 +1,52 @@
+{
+  "physical_format": "Paperback",
+  "weight": "1.4 pounds",
+  "title": "Fontevraud de toutes les penitences",
+  "isbn_10": [
+    "2847020233"
+  ],
+  "publishers": [
+    "CMD"
+  ],
+  "isbn_13": [
+    "9782847020236"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publish_date": "April 24, 2003",
+  "key": "/books/OL12627246M",
+  "authors": [
+    {
+      "key": "/authors/OL3966999A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10001808W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "oclc_numbers": [
+    "162351965"
+  ],
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/ab.bib.10.20150123.full.mrc:584400735:745",
+    "marc:harvard_bibliographic_metadata/20220215_008.bib.mrc:87102226:1411"
+  ],
+  "number_of_pages": 148,
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-06-10T21:00:18.784120"
+  }
+}

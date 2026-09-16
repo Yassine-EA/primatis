@@ -1,0 +1,31 @@
+{
+  "title": "Fontevraud de toutes les penitences",
+  "key": "/works/OL10001808W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3966999A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "History",
+    "Prisons"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:29.804644"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-12-11T04:52:25.269676"
+  }
+}

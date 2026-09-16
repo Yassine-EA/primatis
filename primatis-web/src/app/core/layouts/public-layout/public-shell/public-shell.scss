@@ -1,0 +1,175 @@
+@use '../../../../shared/styles/breakpoints';
+
+.public-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.public-container {
+  width: min(100%, var(--primatis-public-max-width));
+  margin-inline: auto;
+  padding-inline: var(--primatis-content-padding-mobile);
+
+  @include breakpoints.from-tablet {
+    padding-inline: var(--primatis-content-padding-tablet);
+  }
+
+  @include breakpoints.from-desktop {
+    padding-inline: var(--primatis-space-48);
+  }
+}
+
+.public-shell-institutional {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  color: var(--primatis-ivory-100);
+  background: var(--primatis-navy-900);
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+}
+
+.public-shell-institutional-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--primatis-space-16);
+}
+
+.public-shell-institutional-location {
+  color: var(--primatis-copper-300);
+  white-space: nowrap;
+}
+
+.public-shell-header {
+  background: var(--p-surface-0);
+  border-bottom: 1px solid var(--primatis-ivory-200);
+  box-shadow: 0 1px 0 rgba(8, 43, 64, 0.04);
+}
+
+.public-shell-header-inner {
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--primatis-space-24);
+
+  @include breakpoints.from-desktop {
+    min-height: 100px;
+  }
+}
+
+.public-shell-brand {
+  display: block;
+  flex: 0 0 auto;
+  text-decoration: none;
+}
+
+.public-shell-brand-logo {
+  display: block;
+  width: clamp(12rem, 21vw, 18rem);
+  height: auto;
+
+  @media (max-width: 480px) {
+    width: 10.5rem;
+  }
+}
+
+.public-shell-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.public-shell-page-frame {
+  width: 100%;
+  max-width: var(--primatis-public-max-width);
+  margin-inline: auto;
+  padding-top: 0;
+}
+
+.public-shell-footer {
+  background: var(--primatis-ivory-50);
+  color: var(--primatis-navy-900);
+  border-top: 1px solid var(--primatis-ivory-200);
+}
+
+.public-shell-footer-grid {
+  display: grid;
+  gap: var(--primatis-space-lg);
+  padding-block: var(--primatis-space-40);
+
+  @include breakpoints.from-tablet {
+    grid-template-columns: 1.4fr 0.8fr 0.8fr 1.1fr;
+  }
+}
+
+.public-shell-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primatis-space-3xs);
+}
+
+.public-shell-footer-logo {
+  width: min(100%, 15rem);
+  height: auto;
+}
+
+.public-shell-footer-brand p {
+  margin: 0;
+  font-size: var(--primatis-text-meta);
+  color: var(--primatis-gray-700);
+  line-height: 1.5;
+}
+
+.public-shell-footer-heading {
+  margin: 0 0 var(--primatis-space-xs);
+  font-size: var(--primatis-text-small);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--primatis-navy-900);
+}
+
+.public-shell-footer-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--primatis-space-2xs);
+}
+
+.public-shell-footer-nav a {
+  color: var(--primatis-gray-700);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+  }
+}
+
+.public-shell-footer-quote {
+  margin: 0;
+  padding-left: var(--primatis-space-sm);
+  border-left: 2px solid var(--primatis-copper-500);
+  font-family: var(--primatis-font-editorial);
+  font-style: italic;
+  color: var(--primatis-navy-900);
+}
+
+.public-shell-footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--primatis-space-8) var(--primatis-space-24);
+  border-top: 1px solid var(--primatis-ivory-200);
+  padding-block: var(--primatis-space-sm);
+  font-size: var(--primatis-text-meta);
+  color: var(--primatis-gray-700);
+
+  p {
+    margin: 0;
+  }
+}

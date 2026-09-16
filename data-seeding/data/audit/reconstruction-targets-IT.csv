@@ -1,0 +1,166 @@
+language,category,priority,author,target_work
+IT,ITALIAN_CANON,1,Dante Alighieri,Divina Commedia
+IT,ITALIAN_CANON,1,Dante Alighieri,Vita nuova
+IT,ITALIAN_CANON,1,Dante Alighieri,Convivio
+IT,ITALIAN_CANON,1,Dante Alighieri,Rime
+IT,ITALIAN_CANON,1,Francesco Petrarca,Canzoniere
+IT,ITALIAN_CANON,1,Francesco Petrarca,Trionfi
+IT,ITALIAN_CANON,1,Giovanni Boccaccio,Decameron
+IT,ITALIAN_CANON,1,Giovanni Boccaccio,Elegia di Madonna Fiammetta
+IT,ITALIAN_CANON,1,Giovanni Boccaccio,Corbaccio
+IT,ITALIAN_CANON,1,Ludovico Ariosto,Orlando furioso
+IT,ITALIAN_CANON,1,Ludovico Ariosto,Satire
+IT,ITALIAN_CANON,1,Torquato Tasso,Gerusalemme liberata
+IT,ITALIAN_CANON,1,Torquato Tasso,Aminta
+IT,ITALIAN_CANON,1,Niccolò Machiavelli,Il Principe
+IT,ITALIAN_CANON,1,Niccolò Machiavelli,Discorsi sopra la prima deca di Tito Livio
+IT,ITALIAN_CANON,1,Niccolò Machiavelli,La Mandragola
+IT,ITALIAN_CANON,1,Francesco Guicciardini,Ricordi
+IT,ITALIAN_CANON,1,Francesco Guicciardini,Storia d'Italia
+IT,ITALIAN_CANON,1,Benvenuto Cellini,Vita
+IT,ITALIAN_CANON,1,Galileo Galilei,Dialogo sopra i due massimi sistemi del mondo
+IT,ITALIAN_CANON,1,Galileo Galilei,Il Saggiatore
+IT,ITALIAN_CANON,1,Giambattista Marino,Adone
+IT,ITALIAN_CANON,1,Carlo Goldoni,La locandiera
+IT,ITALIAN_CANON,1,Carlo Goldoni,Il servitore di due padroni
+IT,ITALIAN_CANON,1,Giuseppe Parini,Il giorno
+IT,ITALIAN_CANON,1,Vittorio Alfieri,Saul
+IT,ITALIAN_CANON,1,Vittorio Alfieri,Mirra
+IT,ITALIAN_CANON,1,Ugo Foscolo,Ultime lettere di Jacopo Ortis
+IT,ITALIAN_CANON,1,Ugo Foscolo,Dei Sepolcri
+IT,ITALIAN_CANON,1,Alessandro Manzoni,I promessi sposi
+IT,ITALIAN_CANON,1,Alessandro Manzoni,Adelchi
+IT,ITALIAN_CANON,1,Giacomo Leopardi,Canti
+IT,ITALIAN_CANON,1,Giacomo Leopardi,Operette morali
+IT,ITALIAN_CANON,1,Giovanni Verga,I Malavoglia
+IT,ITALIAN_CANON,1,Giovanni Verga,Mastro-don Gesualdo
+IT,ITALIAN_CANON,1,Giovanni Verga,Vita dei campi
+IT,ITALIAN_CANON,1,Giovanni Verga,Novelle rusticane
+IT,ITALIAN_CANON,1,Carlo Collodi,Le avventure di Pinocchio
+IT,ITALIAN_CANON,1,Edmondo De Amicis,Cuore
+IT,ITALIAN_CANON,1,Gabriele D'Annunzio,Il piacere
+IT,ITALIAN_CANON,1,Gabriele D'Annunzio,Alcyone
+IT,ITALIAN_CANON,1,Giovanni Pascoli,Myricae
+IT,ITALIAN_CANON,1,Giovanni Pascoli,Canti di Castelvecchio
+IT,ITALIAN_CANON,1,Antonio Fogazzaro,Piccolo mondo antico
+IT,ITALIAN_CANON,1,Grazia Deledda,Canne al vento
+IT,ITALIAN_CANON,1,Grazia Deledda,Elias Portolu
+IT,ITALIAN_CANON,1,Italo Svevo,Una vita
+IT,ITALIAN_CANON,1,Italo Svevo,Senilità
+IT,ITALIAN_CANON,1,Italo Svevo,La coscienza di Zeno
+IT,ITALIAN_CANON,1,Luigi Pirandello,Il fu Mattia Pascal
+IT,ITALIAN_CANON,1,Luigi Pirandello,"Uno, nessuno e centomila"
+IT,ITALIAN_CANON,1,Luigi Pirandello,Sei personaggi in cerca d'autore
+IT,ITALIAN_CANON,1,Luigi Pirandello,Enrico IV
+IT,ITALIAN_CANON,1,Umberto Saba,Il Canzoniere
+IT,ITALIAN_CANON,1,Guido Gozzano,I colloqui
+IT,TWENTIETH_CENTURY,1,Giuseppe Ungaretti,L'Allegria
+IT,TWENTIETH_CENTURY,1,Eugenio Montale,Ossi di seppia
+IT,TWENTIETH_CENTURY,1,Eugenio Montale,Le occasioni
+IT,TWENTIETH_CENTURY,1,Salvatore Quasimodo,Ed è subito sera
+IT,TWENTIETH_CENTURY,1,Alberto Moravia,Gli indifferenti
+IT,TWENTIETH_CENTURY,1,Alberto Moravia,La noia
+IT,TWENTIETH_CENTURY,1,Cesare Pavese,Paesi tuoi
+IT,TWENTIETH_CENTURY,1,Cesare Pavese,La luna e i falò
+IT,TWENTIETH_CENTURY,1,Elio Vittorini,Conversazione in Sicilia
+IT,TWENTIETH_CENTURY,1,Elio Vittorini,Uomini e no
+IT,TWENTIETH_CENTURY,1,Beppe Fenoglio,Il partigiano Johnny
+IT,TWENTIETH_CENTURY,1,Beppe Fenoglio,Una questione privata
+IT,TWENTIETH_CENTURY,1,Carlo Emilio Gadda,Quer pasticciaccio brutto de via Merulana
+IT,TWENTIETH_CENTURY,1,Carlo Emilio Gadda,La cognizione del dolore
+IT,TWENTIETH_CENTURY,1,Giorgio Bassani,Il giardino dei Finzi-Contini
+IT,TWENTIETH_CENTURY,1,Giuseppe Tomasi di Lampedusa,Il Gattopardo
+IT,TWENTIETH_CENTURY,1,Primo Levi,Se questo è un uomo
+IT,TWENTIETH_CENTURY,1,Primo Levi,La tregua
+IT,TWENTIETH_CENTURY,1,Italo Calvino,Il sentiero dei nidi di ragno
+IT,TWENTIETH_CENTURY,1,Italo Calvino,Il barone rampante
+IT,TWENTIETH_CENTURY,1,Italo Calvino,Le città invisibili
+IT,TWENTIETH_CENTURY,1,Elsa Morante,L'isola di Arturo
+IT,TWENTIETH_CENTURY,1,Elsa Morante,La storia
+IT,TWENTIETH_CENTURY,1,Pier Paolo Pasolini,Ragazzi di vita
+IT,TWENTIETH_CENTURY,1,Pier Paolo Pasolini,Una vita violenta
+IT,TWENTIETH_CENTURY,1,Leonardo Sciascia,Il giorno della civetta
+IT,TWENTIETH_CENTURY,1,Leonardo Sciascia,A ciascuno il suo
+IT,TWENTIETH_CENTURY,1,Gesualdo Bufalino,Diceria dell'untore
+IT,TWENTIETH_CENTURY,1,Natalia Ginzburg,Lessico famigliare
+IT,TWENTIETH_CENTURY,1,Natalia Ginzburg,Le piccole virtù
+IT,TWENTIETH_CENTURY,1,Dino Buzzati,Il deserto dei Tartari
+IT,TWENTIETH_CENTURY,1,Dino Buzzati,Sessanta racconti
+IT,TWENTIETH_CENTURY,1,Curzio Malaparte,Kaputt
+IT,TWENTIETH_CENTURY,1,Curzio Malaparte,La pelle
+IT,TWENTIETH_CENTURY,1,Giorgio Bassani,Gli occhiali d'oro
+IT,TWENTIETH_CENTURY,1,Alberto Moravia,La romana
+IT,TWENTIETH_CENTURY,1,Cesare Pavese,Dialoghi con Leucò
+IT,TWENTIETH_CENTURY,1,Elio Vittorini,Le donne di Messina
+IT,TWENTIETH_CENTURY,1,Elsa Morante,Menzogna e sortilegio
+IT,TWENTIETH_CENTURY,1,Mario Soldati,Le lettere da Capri
+IT,CONTEMPORARY,2,Umberto Eco,Il nome della rosa
+IT,CONTEMPORARY,2,Umberto Eco,Il pendolo di Foucault
+IT,CONTEMPORARY,2,Umberto Eco,Baudolino
+IT,CONTEMPORARY,2,Antonio Tabucchi,Sostiene Pereira
+IT,CONTEMPORARY,2,Antonio Tabucchi,Notturno indiano
+IT,CONTEMPORARY,2,Claudio Magris,Danubio
+IT,CONTEMPORARY,2,Claudio Magris,Microcosmi
+IT,CONTEMPORARY,2,Elena Ferrante,L'amica geniale
+IT,CONTEMPORARY,2,Elena Ferrante,Storia del nuovo cognome
+IT,CONTEMPORARY,2,Elena Ferrante,Storia di chi fugge e di chi resta
+IT,CONTEMPORARY,2,Elena Ferrante,Storia della bambina perduta
+IT,CONTEMPORARY,2,Andrea Camilleri,La forma dell'acqua
+IT,CONTEMPORARY,2,Andrea Camilleri,Il cane di terracotta
+IT,CONTEMPORARY,2,Alessandro Baricco,Seta
+IT,CONTEMPORARY,2,Alessandro Baricco,Oceano mare
+IT,CONTEMPORARY,2,Niccolò Ammaniti,Io non ho paura
+IT,CONTEMPORARY,2,Niccolò Ammaniti,Come Dio comanda
+IT,CONTEMPORARY,2,Margaret Mazzantini,Non ti muovere
+IT,CONTEMPORARY,2,Margaret Mazzantini,Venuto al mondo
+IT,CONTEMPORARY,2,Roberto Saviano,Gomorra
+IT,CONTEMPORARY,2,Paolo Giordano,La solitudine dei numeri primi
+IT,CONTEMPORARY,2,Paolo Cognetti,Le otto montagne
+IT,CONTEMPORARY,2,Erri De Luca,Montedidio
+IT,CONTEMPORARY,2,Domenico Starnone,Lacci
+IT,CONTEMPORARY,2,Michela Murgia,Accabadora
+IT,ESSAYS_PHILOSOPHY,2,Giambattista Vico,Principi di scienza nuova
+IT,ESSAYS_PHILOSOPHY,2,Cesare Beccaria,Dei delitti e delle pene
+IT,ESSAYS_PHILOSOPHY,2,Benedetto Croce,Estetica come scienza dell'espressione e linguistica generale
+IT,ESSAYS_PHILOSOPHY,2,Antonio Gramsci,Quaderni del carcere
+IT,ESSAYS_PHILOSOPHY,2,Norberto Bobbio,Destra e sinistra
+IT,ESSAYS_PHILOSOPHY,2,Umberto Eco,Opera aperta
+IT,ESSAYS_PHILOSOPHY,2,Umberto Eco,Apocalittici e integrati
+IT,ESSAYS_PHILOSOPHY,2,Italo Calvino,Lezioni americane
+IT,ESSAYS_PHILOSOPHY,2,Pier Paolo Pasolini,Scritti corsari
+IT,ESSAYS_PHILOSOPHY,2,Primo Levi,I sommersi e i salvati
+IT,ESSAYS_PHILOSOPHY,2,Giordano Bruno,La cena de le ceneri
+IT,ESSAYS_PHILOSOPHY,2,Giordano Bruno,"De l'infinito, universo e mondi"
+IT,ESSAYS_PHILOSOPHY,2,Tommaso Campanella,La città del Sole
+IT,ESSAYS_PHILOSOPHY,2,Giacomo Leopardi,Zibaldone
+IT,ESSAYS_PHILOSOPHY,2,Norberto Bobbio,Il futuro della democrazia
+IT,HISTORY_SOCIETY,2,Carlo Levi,Cristo si è fermato a Eboli
+IT,HISTORY_SOCIETY,2,Emilio Lussu,Un anno sull'Altipiano
+IT,HISTORY_SOCIETY,2,Mario Rigoni Stern,Il sergente nella neve
+IT,HISTORY_SOCIETY,2,Nuto Revelli,Il mondo dei vinti
+IT,HISTORY_SOCIETY,2,Carlo Ginzburg,Il formaggio e i vermi
+IT,HISTORY_SOCIETY,2,Ernesto De Martino,La terra del rimorso
+IT,HISTORY_SOCIETY,2,Leonardo Sciascia,L'affaire Moro
+IT,HISTORY_SOCIETY,2,Antonio Gramsci,Lettere dal carcere
+IT,HISTORY_SOCIETY,2,Piero Calamandrei,Uomini e città della Resistenza
+IT,HISTORY_SOCIETY,2,Benedetto Croce,Storia d'Italia dal 1871 al 1915
+IT,YOUTH,3,Gianni Rodari,Favole al telefono
+IT,YOUTH,3,Gianni Rodari,Il romanzo di Cipollino
+IT,YOUTH,3,Gianni Rodari,La freccia azzurra
+IT,YOUTH,3,Gianni Rodari,Gelsomino nel paese dei bugiardi
+IT,YOUTH,3,Gianni Rodari,C'era due volte il barone Lamberto
+IT,YOUTH,3,Bianca Pitzorno,L'incredibile storia di Lavinia
+IT,YOUTH,3,Bianca Pitzorno,Ascolta il mio cuore
+IT,YOUTH,3,Roberto Piumini,Lo stralisco
+IT,YOUTH,3,Silvana Gandolfi,L'isola del tempo perso
+IT,YOUTH,3,Angela Nanetti,Mio nonno era un ciliegio
+IT,GRAPHIC,3,Hugo Pratt,Una ballata del mare salato
+IT,GRAPHIC,3,Hugo Pratt,Corte sconta detta arcana
+IT,GRAPHIC,3,Gipi,Appunti per una storia di guerra
+IT,GRAPHIC,3,Gipi,La terra dei figli
+IT,GRAPHIC,3,Zerocalcare,La profezia dell'armadillo
+IT,GRAPHIC,3,Zerocalcare,Kobane Calling
+IT,GRAPHIC,3,Igort,Quaderni ucraini
+IT,GRAPHIC,3,Manuele Fior,Cinquemila chilometri al secondo
+IT,GRAPHIC,3,Lorenzo Mattotti,Fuochi
+IT,GRAPHIC,3,Vittorio Giardino,Jonas Fink: L'infanzia

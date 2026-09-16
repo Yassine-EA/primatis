@@ -1,0 +1,24 @@
+DEV-16 RECONSTRUCTION — LA TARGETS
+==================================
+
+Total targets : 54
+
+BY CATEGORY
+===========
+CLASSICAL_LITERATURE           : 20
+PHILOSOPHY_RHETORIC            : 14
+HISTORY                        : 10
+LATE_MEDIEVAL_RENAISSANCE      : 6
+SCIENCE_CIVILISATION           : 4
+
+POLICY
+======
+
+Targets are editorial objectives, not yet Open Library editions.
+A target may later be satisfied by the best usable Latin edition.
+No acquisition is accepted solely because a cover exists.
+Existing preserved catalogue titles must be checked before acquisition.
+No invented metadata.
+Usable cover required for final acquisition.
+
+STATUS : PASS

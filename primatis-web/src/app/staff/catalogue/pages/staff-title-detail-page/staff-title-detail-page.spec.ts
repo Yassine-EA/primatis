@@ -1,7 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, ParamMap, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, convertToParamMap, provideRouter } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Select } from 'primeng/select';
 import { BehaviorSubject, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -107,6 +109,7 @@ describe('StaffTitleDetailPage', () => {
     TestBed.configureTestingModule({
       imports: [StaffTitleDetailPage],
       providers: [
+        provideRouter([]),
         { provide: ActivatedRoute, useValue: { paramMap: paramMap$ } },
         { provide: StaffCatalogueApiService, useValue: staffCatalogueApiServiceMock },
         { provide: CopyApiService, useValue: copyApiServiceMock },
@@ -139,6 +142,60 @@ describe('StaffTitleDetailPage', () => {
 
     expect(staffCatalogueApiServiceMock.getTitleById).toHaveBeenCalledWith(10);
     expect(component.title()).toEqual(buildTitleDetail());
+  });
+
+  it('should set the document title to "<Titre> — PRIMATIS" (DEV-15.8)', () => {
+    createComponent();
+
+    expect(document.title).toBe('Les Misérables — PRIMATIS');
+  });
+
+  it('should render the three editorial sections, the copies register and a return link', () => {
+    createComponent();
+
+    const headings = Array.from(fixture.nativeElement.querySelectorAll('section h2')).map(
+      (heading) => (heading as HTMLElement).textContent?.trim(),
+    );
+    const backLink: HTMLAnchorElement | null = fixture.nativeElement.querySelector(
+      'a[href="/staff/catalogue"]',
+    );
+
+    expect(headings).toEqual([
+      'Identité bibliographique',
+      'Données de publication',
+      'Auteurs et classification',
+      'Exemplaires',
+    ]);
+    expect(backLink).not.toBeNull();
+  });
+
+  it('should append the language overlay to body', () => {
+    createComponent();
+
+    const select = fixture.debugElement.query(By.directive(Select));
+
+    expect(select.componentInstance.appendTo()).toBe('body');
+  });
+
+  it('should expose translated copy labels for every backend enum value', () => {
+    createComponent();
+
+    expect(component.copyAvailabilityLabel('AVAILABLE')).toBe('Disponible');
+    expect(component.copyAvailabilityLabel('ON_LOAN')).toBe('En prêt');
+    expect(component.copyAvailabilityLabel('RESERVED')).toBe('Réservé');
+    expect(component.copyAvailabilityLabel('UNAVAILABLE')).toBe('Indisponible');
+    expect(component.copyConditionLabel('GOOD')).toBe('Bon état');
+    expect(component.copyConditionLabel('DAMAGED')).toBe('Endommagé');
+    expect(component.copyConditionLabel('LOST')).toBe('Perdu');
+    expect(component.copyConditionLabel('OUT_OF_SERVICE')).toBe('Hors service');
+  });
+
+  it('should keep copy actions and location in the rendered register', () => {
+    createComponent();
+
+    expect(fixture.nativeElement.textContent).toContain('Modifier');
+    expect(fixture.nativeElement.textContent).toContain('Rendre indisponible');
+    expect(fixture.nativeElement.textContent).toContain('Non renseignée');
   });
 
   it('should not call the API when the route id is not numeric', () => {
@@ -280,6 +337,9 @@ describe('StaffTitleDetailPage', () => {
     component.confirmToggleStatus();
 
     expect(confirmationServiceMock.confirm).toHaveBeenCalledTimes(1);
+    expect(confirmationServiceMock.confirm).toHaveBeenCalledWith(
+      expect.objectContaining({ acceptLabel: 'Oui', rejectLabel: 'Non' }),
+    );
     expect(staffCatalogueApiServiceMock.updateTitleStatus).not.toHaveBeenCalled();
   });
 
@@ -332,6 +392,9 @@ describe('StaffTitleDetailPage', () => {
     component.confirmToggleAvailability(copy);
 
     expect(confirmationServiceMock.confirm).toHaveBeenCalledTimes(1);
+    expect(confirmationServiceMock.confirm).toHaveBeenCalledWith(
+      expect.objectContaining({ acceptLabel: 'Oui', rejectLabel: 'Non' }),
+    );
     expect(copyApiServiceMock.updateAvailability).not.toHaveBeenCalled();
   });
 

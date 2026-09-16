@@ -1,0 +1,87 @@
+DEV-16 RECONSTRUCTION — IT MASS RECOVERY
+========================================
+
+INITIAL AUDIT
+=============
+
+Editorial targets       : 165
+Already existing        : 2
+Initial ACCEPT          : 107
+Initial false positive  : 1
+Recovery targets        : 56
+
+RECOVERY
+========
+
+Recovered               : 10
+Still unresolved        : 46
+
+GLOBAL IT STATUS
+================
+
+Resolved objectives     : 119/165
+Still open              : 46
+
+UNRESOLVED TARGETS
+==================
+- #6 Francesco Petrarca / Trionfi
+- #11 Ludovico Ariosto / Satire
+- #17 Francesco Guicciardini / Ricordi
+- #24 Carlo Goldoni / Il servitore di due padroni
+- #34 Giovanni Verga / I Malavoglia
+- #35 Giovanni Verga / Mastro-don Gesualdo
+- #47 Italo Svevo / Una vita
+- #59 Salvatore Quasimodo / Ed è subito sera
+- #61 Alberto Moravia / La noia
+- #62 Cesare Pavese / Paesi tuoi
+- #63 Cesare Pavese / La luna e i falò
+- #74 Italo Calvino / Il sentiero dei nidi di ragno
+- #75 Italo Calvino / Il barone rampante
+- #78 Elsa Morante / La storia
+- #80 Pier Paolo Pasolini / Una vita violenta
+- #83 Gesualdo Bufalino / Diceria dell'untore
+- #84 Natalia Ginzburg / Lessico famigliare
+- #92 Cesare Pavese / Dialoghi con Leucò
+- #98 Umberto Eco / Baudolino
+- #100 Antonio Tabucchi / Notturno indiano
+- #104 Elena Ferrante / Storia del nuovo cognome
+- #116 Paolo Giordano / La solitudine dei numeri primi
+- #117 Paolo Cognetti / Le otto montagne
+- #119 Domenico Starnone / Lacci
+- #120 Michela Murgia / Accabadora
+- #125 Norberto Bobbio / Destra e sinistra
+- #126 Umberto Eco / Opera aperta
+- #127 Umberto Eco / Apocalittici e integrati
+- #132 Giordano Bruno / De l'infinito, universo e mondi
+- #134 Giacomo Leopardi / Zibaldone
+- #139 Nuto Revelli / Il mondo dei vinti
+- #140 Carlo Ginzburg / Il formaggio e i vermi
+- #144 Piero Calamandrei / Uomini e città della Resistenza
+- #145 Benedetto Croce / Storia d'Italia dal 1871 al 1915
+- #147 Gianni Rodari / Il romanzo di Cipollino
+- #148 Gianni Rodari / La freccia azzurra
+- #150 Gianni Rodari / C'era due volte il barone Lamberto
+- #151 Bianca Pitzorno / L'incredibile storia di Lavinia
+- #154 Silvana Gandolfi / L'isola del tempo perso
+- #155 Angela Nanetti / Mio nonno era un ciliegio
+- #158 Gipi / Appunti per una storia di guerra
+- #159 Gipi / La terra dei figli
+- #161 Zerocalcare / Kobane Calling
+- #162 Igort / Quaderni ucraini
+- #164 Lorenzo Mattotti / Fuochi
+- #165 Vittorio Giardino / Jonas Fink: L'infanzia
+
+POLICY
+======
+
+107 first-pass candidates retained.
+Gramsci false positive rejected and re-searched.
+Recovery searches all 56 open targets in one batch.
+Italian language proof remains mandatory at edition level.
+A valid physical cover remains mandatory.
+Recovered candidates still require final consolidated audit.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

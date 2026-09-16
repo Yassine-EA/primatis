@@ -1,0 +1,55 @@
+{
+  "publishers": [
+    "Canadian Conservation Institute"
+  ],
+  "physical_format": "Paperback",
+  "subtitle": "Environmental Norms for Canadian Museums, Art Galleries and Archives; Bulletin Technique 5",
+  "title": "Technical Bulletin 5 : November 1979 Canadian Conservation Institute ",
+  "identifiers": {
+    "goodreads": [
+      "5861553"
+    ]
+  },
+  "isbn_13": [
+    "9780662504009"
+  ],
+  "isbn_10": [
+    "0662504003"
+  ],
+  "publish_date": "1979",
+  "key": "/books/OL11028075M",
+  "works": [
+    {
+      "key": "/works/OL11188318W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "oclc_numbers": [
+    "6901379"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-001.mrc:108353419:1641",
+    "marc:harvard_bibliographic_metadata/ab.bib.09.20150123.full.mrc:679241190:1060",
+    "marc:harvard_bibliographic_metadata/20220215_021.bib.mrc:277281658:1716"
+  ],
+  "languages": [
+    {
+      "key": "/languages/eng"
+    },
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 7,
+  "revision": 7,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-11-15T00:52:08.482773"
+  }
+}

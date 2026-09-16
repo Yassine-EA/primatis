@@ -1,0 +1,50 @@
+{
+  "physical_format": "Paperback",
+  "publishers": [
+    "Presses Universitaires de Saint-Etienne"
+  ],
+  "isbn_10": [
+    "2862721891"
+  ],
+  "number_of_pages": 201,
+  "isbn_13": [
+    "9782862721897"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publish_date": "September 20, 2000",
+  "key": "/books/OL12634077M",
+  "authors": [
+    {
+      "key": "/authors/OL3970201A"
+    }
+  ],
+  "title": "Lettres édifiantes et curieuses des jésuites de l'Inde au XVIIIe siècle",
+  "works": [
+    {
+      "key": "/works/OL10004571W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "oclc_numbers": [
+    "45421486"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-007.mrc:382048782:2040"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2023-11-15T14:25:08.397914"
+  }
+}

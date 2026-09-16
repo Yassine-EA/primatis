@@ -16,7 +16,12 @@ describe('MemberLayout', () => {
       permissions: vi.fn().mockReturnValue([]),
       logout: vi.fn(),
     };
-    const unreadStateMock = { unreadCount: vi.fn().mockReturnValue(0), refresh: vi.fn(), decrement: vi.fn(), reset: vi.fn() };
+    const unreadStateMock = {
+      unreadCount: vi.fn().mockReturnValue(0),
+      refresh: vi.fn(),
+      decrement: vi.fn(),
+      reset: vi.fn(),
+    };
 
     TestBed.configureTestingModule({
       imports: [MemberLayout],
@@ -31,11 +36,22 @@ describe('MemberLayout', () => {
     fixture.detectChanges();
   });
 
-  it('should reuse the shared Navigation component instead of a hardcoded header', () => {
-    expect(fixture.nativeElement.querySelector('app-navigation')).not.toBeNull();
+  it('should render the dedicated MemberNavigation (DEV-15.3, ID-05) instead of the old shared Navigation', () => {
+    expect(fixture.nativeElement.querySelector('app-member-navigation')).not.toBeNull();
+  });
+
+  it('should render the shared AccountMenu (bell/logout)', () => {
+    expect(fixture.nativeElement.querySelector('app-account-menu')).not.toBeNull();
   });
 
   it('should render a router outlet for its children', () => {
     expect(fixture.nativeElement.querySelector('router-outlet')).not.toBeNull();
+  });
+
+  it('should reuse the validated public shell and its brand link', () => {
+    expect(fixture.nativeElement.querySelector('app-public-shell')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('a.public-shell-brand')?.getAttribute('href')).toBe(
+      '/',
+    );
   });
 });

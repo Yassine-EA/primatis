@@ -1,0 +1,60 @@
+{
+  "physical_format": "Hardcover",
+  "weight": "2.9 pounds",
+  "title": "Mougin freres",
+  "isbn_10": [
+    "2878440471"
+  ],
+  "publishers": [
+    "Faton"
+  ],
+  "isbn_13": [
+    "9782878440478"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publish_date": "June 11, 2001",
+  "key": "/books/OL12642377M",
+  "authors": [
+    {
+      "key": "/authors/OL3973721A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10007623W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "11.5 x 8.7 x 0.8 inches",
+  "lccn": [
+    "2002450824"
+  ],
+  "lc_classifications": [
+    "NK4210.M68 A4 2001"
+  ],
+  "source_records": [
+    "marc:marc_loc_2016/BooksAll.2016.part30.utf8:89334617:1330",
+    "amazon:2878440471",
+    "marc:marc_columbia/Columbia-extract-20221130-007.mrc:77095097:1873"
+  ],
+  "oclc_numbers": [
+    "49678796"
+  ],
+  "number_of_pages": 240,
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2023-11-14T02:45:15.228720"
+  }
+}

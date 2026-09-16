@@ -92,6 +92,7 @@ public class ArticleService {
     private final AppUserRepository appUserRepository;
     private final ArticleSanitizer articleSanitizer;
     private final ArticleSlugGenerator articleSlugGenerator;
+    private final ArticleThumbnailExtractor articleThumbnailExtractor;
     private final NotificationService notificationService;
     private final Clock clock;
 
@@ -102,6 +103,7 @@ public class ArticleService {
             AppUserRepository appUserRepository,
             ArticleSanitizer articleSanitizer,
             ArticleSlugGenerator articleSlugGenerator,
+            ArticleThumbnailExtractor articleThumbnailExtractor,
             NotificationService notificationService,
             Clock clock) {
         this.articleRepository = articleRepository;
@@ -110,6 +112,7 @@ public class ArticleService {
         this.appUserRepository = appUserRepository;
         this.articleSanitizer = articleSanitizer;
         this.articleSlugGenerator = articleSlugGenerator;
+        this.articleThumbnailExtractor = articleThumbnailExtractor;
         this.notificationService = notificationService;
         this.clock = clock;
     }
@@ -124,12 +127,14 @@ public class ArticleService {
      * Service via {@link ArticleRepository#findByArticleStatus}, jamais par
      * l'appelant. Résumé allégé ({@link ArticleSummaryResponse}) — voir sa
      * Javadoc pour la justification de l'exclusion de {@code content}/
-     * {@code lastModifiedBy}/{@code tags}.
+     * {@code lastModifiedBy}/{@code tags} ({@code imageUrl},
+     * DEV-ARTICLES-MEDIA-THUMBNAIL, en est calculé sans jamais exposer
+     * {@code content} lui-même).
      */
     @Transactional(readOnly = true)
     public Page<ArticleSummaryResponse> listPublishedArticles(Pageable pageable) {
         return articleRepository.findByArticleStatus(ArticleStatus.PUBLISHED, pageable)
-                .map(ArticleSummaryResponse::from);
+                .map(article -> ArticleSummaryResponse.from(article, articleThumbnailExtractor));
     }
 
     /**

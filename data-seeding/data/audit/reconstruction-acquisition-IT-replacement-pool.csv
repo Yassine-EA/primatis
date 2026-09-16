@@ -1,0 +1,95 @@
+language,category,editorial_rank,target_author,target_work
+IT,ITALIAN_CANON,1,Giovanni Boccaccio,Il Filocolo
+IT,ITALIAN_CANON,2,Giovanni Boccaccio,Ninfale fiesolano
+IT,ITALIAN_CANON,3,Ludovico Ariosto,Cinque canti
+IT,ITALIAN_CANON,4,Torquato Tasso,Rime
+IT,ITALIAN_CANON,5,Niccolò Machiavelli,Istorie fiorentine
+IT,ITALIAN_CANON,6,Carlo Goldoni,I rusteghi
+IT,ITALIAN_CANON,7,Carlo Goldoni,La bottega del caffè
+IT,ITALIAN_CANON,8,Vittorio Alfieri,Vita scritta da esso
+IT,ITALIAN_CANON,9,Ugo Foscolo,Le Grazie
+IT,ITALIAN_CANON,10,Alessandro Manzoni,Il conte di Carmagnola
+IT,ITALIAN_CANON,11,Giacomo Leopardi,Paralipomeni della Batracomiomachia
+IT,ITALIAN_CANON,12,Giovanni Verga,Storia di una capinera
+IT,ITALIAN_CANON,13,Grazia Deledda,Cenere
+IT,ITALIAN_CANON,14,Luigi Pirandello,Novelle per un anno
+IT,TWENTIETH_CENTURY,1,Giuseppe Ungaretti,Sentimento del tempo
+IT,TWENTIETH_CENTURY,2,Eugenio Montale,La bufera e altro
+IT,TWENTIETH_CENTURY,3,Eugenio Montale,Satura
+IT,TWENTIETH_CENTURY,4,Salvatore Quasimodo,Giorno dopo giorno
+IT,TWENTIETH_CENTURY,5,Alberto Moravia,Agostino
+IT,TWENTIETH_CENTURY,6,Cesare Pavese,Il mestiere di vivere
+IT,TWENTIETH_CENTURY,7,Cesare Pavese,La casa in collina
+IT,TWENTIETH_CENTURY,8,Elio Vittorini,Il garofano rosso
+IT,TWENTIETH_CENTURY,9,Beppe Fenoglio,La malora
+IT,TWENTIETH_CENTURY,10,Carlo Emilio Gadda,L'Adalgisa
+IT,TWENTIETH_CENTURY,11,Giorgio Bassani,Dietro la porta
+IT,TWENTIETH_CENTURY,12,Primo Levi,Il sistema periodico
+IT,TWENTIETH_CENTURY,13,Primo Levi,"Se non ora, quando?"
+IT,TWENTIETH_CENTURY,14,Italo Calvino,Marcovaldo
+IT,TWENTIETH_CENTURY,15,Italo Calvino,Se una notte d'inverno un viaggiatore
+IT,TWENTIETH_CENTURY,16,Italo Calvino,Il visconte dimezzato
+IT,TWENTIETH_CENTURY,17,Elsa Morante,Aracoeli
+IT,TWENTIETH_CENTURY,18,Pier Paolo Pasolini,Teorema
+IT,TWENTIETH_CENTURY,19,Leonardo Sciascia,Todo modo
+IT,TWENTIETH_CENTURY,20,Natalia Ginzburg,Caro Michele
+IT,TWENTIETH_CENTURY,21,Dino Buzzati,Un amore
+IT,TWENTIETH_CENTURY,22,Gesualdo Bufalino,Le menzogne della notte
+IT,CONTEMPORARY,1,Umberto Eco,L'isola del giorno prima
+IT,CONTEMPORARY,2,Umberto Eco,Numero zero
+IT,CONTEMPORARY,3,Antonio Tabucchi,Piccoli equivoci senza importanza
+IT,CONTEMPORARY,4,Antonio Tabucchi,Si sta facendo sempre più tardi
+IT,CONTEMPORARY,5,Claudio Magris,Alla cieca
+IT,CONTEMPORARY,6,Elena Ferrante,I giorni dell'abbandono
+IT,CONTEMPORARY,7,Elena Ferrante,La figlia oscura
+IT,CONTEMPORARY,8,Andrea Camilleri,Il ladro di merendine
+IT,CONTEMPORARY,9,Andrea Camilleri,La voce del violino
+IT,CONTEMPORARY,10,Alessandro Baricco,Novecento
+IT,CONTEMPORARY,11,Niccolò Ammaniti,Ti prendo e ti porto via
+IT,CONTEMPORARY,12,Margaret Mazzantini,Nessuno si salva da solo
+IT,CONTEMPORARY,13,Erri De Luca,Il peso della farfalla
+IT,CONTEMPORARY,14,Domenico Starnone,Confidenza
+IT,CONTEMPORARY,15,Michela Murgia,Chirù
+IT,ESSAYS_PHILOSOPHY,1,Benedetto Croce,Breviario di estetica
+IT,ESSAYS_PHILOSOPHY,2,Norberto Bobbio,L'età dei diritti
+IT,ESSAYS_PHILOSOPHY,3,Umberto Eco,Trattato di semiotica generale
+IT,ESSAYS_PHILOSOPHY,4,Italo Calvino,Una pietra sopra
+IT,ESSAYS_PHILOSOPHY,5,Pier Paolo Pasolini,Empirismo eretico
+IT,ESSAYS_PHILOSOPHY,6,Primo Levi,L'altrui mestiere
+IT,ESSAYS_PHILOSOPHY,7,Giordano Bruno,Spaccio de la bestia trionfante
+IT,ESSAYS_PHILOSOPHY,8,Tommaso Campanella,Aforismi politici
+IT,ESSAYS_PHILOSOPHY,9,Giacomo Leopardi,Pensieri
+IT,ESSAYS_PHILOSOPHY,10,Norberto Bobbio,Politica e cultura
+IT,HISTORY_SOCIETY,1,Carlo Levi,Le parole sono pietre
+IT,HISTORY_SOCIETY,2,Emilio Lussu,Marcia su Roma e dintorni
+IT,HISTORY_SOCIETY,3,Mario Rigoni Stern,Ritorno sul Don
+IT,HISTORY_SOCIETY,4,Carlo Ginzburg,I benandanti
+IT,HISTORY_SOCIETY,5,Ernesto De Martino,Sud e magia
+IT,HISTORY_SOCIETY,6,Nuto Revelli,La strada del Davai
+IT,HISTORY_SOCIETY,7,Piero Calamandrei,Diario 1939-1945
+IT,HISTORY_SOCIETY,8,Benedetto Croce,Storia d'Europa nel secolo decimonono
+IT,HISTORY_SOCIETY,9,Leonardo Sciascia,Porte aperte
+IT,YOUTH,1,Gianni Rodari,Il libro degli errori
+IT,YOUTH,2,Gianni Rodari,La torta in cielo
+IT,YOUTH,3,Gianni Rodari,Tante storie per giocare
+IT,YOUTH,4,Gianni Rodari,Il pianeta degli alberi di Natale
+IT,YOUTH,5,Bianca Pitzorno,Clorofilla dal cielo blu
+IT,YOUTH,6,Bianca Pitzorno,Extraterrestre alla pari
+IT,YOUTH,7,Roberto Piumini,Mattia e il nonno
+IT,YOUTH,8,Silvana Gandolfi,Aldabra
+IT,YOUTH,9,Silvana Gandolfi,Pasta di drago
+IT,YOUTH,10,Angela Nanetti,Le memorie di Adalberto
+IT,YOUTH,11,Beatrice Masini,Bambini nel bosco
+IT,YOUTH,12,Stefano Benni,Margherita Dolcevita
+IT,GRAPHIC,1,Hugo Pratt,Favola di Venezia
+IT,GRAPHIC,2,Hugo Pratt,Le etiopiche
+IT,GRAPHIC,3,Gipi,LMVDM
+IT,GRAPHIC,4,Gipi,Questa è la stanza
+IT,GRAPHIC,5,Zerocalcare,Macerie prime
+IT,GRAPHIC,6,Zerocalcare,Dimentica il mio nome
+IT,GRAPHIC,7,Igort,5 è il numero perfetto
+IT,GRAPHIC,8,Igort,Quaderni giapponesi
+IT,GRAPHIC,9,Manuele Fior,L'intervista
+IT,GRAPHIC,10,Manuele Fior,Celestia
+IT,GRAPHIC,11,Lorenzo Mattotti,Stigmate
+IT,GRAPHIC,12,Vittorio Giardino,No pasarán

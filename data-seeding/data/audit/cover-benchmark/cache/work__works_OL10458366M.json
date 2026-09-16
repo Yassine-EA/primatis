@@ -1,0 +1,54 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "1852002"
+    ]
+  },
+  "title": "Braque, Georges",
+  "subtitle": "His Graphic Work",
+  "authors": [
+    {
+      "key": "/authors/OL3174224A"
+    },
+    {
+      "key": "/authors/OL2626615A"
+    }
+  ],
+  "publish_date": "June 30, 1961",
+  "publishers": [
+    "French & European Pubns"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_13": [
+    "9780320060922"
+  ],
+  "physical_format": "Hardcover",
+  "isbn_10": [
+    "0320060926"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Individual Artist",
+    "Art"
+  ],
+  "source_records": [
+    "amazon:0320060926"
+  ],
+  "key": "/books/OL10458366M",
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-08T06:18:08.130063"
+  }
+}

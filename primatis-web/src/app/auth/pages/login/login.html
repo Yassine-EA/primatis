@@ -1,47 +1,141 @@
-<section class="login-page">
-  <h1>Connexion</h1>
+<section class="login-v3-stage">
+  <picture class="login-v3-background" aria-hidden="true">
+    <source
+      media="(max-width: 768px)"
+      srcset="/assets/public/login/background/login-background-768-mobile.webp"
+    />
+    <source
+      media="(max-width: 1599px)"
+      srcset="/assets/public/login/background/login-background-1440.webp"
+    />
+    <img src="/assets/public/login/background/login-background-1920.webp" alt="" />
+  </picture>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-    <div class="field">
-      <label for="login-email">Adresse e-mail</label>
-      <input
-        id="login-email"
-        type="email"
-        pInputText
-        formControlName="email"
-        autocomplete="username"
-        [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
-        aria-describedby="login-email-error"
-      />
-      @if (form.controls.email.invalid && form.controls.email.touched) {
-        <small id="login-email-error" class="field-error" role="alert">
-          Adresse e-mail requise et valide.
-        </small>
-      }
+  <blockquote class="login-v3-mobile-quote">
+    <p>« Il n’y a pas de limite à ce que l’esprit humain peut comprendre. »</p>
+    <cite>— Georges Lemaître</cite>
+  </blockquote>
+
+  <div class="login-v3-stage-inner">
+    <div class="login-v3-heritage" aria-label="Identité Georges Lemaître">
+      <picture>
+        <source
+          media="(max-width: 1199px)"
+          srcset="/assets/public/login/portrait/georges-lemaitre-login-768.webp"
+        />
+        <img
+          src="/assets/public/login/portrait/georges-lemaitre-login-1024.webp"
+          alt="Portrait illustré de Georges Lemaître"
+        />
+      </picture>
+
+      <p>Science · Culture · Partage · Demain</p>
     </div>
 
-    <div class="field">
-      <label for="login-password">Mot de passe</label>
-      <p-password
-        inputId="login-password"
-        formControlName="password"
-        [feedback]="false"
-        [toggleMask]="true"
-        autocomplete="current-password"
-        [attr.aria-invalid]="form.controls.password.invalid && form.controls.password.touched"
-        aria-describedby="login-password-error"
-      />
-      @if (form.controls.password.invalid && form.controls.password.touched) {
-        <small id="login-password-error" class="field-error" role="alert">
-          Mot de passe requis.
-        </small>
-      }
+    <section class="login-v3-panel" aria-labelledby="login-title">
+      <p class="login-v3-kicker">Votre espace personnel</p>
+      <h1 id="login-title">Accéder à votre espace PRIMATIS</h1>
+      <p class="login-v3-intro">
+        Accédez à votre espace membre, personnel ou administration selon vos droits.
+      </p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="login-v3-field">
+          <label for="login-email">Adresse e-mail</label>
+          <div class="login-v3-control">
+            <img src="/assets/public/login/icons/email.svg" alt="" aria-hidden="true" />
+            <input
+              id="login-email"
+              type="email"
+              pInputText
+              formControlName="email"
+              autocomplete="username"
+              placeholder="votre@exemple.be"
+              [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
+              aria-describedby="login-email-error"
+            />
+          </div>
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <small id="login-email-error" class="login-v3-field-error" role="alert">
+              Adresse e-mail requise et valide.
+            </small>
+          }
+        </div>
+
+        <div class="login-v3-field">
+          <label for="login-password">Mot de passe</label>
+          <div class="login-v3-control login-v3-password-control">
+            <img src="/assets/public/login/icons/lock.svg" alt="" aria-hidden="true" />
+            <p-password
+              inputId="login-password"
+              formControlName="password"
+              placeholder="Votre mot de passe"
+              [feedback]="false"
+              [toggleMask]="true"
+              autocomplete="current-password"
+              [attr.aria-invalid]="form.controls.password.invalid && form.controls.password.touched"
+              aria-describedby="login-password-error"
+            />
+          </div>
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <small id="login-password-error" class="login-v3-field-error" role="alert">
+              Mot de passe requis.
+            </small>
+          }
+        </div>
+
+        @if (errorMessage(); as message) {
+          <p-message severity="error">{{ message }}</p-message>
+        }
+
+        <p-button
+          type="submit"
+          label="Se connecter"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          styleClass="login-v3-submit"
+          [loading]="submitting()"
+          [disabled]="submitting()"
+        />
+      </form>
+
+      <div class="login-v3-security">
+        <img src="/assets/public/login/icons/shield-lock.svg" alt="" aria-hidden="true" />
+        <div>
+          <strong>Accès protégé par authentification</strong>
+          <span>Vos droits déterminent les espaces et fonctions accessibles.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<p class="login-v3-mobile-epilogue">
+  Des livres pour comprendre le monde et imaginer demain.
+</p>
+
+<section class="login-v3-benefits" aria-label="Fonctionnalités accessibles après connexion">
+  <article>
+    <img src="/assets/icons/editorial/catalogue-book.svg" alt="" aria-hidden="true" />
+    <div>
+      <h2>Votre espace membre</h2>
+      <p>Consultez vos prêts, réservations, amendes et notifications.</p>
     </div>
+  </article>
 
-    @if (errorMessage(); as message) {
-      <p-message severity="error">{{ message }}</p-message>
-    }
+  <article>
+    <img src="/assets/icons/editorial/users-group.svg" alt="" aria-hidden="true" />
+    <div>
+      <h2>Les outils du personnel</h2>
+      <p>Accédez aux opérations de bibliothèque autorisées pour votre profil.</p>
+    </div>
+  </article>
 
-    <p-button type="submit" label="Se connecter" [loading]="submitting()" [disabled]="submitting()" />
-  </form>
+  <article>
+    <img src="/assets/public/login/icons/settings.svg" alt="" aria-hidden="true" />
+    <div>
+      <h2>Une administration maîtrisée</h2>
+      <p>Les fonctions sensibles restent limitées par rôles et permissions.</p>
+    </div>
+  </article>
 </section>

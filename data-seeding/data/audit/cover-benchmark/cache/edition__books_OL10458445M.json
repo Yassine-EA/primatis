@@ -1,0 +1,46 @@
+{
+  "title": "Chansons De Geste",
+  "authors": [
+    {
+      "key": "/authors/OL2231875A"
+    }
+  ],
+  "publish_date": "October 29, 1963",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "physical_format": "Hardcover",
+  "publishers": [
+    "French & European Pubns"
+  ],
+  "isbn_13": [
+    "9780320062469"
+  ],
+  "isbn_10": [
+    "0320062465"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "General",
+    "Fiction"
+  ],
+  "source_records": [
+    "amazon:0320062465"
+  ],
+  "key": "/books/OL10458445M",
+  "number_of_pages": 160,
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-23T04:24:12.858158"
+  }
+}

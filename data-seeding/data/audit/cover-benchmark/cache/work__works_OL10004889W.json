@@ -1,0 +1,32 @@
+{
+  "title": "Images du bouddhisme vivant",
+  "key": "/works/OL10004889W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3970610A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Civilization",
+    "Buddhist influences",
+    "Buddhism and art"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-05-04T01:22:00.045680"
+  }
+}

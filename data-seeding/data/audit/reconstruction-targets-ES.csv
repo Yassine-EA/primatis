@@ -1,0 +1,174 @@
+language,category,priority,author,target_work
+ES,SPANISH_CANON,1,Miguel de Cervantes,Don Quijote de la Mancha
+ES,SPANISH_CANON,1,Miguel de Cervantes,Novelas ejemplares
+ES,SPANISH_CANON,1,Miguel de Cervantes,La Galatea
+ES,SPANISH_CANON,1,Miguel de Cervantes,Los trabajos de Persiles y Sigismunda
+ES,SPANISH_CANON,1,Lope de Vega,Fuenteovejuna
+ES,SPANISH_CANON,1,Lope de Vega,El perro del hortelano
+ES,SPANISH_CANON,1,Lope de Vega,La dama boba
+ES,SPANISH_CANON,1,Pedro Calderón de la Barca,La vida es sueño
+ES,SPANISH_CANON,1,Pedro Calderón de la Barca,El alcalde de Zalamea
+ES,SPANISH_CANON,1,Pedro Calderón de la Barca,El gran teatro del mundo
+ES,SPANISH_CANON,1,Tirso de Molina,El burlador de Sevilla
+ES,SPANISH_CANON,1,Fernando de Rojas,La Celestina
+ES,SPANISH_CANON,1,Garcilaso de la Vega,Églogas
+ES,SPANISH_CANON,1,San Juan de la Cruz,Cántico espiritual
+ES,SPANISH_CANON,1,Santa Teresa de Jesús,Libro de la vida
+ES,SPANISH_CANON,1,Francisco de Quevedo,El Buscón
+ES,SPANISH_CANON,1,Francisco de Quevedo,Sueños
+ES,SPANISH_CANON,1,Luis de Góngora,Soledades
+ES,SPANISH_CANON,1,Luis de Góngora,Fábula de Polifemo y Galatea
+ES,SPANISH_CANON,1,José Cadalso,Cartas marruecas
+ES,SPANISH_CANON,1,Leandro Fernández de Moratín,El sí de las niñas
+ES,SPANISH_CANON,1,Gustavo Adolfo Bécquer,Rimas y leyendas
+ES,SPANISH_CANON,1,Benito Pérez Galdós,Fortunata y Jacinta
+ES,SPANISH_CANON,1,Benito Pérez Galdós,Misericordia
+ES,SPANISH_CANON,1,Benito Pérez Galdós,Doña Perfecta
+ES,SPANISH_CANON,1,Benito Pérez Galdós,Tristana
+ES,SPANISH_CANON,1,Leopoldo Alas Clarín,La Regenta
+ES,SPANISH_CANON,1,Emilia Pardo Bazán,Los pazos de Ulloa
+ES,SPANISH_CANON,1,Emilia Pardo Bazán,La madre naturaleza
+ES,SPANISH_CANON,1,Vicente Blasco Ibáñez,La barraca
+ES,SPANISH_CANON,1,Vicente Blasco Ibáñez,Cañas y barro
+ES,SPANISH_CANON,1,Miguel de Unamuno,Niebla
+ES,SPANISH_CANON,1,Miguel de Unamuno,"San Manuel Bueno, mártir"
+ES,SPANISH_CANON,1,Miguel de Unamuno,Abel Sánchez
+ES,SPANISH_CANON,1,Pío Baroja,El árbol de la ciencia
+ES,SPANISH_CANON,1,Pío Baroja,Zalacaín el aventurero
+ES,SPANISH_CANON,1,Ramón del Valle-Inclán,Luces de bohemia
+ES,SPANISH_CANON,1,Ramón del Valle-Inclán,Sonata de otoño
+ES,SPANISH_CANON,1,Antonio Machado,Campos de Castilla
+ES,SPANISH_CANON,1,Antonio Machado,"Soledades, galerías y otros poemas"
+ES,SPANISH_CANON,1,Juan Ramón Jiménez,Platero y yo
+ES,SPANISH_CANON,1,Juan Ramón Jiménez,Diario de un poeta recién casado
+ES,SPANISH_CANON,1,Federico García Lorca,Romancero gitano
+ES,SPANISH_CANON,1,Federico García Lorca,La casa de Bernarda Alba
+ES,SPANISH_CANON,1,Federico García Lorca,Bodas de sangre
+ES,LATIN_AMERICAN_CANON,1,Jorge Luis Borges,Ficciones
+ES,LATIN_AMERICAN_CANON,1,Jorge Luis Borges,El Aleph
+ES,LATIN_AMERICAN_CANON,1,Jorge Luis Borges,Historia universal de la infamia
+ES,LATIN_AMERICAN_CANON,1,Julio Cortázar,Rayuela
+ES,LATIN_AMERICAN_CANON,1,Julio Cortázar,Bestiario
+ES,LATIN_AMERICAN_CANON,1,Julio Cortázar,Final del juego
+ES,LATIN_AMERICAN_CANON,1,Gabriel García Márquez,Cien años de soledad
+ES,LATIN_AMERICAN_CANON,1,Gabriel García Márquez,El coronel no tiene quien le escriba
+ES,LATIN_AMERICAN_CANON,1,Gabriel García Márquez,Crónica de una muerte anunciada
+ES,LATIN_AMERICAN_CANON,1,Gabriel García Márquez,El amor en los tiempos del cólera
+ES,LATIN_AMERICAN_CANON,1,Mario Vargas Llosa,La ciudad y los perros
+ES,LATIN_AMERICAN_CANON,1,Mario Vargas Llosa,La casa verde
+ES,LATIN_AMERICAN_CANON,1,Mario Vargas Llosa,Conversación en La Catedral
+ES,LATIN_AMERICAN_CANON,1,Mario Vargas Llosa,La guerra del fin del mundo
+ES,LATIN_AMERICAN_CANON,1,Juan Rulfo,Pedro Páramo
+ES,LATIN_AMERICAN_CANON,1,Juan Rulfo,El llano en llamas
+ES,LATIN_AMERICAN_CANON,1,Alejo Carpentier,El reino de este mundo
+ES,LATIN_AMERICAN_CANON,1,Alejo Carpentier,Los pasos perdidos
+ES,LATIN_AMERICAN_CANON,1,Miguel Ángel Asturias,El señor Presidente
+ES,LATIN_AMERICAN_CANON,1,Miguel Ángel Asturias,Hombres de maíz
+ES,LATIN_AMERICAN_CANON,1,Rómulo Gallegos,Doña Bárbara
+ES,LATIN_AMERICAN_CANON,1,José Eustasio Rivera,La vorágine
+ES,LATIN_AMERICAN_CANON,1,Horacio Quiroga,Cuentos de amor de locura y de muerte
+ES,LATIN_AMERICAN_CANON,1,Horacio Quiroga,Cuentos de la selva
+ES,LATIN_AMERICAN_CANON,1,Rubén Darío,Azul...
+ES,LATIN_AMERICAN_CANON,1,Rubén Darío,Prosas profanas
+ES,LATIN_AMERICAN_CANON,1,Pablo Neruda,Veinte poemas de amor y una canción desesperada
+ES,LATIN_AMERICAN_CANON,1,Pablo Neruda,Residencia en la tierra
+ES,LATIN_AMERICAN_CANON,1,Gabriela Mistral,Desolación
+ES,LATIN_AMERICAN_CANON,1,Gabriela Mistral,Tala
+ES,LATIN_AMERICAN_CANON,1,César Vallejo,Los heraldos negros
+ES,LATIN_AMERICAN_CANON,1,César Vallejo,Trilce
+ES,LATIN_AMERICAN_CANON,1,Octavio Paz,El laberinto de la soledad
+ES,LATIN_AMERICAN_CANON,1,Octavio Paz,Piedra de sol
+ES,LATIN_AMERICAN_CANON,1,José Martí,Versos sencillos
+ES,LATIN_AMERICAN_CANON,1,José Martí,Nuestra América
+ES,LATIN_AMERICAN_CANON,1,Adolfo Bioy Casares,La invención de Morel
+ES,LATIN_AMERICAN_CANON,1,Silvina Ocampo,La furia
+ES,LATIN_AMERICAN_CANON,1,Ernesto Sábato,El túnel
+ES,LATIN_AMERICAN_CANON,1,Ernesto Sábato,Sobre héroes y tumbas
+ES,LATIN_AMERICAN_CANON,1,Augusto Roa Bastos,Yo el Supremo
+ES,LATIN_AMERICAN_CANON,1,Carlos Fuentes,La muerte de Artemio Cruz
+ES,LATIN_AMERICAN_CANON,1,Carlos Fuentes,Aura
+ES,LATIN_AMERICAN_CANON,1,José Donoso,El obsceno pájaro de la noche
+ES,LATIN_AMERICAN_CANON,1,Manuel Puig,Boquitas pintadas
+ES,SPAIN_MODERN_CONTEMPORARY,2,Camilo José Cela,La familia de Pascual Duarte
+ES,SPAIN_MODERN_CONTEMPORARY,2,Camilo José Cela,La colmena
+ES,SPAIN_MODERN_CONTEMPORARY,2,Carmen Laforet,Nada
+ES,SPAIN_MODERN_CONTEMPORARY,2,Ana María Matute,Primera memoria
+ES,SPAIN_MODERN_CONTEMPORARY,2,Ana María Matute,Olvidado rey Gudú
+ES,SPAIN_MODERN_CONTEMPORARY,2,Carmen Martín Gaite,Entre visillos
+ES,SPAIN_MODERN_CONTEMPORARY,2,Carmen Martín Gaite,El cuarto de atrás
+ES,SPAIN_MODERN_CONTEMPORARY,2,Juan Goytisolo,Señas de identidad
+ES,SPAIN_MODERN_CONTEMPORARY,2,Juan Marsé,Últimas tardes con Teresa
+ES,SPAIN_MODERN_CONTEMPORARY,2,Juan Marsé,Si te dicen que caí
+ES,SPAIN_MODERN_CONTEMPORARY,2,Miguel Delibes,El camino
+ES,SPAIN_MODERN_CONTEMPORARY,2,Miguel Delibes,Los santos inocentes
+ES,SPAIN_MODERN_CONTEMPORARY,2,Miguel Delibes,Cinco horas con Mario
+ES,SPAIN_MODERN_CONTEMPORARY,2,Javier Marías,Corazón tan blanco
+ES,SPAIN_MODERN_CONTEMPORARY,2,Javier Marías,Mañana en la batalla piensa en mí
+ES,SPAIN_MODERN_CONTEMPORARY,2,Antonio Muñoz Molina,El invierno en Lisboa
+ES,SPAIN_MODERN_CONTEMPORARY,2,Antonio Muñoz Molina,El jinete polaco
+ES,SPAIN_MODERN_CONTEMPORARY,2,Almudena Grandes,Las edades de Lulú
+ES,SPAIN_MODERN_CONTEMPORARY,2,Almudena Grandes,El corazón helado
+ES,SPAIN_MODERN_CONTEMPORARY,2,Javier Cercas,Soldados de Salamina
+ES,SPAIN_MODERN_CONTEMPORARY,2,Rosa Montero,La loca de la casa
+ES,SPAIN_MODERN_CONTEMPORARY,2,Eduardo Mendoza,La verdad sobre el caso Savolta
+ES,SPAIN_MODERN_CONTEMPORARY,2,Eduardo Mendoza,La ciudad de los prodigios
+ES,SPAIN_MODERN_CONTEMPORARY,2,Manuel Vázquez Montalbán,Los mares del Sur
+ES,SPAIN_MODERN_CONTEMPORARY,2,Arturo Pérez-Reverte,El club Dumas
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Isabel Allende,La casa de los espíritus
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Isabel Allende,De amor y de sombra
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Roberto Bolaño,Los detectives salvajes
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Roberto Bolaño,2666
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Laura Esquivel,Como agua para chocolate
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Elena Poniatowska,La noche de Tlatelolco
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Elena Poniatowska,Hasta no verte Jesús mío
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Gioconda Belli,La mujer habitada
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Gioconda Belli,El país bajo mi piel
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Álvaro Mutis,La nieve del almirante
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Álvaro Mutis,Ilona llega con la lluvia
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Sergio Ramírez,"Margarita, está linda la mar"
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Fernando Vallejo,La virgen de los sicarios
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Laura Restrepo,Delirio
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Juan Gabriel Vásquez,El ruido de las cosas al caer
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Juan Gabriel Vásquez,La forma de las ruinas
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Samanta Schweblin,Distancia de rescate
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Mariana Enríquez,Las cosas que perdimos en el fuego
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Valeria Luiselli,Los ingrávidos
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Alejandro Zambra,Bonsái
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Alejandro Zambra,Formas de volver a casa
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Juan Villoro,El testigo
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Cristina Rivera Garza,Nadie me verá llorar
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Fernanda Melchor,Temporada de huracanes
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Guadalupe Nettel,El cuerpo en que nací
+ES,ESSAYS_PHILOSOPHY,2,José Ortega y Gasset,La rebelión de las masas
+ES,ESSAYS_PHILOSOPHY,2,José Ortega y Gasset,Meditaciones del Quijote
+ES,ESSAYS_PHILOSOPHY,2,María Zambrano,Claros del bosque
+ES,ESSAYS_PHILOSOPHY,2,María Zambrano,El hombre y lo divino
+ES,ESSAYS_PHILOSOPHY,2,Miguel de Unamuno,Del sentimiento trágico de la vida
+ES,ESSAYS_PHILOSOPHY,2,Octavio Paz,El arco y la lira
+ES,ESSAYS_PHILOSOPHY,2,Jorge Luis Borges,Otras inquisiciones
+ES,ESSAYS_PHILOSOPHY,2,Carlos Fuentes,La nueva novela hispanoamericana
+ES,ESSAYS_PHILOSOPHY,2,Mario Vargas Llosa,La verdad de las mentiras
+ES,ESSAYS_PHILOSOPHY,2,Fernando Savater,Ética para Amador
+ES,ESSAYS_PHILOSOPHY,2,Eduardo Galeano,Las venas abiertas de América Latina
+ES,ESSAYS_PHILOSOPHY,2,José Carlos Mariátegui,Siete ensayos de interpretación de la realidad peruana
+ES,HISTORY_SOCIETY,2,Bartolomé de las Casas,Brevísima relación de la destrucción de las Indias
+ES,HISTORY_SOCIETY,2,Bernal Díaz del Castillo,Historia verdadera de la conquista de la Nueva España
+ES,HISTORY_SOCIETY,2,Domingo Faustino Sarmiento,Facundo
+ES,HISTORY_SOCIETY,2,Rodolfo Walsh,Operación Masacre
+ES,HISTORY_SOCIETY,2,Manuel Chaves Nogales,A sangre y fuego
+ES,HISTORY_SOCIETY,2,Arturo Barea,La forja de un rebelde
+ES,HISTORY_SOCIETY,2,Javier Cercas,Anatomía de un instante
+ES,HISTORY_SOCIETY,2,Manuel Azaña,La velada en Benicarló
+ES,YOUTH,3,Ana María Matute,Paulina
+ES,YOUTH,3,Ana María Matute,El polizón del Ulises
+ES,YOUTH,3,Juan Muñoz Martín,Fray Perico y su borrico
+ES,YOUTH,3,Elvira Lindo,Manolito Gafotas
+ES,YOUTH,3,Jordi Sierra i Fabra,Kafka y la muñeca viajera
+ES,YOUTH,3,Laura Gallego García,Finis Mundi
+ES,YOUTH,3,María Isabel Molina,El señor del cero
+ES,YOUTH,3,María Elena Walsh,Cuentopos de Gulubú
+ES,GRAPHIC,3,Quino,Mafalda
+ES,GRAPHIC,3,Héctor Germán Oesterheld,El Eternauta
+ES,GRAPHIC,3,Paco Roca,Arrugas
+ES,GRAPHIC,3,Paco Roca,Los surcos del azar
+ES,GRAPHIC,3,Miguelanxo Prado,Trazo de tiza

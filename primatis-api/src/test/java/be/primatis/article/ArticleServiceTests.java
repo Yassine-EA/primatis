@@ -124,6 +124,39 @@ class ArticleServiceTests {
         assertThat(summary.author().id()).isEqualTo(author.getId());
     }
 
+    // ---------------------------------------------------------------
+    // listPublishedArticles — imageUrl (DEV-ARTICLES-MEDIA-THUMBNAIL)
+    // ---------------------------------------------------------------
+
+    @Test
+    void listPublishedArticlesExposesTheFirstImageUrlFromContent() {
+        AppUser author = persistUser("service-list-thumbnail-present@primatis.test");
+        Article article = persistArticle(
+                author, "Service Thumbnail Present", ArticleStatus.PUBLISHED, Instant.parse("2026-08-10T10:00:00Z"));
+        article.setContent("<p>Texte</p><img src=\"/media/articles/abc.webp\" alt=\"Illustration\">");
+        entityManager.flush();
+
+        Page<ArticleSummaryResponse> page = articleService.listPublishedArticles(PageRequest.of(0, 20, PUBLIC_SORT));
+        ArticleSummaryResponse summary =
+                page.getContent().stream().filter(item -> item.id().equals(article.getId())).findFirst().orElseThrow();
+
+        assertThat(summary.imageUrl()).isEqualTo("/media/articles/abc.webp");
+    }
+
+    @Test
+    void listPublishedArticlesExposesNullImageUrlWhenContentHasNoImage() {
+        AppUser author = persistUser("service-list-thumbnail-absent@primatis.test");
+        // persistArticle() persiste un content par défaut sans image ("Contenu de test").
+        Article article = persistArticle(
+                author, "Service Thumbnail Absent", ArticleStatus.PUBLISHED, Instant.parse("2026-08-10T10:00:00Z"));
+
+        Page<ArticleSummaryResponse> page = articleService.listPublishedArticles(PageRequest.of(0, 20, PUBLIC_SORT));
+        ArticleSummaryResponse summary =
+                page.getContent().stream().filter(item -> item.id().equals(article.getId())).findFirst().orElseThrow();
+
+        assertThat(summary.imageUrl()).isNull();
+    }
+
     @Test
     void listPublishedArticlesTransmitsPaginationCorrectly() {
         AppUser author = persistUser("service-list-pagination@primatis.test");

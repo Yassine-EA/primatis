@@ -48,6 +48,18 @@ def _fold(value: str) -> str:
 
 # Exact aliases only. No substring/fuzzy classification: a source subject must
 # normalize exactly to one of these aliases to receive a Genre.
+#
+# DEV-16.3 Étape E: the block below the original table was added after
+# measuring the real subject frequency distribution on the 1000-work
+# medium sample (`data/validated/medium/works_selected.jsonl`, 402/1000
+# works carry at least one subject, 1223 distinct subjects). Each entry
+# is a subject that occurred >=5 times in that sample AND has an
+# unambiguous 1:1 mapping to an existing PRIMATIS Genre code — no new
+# Genre code was introduced (DEC-16.3-05). Frequent subjects with no
+# safe unambiguous mapping (e.g. "Civilization", "Folklore",
+# "Criticism and interpretation", "Dictionaries", "Congresses") were
+# deliberately left unmapped rather than guessed — see DEV-16.3 report
+# §G for the full frequency table and the excluded candidates.
 _SUBJECT_ALIASES: dict[str, str] = {
     "fiction": "FICTION",
     "science fiction": "SCIENCE_FICTION",
@@ -89,6 +101,16 @@ _SUBJECT_ALIASES: dict[str, str] = {
     "sociology": "SOCIAL_SCIENCES",
     "political science": "POLITICS",
     "politics": "POLITICS",
+    # --- DEV-16.3 Étape E additions (measured on medium, see above) ---
+    "histoire": "HISTORY",  # French-language variant of "history" (12 occurrences)
+    "politics and government": "POLITICS",  # 15 occurrences
+    "historical fiction": "FICTION",  # 10 occurrences, unambiguously fiction
+    "fiction, romance, historical, general": "ROMANCE",  # 14 occurrences
+    "fiction, mystery & detective, general": "MYSTERY",  # 9 occurrences
+    "fiction, mystery & detective, police procedural": "MYSTERY",  # 8 occurrences
+    "economic conditions": "BUSINESS",  # 7 occurrences
+    "description and travel": "TRAVEL",  # 6 occurrences
+    "modern art": "ART",  # 5 occurrences
 }
 
 _FOLDED_SUBJECT_ALIASES = {_fold(key): value for key, value in _SUBJECT_ALIASES.items()}

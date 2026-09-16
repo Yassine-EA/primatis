@@ -1,0 +1,57 @@
+{
+  "publishers": [
+    "Addison-Wesley"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "identifiers": {
+    "librarything": [
+      "5411933"
+    ]
+  },
+  "title": "All Together (Hand in Hand)",
+  "contributions": [
+    "Ruth Fahlman (Photographer)",
+    "May Henderson (Photographer)"
+  ],
+  "number_of_pages": 9,
+  "isbn_13": [
+    "9780201546552"
+  ],
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "0201546558"
+  ],
+  "publish_date": "December 31, 1990",
+  "key": "/books/OL10167849M",
+  "works": [
+    {
+      "key": "/works/OL13165951W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Sociolinguistics"
+  ],
+  "local_id": [
+    "urn:bwbsku:W9-AGN-072"
+  ],
+  "source_records": [
+    "promise:bwb_daily_pallets_2024-09-02:W9-AGN-072"
+  ],
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-09-04T01:44:42.941518"
+  }
+}

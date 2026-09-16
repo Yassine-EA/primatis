@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
@@ -31,7 +32,13 @@ function buildPage(
   content: ReservationResponse[],
   totalElements = content.length,
 ): PageResponse<ReservationResponse> {
-  return { content, page: 0, size: 20, totalElements, totalPages: Math.max(1, Math.ceil(totalElements / 20)) };
+  return {
+    content,
+    page: 0,
+    size: 20,
+    totalElements,
+    totalPages: Math.max(1, Math.ceil(totalElements / 20)),
+  };
 }
 
 function apiHttpError(status: number, code: string, message: string): HttpErrorResponse {
@@ -80,12 +87,15 @@ describe('MemberReservationsPage', () => {
     // (déjà couverte par reservation-create-dialog.spec.ts) — même
     // précédent exact que StaffLoansPage/LoanCreateDialog.
     catalogueApiServiceMock = {
-      searchTitles: vi.fn().mockReturnValue(of({ content: [], page: 0, size: 20, totalElements: 0, totalPages: 0 })),
+      searchTitles: vi
+        .fn()
+        .mockReturnValue(of({ content: [], page: 0, size: 20, totalElements: 0, totalPages: 0 })),
     };
 
     TestBed.configureTestingModule({
       imports: [MemberReservationsPage],
       providers: [
+        provideRouter([]),
         { provide: ReservationApiService, useValue: reservationApiServiceMock },
         { provide: MessageService, useValue: messageServiceMock },
         { provide: ConfirmationService, useValue: confirmationServiceMock },
@@ -105,16 +115,31 @@ describe('MemberReservationsPage', () => {
 
   it('should call listOwnReservations(0, 20) on initial load', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()])));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()])),
+    );
 
     createComponent();
 
     expect(reservationApiServiceMock.listOwnReservations).toHaveBeenCalledWith(0, 20);
   });
 
+  it('should set the document title (DEV-15.6)', () => {
+    configure();
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()])),
+    );
+
+    createComponent();
+
+    expect(document.title).toBe('Mes réservations — PRIMATIS');
+  });
+
   it('should never call the staff listReservations endpoint', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()])));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()])),
+    );
 
     createComponent();
     fixture.componentInstance.onLazyLoad({ first: 20, rows: 20 });
@@ -133,12 +158,14 @@ describe('MemberReservationsPage', () => {
 
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(text).toContain('Les Misérables');
-    expect(text).toContain('2026-08-01T09:00:00Z');
+    expect(text).toContain('1 août 2026');
   });
 
   it('should never expose its own member name on its own consultation page (redundant on /me/reservations)', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()])));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()])),
+    );
 
     createComponent();
 
@@ -150,7 +177,9 @@ describe('MemberReservationsPage', () => {
 
   it('should map a PrimeNG lazy load event to page/size and call listOwnReservations again', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()], 100)));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()], 100)),
+    );
     createComponent();
     expect(fixture.componentInstance.totalRecords()).toBe(100);
     reservationApiServiceMock.listOwnReservations.mockClear();
@@ -162,7 +191,9 @@ describe('MemberReservationsPage', () => {
 
   it('should default to page 0 / size 20 when the lazy load event omits first/rows', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()])));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()])),
+    );
     createComponent();
     reservationApiServiceMock.listOwnReservations.mockClear();
 
@@ -183,7 +214,7 @@ describe('MemberReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('WAITING');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('En attente');
   });
 
   it('should render READY reservations', () => {
@@ -194,7 +225,7 @@ describe('MemberReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('READY');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Prête');
   });
 
   it('should render FULFILLED reservations', () => {
@@ -205,7 +236,7 @@ describe('MemberReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('FULFILLED');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Honorée');
   });
 
   it('should render CANCELLED reservations', () => {
@@ -216,7 +247,7 @@ describe('MemberReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('CANCELLED');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Annulée');
   });
 
   it('should render EXPIRED reservations', () => {
@@ -227,7 +258,7 @@ describe('MemberReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('EXPIRED');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Expirée');
   });
 
   // ---------------------------------------------------------------
@@ -250,10 +281,10 @@ describe('MemberReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('2026-08-22T12:00:00Z');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('22 août 2026');
   });
 
-  it("should render assignedCopy.inventoryCode when present", () => {
+  it('should render assignedCopy.inventoryCode when present', () => {
     configure();
     reservationApiServiceMock.listOwnReservations.mockReturnValue(
       of(
@@ -290,7 +321,9 @@ describe('MemberReservationsPage', () => {
 
   it('should show the loading state before the first response arrives', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue({ subscribe: () => ({ unsubscribe: () => {} }) });
+    reservationApiServiceMock.listOwnReservations.mockReturnValue({
+      subscribe: () => ({ unsubscribe: () => {} }),
+    });
 
     createComponent();
 
@@ -305,7 +338,9 @@ describe('MemberReservationsPage', () => {
 
     const emptyState = fixture.nativeElement.querySelector('app-empty-state');
     expect(emptyState).not.toBeNull();
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Aucune réservation à afficher.');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
+      "Vous n'avez aucune réservation.",
+    );
   });
 
   it('should show the error state on a failed request', () => {
@@ -326,7 +361,9 @@ describe('MemberReservationsPage', () => {
     );
     createComponent();
     reservationApiServiceMock.listOwnReservations.mockClear();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()])));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()])),
+    );
 
     fixture.componentInstance.retry();
 
@@ -343,7 +380,9 @@ describe('MemberReservationsPage', () => {
 
   it('should render the "Nouvelle réservation" creation button', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()])));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()])),
+    );
 
     createComponent();
 
@@ -352,7 +391,9 @@ describe('MemberReservationsPage', () => {
 
   it('should open the create dialog when "Nouvelle réservation" is clicked', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()])));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()])),
+    );
     createComponent();
 
     fixture.componentInstance.openCreateDialog();
@@ -362,7 +403,9 @@ describe('MemberReservationsPage', () => {
 
   it('should keep the dialog closed and non-interactive until explicitly opened', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()])));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()])),
+    );
 
     createComponent();
 
@@ -371,7 +414,9 @@ describe('MemberReservationsPage', () => {
 
   it('should close the dialog without reloading the list when it is simply closed/cancelled', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()])));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()])),
+    );
     createComponent();
     fixture.componentInstance.openCreateDialog();
     reservationApiServiceMock.listOwnReservations.mockClear();
@@ -384,12 +429,16 @@ describe('MemberReservationsPage', () => {
 
   it('should close the dialog and reload from page 0 when a reservation is created', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation()], 100)));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation()], 100)),
+    );
     createComponent();
     fixture.componentInstance.openCreateDialog();
     fixture.componentInstance.onLazyLoad({ first: 40, rows: 20 }); // page courante = 2
     reservationApiServiceMock.listOwnReservations.mockClear();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation({ id: 999 })], 101)));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation({ id: 999 })], 101)),
+    );
 
     fixture.componentInstance.onReservationCreated(buildReservation({ id: 999 }));
 
@@ -399,7 +448,9 @@ describe('MemberReservationsPage', () => {
 
   it('should never fabricate a ReservationResponse locally — onReservationCreated always reloads from the backend', () => {
     configure();
-    reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([buildReservation({ id: 1 })])));
+    reservationApiServiceMock.listOwnReservations.mockReturnValue(
+      of(buildPage([buildReservation({ id: 1 })])),
+    );
     createComponent();
     const reloaded = buildPage([buildReservation({ id: 999 }), buildReservation({ id: 1 })], 2);
     reservationApiServiceMock.listOwnReservations.mockReturnValue(of(reloaded));
@@ -506,7 +557,9 @@ describe('MemberReservationsPage', () => {
     confirmationServiceMock.confirm.mock.calls[0][0].accept();
 
     expect(fixture.componentInstance.rows()).toEqual([cancelled]);
-    expect(messageServiceMock.add).toHaveBeenCalledWith(expect.objectContaining({ severity: 'success' }));
+    expect(messageServiceMock.add).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'success' }),
+    );
   });
 
   it('should show an error toast and never mutate the row when cancelOwnReservation fails', () => {
@@ -514,7 +567,9 @@ describe('MemberReservationsPage', () => {
     const reservation = buildReservation({ id: 1, reservationStatus: 'WAITING' });
     reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([reservation])));
     reservationApiServiceMock.cancelOwnReservation.mockReturnValue(
-      throwError(() => apiHttpError(409, 'RESERVATION_NOT_CANCELLABLE', 'Cette réservation n’est plus annulable.')),
+      throwError(() =>
+        apiHttpError(409, 'RESERVATION_NOT_CANCELLABLE', 'Cette réservation n’est plus annulable.'),
+      ),
     );
     createComponent();
 
@@ -523,7 +578,10 @@ describe('MemberReservationsPage', () => {
 
     expect(fixture.componentInstance.rows()).toEqual([reservation]);
     expect(messageServiceMock.add).toHaveBeenCalledWith(
-      expect.objectContaining({ severity: 'error', detail: 'Cette réservation n’est plus annulable.' }),
+      expect.objectContaining({
+        severity: 'error',
+        detail: 'Cette réservation n’est plus annulable.',
+      }),
     );
   });
 
@@ -552,7 +610,9 @@ describe('MemberReservationsPage', () => {
         detail: 'Impossible d’annuler la réservation : contention concurrente trop forte.',
       }),
     );
-    expect(messageServiceMock.add).not.toHaveBeenCalledWith(expect.objectContaining({ severity: 'success' }));
+    expect(messageServiceMock.add).not.toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'success' }),
+    );
   });
 
   it('should surface RESERVATION_ASSIGNMENT_CONTENTION (FIFO reassignment side effect) as a plain error, never a silent success', () => {
@@ -561,7 +621,11 @@ describe('MemberReservationsPage', () => {
     reservationApiServiceMock.listOwnReservations.mockReturnValue(of(buildPage([reservation])));
     reservationApiServiceMock.cancelOwnReservation.mockReturnValue(
       throwError(() =>
-        apiHttpError(409, 'RESERVATION_ASSIGNMENT_CONTENTION', 'Le Copy n’a pas pu être réaffecté, veuillez réessayer.'),
+        apiHttpError(
+          409,
+          'RESERVATION_ASSIGNMENT_CONTENTION',
+          'Le Copy n’a pas pu être réaffecté, veuillez réessayer.',
+        ),
       ),
     );
     createComponent();
@@ -570,8 +634,12 @@ describe('MemberReservationsPage', () => {
     confirmationServiceMock.confirm.mock.calls[0][0].accept();
 
     expect(fixture.componentInstance.rows()).toEqual([reservation]);
-    expect(messageServiceMock.add).toHaveBeenCalledWith(expect.objectContaining({ severity: 'error' }));
-    expect(messageServiceMock.add).not.toHaveBeenCalledWith(expect.objectContaining({ severity: 'success' }));
+    expect(messageServiceMock.add).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'error' }),
+    );
+    expect(messageServiceMock.add).not.toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'success' }),
+    );
   });
 
   // ---------------------------------------------------------------
@@ -607,6 +675,6 @@ describe('MemberReservationsPage', () => {
     expect(fixture.componentInstance.rows()[0].expirationDate).toBe('2026-08-22T12:00:00Z');
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(text).toContain('INV-000040');
-    expect(text).toContain('2026-08-22T12:00:00Z');
+    expect(text).toContain('22 août 2026');
   });
 });

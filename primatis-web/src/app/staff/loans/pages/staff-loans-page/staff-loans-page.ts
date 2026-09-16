@@ -1,4 +1,6 @@
+import { DatePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
@@ -13,6 +15,7 @@ import { LoanApiService } from '../../../../loans/services/loan-api.service';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import { loanStatusSeverity as sharedLoanStatusSeverity, StatusTagSeverity } from '../../../../shared/status/status-severity';
 import { LoanCreateDialog } from '../../components/loan-create-dialog/loan-create-dialog';
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -45,7 +48,7 @@ const OPEN_LOAN_STATUSES: readonly LoanStatus[] = ['ACTIVE', 'OVERDUE'];
  */
 @Component({
   selector: 'app-staff-loans-page',
-  imports: [TableModule, TagModule, ButtonModule, LoadingState, EmptyState, ErrorState, LoanCreateDialog],
+  imports: [TableModule, TagModule, ButtonModule, DatePipe, LoadingState, EmptyState, ErrorState, LoanCreateDialog],
   templateUrl: './staff-loans-page.html',
   styleUrl: './staff-loans-page.scss',
 })
@@ -54,6 +57,7 @@ export class StaffLoansPage {
   private readonly authService = inject(AuthService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly titleService = inject(Title);
 
   readonly rows = signal<LoanResponse[]>([]);
   readonly totalRecords = signal(0);
@@ -70,6 +74,7 @@ export class StaffLoansPage {
   private lastSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
+    this.titleService.setTitle('Prêts et retours — PRIMATIS');
     this.load(0, DEFAULT_PAGE_SIZE);
   }
 
@@ -92,14 +97,18 @@ export class StaffLoansPage {
     this.load(this.lastPage, this.lastSize);
   }
 
-  loanStatusSeverity(status: LoanStatus): 'success' | 'danger' | 'secondary' {
+  loanStatusSeverity(status: LoanStatus): StatusTagSeverity {
+    return sharedLoanStatusSeverity(status);
+  }
+
+  loanStatusLabel(status: LoanStatus): string {
     switch (status) {
       case 'ACTIVE':
-        return 'success';
+        return 'En cours';
       case 'OVERDUE':
-        return 'danger';
+        return 'En retard';
       case 'RETURNED':
-        return 'secondary';
+        return 'Retourné';
     }
   }
 

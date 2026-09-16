@@ -1,40 +1,163 @@
-<h1>Articles</h1>
+<section class="articles-v3-hero">
+  <picture class="articles-v3-hero-background" aria-hidden="true">
+    <source
+      media="(max-width: 767px)"
+      srcset="/assets/public/articles/hero/articles-hero-768-mobile.webp"
+    />
+    <source
+      media="(max-width: 1439px)"
+      srcset="/assets/public/articles/hero/articles-hero-1280.webp"
+    />
+    <img src="/assets/public/articles/hero/articles-hero-1920.webp" alt="" />
+  </picture>
+  <div class="articles-v3-hero-inner">
+    <h1>Articles &amp; actualités</h1>
+    <p>Toute l'actualité culturelle et scientifique de la bibliothèque Georges Lemaître.</p>
+  </div>
+</section>
 
 @if (loading() && rows().length === 0 && !error()) {
-  <app-loading-state message="Chargement des articles…" />
+  <div class="articles-v3-status">
+    <app-loading-state message="Chargement des articles…" />
+  </div>
 } @else if (error(); as currentError) {
-  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+  <div class="articles-v3-status">
+    <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+  </div>
 } @else if (rows().length === 0) {
-  <app-empty-state title="Aucun article" message="Aucun article n’est publié pour le moment." />
+  <div class="articles-v3-status">
+    <app-empty-state title="Aucun article" message="Aucun article n'est publié pour le moment." />
+  </div>
 } @else {
-  <p-table
-    [value]="rows()"
-    [lazy]="true"
-    [lazyLoadOnInit]="false"
-    [paginator]="true"
-    [rows]="20"
-    [first]="0"
-    [totalRecords]="totalRecords()"
-    [loading]="loading()"
-    (onLazyLoad)="onLazyLoad($event)"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th scope="col">Titre</th>
-        <th scope="col">Résumé</th>
-        <th scope="col">Auteur</th>
-        <th scope="col">Publié le</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-row>
-      <tr>
-        <td>
-          <a [routerLink]="['/articles', row.slug]">{{ row.title }}</a>
-        </td>
-        <td>{{ row.summary ?? '—' }}</td>
-        <td>{{ authorName(row.author) }}</td>
-        <td>{{ row.publishedAt }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
+  <main class="articles-v3-body">
+    <div class="articles-v3-layout">
+      <div class="articles-v3-primary">
+        @if (featured(); as featuredArticle) {
+          <section class="articles-featured-section" aria-labelledby="articles-featured-heading">
+            <p class="articles-featured-eyebrow" id="articles-featured-heading">À la une</p>
+            <a class="articles-featured-card" [routerLink]="['/articles', featuredArticle.slug]">
+              <span class="articles-featured-cover">
+                <img
+                  [src]="cardImageSrc(featuredArticle, '960')"
+                  [alt]="cardImageAlt(featuredArticle)"
+                  [attr.aria-hidden]="featuredArticle.imageUrl ? null : true"
+                />
+              </span>
+              <span class="articles-featured-body">
+                <span class="articles-featured-label">Dernière publication</span>
+                <span class="articles-featured-title">{{ featuredArticle.title }}</span>
+                @if (featuredArticle.summary) {
+                  <span class="articles-featured-summary">{{ featuredArticle.summary }}</span>
+                }
+                <span class="articles-featured-meta">
+                  <time [attr.datetime]="featuredArticle.publishedAt">
+                    <i class="pi pi-calendar" aria-hidden="true"></i>
+                    {{ featuredArticle.publishedAt | date: 'dd/MM/yyyy' }}
+                  </time>
+                  <span>
+                    <i class="pi pi-user" aria-hidden="true"></i>
+                    {{ authorName(featuredArticle.author) }}
+                  </span>
+                </span>
+                <span class="articles-featured-cta">
+                  Lire l'article
+                  <i class="pi pi-arrow-right" aria-hidden="true"></i>
+                </span>
+              </span>
+            </a>
+          </section>
+        }
+
+        <section class="articles-list-section" aria-labelledby="articles-list-heading">
+          @if (gridRows().length > 0) {
+            <div class="articles-v3-section-header">
+              <h2 id="articles-list-heading">Tous les articles</h2>
+              <span>Du plus récent au plus ancien</span>
+            </div>
+
+            <ul class="articles-grid">
+              @for (row of gridRows(); track row.id) {
+                <li>
+                  <a class="articles-card" [routerLink]="['/articles', row.slug]">
+                    <span class="articles-card-cover">
+                      <img
+                        [src]="cardImageSrc(row, '640')"
+                        [alt]="cardImageAlt(row)"
+                        [attr.aria-hidden]="row.imageUrl ? null : true"
+                      />
+                    </span>
+                    <span class="articles-card-body">
+                      <span class="articles-card-title">{{ row.title }}</span>
+                      @if (row.summary) {
+                        <span class="articles-card-summary">{{ row.summary }}</span>
+                      }
+                      <span class="articles-card-meta">
+                        <time [attr.datetime]="row.publishedAt">
+                          <i class="pi pi-calendar" aria-hidden="true"></i>
+                          {{ row.publishedAt | date: 'dd/MM/yyyy' }}
+                        </time>
+                        <span>{{ authorName(row.author) }}</span>
+                      </span>
+                      <span class="articles-card-cta">
+                        Lire l'article
+                        <i class="pi pi-arrow-right" aria-hidden="true"></i>
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+
+          <p-paginator
+            class="articles-pagination"
+            [first]="currentFirst()"
+            [rows]="currentRows()"
+            [totalRecords]="totalRecords()"
+            (onPageChange)="onPageChange($event)"
+          />
+        </section>
+      </div>
+
+      <aside class="articles-v3-sidebar" aria-label="Compléments éditoriaux">
+        @if (latestArticles().length > 0) {
+          <section class="articles-latest" aria-labelledby="articles-latest-heading">
+            <h2 id="articles-latest-heading">Derniers articles</h2>
+            <ul>
+              @for (article of latestArticles(); track article.id) {
+                <li>
+                  <a [routerLink]="['/articles', article.slug]">
+                    <img
+                      [src]="cardImageSrc(article, '640')"
+                      [alt]="cardImageAlt(article)"
+                      [attr.aria-hidden]="article.imageUrl ? null : true"
+                    />
+                    <span>
+                      <strong>{{ article.title }}</strong>
+                      <time [attr.datetime]="article.publishedAt">{{
+                        article.publishedAt | date: 'dd/MM/yyyy'
+                      }}</time>
+                    </span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </section>
+        }
+
+        <a class="articles-lemaitre-card" routerLink="/georges-lemaitre">
+          <picture aria-hidden="true">
+            <img src="/assets/public/articles/editorial/lemaitre-banner-960-mobile.webp" alt="" />
+          </picture>
+          <span>
+            <em
+              >« Entre les livres et les étoiles, il y a le même désir : comprendre notre place dans
+              l'Univers. »</em
+            >
+            <strong>Découvrir Georges Lemaître</strong>
+          </span>
+        </a>
+      </aside>
+    </div>
+  </main>
 }

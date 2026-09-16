@@ -18,6 +18,7 @@ describe('ArticleApiService', () => {
     slug: 'titre-public',
     author: { id: 10, firstName: 'Prénom', lastName: 'Nom' },
     publishedAt: '2026-08-01T10:00:00Z',
+    imageUrl: null,
   };
 
   const detail: ArticleResponse = {

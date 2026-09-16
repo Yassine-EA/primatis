@@ -1,0 +1,51 @@
+{
+  "title": "Le judaïsme",
+  "authors": [
+    {
+      "key": "/authors/OL3980270A"
+    }
+  ],
+  "publish_date": "July 1, 2002",
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "2914230567"
+  ],
+  "publishers": [
+    "Memorial de Caen"
+  ],
+  "isbn_13": [
+    "9782914230568"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "source_records": [
+    "amazon:2914230567",
+    "marc:harvard_bibliographic_metadata/20220215_032.bib.mrc:30666344:1294"
+  ],
+  "key": "/books/OL12656316M",
+  "works": [
+    {
+      "key": "/works/OL10013490W"
+    }
+  ],
+  "oclc_numbers": [
+    "426250108"
+  ],
+  "number_of_pages": 15,
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-02-12T03:07:36.339147"
+  }
+}

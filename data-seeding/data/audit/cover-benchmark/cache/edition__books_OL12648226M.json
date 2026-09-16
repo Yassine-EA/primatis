@@ -1,0 +1,66 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "772644"
+    ]
+  },
+  "title": "Cyrus",
+  "subtitle": "English Titles (Cyrus, the Storytelling Encyclopedia)",
+  "authors": [
+    {
+      "key": "/authors/OL3976531A"
+    },
+    {
+      "key": "/authors/OL1042250A"
+    }
+  ],
+  "publish_date": "May 1999",
+  "publishers": [
+    "PocketAudio"
+  ],
+  "weight": "5 ounces",
+  "physical_format": "Audio Cassette",
+  "contributions": [
+    "Black Cats (Illustrator)"
+  ],
+  "subjects": [
+    "Fiction",
+    "General",
+    "Reference - Encyclopedias",
+    "Juvenile Fiction",
+    "Children's Audio - 4-8",
+    "Audio Adult: Books On Tape"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_13": [
+    "9782895170266"
+  ],
+  "isbn_10": [
+    "2895170266"
+  ],
+  "oclc_numbers": [
+    "631868751"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "4.8 x 4.5 x 0.9 inches",
+  "source_records": [
+    "amazon:2895170266"
+  ],
+  "key": "/books/OL12648226M",
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-06T20:40:26.199031"
+  }
+}

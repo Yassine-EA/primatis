@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 2680">
+  <defs>
+    <linearGradient id="heroShade" x1="0" x2="1"><stop offset="0" stop-color="#031b2b" stop-opacity=".7"/><stop offset=".48" stop-color="#031b2b" stop-opacity=".18"/><stop offset="1" stop-color="#031b2b" stop-opacity=".05"/></linearGradient>
+  </defs>
+  <rect width="1600" height="2150" fill="#FAF9F6"/>
+  <text x="70" y="78" font-family="DejaVu Serif" font-size="42" fill="#082B40">PRIMATIS — Home Asset Pack</text>
+  <text x="70" y="116" font-family="DejaVu Sans" font-size="18" fill="#46515F">ASSET-RESET-02.1 · planche de validation</text>
+
+  <text x="70" y="170" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#082B40">HERO DESKTOP · COMPOSITION EN COUCHES</text>
+  <rect x="70" y="195" width="1460" height="584" rx="16" fill="#082B40"/>
+  <image x="70" y="195" width="1460" height="584" preserveAspectRatio="xMidYMid slice" xlink:href="../hero/hero-background-1920.webp"/>
+  <rect x="70" y="195" width="1460" height="584" rx="16" fill="url(#heroShade)"/>
+  <image x="755" y="204" width="590" height="787" preserveAspectRatio="xMidYMin meet" xlink:href="../hero/georges-lemaitre-illustration-768.webp"/>
+  <text x="120" y="340" font-family="DejaVu Serif" font-size="70" font-weight="bold" fill="#FAF9F6">PRIMATIS</text>
+  <text x="120" y="395" font-family="DejaVu Serif" font-size="31" fill="#FAF9F6">Bibliothèque publique</text>
+  <text x="120" y="435" font-family="DejaVu Serif" font-size="31" fill="#FAF9F6">Georges Lemaître</text>
+  <text x="120" y="492" font-family="DejaVu Serif" font-size="24" font-style="italic" fill="#ECE5DA">Texte et contrôles restent en HTML.</text>
+
+  <text x="70" y="855" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#082B40">VARIANTE MOBILE ET PORTRAIT TRANSPARENT</text>
+  <rect x="70" y="885" width="390" height="490" rx="18" fill="#082B40"/>
+  <image x="70" y="885" width="390" height="490" preserveAspectRatio="xMidYMid slice" xlink:href="../hero/hero-background-768-mobile.webp"/>
+  <rect x="70" y="885" width="390" height="490" rx="18" fill="#031b2b" opacity=".28"/>
+  <image x="135" y="970" width="325" height="433" xlink:href="../hero/georges-lemaitre-illustration-480.webp"/>
+  <rect x="510" y="885" width="1020" height="490" rx="18" fill="#082B40"/>
+  <image x="865" y="895" width="360" height="480" xlink:href="../hero/georges-lemaitre-illustration-480.webp"/>
+  <text x="555" y="950" font-family="DejaVu Sans" font-size="18" fill="#D7A16E">Portrait détouré</text>
+  <text x="555" y="990" font-family="DejaVu Sans" font-size="16" fill="#ECE5DA">Illustration générée</text>
+  <text x="555" y="1020" font-family="DejaVu Sans" font-size="16" fill="#ECE5DA">et non photographie historique.</text>
+
+  <text x="70" y="1455" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#082B40">FALLBACKS ÉDITORIAUX D’ARTICLE</text>
+  <image x="70" y="1480" width="460" height="259" xlink:href="../articles/article-fallback-cosmos-960.webp"/>
+  <image x="570" y="1480" width="460" height="259" xlink:href="../articles/article-fallback-library-960.webp"/>
+  <image x="1070" y="1480" width="460" height="259" xlink:href="../articles/article-fallback-observatory-960.webp"/>
+  <text x="70" y="1772" font-family="DejaVu Sans" font-size="15" fill="#46515F">Ces images sont génériques : aucune association sémantique à un Article réel sans champ image.</text>
+
+  <text x="70" y="1835" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#082B40">BANDEAU LEMAÎTRE</text>
+  <image x="70" y="1860" width="1460" height="365" preserveAspectRatio="xMidYMid slice" xlink:href="../editorial/lemaitre-banner-1920.webp"/>
+
+  <text x="70" y="2300" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#082B40">BANDEAU FOOTER · OBSERVATOIRE À GAUCHE</text>
+  <image x="70" y="2330" width="1460" height="274" preserveAspectRatio="xMidYMid slice" xlink:href="../footer/footer-observatory-1920.webp"/>
+  <text x="70" y="2640" font-family="DejaVu Sans" font-size="14" fill="#46515F">Aucun texte n’est incorporé dans les fichiers runtime ; les superpositions restent en HTML/CSS.</text>
+</svg>

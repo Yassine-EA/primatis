@@ -1,0 +1,87 @@
+DEV-16 — FR FAST CONSOLIDATION v2
+=================================
+
+SOURCE
+======
+
+FR v1 SELECTED          : 2220
+FR v1 RESERVE           : 451
+Validated local pool    : 2671
+
+FINAL
+=====
+
+SELECTED                : 2580/2580
+RESERVE                 : 91
+
+BY CATEGORY
+===========
+FRENCH_LANGUAGE_CANON        selected=570 available=600 floor=500
+TWENTIETH_CENTURY            selected=690 available=698 floor=550
+CONTEMPORARY                 selected=400 available=411 floor=330
+YOUTH                        selected=230 available=243 floor=190
+HISTORY_SOCIETY              selected=230 available=239 floor=180
+ESSAYS_PHILOSOPHY            selected=170 available=180 floor=140
+SCIENCE_CULTURE              selected=110 available=120 floor= 90
+GRAPHIC                      selected=180 available=180 floor=140
+
+EDITORIAL FLOORS
+================
+ALL SATISFIED
+
+SELECTED METADATA
+=================
+
+ISBN       : 2178/2580
+Publisher  : 2575/2580
+Date       : 2569/2580
+Page count : 0/2580
+Valid cover: 2580/2580
+
+INTEGRITY
+=========
+
+Duplicate editions      : 0
+Duplicate works         : 0
+Invalid covers          : 0
+Invalid FR languages    : 0
+
+GLOBAL FR RECONSTRUCTION
+========================
+
+Existing KEEP          : 2660
+Existing REVIEW        : 126
+Validated acquisitions  : 2580
+Validated reserve       : 91
+
+The acquisition pool now sits inside the previously established
+FR replacement interval of approximately 2455–2581 titles.
+
+The exact number finally injected into the 6727-title FR corpus
+will be decided during global master reconstruction, after the
+remaining uncovered preservation candidates are reconciled.
+
+POLICY
+======
+
+No Open Library request performed.
+No new cover downloaded.
+Only already validated v1 AUTO_ACCEPT candidates were reused.
+2580 is deliberately inside the established FR replacement ceiling.
+Category targets were adapted to actual validated availability.
+Editorial floors remain mandatory.
+Every selected title has a validated physical cover.
+Every selected title has an explicit French edition (fre/fra).
+Every work and every physical edition is unique inside the selection.
+Page count remains deferred to the global metadata enrichment phase.
+No bundle modification.
+No database write.
+
+FILES
+=====
+
+data/audit/fr-fast-v2-selected.csv
+data/audit/fr-fast-v2-reserve.csv
+data/audit/fr-fast-v2-report.txt
+
+STATUS : PASS

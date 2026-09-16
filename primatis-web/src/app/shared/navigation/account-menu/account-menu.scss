@@ -1,0 +1,43 @@
+@use '../../styles/breakpoints';
+
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--primatis-space-sm);
+}
+
+.nav-bell {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.account-menu-login {
+  color: var(--p-primary-color);
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Icone seule sous la tablette (DEV-15.11) : a 375px, le bouton "Deconnexion"
+// avec son libelle en toutes lettres fait deborder la barre de navigation
+// publique quand un membre authentifie la consulte (toggle mobile + cloche +
+// bouton en concurrence sur la meme largeur). Le libelle texte revient des
+// la tablette ; aria-label conserve le nom accessible dans les deux cas.
+// ::ng-deep necessaire : le span .p-button-label est injecte par la
+// directive pButton sans l'attribut d'encapsulation de vue de ce composant,
+// un selecteur scope classique ne l'atteint donc jamais.
+.nav-logout {
+  ::ng-deep .p-button-label {
+    display: none;
+
+    @include breakpoints.from-tablet {
+      display: inline;
+    }
+  }
+}

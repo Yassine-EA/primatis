@@ -1,0 +1,33 @@
+{
+  "title": "Compiegne",
+  "key": "/works/OL10003855W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3969375A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Antiquities",
+    "History",
+    "Urban archaeology",
+    "Excavations (Archaeology)"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:52.839053"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-07-10T00:02:16.345104"
+  }
+}

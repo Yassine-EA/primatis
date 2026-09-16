@@ -1,0 +1,94 @@
+DEV-16 — FR MASS EDITORIAL ENGINE v1
+====================================
+
+BASELINE
+========
+
+Existing FR KEEP        : 2660
+Existing FR REVIEW      : 126
+Policy entries          : 252
+
+DISCOVERY
+=========
+
+Unique discovered       : 9331
+AUTO_ACCEPT            : 3657
+REVIEW                 : 224
+REJECT                 : 4781
+
+FINAL POOLS
+===========
+
+SELECTED                : 2220/2600
+RESERVE                 : 451/500
+Combined                : 2671/3100
+
+BY CATEGORY
+===========
+FRENCH_LANGUAGE_CANON        selected= 500/ 500 reserve=100/100
+TWENTIETH_CENTURY            selected= 578/ 650 reserve=120/120
+CONTEMPORARY                 selected= 346/ 550 reserve= 65/100
+YOUTH                        selected= 197/ 300 reserve= 46/ 60
+HISTORY_SOCIETY              selected= 199/ 200 reserve= 40/ 40
+ESSAYS_PHILOSOPHY            selected= 150/ 150 reserve= 30/ 30
+SCIENCE_CULTURE              selected= 100/ 100 reserve= 20/ 20
+GRAPHIC                      selected= 150/ 150 reserve= 30/ 30
+
+SELECTED METADATA
+=================
+
+ISBN       : 1911/2220
+Publisher  : 2214/2220
+Date       : 2215/2220
+Page count : 0/2220
+Valid cover: 2220/2220
+
+INTEGRITY
+=========
+
+Duplicate editions      : 0
+Duplicate works         : 0
+Invalid covers          : 0
+Invalid FR languages    : 0
+
+SELECTED SHORTFALLS
+===================
+- TWENTIETH_CENTURY: 72
+- CONTEMPORARY: 204
+- YOUTH: 103
+- HISTORY_SOCIETY: 1
+
+RESERVE SHORTFALLS
+==================
+- CONTEMPORARY: 35
+- YOUTH: 14
+
+POLICY
+======
+
+Selection is author-first and editorially piloted.
+Only explicit French editions (fre/fra) are eligible.
+Existing FR KEEP and REVIEW works are excluded from acquisition.
+Study guides, summaries and teaching material are rejected.
+Collected works and ambiguous matches are routed to REVIEW.
+AUTO_ACCEPT requires strong author/title concordance and a validated physical cover.
+Per-author caps preserve catalogue diversity.
+SELECTED and RESERVE contain unique works and unique physical editions.
+Reserve is constructed during the same run.
+No invented bibliographic metadata.
+Page count remains a later global enrichment task.
+No bundle modification.
+No database write.
+
+FILES
+=====
+
+data/audit/fr-mass-engine-policy-authors.csv
+data/audit/fr-mass-engine-discovered.csv
+data/audit/fr-mass-engine-selected.csv
+data/audit/fr-mass-engine-reserve.csv
+data/audit/fr-mass-engine-review.csv
+data/audit/fr-mass-engine-reject.csv
+data/audit/fr-mass-engine-report.txt
+
+STATUS : PARTIAL — SELECTED SHORTFALL

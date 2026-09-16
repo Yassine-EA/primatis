@@ -1,0 +1,111 @@
+:host {
+  display: block;
+}
+
+::ng-deep .p-editor-container {
+  border: 0 !important;
+}
+
+::ng-deep .p-editor-toolbar.ql-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--primatis-ivory-50);
+  border: 0 !important;
+  border-bottom: 1px solid var(--primatis-ivory-200) !important;
+}
+
+::ng-deep .p-editor-toolbar .ql-formats {
+  margin-right: 0.35rem !important;
+}
+
+::ng-deep .p-editor-content {
+  border: 0 !important;
+}
+
+::ng-deep .p-editor-content .ql-editor {
+  min-height: 22rem;
+  padding: 1.25rem 1.4rem;
+  color: var(--primatis-gray-900);
+  font-family: var(--primatis-font-ui);
+  font-size: 0.97rem;
+  line-height: 1.75;
+}
+
+::ng-deep .p-editor-content .ql-editor h2,
+::ng-deep .p-editor-content .ql-editor h3,
+::ng-deep .p-editor-content .ql-editor h4 {
+  color: var(--primatis-navy-900);
+  font-family: var(--primatis-font-editorial);
+}
+
+::ng-deep .p-editor-content .ql-editor blockquote {
+  margin-block: 1rem;
+  padding: 0.75rem 1rem;
+  color: var(--primatis-gray-700);
+  background: var(--primatis-ivory-50);
+  border-left-color: var(--primatis-copper-500);
+}
+
+::ng-deep .p-editor-content .ql-editor.ql-blank::before {
+  color: var(--primatis-gray-500);
+  font-style: normal;
+}
+
+.article-content-editor-history-btn {
+  &--redo .pi-undo {
+    display: inline-block;
+    transform: scaleX(-1);
+  }
+}
+
+.article-content-editor-upload-error {
+  display: block;
+  margin-block-start: 0.5rem;
+}
+
+.article-content-editor-alt-hint {
+  margin-block-start: 0;
+  color: var(--primatis-gray-700);
+}
+
+.article-content-editor-alt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-block-end: 0.75rem;
+
+  input {
+    width: 100%;
+  }
+}
+
+.article-content-editor-decorative-field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-block-end: 1rem;
+}
+
+.article-content-editor-alt-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--primatis-space-sm, 0.5rem);
+}
+
+@media (max-width: 767px) {
+  ::ng-deep .p-editor-toolbar.ql-toolbar {
+    padding: 0.55rem;
+  }
+
+  ::ng-deep .p-editor-toolbar .ql-formats {
+    margin-right: 0.1rem !important;
+  }
+
+  ::ng-deep .p-editor-content .ql-editor {
+    min-height: 18rem;
+    padding: 1rem;
+    font-size: 0.94rem;
+  }
+}

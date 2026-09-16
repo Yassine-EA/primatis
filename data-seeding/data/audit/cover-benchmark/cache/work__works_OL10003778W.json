@@ -1,0 +1,31 @@
+{
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2019-04-09T13:51:01.578601"
+  },
+  "title": "Etat et nation en Allemagne au xxeme siecle",
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:52.839053"
+  },
+  "subjects": [
+    "Nationalism",
+    "History"
+  ],
+  "latest_revision": 2,
+  "key": "/works/OL10003778W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3969285A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "revision": 2
+}

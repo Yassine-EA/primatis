@@ -1,7 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { RouterLink } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { TableLazyLoadEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 
 import { AppError } from '../../../../core/errors/api-error';
@@ -12,6 +15,10 @@ import { ReservationApiService } from '../../../../reservations/services/reserva
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  reservationStatusSeverity as sharedReservationStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
 import { ReservationCreateDialog } from '../../components/reservation-create-dialog/reservation-create-dialog';
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -71,7 +78,16 @@ const CANCELLABLE_STATUSES: readonly ReservationStatus[] = ['WAITING', 'READY'];
  */
 @Component({
   selector: 'app-member-reservations-page',
-  imports: [TableModule, TagModule, ButtonModule, LoadingState, EmptyState, ErrorState, ReservationCreateDialog],
+  imports: [
+    RouterLink,
+    TagModule,
+    ButtonModule,
+    PaginatorModule,
+    LoadingState,
+    EmptyState,
+    ErrorState,
+    ReservationCreateDialog,
+  ],
   templateUrl: './member-reservations-page.html',
   styleUrl: './member-reservations-page.scss',
 })
@@ -79,6 +95,7 @@ export class MemberReservationsPage {
   private readonly reservationApiService = inject(ReservationApiService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly titleService = inject(Title);
 
   readonly rows = signal<ReservationResponse[]>([]);
   readonly totalRecords = signal(0);
@@ -89,11 +106,20 @@ export class MemberReservationsPage {
   readonly error = signal<AppError | null>(null);
   readonly cancellingReservationId = signal<number | null>(null);
   readonly createDialogVisible = signal(false);
+  readonly currentFirst = signal(0);
+  readonly pageSize = DEFAULT_PAGE_SIZE;
+  readonly waitingCount = computed(
+    () => this.rows().filter((reservation) => reservation.reservationStatus === 'WAITING').length,
+  );
+  readonly readyCount = computed(
+    () => this.rows().filter((reservation) => reservation.reservationStatus === 'READY').length,
+  );
 
   private lastPage = 0;
   private lastSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
+    this.titleService.setTitle('Mes réservations — PRIMATIS');
     this.load(0, DEFAULT_PAGE_SIZE);
   }
 
@@ -108,22 +134,33 @@ export class MemberReservationsPage {
     this.load(Math.floor(first / rows), rows);
   }
 
+  onPageChange(event: PaginatorState): void {
+    const rows = event.rows ?? DEFAULT_PAGE_SIZE;
+    const first = event.first ?? 0;
+    this.currentFirst.set(first);
+    this.load(Math.floor(first / rows), rows);
+  }
+
   retry(): void {
     this.load(this.lastPage, this.lastSize);
   }
 
-  reservationStatusSeverity(status: ReservationStatus): 'info' | 'success' | 'secondary' | 'danger' | 'warn' {
+  reservationStatusSeverity(status: ReservationStatus): StatusTagSeverity {
+    return sharedReservationStatusSeverity(status);
+  }
+
+  reservationStatusLabel(status: ReservationStatus): string {
     switch (status) {
       case 'WAITING':
-        return 'info';
+        return 'En attente';
       case 'READY':
-        return 'success';
+        return 'Prête';
       case 'FULFILLED':
-        return 'secondary';
+        return 'Honorée';
       case 'CANCELLED':
-        return 'danger';
+        return 'Annulée';
       case 'EXPIRED':
-        return 'warn';
+        return 'Expirée';
     }
   }
 
@@ -151,7 +188,28 @@ export class MemberReservationsPage {
    */
   onReservationCreated(reservation: ReservationResponse): void {
     this.createDialogVisible.set(false);
+    this.currentFirst.set(0);
     this.load(0, this.lastSize);
+  }
+
+  formatDate(value: string | null): string {
+    if (!value) {
+      return '—';
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return new Intl.DateTimeFormat('fr-BE', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    })
+      .format(date)
+      .replace('.', '');
   }
 
   confirmCancel(reservation: ReservationResponse): void {
@@ -176,7 +234,11 @@ export class MemberReservationsPage {
       },
       error: (err: unknown) => {
         this.cancellingReservationId.set(null);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: toAppError(err).message });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: toAppError(err).message,
+        });
       },
     });
   }

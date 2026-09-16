@@ -19,6 +19,16 @@ spring:
     enabled: true
     locations: classpath:db/migration
 
+  # DEV-ARTICLES-MEDIA (DEV-DEC-0079) : plafond technique volontairement
+  # au-dessus de la limite métier réelle (5 Mio, ArticleMediaService) —
+  # cette dernière s'applique donc normalement en premier, avec un message
+  # d'erreur clair (ARTICLE_MEDIA_FILE_TOO_LARGE) ; ce plafond ne reste
+  # qu'un garde-fou résiduel (GlobalExceptionHandler#handleMaxUploadSizeExceeded).
+  servlet:
+    multipart:
+      max-file-size: 6MB
+      max-request-size: 7MB
+
 # Infrastructure JWT RS256 (DEV-03.7). Aucune valeur ici n'est un secret :
 # accessTokenTtl est une configuration technique (n'appartient pas à
 # application_setting) ; privateKeyLocation/publicKeyLocation ne sont que
@@ -39,3 +49,9 @@ primatis:
     # d'environnement (liste séparée par des virgules).
     cors:
       allowed-origins: ${PRIMATIS_CORS_ALLOWED_ORIGINS:http://localhost:4200}
+  # DEV-ARTICLES-MEDIA (DEV-DEC-0079) : dossier filesystem de stockage des
+  # images Article — distinct de l'URL publique (/media/articles/**,
+  # ArticleMediaWebConfig/SecurityConfig, jamais configurable, structurel).
+  # Chemin relatif au répertoire de travail du processus backend.
+  article-media:
+    storage-path: ${PRIMATIS_ARTICLE_MEDIA_STORAGE_PATH:./public/media/articles}

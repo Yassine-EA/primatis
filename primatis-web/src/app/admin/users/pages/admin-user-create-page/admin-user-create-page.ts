@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -70,9 +71,14 @@ export class AdminUserCreatePage {
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly userApiService = inject(UserApiService);
   private readonly router = inject(Router);
+  private readonly titleService = inject(Title);
 
   readonly roleOptions = ROLE_OPTIONS;
   readonly memberStatusOptions = MEMBER_STATUS_OPTIONS;
+
+  constructor() {
+    this.titleService.setTitle('Créer un utilisateur — PRIMATIS');
+  }
 
   readonly form = this.formBuilder.group({
     email: this.formBuilder.control('', [Validators.required, Validators.email]),

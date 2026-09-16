@@ -1,0 +1,110 @@
+DEV-16 — NL MASS EDITORIAL ENGINE v1
+====================================
+
+BASELINE
+========
+
+Existing NL KEEP        : 767
+Existing NL REVIEW      : 101
+Policy entries          : 143
+
+DISCOVERY
+=========
+
+Unique discovered       : 2846
+AUTO_ACCEPT            : 971
+REVIEW                 : 16
+REJECT                 : 1859
+
+FINAL POOLS
+===========
+
+SELECTED                : 589/800
+RESERVE                 : 138/250
+Combined                : 727/1050
+
+BY CATEGORY
+===========
+DUTCH_FLEMISH_CANON          selected= 99/160 reserve= 26/ 50
+TWENTIETH_CENTURY            selected=175/180 reserve= 55/ 55
+CONTEMPORARY                 selected=141/180 reserve= 21/ 55
+YOUTH                        selected= 90/ 90 reserve= 28/ 30
+HISTORY_SOCIETY              selected= 38/ 70 reserve=  5/ 20
+ESSAYS_PHILOSOPHY            selected= 19/ 50 reserve=  0/ 15
+SCIENCE_CULTURE              selected= 18/ 40 reserve=  3/ 15
+GRAPHIC                      selected=  9/ 30 reserve=  0/ 10
+
+SELECTED METADATA
+=================
+
+ISBN       : 549/589
+Publisher  : 589/589
+Date       : 587/589
+Page count : 0/589
+Valid cover: 589/589
+
+RESERVE METADATA
+================
+
+ISBN       : 119/138
+Publisher  : 138/138
+Date       : 137/138
+Page count : 0/138
+Valid cover: 138/138
+
+INTEGRITY
+=========
+
+Duplicate editions      : 0
+Duplicate works         : 0
+Invalid covers          : 0
+Invalid NL languages    : 0
+
+SELECTED SHORTFALLS
+===================
+- DUTCH_FLEMISH_CANON: 61
+- TWENTIETH_CENTURY: 5
+- CONTEMPORARY: 39
+- HISTORY_SOCIETY: 32
+- ESSAYS_PHILOSOPHY: 31
+- SCIENCE_CULTURE: 22
+- GRAPHIC: 21
+
+RESERVE SHORTFALLS
+==================
+- DUTCH_FLEMISH_CANON: 24
+- CONTEMPORARY: 34
+- YOUTH: 2
+- HISTORY_SOCIETY: 15
+- ESSAYS_PHILOSOPHY: 15
+- SCIENCE_CULTURE: 12
+- GRAPHIC: 10
+
+POLICY
+======
+
+Selection is author-first and editorially piloted.
+Only explicit Dutch editions (dut/nld) are eligible.
+Existing NL KEEP and REVIEW works are excluded from acquisition.
+Study guides, summaries, workbooks and teaching material are rejected.
+Collected works and ambiguous matches are routed to REVIEW.
+AUTO_ACCEPT requires strong author/title concordance and a validated physical cover.
+Per-author caps prevent catalogue domination by prolific authors.
+SELECTED and RESERVE contain unique works and unique physical editions.
+The reserve is built during the same run to eliminate recovery/final-gap loops.
+No invented ISBN, publisher, date, page count or cover.
+No bundle modification.
+No database write.
+
+FILES
+=====
+
+data/audit/nl-mass-engine-policy-authors.csv
+data/audit/nl-mass-engine-discovered.csv
+data/audit/nl-mass-engine-selected.csv
+data/audit/nl-mass-engine-reserve.csv
+data/audit/nl-mass-engine-review.csv
+data/audit/nl-mass-engine-reject.csv
+data/audit/nl-mass-engine-report.txt
+
+STATUS : PARTIAL — SELECTED SHORTFALL

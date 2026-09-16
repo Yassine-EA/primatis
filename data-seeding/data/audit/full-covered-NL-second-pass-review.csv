@@ -1,0 +1,17 @@
+source_key,title,subtitle,authors,author_count,isbn,publication_year,publisher,genres,duplicate_like_count,decision,reason,second_pass_flags,dutch_score,best_foreign_language,best_foreign_score
+/books/OL22478638M,James Turrell,"Hemels gewelf in kijkduin = celestial vault in the dunes: the Hague, the Netherlands.","Andrew Graham-Dixon | Michael Hue Williams | Turrell, James.",3,9789073799233,1996,Stroom the Hague Centre for Visual Arts,Arts,0,,,FOREIGN_POSSIBLE_EN_SCORE_2,0,EN,2
+/books/OL22160833M,A matter of life and death,,Anna Blaman,1,9780805734416,1974,Twayne Publishers,Fiction,0,,,FOREIGN_DOMINANT_EN_SCORE_4,1,EN,4
+/books/OL6585758M,The history of Reynard the Fox,"with some account of his family, friends, and associates",Frederick Startridge Ellis | Walter Crane | William Caxton,3,,1894,D. Nutt,,0,,,FOREIGN_DOMINANT_EN_SCORE_5,1,EN,5
+/books/OL2198058M,In a dark wood wandering,,Hella S. Haasse,1,9780897333368,1989,Academy,Fiction,0,,,FOREIGN_POSSIBLE_EN_SCORE_2,0,EN,2
+/books/OL25542196M,Applications of Declarative Programming and Knowledge Management,"17th International Conference, INAP 2007, and 21st Workshop on Logic Programming, WLP 2007, Würzburg, Germany, October 4-6, 2007, Revised Selected Papers","Hutchison, David - undifferentiated",1,9783642006746,2009,Springer Berlin Heidelberg,Technologie,0,,,FOREIGN_DOMINANT_EN_SCORE_4,1,EN,4
+/books/OL21436035M,The art of warfare in Western Europe during the Middle Ages,from the eighth century to 1340,J. F. Verbruggen,1,9780720490060,1977,North-Holland Pub. Co.,Histoire,0,,,FOREIGN_DOMINANT_EN_SCORE_6,1,EN,6
+/books/OL14626044M,Art from the mentally disturbed,the shattered vision of schizophrenics,J. H Plokker,1,,1965,"Little, Brown",Arts,0,,,FOREIGN_DOMINANT_EN_SCORE_4,1,EN,4
+/books/OL12848814M,Applied Arts and Industrial Design 1800 - The Present,,J.R. ter Molen,1,9789067073981,1996,Museum Boijmans van Beuningen,Histoire,0,,,FOREIGN_POSSIBLE_EN_SCORE_2,0,EN,2
+/books/OL4875093M,Tumbleweed,a novel,Janwillem van de Wetering,1,9780395243527,1976,Houghton Mifflin,Fiction | Policier et mystère,0,,,FOREIGN_POSSIBLE_EN_SCORE_2,0,EN,2
+/books/OL12846312M,Crossbows in the Royal Netherlands Army Museum,,Jens Sensfelder,1,9789059721746,2008,"Eburon Publishers, Delft",Histoire,0,,,FOREIGN_POSSIBLE_EN_SCORE_2,0,EN,2
+/books/OL21172536M,Men and ideas,"history, the Middle Ages, the Renaissance",Johan Huizinga,1,9780691054223,1984,Princeton University Press,Histoire,0,,,FOREIGN_DOMINANT_EN_SCORE_3,0,EN,3
+/books/OL59274859M,Jorge Macchi,the book of hours,Jorge Macchi,1,9789081726832,2016,Museum van Deinze en de Leiestreek,,0,,,FOREIGN_DOMINANT_EN_SCORE_3,1,EN,3
+/books/OL16406155M,The philosophy of Jules Lachelier,Du fondement de l'induction. Psychologie et métaphysique. Notes sur le pari de Pascal.,Jules Lachelier,1,,1960,Nijhoff,Philosophie,0,,,FOREIGN_DOMINANT_FR_SCORE_4,2,FR,4
+/books/OL7199257M,The hidden force,a story of modern Java,Louis Couperus,1,,1922,Cape,,0,,,FOREIGN_DOMINANT_EN_SCORE_3,1,EN,3
+/books/OL6065746M,The cocktail party,a comedy,T. S. Eliot,1,,1950,Faber and Faber,Théâtre,0,,,FOREIGN_POSSIBLE_EN_SCORE_2,0,EN,2
+/books/OL22290196M,The deadbeats,a novel,Ward Ruyslinck,1,9780720622256,1968,Owen,,0,,,FOREIGN_DOMINANT_EN_SCORE_3,0,EN,3

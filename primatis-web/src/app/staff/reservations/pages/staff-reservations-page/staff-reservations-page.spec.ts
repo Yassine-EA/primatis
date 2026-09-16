@@ -118,6 +118,15 @@ describe('StaffReservationsPage', () => {
     expect(reservationApiServiceMock.listReservations).toHaveBeenCalledWith(0, 20);
   });
 
+  it('should set the document title (DEV-15.8)', () => {
+    configure();
+    reservationApiServiceMock.listReservations.mockReturnValue(of(buildPage([buildReservation()])));
+
+    createComponent();
+
+    expect(document.title).toBe('Réservations — PRIMATIS');
+  });
+
   it('should never call the self-service listOwnReservations endpoint', () => {
     configure();
     reservationApiServiceMock.listReservations.mockReturnValue(of(buildPage([buildReservation()])));
@@ -193,7 +202,7 @@ describe('StaffReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('WAITING');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('En attente');
   });
 
   it('should render READY reservations', () => {
@@ -204,7 +213,7 @@ describe('StaffReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('READY');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Prête');
   });
 
   it('should render FULFILLED reservations', () => {
@@ -215,7 +224,7 @@ describe('StaffReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('FULFILLED');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Honorée');
   });
 
   it('should render CANCELLED reservations', () => {
@@ -226,7 +235,7 @@ describe('StaffReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('CANCELLED');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Annulée');
   });
 
   it('should render EXPIRED reservations', () => {
@@ -237,7 +246,7 @@ describe('StaffReservationsPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('EXPIRED');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Expirée');
   });
 
   // ---------------------------------------------------------------

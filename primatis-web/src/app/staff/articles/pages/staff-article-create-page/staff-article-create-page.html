@@ -1,38 +1,137 @@
-<h1>Créer un article</h1>
+<div class="page-shell staff-loans-page staff-article-editor-page staff-article-create-page">
+  <header class="page-header staff-loans-hero staff-article-editor-hero">
+    <div class="staff-loans-hero-copy">
+      <span class="staff-page-kicker">Contenus éditoriaux</span>
+      <h1 class="page-title">Créer un article</h1>
+      <p class="page-description">
+        Rédigez un contenu destiné au site public. L’article restera en brouillon jusqu’à sa
+        publication explicite.
+      </p>
+    </div>
 
-<form [formGroup]="form" (ngSubmit)="submit()">
-  @if (errorMessage(); as message) {
-    <p-message severity="error" [text]="message" styleClass="form-banner-error" />
-  }
+    <a
+      pButton
+      type="button"
+      severity="secondary"
+      icon="pi pi-arrow-left"
+      label="Retour aux articles"
+      class="staff-article-editor-back"
+      routerLink="/staff/articles"
+    ></a>
+  </header>
 
-  <div class="form-field">
-    <label for="article-title">Titre</label>
-    <input pInputText id="article-title" formControlName="title" maxlength="255" />
-    @if (form.controls.title.invalid && form.controls.title.touched) {
-      <p-message severity="error" text="Le titre est requis (255 caractères maximum)." />
+  <form class="staff-article-editor-form" [formGroup]="form" (ngSubmit)="submit()">
+    @if (errorMessage(); as message) {
+      <p-message severity="error" [text]="message" styleClass="form-banner-error" />
     }
-    @if (fieldError('title'); as message) {
-      <p-message severity="error" [text]="message" />
-    }
-  </div>
 
-  <div class="form-field">
-    <label for="article-summary">Résumé</label>
-    <input pInputText id="article-summary" formControlName="summary" />
-  </div>
+    <section class="staff-article-editor-card" aria-labelledby="article-create-identity-heading">
+      <div class="staff-article-editor-card-heading">
+        <span class="staff-article-editor-step" aria-hidden="true">1</span>
+        <div>
+          <span class="staff-page-kicker">Présentation</span>
+          <h2 id="article-create-identity-heading">Informations éditoriales</h2>
+          <p>Donnez à l’article un titre clair et un résumé court pour le présenter aux lecteurs.</p>
+        </div>
+      </div>
 
-  <div class="form-field">
-    <label for="article-content">Contenu</label>
-    <textarea pTextarea id="article-content" formControlName="content" rows="12"></textarea>
-    @if (form.controls.content.invalid && form.controls.content.touched) {
-      <p-message severity="error" text="Le contenu est requis." />
-    }
-    @if (fieldError('content'); as message) {
-      <p-message severity="error" [text]="message" />
-    }
-  </div>
+      <div class="staff-article-editor-fields">
+        <div class="form-field staff-article-editor-field-wide">
+          <label for="article-title">Titre <span aria-hidden="true">*</span></label>
+          <input
+            pInputText
+            id="article-title"
+            formControlName="title"
+            maxlength="255"
+            placeholder="Titre de l’article"
+            autocomplete="off"
+          />
+          @if (form.controls.title.invalid && form.controls.title.touched) {
+            <p-message severity="error" text="Le titre est requis (255 caractères maximum)." />
+          }
+          @if (fieldError('title'); as message) {
+            <p-message severity="error" [text]="message" />
+          }
+        </div>
 
-  <div class="form-actions">
-    <button pButton type="submit" label="Créer l'article" [disabled]="submitting()"></button>
-  </div>
-</form>
+        <div class="form-field staff-article-editor-field-wide">
+          <label for="article-summary">Résumé</label>
+          <textarea
+            id="article-summary"
+            formControlName="summary"
+            rows="4"
+            placeholder="Présentez l’article en quelques lignes…"
+          ></textarea>
+          <span class="staff-article-editor-hint">
+            Ce texte peut servir d’introduction dans les listes publiques d’articles.
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="staff-article-editor-card" aria-labelledby="article-create-content-heading">
+      <div class="staff-article-editor-card-heading">
+        <span class="staff-article-editor-step" aria-hidden="true">2</span>
+        <div>
+          <span class="staff-page-kicker">Rédaction</span>
+          <h2 id="article-create-content-heading">Contenu de l’article</h2>
+          <p>
+            Structurez le texte avec des titres, listes, citations et liens. Les images seront
+            intégrées dans un chantier séparé.
+          </p>
+        </div>
+      </div>
+
+      <div class="staff-article-editor-content-wrap">
+        <div class="staff-article-editor-content-label">
+          <div>
+            <label id="article-content-label">Contenu <span aria-hidden="true">*</span></label>
+            <span>Le contenu sera enregistré sous forme de HTML contrôlé.</span>
+          </div>
+          <span class="staff-article-editor-draft-note">
+            <i class="pi pi-file-edit" aria-hidden="true"></i>
+            Brouillon à la création
+          </span>
+        </div>
+
+        <app-article-content-editor
+          id="article-content"
+          aria-labelledby="article-content-label"
+          [content]="form.controls.content.value"
+          [disabled]="form.controls.content.disabled"
+          (contentChange)="form.controls.content.setValue($event)"
+          (editorBlur)="form.controls.content.markAsTouched()"
+        />
+        @if (form.controls.content.invalid && form.controls.content.touched) {
+          <p-message severity="error" text="Le contenu est requis." />
+        }
+        @if (fieldError('content'); as message) {
+          <p-message severity="error" [text]="message" />
+        }
+      </div>
+    </section>
+
+    <div class="staff-article-editor-actions">
+      <p class="staff-article-editor-required-note">
+        <span aria-hidden="true">*</span> Champs obligatoires · l’article ne sera pas publié
+        automatiquement.
+      </p>
+      <div class="staff-article-editor-buttons">
+        <a
+          pButton
+          type="button"
+          severity="secondary"
+          label="Annuler"
+          routerLink="/staff/articles"
+        ></a>
+        <button
+          pButton
+          type="submit"
+          icon="pi pi-check"
+          label="Créer l'article"
+          [disabled]="submitting()"
+        ></button>
+      </div>
+    </div>
+  </form>
+</div>

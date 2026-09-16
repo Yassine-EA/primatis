@@ -766,7 +766,11 @@ def test_build_bundle_enriches_authors_from_snapshot_and_preserves_others(
                 "name": "Canonical Author One",
                 "birth_date": "1900-01-01",
                 "death_date": "1980-01-01",
-                "bio": "Notice biographique enrichie.",
+                "bio": (
+                    "Cet écrivain français était considéré, depuis son "
+                    "plus jeune âge, comme l'un des auteurs les plus "
+                    "reconnus de son siècle."
+                ),
             }
         ],
     )
@@ -791,7 +795,10 @@ def test_build_bundle_enriches_authors_from_snapshot_and_preserves_others(
     assert enriched["full_name"] == "Canonical Author One"
     assert enriched["birth_date"] == "1900-01-01"
     assert enriched["death_date"] == "1980-01-01"
-    assert enriched["biography"] == "Notice biographique enrichie."
+    assert enriched["biography"] == (
+        "Cet écrivain français était considéré, depuis son plus jeune âge, "
+        "comme l'un des auteurs les plus reconnus de son siècle."
+    )
     assert enriched["nationality"] == ""
 
     unenriched = rows["/authors/OL2A"]

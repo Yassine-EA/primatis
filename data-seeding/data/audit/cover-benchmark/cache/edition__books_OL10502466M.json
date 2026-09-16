@@ -1,0 +1,48 @@
+{
+  "title": "Le Vicomte de Bragelonne",
+  "subtitle": "Tome I. Première partie",
+  "authors": [
+    {
+      "key": "/authors/OL18236A"
+    }
+  ],
+  "publish_date": "January 17, 2001",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "physical_format": "Paperback",
+  "weight": "1.1 pounds",
+  "publishers": [
+    "Adamant Media Corporation"
+  ],
+  "isbn_13": [
+    "9780543854667"
+  ],
+  "isbn_10": [
+    "0543854663"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Fiction / Adventure"
+  ],
+  "physical_dimensions": "23 x 8.2 x 5.2 inches",
+  "source_records": [
+    "amazon:0543854663"
+  ],
+  "key": "/books/OL10502466M",
+  "number_of_pages": 364,
+  "latest_revision": 13,
+  "revision": 13,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-10T03:13:00.227717"
+  }
+}

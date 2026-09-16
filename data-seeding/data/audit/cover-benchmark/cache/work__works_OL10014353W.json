@@ -1,0 +1,33 @@
+{
+  "title": "Adriano Ribolzi",
+  "key": "/works/OL10014353W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3981099A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Catalogs",
+    "Art objects",
+    "Galerie Adriano Ribolzi",
+    "Antiques"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:59:38.336708"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2023-05-28T03:11:28.822727"
+  }
+}

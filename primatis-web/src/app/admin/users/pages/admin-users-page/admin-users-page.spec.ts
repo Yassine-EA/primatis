@@ -102,7 +102,7 @@ describe('AdminUsersPage', () => {
     expect(text).toContain('Marie Curie');
     expect(text).toContain('marie@primatis.test');
     expect(text).toContain('M000000001');
-    expect(text).toContain('ACTIVE');
+    expect(text).toContain('Actif');
   });
 
   it('should render — for a null memberNumber and a null memberStatus', () => {

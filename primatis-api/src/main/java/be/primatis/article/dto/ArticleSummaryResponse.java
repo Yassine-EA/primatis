@@ -1,6 +1,7 @@
 package be.primatis.article.dto;
 
 import be.primatis.article.Article;
+import be.primatis.article.ArticleThumbnailExtractor;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -36,18 +37,33 @@ import java.util.Objects;
  *
  * <p>{@code author} reste un résumé compact ({@link ArticleUserResponse}),
  * jamais l'Entity {@code AppUser} exposée directement.
+ *
+ * <p>{@code imageUrl} (DEV-ARTICLES-MEDIA-THUMBNAIL) : URL de la première
+ * {@code <img>} trouvée dans {@code content} ({@link
+ * ArticleThumbnailExtractor}, jamais recalculée ici), ou {@code null} si
+ * aucune image valide — {@code content} lui-même n'est jamais exposé dans
+ * ce résumé (raison ci-dessus, inchangée). Aucune nouvelle colonne/table :
+ * calculé à la volée depuis la donnée déjà persistée.
  */
 public record ArticleSummaryResponse(
-        Long id, String title, String summary, String slug, ArticleUserResponse author, Instant publishedAt) {
+        Long id,
+        String title,
+        String summary,
+        String slug,
+        ArticleUserResponse author,
+        Instant publishedAt,
+        String imageUrl) {
 
-    public static ArticleSummaryResponse from(Article article) {
+    public static ArticleSummaryResponse from(Article article, ArticleThumbnailExtractor thumbnailExtractor) {
         Objects.requireNonNull(article, "article");
+        Objects.requireNonNull(thumbnailExtractor, "thumbnailExtractor");
         return new ArticleSummaryResponse(
                 article.getId(),
                 article.getTitle(),
                 article.getSummary(),
                 article.getSlug(),
                 ArticleUserResponse.from(article.getAuthorUser()),
-                article.getPublishedAt());
+                article.getPublishedAt(),
+                thumbnailExtractor.extractFirstImageUrl(article.getContent()));
     }
 }

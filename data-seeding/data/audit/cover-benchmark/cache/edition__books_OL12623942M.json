@@ -1,0 +1,59 @@
+{
+  "publishers": [
+    "Terre de brume"
+  ],
+  "identifiers": {
+    "goodreads": [
+      "2396026"
+    ]
+  },
+  "subtitle": "Photographies de Pierre Josse, Jean Hervoche and Claude Le Gall",
+  "title": "Images D'Irlandae",
+  "type": {
+    "key": "/type/edition"
+  },
+  "number_of_pages": 2,
+  "isbn_13": [
+    "9782843621291"
+  ],
+  "isbn_10": [
+    "2843621291"
+  ],
+  "publish_date": "2001",
+  "key": "/books/OL12623942M",
+  "authors": [
+    {
+      "key": "/authors/OL3965596A"
+    }
+  ],
+  "oclc_numbers": [
+    "52746945"
+  ],
+  "works": [
+    {
+      "key": "/works/OL10000551W"
+    }
+  ],
+  "physical_format": "Unknown Binding",
+  "lc_classifications": [
+    "DA959 .B47 2001"
+  ],
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/20220215_006.bib.mrc:101716801:1840"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 7,
+  "revision": 7,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-06-02T16:09:50.149828"
+  }
+}

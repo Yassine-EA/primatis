@@ -1,5 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 
@@ -8,6 +10,12 @@ import { toAppError } from '../../../../core/errors/api-error.util';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  accountStatusSeverity as sharedAccountStatusSeverity,
+  memberStatusSeverity as sharedMemberStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
+import { AccountStatus } from '../../../../user/models/account-status';
 import { MemberStatus } from '../../../../user/models/member-status';
 import { UserResponse } from '../../../../user/models/user-response';
 import { UserApiService } from '../../../../user/services/user-api.service';
@@ -23,12 +31,13 @@ const DEFAULT_PAGE_SIZE = 20;
  */
 @Component({
   selector: 'app-admin-users-page',
-  imports: [RouterLink, TableModule, TagModule, LoadingState, EmptyState, ErrorState],
+  imports: [RouterLink, ButtonModule, TableModule, TagModule, LoadingState, EmptyState, ErrorState],
   templateUrl: './admin-users-page.html',
   styleUrl: './admin-users-page.scss',
 })
 export class AdminUsersPage {
   private readonly userApiService = inject(UserApiService);
+  private readonly titleService = inject(Title);
 
   readonly rows = signal<UserResponse[]>([]);
   readonly totalRecords = signal(0);
@@ -44,6 +53,7 @@ export class AdminUsersPage {
   private lastSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
+    this.titleService.setTitle('Administration des utilisateurs — PRIMATIS');
     this.load(0, DEFAULT_PAGE_SIZE);
   }
 
@@ -62,15 +72,28 @@ export class AdminUsersPage {
     this.load(this.lastPage, this.lastSize);
   }
 
-  memberStatusSeverity(status: MemberStatus): 'success' | 'danger' | 'warn' {
+  memberStatusSeverity(status: MemberStatus): StatusTagSeverity {
+    return sharedMemberStatusSeverity(status);
+  }
+
+  accountStatusSeverity(status: AccountStatus): StatusTagSeverity {
+    return sharedAccountStatusSeverity(status);
+  }
+
+  // Même précédent exact que StaffUsersPage/MemberProfilePage (DEV-15.6/DEV-15.8).
+  memberStatusLabel(status: MemberStatus): string {
     switch (status) {
       case 'ACTIVE':
-        return 'success';
+        return 'Actif';
       case 'BLOCKED':
-        return 'danger';
+        return 'Bloqué';
       case 'EXPIRED':
-        return 'warn';
+        return 'Expiré';
     }
+  }
+
+  accountStatusLabel(status: AccountStatus): string {
+    return status === 'ACTIVE' ? 'Actif' : 'Désactivé';
   }
 
   private load(page: number, size: number): void {

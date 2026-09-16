@@ -1,0 +1,283 @@
+<section class="lemaitre-v3-hero">
+  <picture class="lemaitre-v3-hero-background" aria-hidden="true">
+    <source
+      media="(max-width: 767px)"
+      srcset="/assets/public/georges-lemaitre/hero/georges-lemaitre-background-768-mobile.webp"
+    />
+    <source
+      media="(max-width: 1439px)"
+      srcset="/assets/public/georges-lemaitre/hero/georges-lemaitre-background-1280.webp"
+    />
+    <img src="/assets/public/georges-lemaitre/hero/georges-lemaitre-background-1920.webp" alt="" />
+  </picture>
+
+  <div class="lemaitre-v3-hero-inner">
+    <div class="lemaitre-v3-hero-copy">
+      <h1>Georges Lemaître</h1>
+      <p class="lemaitre-v3-hero-subtitle">Physicien, mathématicien et astronome belge</p>
+      <p class="lemaitre-v3-hero-lede">
+        Pionnier de la cosmologie moderne et inspirateur de cette bibliothèque.
+      </p>
+
+      <div class="lemaitre-v3-hero-actions">
+        <a routerLink="/catalogue" class="cta cta--primary">
+          <i class="pi pi-book" aria-hidden="true"></i>
+          Découvrir le catalogue
+        </a>
+        <a href="#lemaitre-reperes" class="cta cta--secondary" (click)="scrollToReperes($event)">
+          Explorer son héritage
+          <i class="pi pi-arrow-down" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+
+    <picture class="lemaitre-v3-portrait-wrap">
+      <source
+        media="(max-width: 767px)"
+        srcset="/assets/public/georges-lemaitre/hero/georges-lemaitre-portrait-480.webp"
+      />
+      <source
+        media="(max-width: 1199px)"
+        srcset="/assets/public/georges-lemaitre/hero/georges-lemaitre-portrait-768.webp"
+      />
+      <img
+        class="lemaitre-hero-portrait"
+        src="/assets/public/georges-lemaitre/hero/georges-lemaitre-portrait-1024.webp"
+        alt="Portrait illustré de Georges Lemaître"
+      />
+    </picture>
+
+    <div class="lemaitre-v3-hero-note" aria-label="Repère biographique">
+      <span>1894</span>
+      <strong>Charleroi</strong>
+      <p>Une figure locale au rayonnement scientifique international.</p>
+    </div>
+
+    <p
+      class="lemaitre-v3-formula"
+      aria-label="Loi de Hubble-Lemaître : la vitesse de récession est égale à la constante de Hubble multipliée par la distance"
+    >
+      v = H<sub>0</sub>&nbsp;d
+    </p>
+  </div>
+</section>
+
+<main class="lemaitre-v3-body">
+  <section
+    class="lemaitre-v3-reperes"
+    id="lemaitre-reperes"
+    aria-labelledby="lemaitre-reperes-heading"
+  >
+    <div class="lemaitre-v3-section-heading">
+      <div>
+        <p class="lemaitre-v3-kicker">Une vie au service de la connaissance</p>
+        <h2 id="lemaitre-reperes-heading">Repères biographiques</h2>
+      </div>
+      <p>
+        Né à Charleroi en 1894, Georges Lemaître a réuni physique, mathématiques et astronomie pour
+        renouveler notre compréhension de l'Univers.
+      </p>
+    </div>
+
+    <ol class="lemaitre-timeline">
+      <li>
+        <span class="lemaitre-timeline-year">1894</span>
+        <span class="lemaitre-timeline-label">Naissance à Charleroi</span>
+      </li>
+      <li>
+        <span class="lemaitre-timeline-year">1927</span>
+        <span class="lemaitre-timeline-label">L'Univers en expansion</span>
+      </li>
+      <li>
+        <span class="lemaitre-timeline-year">1931</span>
+        <span class="lemaitre-timeline-label">L'atome primitif</span>
+      </li>
+      <li>
+        <span class="lemaitre-timeline-year">1934</span>
+        <span class="lemaitre-timeline-label">Prix Francqui</span>
+      </li>
+      <li>
+        <span class="lemaitre-timeline-year">1966</span>
+        <span class="lemaitre-timeline-label">Décès à Louvain</span>
+      </li>
+    </ol>
+
+    <div class="lemaitre-v3-domains" aria-label="Domaines associés à son œuvre">
+      <span>Physique</span>
+      <span>Mathématiques</span>
+      <span>Astronomie</span>
+      <span>Cosmologie</span>
+    </div>
+  </section>
+
+  <aside class="lemaitre-v3-aside" aria-label="Synthèse biographique">
+    <section>
+      <h3>Dates clés</h3>
+      <dl class="lemaitre-key-dates">
+        <div>
+          <dt>1894</dt>
+          <dd>Naissance à Charleroi</dd>
+        </div>
+        <div>
+          <dt>1927</dt>
+          <dd>Univers en expansion</dd>
+        </div>
+        <div>
+          <dt>1931</dt>
+          <dd>Atome primitif</dd>
+        </div>
+        <div>
+          <dt>1934</dt>
+          <dd>Prix Francqui</dd>
+        </div>
+        <div>
+          <dt>1966</dt>
+          <dd>Décès à Louvain</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h3>Domaines</h3>
+      <div class="lemaitre-v3-aside-domains">
+        <span>Physique</span>
+        <span>Mathématiques</span>
+        <span>Astronomie</span>
+        <span>Cosmologie</span>
+      </div>
+    </section>
+
+    <a href="#lemaitre-sources-heading" class="lemaitre-v3-aside-link">
+      Consulter les sources
+      <i class="pi pi-arrow-down" aria-hidden="true"></i>
+    </a>
+  </aside>
+
+  <div class="lemaitre-v3-science-grid">
+    <section
+      class="lemaitre-v3-science-card lemaitre-v3-expansion"
+      aria-labelledby="lemaitre-expansion-heading"
+    >
+      <picture aria-hidden="true">
+        <source
+          media="(max-width: 767px)"
+          srcset="/assets/public/georges-lemaitre/science/universe-expansion-640.webp"
+        />
+        <img src="/assets/public/georges-lemaitre/science/universe-expansion-960.webp" alt="" />
+      </picture>
+      <div>
+        <p class="lemaitre-v3-science-year">1927</p>
+        <h2 id="lemaitre-expansion-heading">L'Univers en expansion</h2>
+        <p>
+          Georges Lemaître publie un modèle décrivant un Univers en expansion, fondé sur la
+          relativité générale et les observations astrophysiques de son époque. Il est parmi les
+          premiers à en estimer le taux d'expansion.
+        </p>
+      </div>
+    </section>
+
+    <section
+      class="lemaitre-v3-science-card lemaitre-v3-atom"
+      aria-labelledby="lemaitre-atom-heading"
+    >
+      <picture aria-hidden="true">
+        <source
+          media="(max-width: 767px)"
+          srcset="/assets/public/georges-lemaitre/science/primitive-atom-768-mobile.webp"
+        />
+        <img src="/assets/public/georges-lemaitre/science/primitive-atom-1280.webp" alt="" />
+      </picture>
+      <div>
+        <p class="lemaitre-v3-science-year">1931</p>
+        <h2 id="lemaitre-atom-heading">L'atome primitif</h2>
+        <p>
+          Il développe l'idée d'un commencement de l'Univers sous la forme d'un « atome primitif »
+          unique. Cette intuition est aujourd'hui reconnue comme l'une des bases de la cosmologie
+          moderne.
+        </p>
+        <small>Représentation artistique de l'idée d'atome primitif.</small>
+      </div>
+    </section>
+  </div>
+
+  <div class="lemaitre-v3-editorial-grid">
+    <section class="lemaitre-v3-charleroi" aria-labelledby="lemaitre-charleroi-heading">
+      <img
+        src="/assets/public/georges-lemaitre/editorial/charleroi-link-960-decorative.webp"
+        alt=""
+        aria-hidden="true"
+      />
+      <div>
+        <p class="lemaitre-v3-kicker">Une figure locale, un rayonnement universel</p>
+        <h2 id="lemaitre-charleroi-heading">Georges Lemaître et Charleroi</h2>
+        <p>
+          Georges Lemaître est né à Charleroi en 1894. Ce lien de naissance ancre localement une
+          figure dont les travaux ont ensuite eu un rayonnement international.
+        </p>
+      </div>
+    </section>
+
+    <section class="lemaitre-v3-why" aria-labelledby="lemaitre-why-heading">
+      <picture aria-hidden="true">
+        <source
+          media="(max-width: 767px)"
+          srcset="/assets/public/georges-lemaitre/editorial/why-primatis-960-mobile.webp"
+        />
+        <img src="/assets/public/georges-lemaitre/editorial/why-primatis-1920.webp" alt="" />
+      </picture>
+      <div>
+        <p class="lemaitre-v3-kicker">Science, culture et transmission</p>
+        <h2 id="lemaitre-why-heading">Pourquoi PRIMATIS porte son nom ?</h2>
+        <p>
+          PRIMATIS inscrit sa mission dans la continuité d'une figure née à Charleroi et devenue une
+          référence internationale : rendre la connaissance accessible à tous, dans un lieu ouvert à
+          la science comme à la culture.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <section class="lemaitre-v3-sources" aria-labelledby="lemaitre-sources-heading">
+    <div>
+      <p class="lemaitre-v3-kicker">Pour aller plus loin</p>
+      <h2 id="lemaitre-sources-heading">Sources</h2>
+    </div>
+    <ul class="lemaitre-sources">
+      <li>
+        <a
+          href="https://archives.uclouvain.be/exhibits/show/georges-lemaitre"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="pi pi-external-link" aria-hidden="true"></i>
+          UCLouvain — Archives Georges Lemaître
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://www.esa.int/Space_in_Member_States/Belgium_-_Francais/Le_lancement_de_l_ATV-5_belge_Georges_Lemaitre"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="pi pi-external-link" aria-hidden="true"></i>
+          Agence spatiale européenne (ESA) — Georges Lemaître
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://commons.wikimedia.org/wiki/File:GLemaitre30.jpg"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="pi pi-external-link" aria-hidden="true"></i>
+          Wikimedia Commons — portrait historique de référence
+        </a>
+      </li>
+    </ul>
+
+    <a routerLink="/" class="cta cta--secondary lemaitre-back">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i>
+      Retour à l'accueil
+    </a>
+  </section>
+</main>

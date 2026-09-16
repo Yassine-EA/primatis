@@ -1,60 +1,191 @@
 @if (loading()) {
-  <app-loading-state message="Chargement du titre…" />
+  <div class="title-detail-v3-status">
+    <app-loading-state message="Chargement du titre…" />
+  </div>
 } @else if (error(); as currentError) {
-  <app-error-state [message]="currentError.message" />
+  <div class="title-detail-v3-status">
+    <a routerLink="/catalogue" class="title-detail-v3-status-back">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i>
+      Retour au catalogue
+    </a>
+    <app-error-state [message]="currentError.message" />
+  </div>
 } @else if (title(); as currentTitle) {
-  <article class="title-detail">
-    <div class="title-detail-header">
-      @if (currentTitle.coverImageUrl) {
-        <img
-          [src]="currentTitle.coverImageUrl"
-          [alt]="'Couverture de ' + currentTitle.title"
-          class="title-detail-cover"
-        />
-      }
-      <div>
+  <nav class="title-detail-v3-mobile-breadcrumb" aria-label="Fil d'Ariane">
+    <a routerLink="/">Accueil</a>
+    <i class="pi pi-chevron-right" aria-hidden="true"></i>
+    <a routerLink="/catalogue">Catalogue</a>
+  </nav>
+
+  <section class="title-detail-v3-hero">
+    <picture class="title-detail-v3-hero-background" aria-hidden="true">
+      <source
+        media="(max-width: 1439px)"
+        srcset="/assets/public/title-detail/hero/title-detail-hero-1280.webp"
+      />
+      <img src="/assets/public/title-detail/hero/title-detail-hero-1920.webp" alt="" />
+    </picture>
+    <div class="title-detail-v3-hero-inner">
+      <nav class="title-detail-v3-breadcrumb" aria-label="Fil d'Ariane">
+        <ol>
+          <li><a routerLink="/">Accueil</a></li>
+          <li><a routerLink="/catalogue">Catalogue</a></li>
+          <li aria-current="page">{{ currentTitle.title }}</li>
+        </ol>
+      </nav>
+
+      <div class="title-detail-v3-hero-copy">
         <h1>{{ currentTitle.title }}</h1>
         @if (currentTitle.subtitle) {
-          <p class="title-detail-subtitle">{{ currentTitle.subtitle }}</p>
+          <p>{{ currentTitle.subtitle }}</p>
         }
       </div>
     </div>
+  </section>
 
-    @if (currentTitle.summary) {
-      <p class="title-detail-summary">{{ currentTitle.summary }}</p>
-    }
-
-    <dl>
-      @if (currentTitle.authors.length > 0) {
-        <dt>Auteur(s)</dt>
-        <dd>{{ authorNames(currentTitle) }}</dd>
-      }
-      @if (currentTitle.genres.length > 0) {
-        <dt>Genre(s)</dt>
-        <dd class="title-detail-genres">
-          @for (genre of currentTitle.genres; track genre.id) {
-            <p-tag [value]="genre.label" />
+  <main class="title-detail-v3-body">
+    <section
+      class="title-detail-v3-intro"
+      [class.title-detail-v3-intro--with-action]="canReserve() || showLoginCta()"
+      aria-labelledby="title-detail-heading"
+    >
+      <div class="title-detail-v3-cover-column">
+        <span class="title-detail-cover title-detail-v3-cover">
+          @if (currentTitle.coverImageUrl) {
+            <img [src]="currentTitle.coverImageUrl" [alt]="'Couverture de ' + currentTitle.title" />
+          } @else {
+            <span class="cover-fallback title-detail-v3-cover-fallback" aria-hidden="true"></span>
           }
-        </dd>
+        </span>
+      </div>
+
+      <div class="title-detail-v3-overview">
+        @if (currentTitle.genres.length > 0) {
+          <p class="title-detail-v3-eyebrow">{{ currentTitle.genres[0].label }}</p>
+        } @else {
+          <p class="title-detail-v3-eyebrow">Ouvrage du catalogue</p>
+        }
+
+        <h2 id="title-detail-heading">{{ currentTitle.title }}</h2>
+
+        @if (currentTitle.subtitle) {
+          <p class="title-detail-v3-subtitle">{{ currentTitle.subtitle }}</p>
+        }
+
+        @if (currentTitle.authors.length > 0) {
+          <p class="title-detail-v3-authors">{{ authorNames(currentTitle) }}</p>
+        }
+
+        <dl class="title-detail-v3-metadata title-detail-metadata">
+          @if (currentTitle.publisher) {
+            <div class="title-detail-v3-metadata-item">
+              <dt><i class="pi pi-building" aria-hidden="true"></i> Éditeur</dt>
+              <dd>{{ currentTitle.publisher }}</dd>
+            </div>
+          }
+          @if (currentTitle.publicationYear) {
+            <div class="title-detail-v3-metadata-item">
+              <dt><i class="pi pi-calendar" aria-hidden="true"></i> Publication</dt>
+              <dd>{{ currentTitle.publicationYear }}</dd>
+            </div>
+          }
+          <div class="title-detail-v3-metadata-item">
+            <dt><i class="pi pi-globe" aria-hidden="true"></i> Langue</dt>
+            <dd>{{ languageLabel(currentTitle.language) }}</dd>
+          </div>
+          @if (currentTitle.pageCount) {
+            <div class="title-detail-v3-metadata-item">
+              <dt><i class="pi pi-file" aria-hidden="true"></i> Pages</dt>
+              <dd>{{ currentTitle.pageCount }}</dd>
+            </div>
+          }
+          @if (currentTitle.isbn) {
+            <div class="title-detail-v3-metadata-item title-detail-v3-metadata-isbn">
+              <dt><i class="pi pi-hashtag" aria-hidden="true"></i> ISBN</dt>
+              <dd>{{ currentTitle.isbn }}</dd>
+            </div>
+          }
+        </dl>
+
+        @if (currentTitle.genres.length > 0) {
+          <div class="title-detail-genres title-detail-v3-genres" aria-label="Genres">
+            @for (genre of currentTitle.genres; track genre.id) {
+              <p-tag [value]="genre.label" severity="secondary" />
+            }
+          </div>
+        }
+      </div>
+
+      @if (canReserve() || showLoginCta()) {
+        <aside class="title-detail-v3-action-panel" aria-labelledby="title-detail-action-heading">
+          <div class="title-detail-v3-action-heading">
+            <img src="/assets/icons/editorial/catalogue-book.svg" alt="" aria-hidden="true" />
+            <div>
+              <h2 id="title-detail-action-heading">Réserver cet ouvrage</h2>
+              <p>La demande sera vérifiée selon les règles de la bibliothèque.</p>
+            </div>
+          </div>
+
+          <div class="title-detail-cta title-detail-v3-cta">
+            @if (canReserve()) {
+              @if (reservationState() === 'success') {
+                <p class="title-detail-cta-success">
+                  <i class="pi pi-check" aria-hidden="true"></i>
+                  Réservation créée.
+                </p>
+              } @else {
+                <button
+                  type="button"
+                  class="cta cta--primary title-detail-cta-reserve"
+                  [disabled]="reservationState() === 'pending'"
+                  (click)="reserve(currentTitle.id)"
+                >
+                  <i class="pi pi-bookmark" aria-hidden="true"></i>
+                  {{ reservationState() === 'pending' ? 'Réservation en cours…' : 'Réserver' }}
+                </button>
+                @if (
+                  reservationState() === 'error' && reservationError();
+                  as reservationErrorMessage
+                ) {
+                  <p class="title-detail-cta-error" role="alert">{{ reservationErrorMessage }}</p>
+                }
+              }
+            } @else if (showLoginCta()) {
+              <a
+                [routerLink]="['/login']"
+                [queryParams]="{ returnUrl: loginReturnUrl() }"
+                class="title-detail-cta-login cta cta--primary"
+              >
+                Se connecter pour réserver
+              </a>
+            }
+          </div>
+        </aside>
       }
-      <dt>Langue</dt>
-      <dd>{{ currentTitle.language }}</dd>
-      @if (currentTitle.publicationYear) {
-        <dt>Année de publication</dt>
-        <dd>{{ currentTitle.publicationYear }}</dd>
+    </section>
+
+    <section class="title-detail-v3-summary" aria-labelledby="title-detail-summary-heading">
+      <h2 id="title-detail-summary-heading">Résumé</h2>
+      @if (currentTitle.summary) {
+        <p class="title-detail-summary">{{ currentTitle.summary }}</p>
+      } @else {
+        <p class="title-detail-summary title-detail-summary-empty">
+          Aucun résumé disponible pour cet ouvrage.
+        </p>
       }
-      @if (currentTitle.publisher) {
-        <dt>Éditeur</dt>
-        <dd>{{ currentTitle.publisher }}</dd>
-      }
-      @if (currentTitle.pageCount) {
-        <dt>Nombre de pages</dt>
-        <dd>{{ currentTitle.pageCount }}</dd>
-      }
-      @if (currentTitle.isbn) {
-        <dt>ISBN</dt>
-        <dd>{{ currentTitle.isbn }}</dd>
-      }
-    </dl>
-  </article>
+    </section>
+
+    @if (currentTitle.authors.length > 0) {
+      <section class="title-detail-v3-authors-panel" aria-labelledby="title-detail-authors-heading">
+        <h2 id="title-detail-authors-heading">
+          Auteur{{ currentTitle.authors.length > 1 ? 's' : '' }}
+        </h2>
+        <ul>
+          @for (author of currentTitle.authors; track author.id) {
+            <li>{{ author.fullName }}</li>
+          }
+        </ul>
+      </section>
+    }
+  </main>
 }

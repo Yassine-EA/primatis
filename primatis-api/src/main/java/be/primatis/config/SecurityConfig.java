@@ -87,6 +87,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/titles/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/articles/**").permitAll()
+                        // DEV-ARTICLES-MEDIA (DEV-DEC-0079) : une image intégrée au contenu HTML
+                        // d'un Article publié doit rester visible sans authentification, même
+                        // précédent exact que la surface publique Article ci-dessus.
+                        .requestMatchers(HttpMethod.GET, "/media/articles/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(authenticationEntryPoint)

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="1120" viewBox="0 0 1600 1120">
+  <rect width="1600" height="1120" fill="#f7f5f1"/>
+  <text x="70" y="78" fill="#082c46" font-family="Georgia, serif" font-size="44">PRIMATIS — Détail d’un livre</text>
+  <text x="70" y="116" fill="#53616f" font-family="Arial, sans-serif" font-size="20">ASSET-RESET-02.3 · planche de validation</text>
+
+  <text x="70" y="182" fill="#082c46" font-family="Arial, sans-serif" font-weight="700" font-size="18">DESKTOP · TEXTE HTML À GAUCHE, OBSERVATOIRE À DROITE</text>
+  <defs>
+    <clipPath id="desktop"><rect x="70" y="205" width="1460" height="244" rx="2"/></clipPath>
+    <clipPath id="tablet"><rect x="70" y="560" width="900" height="225" rx="2"/></clipPath>
+  </defs>
+  <image x="70" y="205" width="1460" height="244" preserveAspectRatio="xMidYMid slice" clip-path="url(#desktop)" xlink:href="../hero/title-detail-hero-1920.webp"/>
+  <text x="120" y="315" fill="#ffffff" font-family="Georgia, serif" font-size="52" font-weight="700">Titre du livre</text>
+  <text x="120" y="360" fill="#f4eee5" font-family="Georgia, serif" font-size="28" font-style="italic">Sous-titre piloté par les données</text>
+  <text x="1110" y="330" fill="#f4eee5" font-family="Georgia, serif" font-size="22" font-style="italic">Citation HTML facultative</text>
+
+  <text x="70" y="520" fill="#082c46" font-family="Arial, sans-serif" font-weight="700" font-size="18">TABLETTE · 1280 × 320</text>
+  <image x="70" y="560" width="900" height="225" preserveAspectRatio="xMidYMid slice" clip-path="url(#tablet)" xlink:href="../hero/title-detail-hero-1280.webp"/>
+
+  <rect x="1010" y="560" width="520" height="225" rx="16" fill="#ffffff" stroke="#d8dfe5"/>
+  <text x="1060" y="625" fill="#082c46" font-family="Arial, sans-serif" font-weight="700" font-size="22">MOBILE ≤ 768 px</text>
+  <text x="1060" y="675" fill="#53616f" font-family="Arial, sans-serif" font-size="20">Aucun hero raster.</text>
+  <text x="1060" y="710" fill="#53616f" font-family="Arial, sans-serif" font-size="20">La page commence directement</text>
+  <text x="1060" y="745" fill="#53616f" font-family="Arial, sans-serif" font-size="20">par le contenu du livre.</text>
+
+  <rect x="70" y="860" width="1460" height="150" rx="16" fill="#f0ebe2"/>
+  <text x="100" y="910" fill="#082c46" font-family="Arial, sans-serif" font-size="18">Couverture : coverImageUrl réel → fallback global si absent.</text>
+  <text x="100" y="950" fill="#082c46" font-family="Arial, sans-serif" font-size="18">Disponibilité, localisation et recommandations : interdites sans contrat backend.</text>
+  <text x="100" y="990" fill="#082c46" font-family="Arial, sans-serif" font-size="18">Aucune nouvelle génération IA : dérivation du hero Home déjà validé.</text>
+</svg>

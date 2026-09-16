@@ -1,0 +1,41 @@
+DEV-16 RECONSTRUCTION — DE TARGETS
+==================================
+
+Total targets : 113
+
+BY CATEGORY
+===========
+GERMAN_LANGUAGE_CANON          : 35
+TWENTIETH_CENTURY              : 30
+CONTEMPORARY                   : 15
+PHILOSOPHY_ESSAYS              : 15
+HISTORY_SOCIETY                : 8
+YOUTH                          : 5
+SCIENCE_CULTURE                : 5
+
+EDITORIAL POLICY
+================
+
+Targets are works, not physical editions.
+German-language editorial value is selected before availability.
+Canonical literature and twentieth-century literature form the foundation.
+Philosophy and intellectual history are deliberately substantial.
+Modern and contemporary literature complements the canon.
+Youth and science/culture are represented deliberately.
+Translations do not form the foundation of the DE corpus.
+
+ACQUISITION POLICY
+==================
+
+Existing preserved DE titles must be matched before acquisition.
+No ISBN, publisher, date, page count or cover is invented.
+Final acquired editions must explicitly support German (ger/deu).
+A validated physical cover is mandatory for final acquisition.
+One physical edition cannot satisfy two independent slots.
+page_count will be integrated when reliably recoverable.
+
+No Open Library request performed.
+No bundle modification.
+No database write.
+
+STATUS : PASS

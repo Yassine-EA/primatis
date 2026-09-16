@@ -1,0 +1,55 @@
+{
+  "physical_format": "Paperback",
+  "subtitle": "Un hommage à Raymond Maufrais",
+  "publishers": [
+    "Scripta"
+  ],
+  "isbn_10": [
+    "2910870057"
+  ],
+  "number_of_pages": 210,
+  "isbn_13": [
+    "9782910870058"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publish_date": "November 15, 1996",
+  "key": "/books/OL12653284M",
+  "authors": [
+    {
+      "key": "/authors/OL3978848A"
+    }
+  ],
+  "title": "Aventures au coeur de la Guyane",
+  "works": [
+    {
+      "key": "/works/OL10012153W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "lc_classifications": [
+    "F2452 .C381 1996"
+  ],
+  "oclc_numbers": [
+    "38985888"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-005.mrc:115752235:1002",
+    "marc:harvard_bibliographic_metadata/20220215_013.bib.mrc:176075278:1194"
+  ],
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-08-11T13:39:48.662590"
+  }
+}

@@ -1,0 +1,28 @@
+language,category,quota,priority,description
+LA,CLASSICAL_LITERATURE,20,1,Major Latin literary works and canonical authors of Antiquity.
+LA,PHILOSOPHY_RHETORIC,14,1,"Major philosophical, rhetorical and intellectual works written in Latin."
+LA,HISTORY,10,1,Major Latin historical works and chroniclers.
+LA,LATE_MEDIEVAL_RENAISSANCE,6,2,"Representative Late Antique, Medieval or Renaissance Latin works."
+LA,SCIENCE_CIVILISATION,4,2,"Significant scientific, scholarly or civilisation texts originally written in Latin."
+IT,ITALIAN_CANON,55,1,Major canonical authors and landmark works of Italian literature.
+IT,TWENTIETH_CENTURY,40,1,Recognised twentieth-century Italian literature.
+IT,CONTEMPORARY,25,2,Established contemporary Italian authors and works.
+IT,ESSAYS_PHILOSOPHY,15,2,"Major Italian essays, philosophy and intellectual history."
+IT,HISTORY_SOCIETY,10,2,"Italian history, society and cultural studies."
+IT,YOUTH,10,3,Recognised Italian children's or young-adult works.
+IT,GRAPHIC,10,3,Significant Italian comics or graphic literature.
+ES,SPANISH_CANON,45,1,Major canonical authors and works from Spain.
+ES,LATIN_AMERICAN_CANON,45,1,Major canonical Spanish-language authors and works from Latin America.
+ES,SPAIN_MODERN_CONTEMPORARY,25,2,Recognised modern and contemporary literature from Spain.
+ES,LATIN_AMERICA_MODERN_CONTEMPORARY,25,2,Recognised modern and contemporary Spanish-language literature from Latin America.
+ES,ESSAYS_PHILOSOPHY,12,2,"Spanish-language essays, philosophy and intellectual works."
+ES,HISTORY_SOCIETY,8,2,"Spanish-language history, society and cultural studies."
+ES,YOUTH,8,3,Recognised Spanish-language children's or young-adult works.
+ES,GRAPHIC,5,3,Significant Spanish-language comics or graphic literature.
+DE,GERMAN_LANGUAGE_CANON,35,1,Major canonical German-language authors and works.
+DE,TWENTIETH_CENTURY,30,1,Recognised twentieth-century German-language literature.
+DE,CONTEMPORARY,15,2,Established contemporary German-language authors.
+DE,PHILOSOPHY_ESSAYS,15,1,"Major German-language philosophy, essays and intellectual history."
+DE,HISTORY_SOCIETY,8,2,"German-language history, society and cultural studies."
+DE,YOUTH,5,3,Recognised German-language children's or young-adult works.
+DE,SCIENCE_CULTURE,5,3,Significant German-language scientific or cultural works.

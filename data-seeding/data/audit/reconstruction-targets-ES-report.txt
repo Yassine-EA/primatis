@@ -1,0 +1,42 @@
+DEV-16 RECONSTRUCTION — ES TARGETS
+==================================
+
+Total targets : 173
+
+BY CATEGORY
+===========
+SPANISH_CANON                          : 45
+LATIN_AMERICAN_CANON                   : 45
+SPAIN_MODERN_CONTEMPORARY              : 25
+LATIN_AMERICA_MODERN_CONTEMPORARY      : 25
+ESSAYS_PHILOSOPHY                      : 12
+HISTORY_SOCIETY                        : 8
+YOUTH                                  : 8
+GRAPHIC                                : 5
+
+EDITORIAL POLICY
+================
+
+Targets are works, not physical editions.
+Spanish-language literary value is selected before availability.
+Spain and Latin America have separate editorial foundations.
+Canonical authors and landmark works are prioritised.
+Modern and contemporary literature complements the canon.
+Youth and graphic literature are represented deliberately.
+Translations do not form the foundation of the ES corpus.
+
+ACQUISITION POLICY
+==================
+
+Existing preserved ES titles must be matched before acquisition.
+No ISBN, publisher, date, page count or cover is invented.
+Final acquired editions must explicitly support Spanish (spa).
+A validated physical cover is mandatory for final acquisition.
+One physical edition cannot satisfy two independent slots.
+page_count will be integrated when reliably recoverable.
+
+No Open Library request performed.
+No bundle modification.
+No database write.
+
+STATUS : PASS

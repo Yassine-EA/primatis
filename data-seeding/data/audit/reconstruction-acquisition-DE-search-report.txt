@@ -1,0 +1,69 @@
+DEV-16 RECONSTRUCTION — DE MASS ACQUISITION SEARCH
+=================================================
+
+Acquisition targets      : 111
+Best candidates found    : 90
+No usable candidate      : 21
+Edition collisions       : 0
+
+SELECTED METADATA
+=================
+
+ISBN       : 77/90
+Publisher  : 89/90
+Date       : 89/90
+Page count : 0/90
+Valid cover: 90/90
+
+BY CATEGORY
+===========
+CONTEMPORARY                   total= 15 found=  8 missing=  7
+GERMAN_LANGUAGE_CANON          total= 33 found= 31 missing=  2
+HISTORY_SOCIETY                total=  8 found=  4 missing=  4
+PHILOSOPHY_ESSAYS              total= 15 found= 14 missing=  1
+SCIENCE_CULTURE                total=  5 found=  3 missing=  2
+TWENTIETH_CENTURY              total= 30 found= 26 missing=  4
+YOUTH                          total=  5 found=  4 missing=  1
+
+EDITION COLLISIONS
+==================
+NONE
+
+TARGETS WITHOUT USABLE CANDIDATE
+================================
+- #7 Friedrich Schiller / Maria Stuart
+- #32 Hermann Hesse / Demian
+- #40 Alfred Döblin / Berlin Alexanderplatz
+- #52 Ingeborg Bachmann / Malina
+- #56 Stefan Zweig / Ungeduld des Herzens
+- #58 Joseph Roth / Radetzkymarsch
+- #69 Daniel Kehlmann / Tyll
+- #70 Jenny Erpenbeck / Heimsuchung
+- #71 Jenny Erpenbeck / Gehen, ging, gegangen
+- #72 W. G. Sebald / Austerlitz
+- #73 W. G. Sebald / Die Ringe des Saturn
+- #75 Herta Müller / Atemschaukel
+- #76 Herta Müller / Herztier
+- #92 Theodor W. Adorno / Minima Moralia
+- #96 Sebastian Haffner / Geschichte eines Deutschen
+- #97 Victor Klemperer / LTI
+- #100 Hannah Arendt / Eichmann in Jerusalem
+- #101 Alexander Mitscherlich / Die Unfähigkeit zu trauern
+- #107 Michael Ende / Die unendliche Geschichte
+- #110 Carl Friedrich Gauß / Disquisitiones Arithmeticae
+- #111 Max Planck / Wissenschaftliche Selbstbiographie
+
+POLICY
+======
+
+Search covers all 111 unmatched DE editorial targets.
+Two DE targets are already represented in the preserved catalogue.
+Processing is internally batched and resumable.
+German is mandatory at edition level: ger or deu.
+A valid physical cover is mandatory.
+BEST_CANDIDATE_FOUND is not final editorial approval.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

@@ -1,0 +1,51 @@
+{
+  "title": "A, B, C... Play with Me!",
+  "authors": [
+    {
+      "key": "/authors/OL2903427A"
+    },
+    {
+      "key": "/authors/OL3573201A"
+    }
+  ],
+  "publish_date": "October 1988",
+  "publishers": [
+    "Meadowbrook Press"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_13": [
+    "9780881661217"
+  ],
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "088166121X"
+  ],
+  "oclc_numbers": [
+    "29911362"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Alphabet",
+    "Language Arts / Linguistics / Literacy"
+  ],
+  "source_records": [
+    "amazon:088166121X"
+  ],
+  "key": "/books/OL11224333M",
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-31T20:43:48.344244"
+  }
+}

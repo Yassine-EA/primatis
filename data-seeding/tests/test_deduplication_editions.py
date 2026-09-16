@@ -96,7 +96,12 @@ def test_same_metadata_without_isbn_is_candidate_but_not_merged() -> None:
     assert result.candidates[0].reason == "EXACT_METADATA_CANDIDATE_NO_ISBN"
 
 
-def test_title_similarity_alone_does_not_create_candidate_when_metadata_differs() -> None:
+def test_differing_publication_year_is_surfaced_as_edition_variant() -> None:
+    # DEC-16.3-07 (DEV-16.2 §9.3): two editions sharing every other
+    # normalized field but a DIFFERENT publication_year are surfaced as a
+    # traceable `EDITION_VARIANT_CANDIDATE` (plausible legitimate
+    # reprint/re-edition) rather than staying invisible to the dedup
+    # report — but NEVER auto-merged, exactly like any other candidate.
     result = deduplicate_editions(
         [
             edition("/books/B1", isbn=None, publication_year=1999),
@@ -104,8 +109,37 @@ def test_title_similarity_alone_does_not_create_candidate_when_metadata_differs(
         ]
     )
 
-    assert len(result.kept) == 2
-    assert result.candidates == []
+    assert [item.source_key for item in result.kept] == ["/books/B1", "/books/B2"]
+    assert result.duplicates == []
+    assert len(result.candidates) == 1
+    assert result.candidates[0].reason == "EDITION_VARIANT_CANDIDATE"
+
+
+def test_same_publication_year_stays_ambiguous_match_not_edition_variant() -> None:
+    result = deduplicate_editions(
+        [
+            edition("/books/B1", isbn=None, publication_year=2020),
+            edition("/books/B2", isbn=None, publication_year=2020),
+        ]
+    )
+
+    assert len(result.candidates) == 1
+    assert result.candidates[0].reason == "EXACT_METADATA_CANDIDATE_NO_ISBN"
+
+
+def test_missing_publication_year_on_one_side_stays_ambiguous_match() -> None:
+    # Only a genuinely differing KNOWN year counts as an edition_variant
+    # signal — one missing year among the group is not evidence of a
+    # legitimate distinct edition, so it stays ambiguous_match.
+    result = deduplicate_editions(
+        [
+            edition("/books/B1", isbn=None, publication_year=2020),
+            edition("/books/B2", isbn=None, publication_year=None),
+        ]
+    )
+
+    assert len(result.candidates) == 1
+    assert result.candidates[0].reason == "EXACT_METADATA_CANDIDATE_NO_ISBN"
 
 
 def test_folding_accents_and_case_only_affects_candidate_detection() -> None:

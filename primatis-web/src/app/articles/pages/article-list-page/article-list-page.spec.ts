@@ -17,6 +17,7 @@ function buildArticle(overrides: Partial<ArticleSummaryResponse> = {}): ArticleS
     slug: 'les-horaires-dete',
     author: { id: 10, firstName: 'Prénom', lastName: 'Nom' },
     publishedAt: '2026-08-01T10:00:00Z',
+    imageUrl: null,
     ...overrides,
   };
 }
@@ -91,14 +92,23 @@ describe('ArticleListPage', () => {
     expect(component.totalRecords()).toBe(2);
   });
 
-  it('should render title, summary, author and publishedAt for each row', () => {
+  it('should render title, summary, author and a French-formatted date for each row', () => {
     createComponent();
 
     const text: string = fixture.nativeElement.textContent;
     expect(text).toContain('Les horaires d’été');
     expect(text).toContain('La bibliothèque adapte ses horaires pour la période estivale.');
     expect(text).toContain('Prénom Nom');
-    expect(text).toContain('2026-08-01T10:00:00Z');
+    expect(text).toContain('01/08/2026');
+    // Jamais le timestamp ISO brut sur le portail public (mission §11).
+    expect(text).not.toContain('2026-08-01T10:00:00Z');
+  });
+
+  it('should expose the publishedAt value as a semantic <time datetime="...">', () => {
+    createComponent();
+
+    const time: HTMLTimeElement | null = fixture.nativeElement.querySelector('time');
+    expect(time?.getAttribute('datetime')).toBe('2026-08-01T10:00:00Z');
   });
 
   it('should never call the API more than once per page (no N+1 detail fetch)', () => {
@@ -118,20 +128,126 @@ describe('ArticleListPage', () => {
     expect(link).not.toBeNull();
   });
 
-  it('should reload with the requested page/size on lazy load', () => {
+  it('should set the document title (DESIGN-V2-B4)', () => {
+    createComponent();
+
+    expect(document.title).toBe('Articles — PRIMATIS');
+  });
+
+  describe('vignettes réelles des Articles (DEV-ARTICLES-MEDIA-THUMBNAIL)', () => {
+    it('should use imageUrl for the featured card with an informative alt', () => {
+      articleApiServiceMock.listPublishedArticles.mockReturnValue(
+        of(
+          buildPage([
+            buildArticle({
+              id: 1,
+              title: 'Article illustré',
+              imageUrl: '/media/articles/portrait.webp',
+            }),
+          ]),
+        ),
+      );
+      createComponent();
+
+      const image: HTMLImageElement | null = fixture.nativeElement.querySelector(
+        '.articles-featured-cover img',
+      );
+      expect(image?.getAttribute('src')).toBe('/media/articles/portrait.webp');
+      expect(image?.getAttribute('alt')).toBe('Illustration de l’article « Article illustré »');
+      expect(image?.hasAttribute('aria-hidden')).toBe(false);
+    });
+
+    it('should keep the decorative fallback when an Article has no imageUrl', () => {
+      createComponent();
+
+      const article = component.featured();
+      const image: HTMLImageElement | null = fixture.nativeElement.querySelector(
+        '.articles-featured-cover img',
+      );
+      expect(article).not.toBeNull();
+      expect(image?.getAttribute('src')).toBe(component.articleVisual(article!, '960'));
+      expect(image?.getAttribute('alt')).toBe('');
+      expect(image?.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('should use imageUrl for grid and latest-articles thumbnails too', () => {
+      articleApiServiceMock.listPublishedArticles.mockReturnValue(
+        of(
+          buildPage([
+            buildArticle({ id: 1, title: 'Vedette' }),
+            buildArticle({
+              id: 2,
+              title: 'Deuxième illustré',
+              slug: 'deuxieme-illustre',
+              imageUrl: '/media/articles/deuxieme.webp',
+            }),
+          ]),
+        ),
+      );
+      createComponent();
+
+      const gridImage: HTMLImageElement | null = fixture.nativeElement.querySelector(
+        '.articles-card-cover img',
+      );
+      const latestImage: HTMLImageElement | null = fixture.nativeElement.querySelector(
+        '.articles-latest img',
+      );
+      expect(gridImage?.getAttribute('src')).toBe('/media/articles/deuxieme.webp');
+      expect(latestImage?.getAttribute('src')).toBe('/media/articles/deuxieme.webp');
+    });
+  });
+
+  describe('article vedette (DESIGN-V2-B4 §8)', () => {
+    it('should feature the first article of the first page, deterministically (backend already sorts by most recent)', () => {
+      articleApiServiceMock.listPublishedArticles.mockReturnValue(
+        of(
+          buildPage(
+            [
+              buildArticle({ id: 1, title: 'Le plus récent' }),
+              buildArticle({ id: 2, title: 'Deuxième' }),
+              buildArticle({ id: 3, title: 'Troisième' }),
+            ],
+            3,
+          ),
+        ),
+      );
+      createComponent();
+
+      expect(component.featured()?.title).toBe('Le plus récent');
+      expect(component.gridRows().map((row) => row.title)).toEqual(['Deuxième', 'Troisième']);
+      expect(fixture.nativeElement.querySelector('.articles-featured-card')).not.toBeNull();
+    });
+
+    it('should not feature any article on a page after the first (no fabricated "most recent among these")', () => {
+      articleApiServiceMock.listPublishedArticles.mockReturnValue(
+        of(buildPage([buildArticle({ id: 21, title: 'Page 2 item' })], 21)),
+      );
+      createComponent();
+      articleApiServiceMock.listPublishedArticles.mockClear();
+
+      component.onPageChange({ first: 20, rows: 20 });
+      fixture.detectChanges();
+
+      expect(component.featured()).toBeNull();
+      expect(component.gridRows().map((row) => row.title)).toEqual(['Page 2 item']);
+      expect(fixture.nativeElement.querySelector('.articles-featured-card')).toBeNull();
+    });
+  });
+
+  it('should reload with the requested page/rows on paginator page change', () => {
     createComponent();
     articleApiServiceMock.listPublishedArticles.mockClear();
 
-    component.onLazyLoad({ first: 40, rows: 20 });
+    component.onPageChange({ first: 40, rows: 20 });
 
     expect(lastCall()).toEqual([2, 20]);
   });
 
-  it('should fall back to defaults when the lazy load event omits first/rows', () => {
+  it('should fall back to defaults when the page change event omits first/rows', () => {
     createComponent();
     articleApiServiceMock.listPublishedArticles.mockClear();
 
-    component.onLazyLoad({});
+    component.onPageChange({});
 
     expect(lastCall()).toEqual([0, 20]);
   });
@@ -174,7 +290,7 @@ describe('ArticleListPage', () => {
       throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')),
     );
     createComponent();
-    component.onLazyLoad({ first: 40, rows: 20 });
+    component.onPageChange({ first: 40, rows: 20 });
     articleApiServiceMock.listPublishedArticles.mockClear();
     articleApiServiceMock.listPublishedArticles.mockReturnValue(of(buildPage([buildArticle()])));
 

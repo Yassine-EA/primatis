@@ -178,6 +178,44 @@ class ArticleControllerTests {
     }
 
     // ---------------------------------------------------------------
+    // GET /api/v1/articles — imageUrl (DEV-ARTICLES-MEDIA-THUMBNAIL)
+    // ---------------------------------------------------------------
+
+    @Test
+    void listArticlesExposesTheFirstImageUrlFromContentWithoutTheContentItself() throws Exception {
+        AppUser author = persistUser("controller-list-thumbnail-present@primatis.test");
+        Article article = persistArticleWithSlug(author, "Controller Thumbnail Present",
+                "controller-thumbnail-present", ArticleStatus.PUBLISHED, Instant.parse("2026-08-10T10:00:00Z"));
+        transactionTemplate().executeWithoutResult(status -> articleRepository.findById(article.getId())
+                .orElseThrow()
+                .setContent("<p>Texte</p><img src=\"/media/articles/thumb.webp\" alt=\"Illustration\">"));
+
+        mockMvc.perform(get("/api/v1/articles").param("size", "100"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.slug == 'controller-thumbnail-present')].imageUrl")
+                        .value("/media/articles/thumb.webp"))
+                .andExpect(jsonPath("$.content[?(@.slug == 'controller-thumbnail-present')].content").doesNotExist());
+    }
+
+    @Test
+    void listArticlesExposesNullImageUrlWhenContentHasNoImage() throws Exception {
+        AppUser author = persistUser("controller-list-thumbnail-absent@primatis.test");
+        // persistArticleWithSlug() persiste un content par défaut sans image ("Contenu de test").
+        persistArticleWithSlug(author, "Controller Thumbnail Absent", "controller-thumbnail-absent",
+                ArticleStatus.PUBLISHED, Instant.parse("2026-08-10T10:00:00Z"));
+
+        mockMvc.perform(get("/api/v1/articles").param("size", "100"))
+                .andExpect(status().isOk())
+                // Jackson sérialise ici une valeur JSON `null` littérale (vérifié : le corps
+                // réel contient bien "imageUrl":null, pas un champ omis). Le filtre
+                // JSONPath `[?(...)]` renvoie une liste même pour un seul élément
+                // correspondant : la valeur résolue est donc `[null]`, jamais `null` nu —
+                // `contains(nullValue())` vérifie exactement cette forme.
+                .andExpect(jsonPath("$.content[?(@.slug == 'controller-thumbnail-absent')].imageUrl")
+                        .value(org.hamcrest.Matchers.contains(org.hamcrest.Matchers.nullValue())));
+    }
+
+    // ---------------------------------------------------------------
     // GET /api/v1/articles/{slug} — sécurité (permitAll)
     // ---------------------------------------------------------------
 

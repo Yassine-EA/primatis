@@ -1,0 +1,32 @@
+{
+  "title": "Questions de nationalité",
+  "key": "/works/OL10003727W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3969242A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Citizenship",
+    "History",
+    "Naturalization"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:52.839053"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-07T22:14:25.755328"
+  }
+}

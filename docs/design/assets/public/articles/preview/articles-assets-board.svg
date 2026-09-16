@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="1440" viewBox="0 0 1600 1440">
+  <rect width="1600" height="1440" fill="#f7f5f1"/>
+  <text x="70" y="78" fill="#082c46" font-family="Georgia, serif" font-size="44">PRIMATIS — Articles &amp; actualités</text>
+  <text x="70" y="116" fill="#53616f" font-family="Arial, sans-serif" font-size="20">ASSET-RESET-02.4 · planche de validation</text>
+
+  <text x="70" y="180" fill="#082c46" font-family="Arial, sans-serif" font-weight="700" font-size="18">HERO DESKTOP · TEXTE HTML, IMAGE DÉCORATIVE</text>
+  <image x="70" y="205" width="1460" height="304" preserveAspectRatio="xMidYMid slice" xlink:href="../hero/articles-hero-1920.webp"/>
+  <text x="120" y="330" fill="#fff" font-family="Georgia, serif" font-size="54" font-weight="700">Articles &amp; actualités</text>
+  <text x="120" y="375" fill="#f4eee5" font-family="Georgia, serif" font-size="26" font-style="italic">Toute l’actualité culturelle et scientifique</text>
+
+  <text x="70" y="570" fill="#082c46" font-family="Arial, sans-serif" font-weight="700" font-size="18">FAMILLE DE FALLBACKS · 16:9</text>
+  <image x="70" y="600" width="450" height="253" preserveAspectRatio="xMidYMid slice" xlink:href="../cards/article-fallback-cosmos-640.webp"/>
+  <image x="575" y="600" width="450" height="253" preserveAspectRatio="xMidYMid slice" xlink:href="../cards/article-fallback-library-640.webp"/>
+  <image x="1080" y="600" width="450" height="253" preserveAspectRatio="xMidYMid slice" xlink:href="../cards/article-fallback-observatory-640.webp"/>
+  <text x="255" y="886" text-anchor="middle" fill="#53616f" font-family="Arial, sans-serif" font-size="17">Cosmos</text>
+  <text x="800" y="886" text-anchor="middle" fill="#53616f" font-family="Arial, sans-serif" font-size="17">Bibliothèque</text>
+  <text x="1305" y="886" text-anchor="middle" fill="#53616f" font-family="Arial, sans-serif" font-size="17">Observatoire</text>
+
+  <text x="70" y="955" fill="#082c46" font-family="Arial, sans-serif" font-weight="700" font-size="18">BANDEAU ÉDITORIAL GEORGES LEMAÎTRE</text>
+  <image x="70" y="985" width="1460" height="365" preserveAspectRatio="xMidYMid slice" xlink:href="../editorial/lemaitre-banner-1920.webp"/>
+  <rect x="650" y="1040" width="760" height="200" rx="14" fill="#f7f5f1" fill-opacity=".82"/>
+  <text x="700" y="1110" fill="#082c46" font-family="Georgia, serif" font-size="28" font-style="italic">Texte éditorial conservé en HTML.</text>
+  <text x="700" y="1160" fill="#53616f" font-family="Arial, sans-serif" font-size="18">Aucune catégorie, quantité ou image métier inventée.</text>
+  <text x="700" y="1200" fill="#53616f" font-family="Arial, sans-serif" font-size="18">Les visuels de cartes sont des fallbacks décoratifs.</text>
+</svg>

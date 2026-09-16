@@ -1,0 +1,30 @@
+{
+  "title": "En Islam, jardins et mosquées",
+  "key": "/works/OL10003274W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3968726A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Islamic art and symbolism"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:52.839053"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-15T14:07:25.776622"
+  }
+}

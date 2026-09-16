@@ -1,0 +1,57 @@
+{
+  "publishers": [
+    "Le Nouveau Commerce"
+  ],
+  "number_of_pages": 33,
+  "weight": "2.1 ounces",
+  "title": "En Islam, jardins et mosquées",
+  "type": {
+    "key": "/type/edition"
+  },
+  "identifiers": {
+    "goodreads": [
+      "5450004"
+    ]
+  },
+  "isbn_13": [
+    "9782855410708"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "authors": [
+    {
+      "key": "/authors/OL3968726A"
+    }
+  ],
+  "isbn_10": [
+    "2855410703"
+  ],
+  "publish_date": "January 1, 1994",
+  "key": "/books/OL12630731M",
+  "works": [
+    {
+      "key": "/works/OL10003274W"
+    }
+  ],
+  "physical_format": "Paperback",
+  "physical_dimensions": "8.5 x 4.1 x 0.2 inches",
+  "oclc_numbers": [
+    "34496828"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-004.mrc:88549478:748"
+  ],
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-15T14:07:25.776622"
+  }
+}

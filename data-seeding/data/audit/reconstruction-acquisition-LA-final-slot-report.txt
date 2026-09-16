@@ -1,0 +1,34 @@
+DEV-16 RECONSTRUCTION — LA FINAL SLOT
+=====================================
+
+Editorial fallback works tested : 5
+Usable candidates found         : 3
+
+RESULTS
+=======
+1. Érasme / Adagia -> BEST_CANDIDATE_FOUND
+2. Juan Luis Vives / De disciplinis -> NO_CANDIDATE
+3. Lorenzo Valla / De falso credita et ementita Constantini donatione -> BEST_CANDIDATE_FOUND
+4. Ange Politien / Miscellaneorum centuria prima -> NO_CANDIDATE
+5. Rodolphe Agricola / De inventione dialectica -> BEST_CANDIDATE_FOUND
+
+FINAL SLOT
+==========
+
+Author    : Érasme
+Work      : Adagia
+Edition   : Desiderii Erasmi Roterodami Opera Omnia Emendatiora et Auctiora ... : Doctorumque, Notis Illustrata
+Key       : /books/OL46170324M
+Languages : lat
+ISBN      : 9781015985957
+Publisher : Creative Media Partners, LLC
+Date      : 2022
+Page count: NULL
+Cover     : VALID_COVER
+
+LA FINAL STATUS : 54/54 RESOLVED
+
+No bundle modification.
+No database write.
+
+STATUS : PASS

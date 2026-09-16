@@ -1,0 +1,54 @@
+{
+  "publishers": [
+    "Peeters"
+  ],
+  "key": "/books/OL12638896M",
+  "title": "Politique et philosophie chez Aristote",
+  "number_of_pages": 184,
+  "isbn_13": [
+    "9782870371732"
+  ],
+  "physical_format": "Mass Market Paperback",
+  "isbn_10": [
+    "287037173X"
+  ],
+  "publish_date": "January 1, 1991",
+  "authors": [
+    {
+      "key": "/authors/OL3972453A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10006437W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "lc_classifications": [
+    "JC71.A7 B64 1991"
+  ],
+  "oclc_numbers": [
+    "25461737"
+  ],
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/ab.bib.09.20150123.full.mrc:900122372:1167",
+    "bwb:9782870371732"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-12T22:55:50.358959"
+  }
+}

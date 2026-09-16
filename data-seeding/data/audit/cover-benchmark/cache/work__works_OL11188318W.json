@@ -1,0 +1,39 @@
+{
+  "title": "Environmental norms for Canadian museums, art galleries and archives =",
+  "key": "/works/OL11188318W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL4674139A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Museums",
+    "Climatic factors",
+    "Museum conservation methods",
+    "Environmental aspects",
+    "Environmental monitoring",
+    "Art objects",
+    "Conservation and restoration",
+    "Objets d'art",
+    "Conservation et restauration",
+    "Livres"
+  ],
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T04:11:24.980995"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-01-12T22:43:05.801199"
+  }
+}

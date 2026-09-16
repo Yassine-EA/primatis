@@ -1,0 +1,66 @@
+DEV-16 RECONSTRUCTION — DE MASS RECOVERY
+========================================
+
+INITIAL AUDIT
+=============
+
+Editorial targets       : 113
+Already existing        : 2
+Initial ACCEPT          : 81
+Recovery targets        : 30
+
+Recovery composition:
+- First-pass missing    : 21
+- Editorial mismatches  : 9
+
+RECOVERY
+========
+
+Recovered               : 11
+Still unresolved        : 19
+
+GLOBAL DE STATUS
+================
+
+Resolved objectives     : 94/113
+Still open              : 19
+
+UNRESOLVED TARGETS
+==================
+- #32 Hermann Hesse / Demian
+- #52 Ingeborg Bachmann / Malina
+- #56 Stefan Zweig / Ungeduld des Herzens
+- #59 Ödön von Horváth / Jugend ohne Gott
+- #69 Daniel Kehlmann / Tyll
+- #70 Jenny Erpenbeck / Heimsuchung
+- #71 Jenny Erpenbeck / Gehen, ging, gegangen
+- #72 W. G. Sebald / Austerlitz
+- #73 W. G. Sebald / Die Ringe des Saturn
+- #75 Herta Müller / Atemschaukel
+- #76 Herta Müller / Herztier
+- #96 Sebastian Haffner / Geschichte eines Deutschen
+- #97 Victor Klemperer / LTI
+- #100 Hannah Arendt / Eichmann in Jerusalem
+- #101 Alexander Mitscherlich / Die Unfähigkeit zu trauern
+- #103 Willy Brandt / Erinnerungen
+- #107 Michael Ende / Die unendliche Geschichte
+- #110 Carl Friedrich Gauß / Disquisitiones Arithmeticae
+- #111 Max Planck / Wissenschaftliche Selbstbiographie
+
+POLICY
+======
+
+Two targets remain satisfied by the preserved DE catalogue.
+81 clean first-pass acquisitions are retained.
+Generic collected works, commentary and study guides are not accepted as substitutes.
+Wrong-work and wrong-author false positives are explicitly rejected.
+German remains mandatory at edition level: ger or deu.
+Multilingual editions are accepted only when German is explicit.
+A valid physical cover remains mandatory.
+Previously selected first-pass editions are excluded from recovery.
+Recovered candidates require final consolidated validation.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

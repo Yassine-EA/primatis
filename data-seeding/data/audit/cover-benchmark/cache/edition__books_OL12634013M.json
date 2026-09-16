@@ -1,0 +1,63 @@
+{
+  "physical_format": "Unknown Binding",
+  "weight": "1.1 pounds",
+  "title": "Bernard Delicieux et l'Inquisition albigeoise (1300-1320)",
+  "isbn_10": [
+    "2862661759"
+  ],
+  "publishers": [
+    "Loubatieres"
+  ],
+  "isbn_13": [
+    "9782862661759"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publish_date": "1992",
+  "key": "/books/OL12634013M",
+  "authors": [
+    {
+      "key": "/authors/OL3970146A"
+    }
+  ],
+  "subjects": [
+    "Bernard, Delicieux"
+  ],
+  "works": [
+    {
+      "key": "/works/OL10004541W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "9.4 x 6.3 x 0.8 inches",
+  "lccn": [
+    "92247346"
+  ],
+  "lc_classifications": [
+    "BX4705.B38 H38 1992"
+  ],
+  "oclc_numbers": [
+    "28181412"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-003.mrc:171241146:2512",
+    "marc:harvard_bibliographic_metadata/ab.bib.02.20150123.full.mrc:656252112:1327",
+    "marc:harvard_bibliographic_metadata/20220215_045.bib.mrc:126979886:2120"
+  ],
+  "number_of_pages": 165,
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-07-28T00:51:12.158862"
+  }
+}

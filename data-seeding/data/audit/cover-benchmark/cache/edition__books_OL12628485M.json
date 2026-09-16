@@ -1,0 +1,60 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "1783415"
+    ]
+  },
+  "title": "Marcel Poncet (Collection Maitres D'hier Et D'aujourd'hui)",
+  "authors": [
+    {
+      "key": "/authors/OL51019A"
+    },
+    {
+      "key": "/authors/OL3967645A"
+    }
+  ],
+  "publishers": [
+    "La Bibliotheque des Arts (FR)"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "weight": "4.1 pounds",
+  "isbn_13": [
+    "9782850471971"
+  ],
+  "physical_format": "Hardcover",
+  "isbn_10": [
+    "2850471976"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "History of art & design styles: from c 1900 -",
+    "Individual artists"
+  ],
+  "physical_dimensions": "13.9 x 10.2 x 1 inches",
+  "source_records": [
+    "amazon:2850471976"
+  ],
+  "key": "/books/OL12628485M",
+  "number_of_pages": 196,
+  "works": [
+    {
+      "key": "/works/OL10002305W"
+    }
+  ],
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-28T01:02:36.518972"
+  }
+}

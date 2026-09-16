@@ -1,0 +1,59 @@
+{
+  "publishers": [
+    "Jean-Michel Place"
+  ],
+  "physical_format": "Hardcover",
+  "weight": "5 ounces",
+  "title": "Construire la ville complexe ?",
+  "identifiers": {
+    "goodreads": [
+      "2123995"
+    ]
+  },
+  "isbn_13": [
+    "9782914981057"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "authors": [
+    {
+      "key": "/authors/OL3980496A"
+    }
+  ],
+  "isbn_10": [
+    "2914981058"
+  ],
+  "publish_date": "June 7, 2002",
+  "key": "/books/OL12656728M",
+  "works": [
+    {
+      "key": "/works/OL10013684W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "6.8 x 4.8 x 0.3 inches",
+  "lccn": [
+    "2004459105"
+  ],
+  "lc_classifications": [
+    "NA9031 .R425 2002"
+  ],
+  "source_records": [
+    "marc:marc_loc_2016/BooksAll.2016.part32.utf8:72919809:812"
+  ],
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2020-12-10T23:13:29.703819"
+  }
+}

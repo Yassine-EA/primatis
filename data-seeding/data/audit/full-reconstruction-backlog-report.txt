@@ -1,0 +1,68 @@
+FULL RECONSTRUCTION — BASELINE
+==============================
+
+Full titles : 15000
+
+KEEP      : 6297
+REVIEW    : 621
+REPLACE   : 564
+UNCOVERED : 7518
+------------------------------
+TOTAL     : 15000
+
+EDITORIAL DECISIONS
+===================
+
+KEEP_CORE        : 4243
+KEEP_TRANSLATION : 2054
+REVIEW           : 621
+REPLACE          : 564
+
+METADATA BY STATE
+=================
+
+KEEP (6297)
+  isbn      :  5336/ 6297 ( 84.74%)
+  year      :  6251/ 6297 ( 99.27%)
+  publisher :  6267/ 6297 ( 99.52%)
+  page_count:     0/ 6297 (  0.00%)
+  summary   :  2007/ 6297 ( 31.87%)
+  work_key  :     0/ 6297 (  0.00%)
+  cover_ref :  1461/ 6297 ( 23.20%)
+
+REVIEW (621)
+  isbn      :   481/  621 ( 77.46%)
+  year      :   599/  621 ( 96.46%)
+  publisher :   597/  621 ( 96.14%)
+  page_count:     0/  621 (  0.00%)
+  summary   :   187/  621 ( 30.11%)
+  work_key  :     0/  621 (  0.00%)
+  cover_ref :   163/  621 ( 26.25%)
+
+REPLACE (564)
+  isbn      :   346/  564 ( 61.35%)
+  year      :   520/  564 ( 92.20%)
+  publisher :   518/  564 ( 91.84%)
+  page_count:     0/  564 (  0.00%)
+  summary   :   114/  564 ( 20.21%)
+  work_key  :     0/  564 (  0.00%)
+  cover_ref :   144/  564 ( 25.53%)
+
+UNCOVERED (7518)
+  isbn      :  3928/ 7518 ( 52.25%)
+  year      :  7417/ 7518 ( 98.66%)
+  publisher :  7328/ 7518 ( 97.47%)
+  page_count:     0/ 7518 (  0.00%)
+  summary   :   238/ 7518 (  3.17%)
+  work_key  :     0/ 7518 (  0.00%)
+  cover_ref :     0/ 7518 (  0.00%)
+
+RECONSTRUCTION PRINCIPLE
+========================
+
+KEEP      -> preserve
+REVIEW    -> resolve before final catalogue
+REPLACE   -> replacement candidate required
+UNCOVERED -> evaluate / enrich / replace
+
+STATUS : PASS

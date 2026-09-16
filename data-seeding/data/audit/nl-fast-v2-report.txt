@@ -1,0 +1,81 @@
+DEV-16 — NL FAST CONSOLIDATION v2
+=================================
+
+SOURCE
+======
+
+v1 discovered           : 2846
+v1 AUTO_ACCEPT          : 971
+Eligible after checks   : 971
+
+SELECTION
+=========
+
+Final SELECTED          : 800/800
+Final RESERVE           : 171
+
+BY CATEGORY
+===========
+DUTCH_FLEMISH_CANON          selected=143 target=145 floor=120
+TWENTIETH_CENTURY            selected=261 target=215 floor=170
+CONTEMPORARY                 selected=172 target=190 floor=140
+YOUTH                        selected=129 target=105 floor= 80
+HISTORY_SOCIETY              selected= 46 target= 60 floor= 35
+ESSAYS_PHILOSOPHY            selected= 19 target= 35 floor= 15
+SCIENCE_CULTURE              selected= 21 target= 30 floor= 15
+GRAPHIC                      selected=  9 target= 20 floor=  8
+
+EDITORIAL FLOORS
+================
+ALL SATISFIED
+
+METADATA
+========
+
+ISBN       : 724/800
+Publisher  : 800/800
+Date       : 794/800
+Page count : 0/800
+Valid cover: 800/800
+
+INTEGRITY
+=========
+
+Duplicate editions      : 0
+Duplicate works         : 0
+Invalid covers          : 0
+Invalid NL languages    : 0
+
+HUMAN REVIEW
+============
+
+v1 REVIEW retained      : 16
+
+The v1 REVIEW rows are all excluded from automatic selection.
+They are not required to reach the NL target if STATUS is PASS.
+
+POLICY v2
+=========
+
+No new Open Library request was performed.
+No new cover was downloaded.
+Only v1 AUTO_ACCEPT candidates with an already validated physical cover are reusable.
+The original v1 quotas were relaxed because they were availability constraints, not documentary truth.
+Editorial floors preserve a meaningful canon, modern literature, nonfiction, youth and graphic corpus.
+Per-author max_total is used as the normal cap.
+Only controlled extensions are allowed after normal caps are exhausted.
+Tier 1 authors remain preferred.
+Every selected item has a unique work and a unique physical edition.
+Page count remains a later global enrichment task.
+No bundle modification.
+No database write.
+
+FILES
+=====
+
+data/audit/nl-fast-v2-selected.csv
+data/audit/nl-fast-v2-reserve.csv
+data/audit/nl-fast-v2-excluded.csv
+data/audit/nl-fast-v2-report.txt
+
+STATUS : PASS

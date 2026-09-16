@@ -1,0 +1,40 @@
+{
+  "title": "Saint-Denis et la royauté",
+  "subjects": [
+    "Historiography",
+    "History",
+    "Congresses",
+    "Power (Social sciences)",
+    "Congrès",
+    "Histoire médiévale",
+    "Pouvoir royal",
+    "Historiographie",
+    "Histoire",
+    "Idéologie",
+    "Abbaye de Saint-Denis (Saint-Denis, Seine-Saint-Denis, France)"
+  ],
+  "key": "/works/OL10004232W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3969771A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-19T15:11:19.322115"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "physical_format": "Paperback",
+  "subtitle": "Receuil de cartes postales anciennes",
+  "title": "Autrefois Anglet ",
+  "isbn_10": [
+    "2843942829"
+  ],
+  "publishers": [
+    "Atlantica"
+  ],
+  "isbn_13": [
+    "9782843942822"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publish_date": "January 1, 2000",
+  "key": "/books/OL12624159M",
+  "authors": [
+    {
+      "key": "/authors/OL3965709A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10000656W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "lc_classifications": [
+    "DC801.A558 S25 2000"
+  ],
+  "oclc_numbers": [
+    "53083697"
+  ],
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/20220215_008.bib.mrc:264455334:1676"
+  ],
+  "number_of_pages": 249,
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-07-10T19:30:28.094877"
+  }
+}

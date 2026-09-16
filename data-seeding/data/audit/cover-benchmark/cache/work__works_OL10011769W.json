@@ -1,0 +1,32 @@
+{
+  "title": "Grandrif",
+  "key": "/works/OL10011769W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3978388A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "History",
+    "Social life and customs",
+    "Description and travel"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:59:11.351463"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-09-23T10:20:59.818751"
+  }
+}

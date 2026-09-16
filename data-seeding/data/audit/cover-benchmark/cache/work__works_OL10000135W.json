@@ -1,0 +1,33 @@
+{
+  "title": "Kitabat Juzif Mughayzil",
+  "subjects": [
+    "Politics and government",
+    "Arab-Israeli conflict",
+    "Democracy",
+    "History"
+  ],
+  "key": "/works/OL10000135W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3965115A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:19.964652"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-18T11:08:17.491600"
+  }
+}

@@ -1,0 +1,40 @@
+DEV-16 RECONSTRUCTION — LA TARGET MATCHING
+==========================================
+
+Targets            : 54
+Preserved LA titles: 56
+
+MATCH RESULTS
+=============
+
+EXACT_MATCH  : 4
+LIKELY_MATCH : 1
+NO_MATCH     : 49
+
+Acquisition candidates before manual resolution:
+  49
+
+IMPORTANT
+=========
+
+EXACT_MATCH means a strong author+work match.
+LIKELY_MATCH requires human confirmation.
+NO_MATCH remains an acquisition target.
+
+Matching does NOT modify the catalogue.
+No Open Library request performed.
+No bundle modification.
+No database write.
+
+EXACT MATCHES
+=============
+- Ovide / Metamorphoses -> Metamorphoses
+- Ovide / Tristia -> Tristia, III
+- Thomas More / Utopia -> The Utopia of Sir Thomas More
+- Pline l'Ancien / Naturalis Historia -> Naturalis Historiae, vol. I
+
+LIKELY MATCHES
+==============
+- Boèce / De Consolatione Philosophiae -> Boethius' Consolation of philosophy [score=0.8581]
+
+STATUS : PASS

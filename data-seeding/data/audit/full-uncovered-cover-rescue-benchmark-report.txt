@@ -1,0 +1,46 @@
+FULL UNCOVERED — COVER RESCUE BENCHMARK
+=======================================
+
+sample size : 500
+
+RESULTS
+=======
+DIRECT_COVER_FOUND   : 18
+NO_DIRECT_COVER      : 470
+IMAGE_TOO_SMALL      : 12
+INVALID_IMAGE        : 0
+DOWNLOAD_ERROR       : 0
+
+DIRECT COVER RATE : 3.60%
+
+METHODS
+=======
+ISBN : 18
+OLID : 0
+
+BY LANGUAGE
+===========
+DE TOTAL= 39 DIRECT=  2 RATE=  5.13%
+EN TOTAL= 87 DIRECT=  3 RATE=  3.45%
+ES TOTAL= 30 DIRECT=  0 RATE=  0.00%
+FR TOTAL=244 DIRECT= 10 RATE=  4.10%
+IT TOTAL= 21 DIRECT=  1 RATE=  4.76%
+LA TOTAL=  4 DIRECT=  0 RATE=  0.00%
+NL TOTAL= 75 DIRECT=  2 RATE=  2.67%
+
+BY QUALITY BUCKET
+=================
+STRONG     TOTAL= 15 DIRECT=  3 RATE= 20.00%
+PROMISING  TOTAL=243 DIRECT= 15 RATE=  6.17%
+WEAK       TOTAL=226 DIRECT=  0 RATE=  0.00%
+VERY_WEAK  TOTAL= 16 DIRECT=  0 RATE=  0.00%
+
+IMPORTANT
+=========
+
+Benchmark only.
+No bundle modification.
+No database write.
+No title replacement.
+
+STATUS : PASS

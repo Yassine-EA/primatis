@@ -1,0 +1,472 @@
+duplicate_type,resolved_path,owner_count,source_key,language,title,authors,cover_id,sha256
+SAME_FILE,data/covers/full/ol-cover-10708272.jpg,4,/books/OL6777822M,LA,Regulus,Antoine de Saint-Exupéry,10708272,43f05e6d5175d88b19b69d75a4c5e2fd457cfe91b1b1bf978d3b1e0658ef80ad
+SAME_FILE,data/covers/full/ol-cover-10708272.jpg,4,/books/OL13430352M,IT,Il Piccolo Principe,Antoine de Saint-Exupéry,10708272,43f05e6d5175d88b19b69d75a4c5e2fd457cfe91b1b1bf978d3b1e0658ef80ad
+SAME_FILE,data/covers/full/ol-cover-10708272.jpg,4,/books/OL8935860M,DE,Der Kleine Prinz,Antoine de Saint-Exupéry,10708272,43f05e6d5175d88b19b69d75a4c5e2fd457cfe91b1b1bf978d3b1e0658ef80ad
+SAME_FILE,data/covers/full/ol-cover-10708272.jpg,4,/books/OL32117993M,FR,Le petit prince,Antoine de Saint-Exupéry,10708272,43f05e6d5175d88b19b69d75a4c5e2fd457cfe91b1b1bf978d3b1e0658ef80ad
+SAME_FILE,data/covers/full/ol-cover-289591.jpg,2,/books/OL5856979M,LA,Fabula de Petro Cuniculo.,Beatrix Potter,289591,f1c2219db60ae3fb520e5afbd3c56c4ec48a6f40b5bffbf51c4029e6de193919
+SAME_FILE,data/covers/full/ol-cover-289591.jpg,2,/books/OL23303624M,FR,Histoire de Pierre Lapin.,Beatrix Potter,289591,f1c2219db60ae3fb520e5afbd3c56c4ec48a6f40b5bffbf51c4029e6de193919
+SAME_FILE,data/covers/full/ol-cover-8597022.jpg,2,/books/OL3243753M,LA,Pinoculus Latinus,Carlo Collodi,8597022,4100a930e1fde9dc876e38c1c5522d08a9d8927f1ed516f626688107e254d6ca
+SAME_FILE,data/covers/full/ol-cover-8597022.jpg,2,/books/OL27004395M,NL,Pinocchio,Carlo Collodi,8597022,4100a930e1fde9dc876e38c1c5522d08a9d8927f1ed516f626688107e254d6ca
+SAME_FILE,data/covers/full/ol-cover-3325898.jpg,2,/books/OL12449141M,LA,De Sigaris Pharaonis,Hergé,3325898,f6d82fbb6c2a92c09e4ccd36c3df698278fb2dac17c379b04f104a814bf80f17
+SAME_FILE,data/covers/full/ol-cover-3325898.jpg,2,/books/OL45313511M,FR,Les Cigares du Pharaon,Hergé,3325898,f6d82fbb6c2a92c09e4ccd36c3df698278fb2dac17c379b04f104a814bf80f17
+SAME_FILE,data/covers/full/ol-cover-552443.jpg,2,/books/OL2720457M,LA,Magus mirabilis in Oz,L. Frank Baum,552443,f428e205582b58640af783ae9dcdcdaf9c3b3c4b9e15a801975e8f5d5e587386
+SAME_FILE,data/covers/full/ol-cover-552443.jpg,2,/books/OL39481818M,NL,De tovenaar van Oz,L. Frank Baum,552443,f428e205582b58640af783ae9dcdcdaf9c3b3c4b9e15a801975e8f5d5e587386
+SAME_FILE,data/covers/full/ol-cover-10527843.jpg,2,/books/OL5919462M,LA,Alicia in Terra Mirabili,Lewis Carroll,10527843,5aff8135fd461a567e26075fe1835558e6fe6cce4ce8b71b8e851e02bd6d6bbd
+SAME_FILE,data/covers/full/ol-cover-10527843.jpg,2,/books/OL25414595M,NL,De avonturen van Alice in Wonderland,Lewis Carroll,10527843,5aff8135fd461a567e26075fe1835558e6fe6cce4ce8b71b8e851e02bd6d6bbd
+SAME_FILE,data/covers/full/ol-cover-332367.jpg,2,/books/OL5437082M,LA,Apocolocyntosis divi Claudii,Seneca the Younger,332367,d0e5e443e80fce2ac40cc2708a4db14b1e12bb76048f28849c2f6bcd23e064c3
+SAME_FILE,data/covers/full/ol-cover-332367.jpg,2,/books/OL23338171M,EN,The satire of Seneca on the Apotheosis of Claudius commonly called the Apocolocyntosis,Seneca the Younger,332367,d0e5e443e80fce2ac40cc2708a4db14b1e12bb76048f28849c2f6bcd23e064c3
+SAME_FILE,data/covers/full/ol-cover-5493539.jpg,2,/books/OL13868653M,LA,L. Annaei Senecae Oedipus,Seneca the Younger,5493539,2f5c31545ffc4c72987ae6b619eec342a5dbc635e3dd2cb0ad7beefdb7707e52
+SAME_FILE,data/covers/full/ol-cover-5493539.jpg,2,/books/OL15148768M,NL,"Oedipus, drama.",Seneca the Younger,5493539,2f5c31545ffc4c72987ae6b619eec342a5dbc635e3dd2cb0ad7beefdb7707e52
+SAME_FILE,data/covers/full/ol-cover-4757201.jpg,2,/books/OL3055507M,LA,Thyestes,Seneca the Younger,4757201,ebce723da341aee366f9bf5c96a6380311c7be6432a6aa00ce581f260c836ca6
+SAME_FILE,data/covers/full/ol-cover-4757201.jpg,2,/books/OL18227264M,IT,Tieste [di] Seneca.,Seneca the Younger,4757201,ebce723da341aee366f9bf5c96a6380311c7be6432a6aa00ce581f260c836ca6
+SAME_FILE,data/covers/full/ol-cover-5935378.jpg,3,/books/OL23349269M,LA,Tragoediae,Seneca the Younger,5935378,600f7fe0a0fca7ec195e62bab61790f22153e5841c4e6bb58c7e1ce1842c5547
+SAME_FILE,data/covers/full/ol-cover-5935378.jpg,3,/books/OL23349236M,EN,Tragedies.,Seneca the Younger,5935378,600f7fe0a0fca7ec195e62bab61790f22153e5841c4e6bb58c7e1ce1842c5547
+SAME_FILE,data/covers/full/ol-cover-5935378.jpg,3,/books/OL21048892M,FR,... Tragédies ...,Seneca the Younger,5935378,600f7fe0a0fca7ec195e62bab61790f22153e5841c4e6bb58c7e1ce1842c5547
+SAME_FILE,data/covers/full/ol-cover-7222976.jpg,3,/books/OL7105458M,LA,The Utopia of Sir Thomas More,Thomas More,7222976,5b8f39575024daa3d66e9eca2ae6f6764678bdef469bad9224877a6846c95348
+SAME_FILE,data/covers/full/ol-cover-7222976.jpg,3,/books/OL24353152M,NL,"Het onbekend en wonderlijk eyland, Utopia",Thomas More,7222976,5b8f39575024daa3d66e9eca2ae6f6764678bdef469bad9224877a6846c95348
+SAME_FILE,data/covers/full/ol-cover-7222976.jpg,3,/books/OL4766475M,FR,La description de l'isle d'Utopie.,Thomas More,7222976,5b8f39575024daa3d66e9eca2ae6f6764678bdef469bad9224877a6846c95348
+SAME_FILE,data/covers/full/ol-cover-5375062.jpg,2,/books/OL17496380M,IT,Diario della guerra del maiale,Adolfo Bioy Casares,5375062,8acd6fe1c9b57c325ffcc7e6b502d8b68878b7950330a2c8d4b62ca7c0de3e45
+SAME_FILE,data/covers/full/ol-cover-5375062.jpg,2,/books/OL12467090M,FR,Journal de la guerre au cochon,Adolfo Bioy Casares,5375062,8acd6fe1c9b57c325ffcc7e6b502d8b68878b7950330a2c8d4b62ca7c0de3e45
+SAME_FILE,data/covers/full/ol-cover-6548168.jpg,3,/books/OL59568075M,IT,Oresteia,Aeschylus,6548168,4b6401fdf04df21bb1b7ee2d3f8190b1dc7a83d45d1f1dbe54b1fda5a5006402
+SAME_FILE,data/covers/full/ol-cover-6548168.jpg,3,/books/OL4465364M,ES,La Orestía,Aeschylus,6548168,4b6401fdf04df21bb1b7ee2d3f8190b1dc7a83d45d1f1dbe54b1fda5a5006402
+SAME_FILE,data/covers/full/ol-cover-6548168.jpg,3,/books/OL24180265M,EN,The Oresteia of Aeschylus,Aeschylus,6548168,4b6401fdf04df21bb1b7ee2d3f8190b1dc7a83d45d1f1dbe54b1fda5a5006402
+SAME_FILE,data/covers/full/ol-cover-207513.jpg,2,/books/OL62359759M,IT,Terra di Mezzo,Alan Dean Foster,207513,09dfca3d96b73821912e75d82b46d384b0000a80fb8364411cd6bd06ec513b30
+SAME_FILE,data/covers/full/ol-cover-207513.jpg,2,/books/OL27031284M,DE,Die denkenden Wälder,Alan Dean Foster,207513,09dfca3d96b73821912e75d82b46d384b0000a80fb8364411cd6bd06ec513b30
+SAME_FILE,data/covers/full/ol-cover-968944.jpg,3,/books/OL39813735M,IT,Gli anni,Annie Ernaux,968944,a41afdee866bf7ffa10eac97e30b382a60c78e881098931800b60f9c62d03b9d
+SAME_FILE,data/covers/full/ol-cover-968944.jpg,3,/books/OL12709707M,DE,Sich verlieren,Annie Ernaux,968944,a41afdee866bf7ffa10eac97e30b382a60c78e881098931800b60f9c62d03b9d
+SAME_FILE,data/covers/full/ol-cover-968944.jpg,3,/books/OL47301676M,NL,De jaren,Annie Ernaux,968944,a41afdee866bf7ffa10eac97e30b382a60c78e881098931800b60f9c62d03b9d
+SAME_FILE,data/covers/full/ol-cover-3949712.jpg,3,/books/OL32132773M,IT,Il posto,Annie Ernaux,3949712,ac64dee5ab97b45823cdf367ffdc8431eb44ac96c4465548ab4dff2309bd0492
+SAME_FILE,data/covers/full/ol-cover-3949712.jpg,3,/books/OL32582674M,DE,Der Platz,Annie Ernaux,3949712,ac64dee5ab97b45823cdf367ffdc8431eb44ac96c4465548ab4dff2309bd0492
+SAME_FILE,data/covers/full/ol-cover-3949712.jpg,3,/books/OL33646900M,FR,La place,Annie Ernaux,3949712,ac64dee5ab97b45823cdf367ffdc8431eb44ac96c4465548ab4dff2309bd0492
+SAME_FILE,data/covers/full/ol-cover-970078.jpg,3,/books/OL47519662M,IT,La vergogna,Annie Ernaux,970078,ed091261152a0c1315ad083b5dfb89c458e950ea0805d147abb42488a20f85dc
+SAME_FILE,data/covers/full/ol-cover-970078.jpg,3,/books/OL47317785M,DE,Die Scham,Annie Ernaux,970078,ed091261152a0c1315ad083b5dfb89c458e950ea0805d147abb42488a20f85dc
+SAME_FILE,data/covers/full/ol-cover-970078.jpg,3,/books/OL746592M,FR,La honte,Annie Ernaux,970078,ed091261152a0c1315ad083b5dfb89c458e950ea0805d147abb42488a20f85dc
+SAME_FILE,data/covers/full/ol-cover-2210130.jpg,2,/books/OL47938633M,IT,Pilota di guerra,Antoine de Saint-Exupéry,2210130,ebfde3a94a617a3423956b50a92da418c965ea93329dedf91cd35e23cb8c9807
+SAME_FILE,data/covers/full/ol-cover-2210130.jpg,2,/books/OL36594772M,DE,Flug nach Arras,Antoine de Saint-Exupéry,2210130,ebfde3a94a617a3423956b50a92da418c965ea93329dedf91cd35e23cb8c9807
+SAME_FILE,data/covers/full/ol-cover-116397.jpg,4,/books/OL38212484M,IT,Volo di notte,Antoine de Saint-Exupéry,116397,e26103651f4745f1b542ade4239bd3b13b335153ac5ede5c2ae602a03700152a
+SAME_FILE,data/covers/full/ol-cover-116397.jpg,4,/books/OL9066682M,DE,Nachtflug. Roman. ( Erzähler- Bibliothek).,Antoine de Saint-Exupéry,116397,e26103651f4745f1b542ade4239bd3b13b335153ac5ede5c2ae602a03700152a
+SAME_FILE,data/covers/full/ol-cover-116397.jpg,4,/books/OL24328789M,NL,Nachtvlucht,Antoine de Saint-Exupéry,116397,e26103651f4745f1b542ade4239bd3b13b335153ac5ede5c2ae602a03700152a
+SAME_FILE,data/covers/full/ol-cover-116397.jpg,4,/books/OL27783416M,FR,Vol de nuit,Antoine de Saint-Exupéry,116397,e26103651f4745f1b542ade4239bd3b13b335153ac5ede5c2ae602a03700152a
+SAME_FILE,data/covers/full/ol-cover-10513792.jpg,2,/books/OL22939038M,IT,Il dio delle piccole cose,Arundhati Roy,10513792,228d9990ea3cf499669b35c026988ddbe23dcf04d3347eab07c5c71a0882289b
+SAME_FILE,data/covers/full/ol-cover-10513792.jpg,2,/books/OL35687461M,NL,De god van kleine dingen,Arundhati Roy,10513792,228d9990ea3cf499669b35c026988ddbe23dcf04d3347eab07c5c71a0882289b
+SAME_FILE,data/covers/full/ol-cover-8242875.jpg,2,/books/OL16522151M,IT,Autorità e individuo.,Bertrand Russell,8242875,7dff9e5e0451bf44d488f1413f855bc363f6d536fef8920d44ee546215f8f4e6
+SAME_FILE,data/covers/full/ol-cover-8242875.jpg,2,/books/OL13115373M,ES,Autoridad E Individuo,Bertrand Russell,8242875,7dff9e5e0451bf44d488f1413f855bc363f6d536fef8920d44ee546215f8f4e6
+SAME_FILE,data/covers/full/ol-cover-9321152.jpg,3,/books/OL15457632M,IT,L' ABC della relatività.,Bertrand Russell,9321152,bae61170c7b1ea32c2fecf2a5c545899c913b1100cd9448f09e5840af364d680
+SAME_FILE,data/covers/full/ol-cover-9321152.jpg,3,/books/OL15441187M,NL,Het ABC van de relativiteit.,Bertrand Russell,9321152,bae61170c7b1ea32c2fecf2a5c545899c913b1100cd9448f09e5840af364d680
+SAME_FILE,data/covers/full/ol-cover-9321152.jpg,3,/books/OL15441198M,FR,ABC de la relativité.,Bertrand Russell,9321152,bae61170c7b1ea32c2fecf2a5c545899c913b1100cd9448f09e5840af364d680
+SAME_FILE,data/covers/full/ol-cover-1601265.jpg,2,/books/OL16197094M,IT,L' analisi della materia.,Bertrand Russell,1601265,a52d92c906d7f805ec9a3332cbef4976e25342f6356b790e9e8ec81b4dd7eca4
+SAME_FILE,data/covers/full/ol-cover-1601265.jpg,2,/books/OL20575117M,FR,L' analyse de la matiere.,Bertrand Russell,1601265,a52d92c906d7f805ec9a3332cbef4976e25342f6356b790e9e8ec81b4dd7eca4
+SAME_FILE,data/covers/full/ol-cover-253601.jpg,3,/books/OL878284M,IT,Storia delle conquiste umane,Daniel J. Boorstin,253601,be76f67ae9830dbd15f550e08158045dac1e3693e95c27cc57bc58f842b2e331
+SAME_FILE,data/covers/full/ol-cover-253601.jpg,3,/books/OL872653M,NL,De ontdekkers,Daniel J. Boorstin,253601,be76f67ae9830dbd15f550e08158045dac1e3693e95c27cc57bc58f842b2e331
+SAME_FILE,data/covers/full/ol-cover-253601.jpg,3,/books/OL872022M,FR,Les découvreurs,Daniel J. Boorstin,253601,be76f67ae9830dbd15f550e08158045dac1e3693e95c27cc57bc58f842b2e331
+SAME_FILE,data/covers/full/ol-cover-76492.jpg,3,/books/OL32354389M,IT,Lo zoo umano,Desmond Morris,76492,bd1a54999192f6a2d71fc5fec209c21ac54602f2988442aa5afd96c854653675
+SAME_FILE,data/covers/full/ol-cover-76492.jpg,3,/books/OL32817808M,ES,El zoo humano,Desmond Morris,76492,bd1a54999192f6a2d71fc5fec209c21ac54602f2988442aa5afd96c854653675
+SAME_FILE,data/covers/full/ol-cover-76492.jpg,3,/books/OL47848270M,FR,Le zoo humain,Desmond Morris,76492,bd1a54999192f6a2d71fc5fec209c21ac54602f2988442aa5afd96c854653675
+SAME_FILE,data/covers/full/ol-cover-7398079.jpg,2,/books/OL20140192M,IT,Il negoziatore.,Frederick Forsyth,7398079,f3e80af5e96858f1da4e7243667d6dc6963e85c0d6bce025889fc5f318187bac
+SAME_FILE,data/covers/full/ol-cover-7398079.jpg,2,/books/OL21792313M,FR,Le négociateur,Frederick Forsyth,7398079,f3e80af5e96858f1da4e7243667d6dc6963e85c0d6bce025889fc5f318187bac
+SAME_FILE,data/covers/full/ol-cover-8272336.jpg,3,/books/OL27138573M,IT,I fratelli Karamazov,Fyodor Dostoyevsky,8272336,99091e24e5d04e65691054ca359e8c6498500cc515ad25d4d7905b3076aefae7
+SAME_FILE,data/covers/full/ol-cover-8272336.jpg,3,/books/OL37044481M,EN,The Brothers Karamazov,Fyodor Dostoyevsky,8272336,99091e24e5d04e65691054ca359e8c6498500cc515ad25d4d7905b3076aefae7
+SAME_FILE,data/covers/full/ol-cover-8272336.jpg,3,/books/OL26605105M,FR,Les frères Karamazov,Fyodor Dostoyevsky,8272336,99091e24e5d04e65691054ca359e8c6498500cc515ad25d4d7905b3076aefae7
+SAME_FILE,data/covers/full/ol-cover-10096625.jpg,3,/books/OL19736211M,IT,Notizia di un sequestro,Gabriel García Márquez,10096625,2a1234fca7dc34f50e3ad40ef8dc3b839db28fb095bc4354507b7b79b13f758e
+SAME_FILE,data/covers/full/ol-cover-10096625.jpg,3,/books/OL32130886M,NL,Ontvoeringsbericht,Gabriel García Márquez,10096625,2a1234fca7dc34f50e3ad40ef8dc3b839db28fb095bc4354507b7b79b13f758e
+SAME_FILE,data/covers/full/ol-cover-10096625.jpg,3,/books/OL12467882M,FR,Journal d'un enlèvement,Gabriel García Márquez,10096625,2a1234fca7dc34f50e3ad40ef8dc3b839db28fb095bc4354507b7b79b13f758e
+SAME_FILE,data/covers/full/ol-cover-9267242.jpg,3,/books/OL35719243M,IT,1984,George Orwell,9267242,7a8c05a1fc021c4438286a10e766ddf5a93ac3e343e15467f3514c4b7cf03221
+SAME_FILE,data/covers/full/ol-cover-9267242.jpg,3,/books/OL24636613M,NL,1984,George Orwell,9267242,7a8c05a1fc021c4438286a10e766ddf5a93ac3e343e15467f3514c4b7cf03221
+SAME_FILE,data/covers/full/ol-cover-9267242.jpg,3,/books/OL8837183M,FR,1984,George Orwell,9267242,7a8c05a1fc021c4438286a10e766ddf5a93ac3e343e15467f3514c4b7cf03221
+SAME_FILE,data/covers/full/ol-cover-11261770.jpg,3,/books/OL27068301M,IT,La fattoria degli animali,George Orwell,11261770,26ea9fe52fc1b2574706bb5be7e478c963764c80a18e04e15ea93200eb9b9551
+SAME_FILE,data/covers/full/ol-cover-11261770.jpg,3,/books/OL25874368M,ES,Rebelión en la granja,George Orwell,11261770,26ea9fe52fc1b2574706bb5be7e478c963764c80a18e04e15ea93200eb9b9551
+SAME_FILE,data/covers/full/ol-cover-11261770.jpg,3,/books/OL18430168M,NL,Dierenboerderij,George Orwell,11261770,26ea9fe52fc1b2574706bb5be7e478c963764c80a18e04e15ea93200eb9b9551
+SAME_FILE,data/covers/full/ol-cover-13223338.jpg,2,/books/OL36691977M,IT,L'uomo che credeva di non avere più tempo,Guillaume Musso,13223338,5cbca6a15e3f14954b9e30c92c29ef9e6e863084e1704dddee095881cca4ba1c
+SAME_FILE,data/covers/full/ol-cover-13223338.jpg,2,/books/OL31951800M,FR,Et après...,Guillaume Musso,13223338,5cbca6a15e3f14954b9e30c92c29ef9e6e863084e1704dddee095881cca4ba1c
+SAME_FILE,data/covers/full/ol-cover-12866283.jpg,2,/books/OL27083962M,IT,Quando si ama non scende mai la notte,Guillaume Musso,12866283,ed821db0a1bfda253bd691367d087aa4b8a91c13eb2b35f681996535726794b0
+SAME_FILE,data/covers/full/ol-cover-12866283.jpg,2,/books/OL47064723M,FR,Parce que je t'aime,Guillaume Musso,12866283,ed821db0a1bfda253bd691367d087aa4b8a91c13eb2b35f681996535726794b0
+SAME_FILE,data/covers/full/ol-cover-6705630.jpg,3,/books/OL25562053M,IT,Sulla violenza,Hannah Arendt,6705630,8b6d7bf749aba6aa2862b5ac43e5248dadf31b5c2c8f005d72de35825ddbfab4
+SAME_FILE,data/covers/full/ol-cover-6705630.jpg,3,/books/OL13192650M,ES,Sobre la violencia,Hannah Arendt,6705630,8b6d7bf749aba6aa2862b5ac43e5248dadf31b5c2c8f005d72de35825ddbfab4
+SAME_FILE,data/covers/full/ol-cover-6705630.jpg,3,/books/OL19850467M,FR,Du mensonge à la violence : essai de politique contemporaine,Hannah Arendt,6705630,8b6d7bf749aba6aa2862b5ac43e5248dadf31b5c2c8f005d72de35825ddbfab4
+SAME_FILE,data/covers/full/ol-cover-5746840.jpg,4,/books/OL16607252M,IT,Vita activa,Hannah Arendt,5746840,cf29cc37fef71c876e967c3e5ca40a2b7d930193ed7b014190b559210c648a03
+SAME_FILE,data/covers/full/ol-cover-5746840.jpg,4,/books/OL47439639M,ES,La condición humana,Hannah Arendt,5746840,cf29cc37fef71c876e967c3e5ca40a2b7d930193ed7b014190b559210c648a03
+SAME_FILE,data/covers/full/ol-cover-5746840.jpg,4,/books/OL46914490M,EN,The Human Condition,Hannah Arendt,5746840,cf29cc37fef71c876e967c3e5ca40a2b7d930193ed7b014190b559210c648a03
+SAME_FILE,data/covers/full/ol-cover-5746840.jpg,4,/books/OL22183641M,FR,Condition de l'homme moderne =,Hannah Arendt,5746840,cf29cc37fef71c876e967c3e5ca40a2b7d930193ed7b014190b559210c648a03
+SAME_FILE,data/covers/full/ol-cover-10521439.jpg,3,/books/OL31955606M,IT,Bartleby lo scrivano,Herman Melville,10521439,f73f565f79c059cb8ae373ee591f4bfa0953cecdf2e97f56af895826acf788c7
+SAME_FILE,data/covers/full/ol-cover-10521439.jpg,3,/books/OL9064345M,DE,"Bartleby, der Schreiber. Eine Geschichte aus der Wall Street.",Herman Melville,10521439,f73f565f79c059cb8ae373ee591f4bfa0953cecdf2e97f56af895826acf788c7
+SAME_FILE,data/covers/full/ol-cover-10521439.jpg,3,/books/OL31446258M,FR,Bartleby,Herman Melville,10521439,f73f565f79c059cb8ae373ee591f4bfa0953cecdf2e97f56af895826acf788c7
+SAME_FILE,data/covers/full/ol-cover-9223569.jpg,2,/books/OL25264802M,IT,Billy Budd il marinaio,Herman Melville,9223569,e2474fd194598d9c3a1c51c57ea340f9637780d85c8073ee86f086db573aa4d7
+SAME_FILE,data/covers/full/ol-cover-9223569.jpg,2,/books/OL8840392M,FR,"Billy Budd, marin",Herman Melville,9223569,e2474fd194598d9c3a1c51c57ea340f9637780d85c8073ee86f086db573aa4d7
+SAME_FILE,data/covers/full/ol-cover-9341648.jpg,2,/books/OL27108351M,IT,Taipi,Herman Melville,9341648,61f2ca6085556f3f90c0795622536ac4b3b6718ca2cdf71883bf39833c7d9731
+SAME_FILE,data/covers/full/ol-cover-9341648.jpg,2,/books/OL6458215M,DE,Taïpi,Herman Melville,9341648,61f2ca6085556f3f90c0795622536ac4b3b6718ca2cdf71883bf39833c7d9731
+SAME_FILE,data/covers/full/ol-cover-5354508.jpg,2,/books/OL21684124M,IT,Magritte,Jacques Dopagne,5354508,beb92b58fcc8e71dd0d48474a50d0a4e52963f88373e6f25c9082c4d6f138f39
+SAME_FILE,data/covers/full/ol-cover-5354508.jpg,2,/books/OL22817037M,FR,Magritte,Jacques Dopagne,5354508,beb92b58fcc8e71dd0d48474a50d0a4e52963f88373e6f25c9082c4d6f138f39
+SAME_FILE,data/covers/full/ol-cover-10832290.jpg,2,/books/OL26888514M,IT,Finzioni,Jorge Luis Borges,10832290,c159ff12e48e23fd7e9b16a956b4d25020031b93b6592a85ff2ffa1ab055b8ff
+SAME_FILE,data/covers/full/ol-cover-10832290.jpg,2,/books/OL37809310M,FR,Fictions,Jorge Luis Borges,10832290,c159ff12e48e23fd7e9b16a956b4d25020031b93b6592a85ff2ffa1ab055b8ff
+SAME_FILE,data/covers/full/ol-cover-97008.jpg,3,/books/OL36636673M,IT,Il manoscritto di Brodie,Jorge Luis Borges,97008,295b9e603d78511e7953bab2f2b4b3b127ff01718a844c07ecbcac71b7548ca5
+SAME_FILE,data/covers/full/ol-cover-97008.jpg,3,/books/OL24733206M,NL,Het Verslag van Brodie,Jorge Luis Borges,97008,295b9e603d78511e7953bab2f2b4b3b127ff01718a844c07ecbcac71b7548ca5
+SAME_FILE,data/covers/full/ol-cover-97008.jpg,3,/books/OL8838336M,FR,Le rapport de Brodie,Jorge Luis Borges,97008,295b9e603d78511e7953bab2f2b4b3b127ff01718a844c07ecbcac71b7548ca5
+SAME_FILE,data/covers/full/ol-cover-6976035.jpg,2,/books/OL32051018M,IT,Il giro del mondo in ottanta giorni,Jules Verne,6976035,758f499bb934aef825601162298a34546a4e95959d93a186674482c384a0e23f
+SAME_FILE,data/covers/full/ol-cover-6976035.jpg,2,/books/OL25882699M,FR,Le tour du monde en quatre-vingts jours,Jules Verne,6976035,758f499bb934aef825601162298a34546a4e95959d93a186674482c384a0e23f
+SAME_FILE,data/covers/full/ol-cover-5890987.jpg,2,/books/OL22929920M,IT,Viaggio al centro della terra,Jules Verne,5890987,a8761bef0b3922292d68ba27b12092ac1ba6a5b88778c54daa803d31a307f699
+SAME_FILE,data/covers/full/ol-cover-5890987.jpg,2,/books/OL32006939M,FR,Voyage au centre de la terre,Jules Verne,5890987,a8761bef0b3922292d68ba27b12092ac1ba6a5b88778c54daa803d31a307f699
+SAME_FILE,data/covers/full/ol-cover-8248406.jpg,2,/books/OL45687309M,IT,Ombre bruciate,Kamila Shamsie,8248406,047d4f45d7fcf6d914c34d4fd20f1b8f93579bb5d09794260842007b037df383
+SAME_FILE,data/covers/full/ol-cover-8248406.jpg,2,/books/OL47313874M,NL,Verbrande schaduwen,Kamila Shamsie,8248406,047d4f45d7fcf6d914c34d4fd20f1b8f93579bb5d09794260842007b037df383
+SAME_FILE,data/covers/full/ol-cover-12755709.jpg,2,/books/OL57376857M,IT,"Alexis, o, Il trattato della lotta vana",Marguerite Yourcenar,12755709,93af7e94959e15179c9cee9d10f5a3a183f96c9285bed1aca6815d6b26e31770
+SAME_FILE,data/covers/full/ol-cover-12755709.jpg,2,/books/OL58396026M,FR,"Alexis, ou, Le traité du vain combat",Marguerite Yourcenar,12755709,93af7e94959e15179c9cee9d10f5a3a183f96c9285bed1aca6815d6b26e31770
+SAME_FILE,data/covers/full/ol-cover-10227956.jpg,2,/books/OL18597409M,IT,Amori ridicoli.,Milan Kundera,10227956,b2f8eb843e46c3387109f36b0aeebce3a7b9786d53992b1461e0a37e28fbc46e
+SAME_FILE,data/covers/full/ol-cover-10227956.jpg,2,/books/OL2501634M,FR,Risibles amours,Milan Kundera,10227956,b2f8eb843e46c3387109f36b0aeebce3a7b9786d53992b1461e0a37e28fbc46e
+SAME_FILE,data/covers/full/ol-cover-42940.jpg,2,/books/OL32351351M,IT,Lo scherzo,Milan Kundera,42940,6a1288c679d5aee069256ac46cb7dd3e65be280491cb6e12cfd627cf0d7cc06d
+SAME_FILE,data/covers/full/ol-cover-42940.jpg,2,/books/OL22189226M,FR,La plaisanterie,Milan Kundera,42940,6a1288c679d5aee069256ac46cb7dd3e65be280491cb6e12cfd627cf0d7cc06d
+SAME_FILE,data/covers/full/ol-cover-4744992.jpg,2,/books/OL37745006M,IT,Un matrimonio benedetto,Ngũgĩ wa Thiongʼo,4744992,5297738b73037e80eeb675bc01af2fe8ad98fdc6aeaf365bf778b04d406afd72
+SAME_FILE,data/covers/full/ol-cover-4744992.jpg,2,/books/OL28961193M,DE,Verborgene Schicksale,Ngũgĩ wa Thiongʼo,4744992,5297738b73037e80eeb675bc01af2fe8ad98fdc6aeaf365bf778b04d406afd72
+SAME_FILE,data/covers/full/ol-cover-7296134.jpg,2,/books/OL44877027M,IT,La conquista del pane,Peter Kropotkin,7296134,820d1178e64449034aaa069b5f3dcac3f7f31057527f24bf836ce40e081cc21f
+SAME_FILE,data/covers/full/ol-cover-7296134.jpg,2,/books/OL24794078M,FR,Khli͡eb i voli͡a,Peter Kropotkin,7296134,820d1178e64449034aaa069b5f3dcac3f7f31057527f24bf836ce40e081cc21f
+SAME_FILE,data/covers/full/ol-cover-10153906.jpg,2,/books/OL30151424M,IT,La scienza moderna e l'anarchia,Peter Kropotkin,10153906,e62577beaa3fbb9cabdc9356a1c39d9b85bfddd14dfcf4bf55b73ec3ae588296
+SAME_FILE,data/covers/full/ol-cover-10153906.jpg,2,/books/OL2765785M,ES,La ciencia moderna y el anarquismo,Peter Kropotkin,10153906,e62577beaa3fbb9cabdc9356a1c39d9b85bfddd14dfcf4bf55b73ec3ae588296
+SAME_FILE,data/covers/full/ol-cover-4842395.jpg,3,/books/OL1179244M,IT,Parole di un ribelle,Peter Kropotkin,4842395,ca1354a7c19fcf2cabdd0c7ae759a4cba1835f34bd5f48d23de975d02e98f8da
+SAME_FILE,data/covers/full/ol-cover-4842395.jpg,3,/books/OL13239831M,ES,Palabras de Un Rebelde,Peter Kropotkin,4842395,ca1354a7c19fcf2cabdd0c7ae759a4cba1835f34bd5f48d23de975d02e98f8da
+SAME_FILE,data/covers/full/ol-cover-4842395.jpg,3,/books/OL39820204M,FR,Paroles d'un révolté,Peter Kropotkin,4842395,ca1354a7c19fcf2cabdd0c7ae759a4cba1835f34bd5f48d23de975d02e98f8da
+SAME_FILE,data/covers/full/ol-cover-9346537.jpg,3,/books/OL57490083M,IT,Cronache Marziane,Ray Bradbury,9346537,231277607fbd73f74e99672cbace8abff99697169e562a65eea7573fca3bfd76
+SAME_FILE,data/covers/full/ol-cover-9346537.jpg,3,/books/OL45645957M,ES,Crónicas marcianas,Ray Bradbury,9346537,231277607fbd73f74e99672cbace8abff99697169e562a65eea7573fca3bfd76
+SAME_FILE,data/covers/full/ol-cover-9346537.jpg,3,/books/OL49539821M,FR,Chroniques martiennes,Ray Bradbury,9346537,231277607fbd73f74e99672cbace8abff99697169e562a65eea7573fca3bfd76
+SAME_FILE,data/covers/full/ol-cover-12993656.jpg,4,/books/OL49226330M,IT,Fahrenheit 451,Ray Bradbury,12993656,7dad5b635f43fb8a117e65e1f8f127441cd147f3c8029c645cf2190a61b23f50
+SAME_FILE,data/covers/full/ol-cover-12993656.jpg,4,/books/OL32062901M,ES,Fahrenheit 451,Ray Bradbury,12993656,7dad5b635f43fb8a117e65e1f8f127441cd147f3c8029c645cf2190a61b23f50
+SAME_FILE,data/covers/full/ol-cover-12993656.jpg,4,/books/OL26437277M,NL,Fahrenheit 451,Ray Bradbury,12993656,7dad5b635f43fb8a117e65e1f8f127441cd147f3c8029c645cf2190a61b23f50
+SAME_FILE,data/covers/full/ol-cover-12993656.jpg,4,/books/OL44791038M,FR,Fahrenheit 451,Ray Bradbury,12993656,7dad5b635f43fb8a117e65e1f8f127441cd147f3c8029c645cf2190a61b23f50
+SAME_FILE,data/covers/full/ol-cover-9346340.jpg,4,/books/OL20652038M,IT,Il popolo dell'autunno,Ray Bradbury,9346340,74617b76fb6980a7d8ec3e0dfd5c6c50dc205af65202431c62203f16c9053526
+SAME_FILE,data/covers/full/ol-cover-9346340.jpg,4,/books/OL27578906M,ES,La feria de las tinieblas,Ray Bradbury,9346340,74617b76fb6980a7d8ec3e0dfd5c6c50dc205af65202431c62203f16c9053526
+SAME_FILE,data/covers/full/ol-cover-9346340.jpg,4,/books/OL53722322M,EN,Something Wicked This Way Comes,Ray Bradbury,9346340,74617b76fb6980a7d8ec3e0dfd5c6c50dc205af65202431c62203f16c9053526
+SAME_FILE,data/covers/full/ol-cover-9346340.jpg,4,/books/OL8864610M,FR,La foire des ténèbres,Ray Bradbury,9346340,74617b76fb6980a7d8ec3e0dfd5c6c50dc205af65202431c62203f16c9053526
+SAME_FILE,data/covers/full/ol-cover-8236442.jpg,2,/books/OL19312233M,IT,Discorso sul metodo,René Descartes,8236442,b1a54a544e090edb6d4d048bc0deaf62f4e10bf590c87ad8f0b1d109bc77d9ad
+SAME_FILE,data/covers/full/ol-cover-8236442.jpg,2,/books/OL24191905M,FR,Discours de la méthode,René Descartes,8236442,b1a54a544e090edb6d4d048bc0deaf62f4e10bf590c87ad8f0b1d109bc77d9ad
+SAME_FILE,data/covers/full/ol-cover-2281714.jpg,3,/books/OL21011362M,IT,I principj della filosofia di Renato Des-Cartes,René Descartes,2281714,ad6482b337286ae8eaf060c7e135ce95352686531ec58b810d76670c818959c6
+SAME_FILE,data/covers/full/ol-cover-2281714.jpg,3,/books/OL6534730M,NL,Principia Philosophiae,René Descartes,2281714,ad6482b337286ae8eaf060c7e135ce95352686531ec58b810d76670c818959c6
+SAME_FILE,data/covers/full/ol-cover-2281714.jpg,3,/books/OL15340521M,FR,Les principes de la philosophie,René Descartes,2281714,ad6482b337286ae8eaf060c7e135ce95352686531ec58b810d76670c818959c6
+SAME_FILE,data/covers/full/ol-cover-911109.jpg,2,/books/OL61523125M,IT,Io sono leggenda,Richard Matheson,911109,aa06222a3c3f3800251018fb74e0b6270fe32e45c9530d4d0e8249e751e92a39
+SAME_FILE,data/covers/full/ol-cover-911109.jpg,2,/books/OL25443566M,FR,Je suis une légende,Richard Matheson,911109,aa06222a3c3f3800251018fb74e0b6270fe32e45c9530d4d0e8249e751e92a39
+SAME_FILE,data/covers/full/ol-cover-3797057.jpg,3,/books/OL18461182M,IT,Questioni naturali,Seneca the Younger,3797057,b71fd11be63dacb7a9d28ea93fc755013ac00a97e726acc4f420b4bf35991a1f
+SAME_FILE,data/covers/full/ol-cover-3797057.jpg,3,/books/OL7239924M,EN,Physical science in the time of Nero,Seneca the Younger,3797057,b71fd11be63dacb7a9d28ea93fc755013ac00a97e726acc4f420b4bf35991a1f
+SAME_FILE,data/covers/full/ol-cover-3797057.jpg,3,/books/OL18635781M,FR,Questions naturelles ...,Seneca the Younger,3797057,b71fd11be63dacb7a9d28ea93fc755013ac00a97e726acc4f420b4bf35991a1f
+SAME_FILE,data/covers/full/ol-cover-12313764.jpg,2,/books/OL27088255M,IT,Solaris,Stanisław Lem,12313764,d6bdbb09a56dddddb4933ee28e9efed855d7788f3701d9809df41abf488c8065
+SAME_FILE,data/covers/full/ol-cover-12313764.jpg,2,/books/OL62337020M,FR,Solaris,Stanisław Lem,12313764,d6bdbb09a56dddddb4933ee28e9efed855d7788f3701d9809df41abf488c8065
+SAME_FILE,data/covers/full/ol-cover-9330145.jpg,4,/books/OL25311040M,IT,Nostra Sorella Carrie,Theodore Dreiser,9330145,0658d777c1e0e806d4b21fd3f31d921c067db2a12a1a4650ff16535cb1e15989
+SAME_FILE,data/covers/full/ol-cover-9330145.jpg,4,/books/OL13323674M,ES,Nuestra Carrie (Clasica Maior),Theodore Dreiser,9330145,0658d777c1e0e806d4b21fd3f31d921c067db2a12a1a4650ff16535cb1e15989
+SAME_FILE,data/covers/full/ol-cover-9330145.jpg,4,/books/OL6732895M,DE,"Schwester Carrie, roman.",Theodore Dreiser,9330145,0658d777c1e0e806d4b21fd3f31d921c067db2a12a1a4650ff16535cb1e15989
+SAME_FILE,data/covers/full/ol-cover-9330145.jpg,4,/books/OL58736393M,EN,Sister Carrie,Theodore Dreiser,9330145,0658d777c1e0e806d4b21fd3f31d921c067db2a12a1a4650ff16535cb1e15989
+SAME_FILE,data/covers/full/ol-cover-12995614.jpg,2,/books/OL56058556M,IT,Le avventure di Mademoiselle de Maupin,Théophile Gautier,12995614,cf96c737a3a99229673f4c3503c376a86ab64ad025414656ab2fc6010aabcf78
+SAME_FILE,data/covers/full/ol-cover-12995614.jpg,2,/books/OL6049782M,FR,Mademoiselle de Maupin.,Théophile Gautier,12995614,cf96c737a3a99229673f4c3503c376a86ab64ad025414656ab2fc6010aabcf78
+SAME_FILE,data/covers/full/ol-cover-4209835.jpg,3,/books/OL15138118M,IT,A bordo con Noè,Timothy Findley,4209835,8842c5763cdd6680accde89e2e808e9fd5304317243bc1f0fc66971035900999
+SAME_FILE,data/covers/full/ol-cover-4209835.jpg,3,/books/OL22623830M,DE,Die letzte Flut,Timothy Findley,4209835,8842c5763cdd6680accde89e2e808e9fd5304317243bc1f0fc66971035900999
+SAME_FILE,data/covers/full/ol-cover-4209835.jpg,3,/books/OL32132051M,FR,Passagers clandestins,Timothy Findley,4209835,8842c5763cdd6680accde89e2e808e9fd5304317243bc1f0fc66971035900999
+SAME_FILE,data/covers/full/ol-cover-6949557.jpg,3,/books/OL32114009M,IT,La figlia del pianista,Timothy Findley,6949557,9f0c515a67c26588dad367ad6088a68d7f17dbe1eba450bf4c9818892f754a48
+SAME_FILE,data/covers/full/ol-cover-6949557.jpg,3,/books/OL9063919M,DE,Die Tochter des Klavierspielers.,Timothy Findley,6949557,9f0c515a67c26588dad367ad6088a68d7f17dbe1eba450bf4c9818892f754a48
+SAME_FILE,data/covers/full/ol-cover-6949557.jpg,3,/books/OL12622241M,FR,La fille de l'homme au piano,Timothy Findley,6949557,9f0c515a67c26588dad367ad6088a68d7f17dbe1eba450bf4c9818892f754a48
+SAME_FILE,data/covers/full/ol-cover-12736044.jpg,6,/books/OL32083596M,IT,"Candido, ovvero, L'ottimismo",Voltaire,12736044,1e48571d4782f5edecdf87cd867f41df1c6187473739ca896f768cf3c2abc6c8
+SAME_FILE,data/covers/full/ol-cover-12736044.jpg,6,/books/OL35354523M,ES,Cándido,Voltaire,12736044,1e48571d4782f5edecdf87cd867f41df1c6187473739ca896f768cf3c2abc6c8
+SAME_FILE,data/covers/full/ol-cover-12736044.jpg,6,/books/OL17475171M,DE,"Kandide, oder, Die beste Welt",Voltaire,12736044,1e48571d4782f5edecdf87cd867f41df1c6187473739ca896f768cf3c2abc6c8
+SAME_FILE,data/covers/full/ol-cover-12736044.jpg,6,/books/OL24328781M,NL,"Candide, of Het optimisme",Voltaire,12736044,1e48571d4782f5edecdf87cd867f41df1c6187473739ca896f768cf3c2abc6c8
+SAME_FILE,data/covers/full/ol-cover-12736044.jpg,6,/books/OL39806707M,EN,Candide,Voltaire,12736044,1e48571d4782f5edecdf87cd867f41df1c6187473739ca896f768cf3c2abc6c8
+SAME_FILE,data/covers/full/ol-cover-12736044.jpg,6,/books/OL37862101M,FR,"Candide, ou L'optimisme",Voltaire,12736044,1e48571d4782f5edecdf87cd867f41df1c6187473739ca896f768cf3c2abc6c8
+SAME_FILE,data/covers/full/ol-cover-1645072.jpg,2,/books/OL13115765M,ES,"Bisa Bea, Bisa Bel",Ana Maria Machado,1645072,75f86ed996cdbbb64f196b3279d08e66076a16d2f62bed7bb14b59ddd032ac13
+SAME_FILE,data/covers/full/ol-cover-1645072.jpg,2,/books/OL8212153M,EN,Me in the Middle,Ana Maria Machado,1645072,75f86ed996cdbbb64f196b3279d08e66076a16d2f62bed7bb14b59ddd032ac13
+SAME_FILE,data/covers/full/ol-cover-12971015.jpg,3,/books/OL40214646M,ES,La habitación adoptiva,Antonia Michaelis,12971015,e8eb662ad8b1f4140ddfc35570b0ff79456b3728a42d21224e8cd0155e0004ee
+SAME_FILE,data/covers/full/ol-cover-12971015.jpg,3,/books/OL23069832M,DE,Das Adoptivzimmer,Antonia Michaelis,12971015,e8eb662ad8b1f4140ddfc35570b0ff79456b3728a42d21224e8cd0155e0004ee
+SAME_FILE,data/covers/full/ol-cover-12971015.jpg,3,/books/OL29668388M,EN,The Secret Room,Antonia Michaelis,12971015,e8eb662ad8b1f4140ddfc35570b0ff79456b3728a42d21224e8cd0155e0004ee
+SAME_FILE,data/covers/full/ol-cover-7003402.jpg,3,/books/OL27582920M,ES,Nuestra señora de las tinieblas,Charles Busch | Fritz Leiber,7003402,b5911289fff4221f53fc725a4ce8da45fa22b292f7c96896db01e52ef1166044
+SAME_FILE,data/covers/full/ol-cover-7003402.jpg,3,/books/OL35666376M,DE,Herrin der Dunkelheit,Charles Busch | Fritz Leiber,7003402,b5911289fff4221f53fc725a4ce8da45fa22b292f7c96896db01e52ef1166044
+SAME_FILE,data/covers/full/ol-cover-7003402.jpg,3,/books/OL27251942M,FR,Notre-dame des ténèbres,Charles Busch | Fritz Leiber,7003402,b5911289fff4221f53fc725a4ce8da45fa22b292f7c96896db01e52ef1166044
+SAME_FILE,data/covers/full/ol-cover-5279493.jpg,2,/books/OL4015360M,ES,Clarice Lispector,Clarice Lispector,5279493,0629edf344e2fad9316517cc79dfae9baa242a825adacd7ac2752e34320ea382
+SAME_FILE,data/covers/full/ol-cover-5279493.jpg,2,/books/OL16474067M,FR,Clarice Lispector,Clarice Lispector,5279493,0629edf344e2fad9316517cc79dfae9baa242a825adacd7ac2752e34320ea382
+SAME_FILE,data/covers/full/ol-cover-650866.jpg,3,/books/OL13311252M,ES,La hora de la estrella (Libros del Tiempo),Clarice Lispector,650866,37aa6017eaaf9f3c36b6c14b3ce70249d8d8c56c9eaa8a8a2d06ee107ab33b95
+SAME_FILE,data/covers/full/ol-cover-650866.jpg,3,/books/OL24896411M,EN,The hour of the star,Clarice Lispector,650866,37aa6017eaaf9f3c36b6c14b3ce70249d8d8c56c9eaa8a8a2d06ee107ab33b95
+SAME_FILE,data/covers/full/ol-cover-650866.jpg,3,/books/OL12529834M,FR,L'heure de l'étoile,Clarice Lispector,650866,37aa6017eaaf9f3c36b6c14b3ce70249d8d8c56c9eaa8a8a2d06ee107ab33b95
+SAME_FILE,data/covers/full/ol-cover-4141933.jpg,2,/books/OL35067067M,ES,La pasión según G. H.,Clarice Lispector,4141933,3880775620a9ee87d0be47de9ebb2693ec01b4d9512adf1b926e6a23bb5ba958
+SAME_FILE,data/covers/full/ol-cover-4141933.jpg,2,/books/OL2529359M,EN,The passion according to G.H.,Clarice Lispector,4141933,3880775620a9ee87d0be47de9ebb2693ec01b4d9512adf1b926e6a23bb5ba958
+SAME_FILE,data/covers/full/ol-cover-4493253.jpg,2,/books/OL22935401M,ES,Lazos de familia,Clarice Lispector,4493253,b6fb615b320b9a0675dbe8ce571256a9640a67e29693f43031403e1ead72b3e8
+SAME_FILE,data/covers/full/ol-cover-4493253.jpg,2,/books/OL5282268M,EN,Family ties.,Clarice Lispector,4493253,b6fb615b320b9a0675dbe8ce571256a9640a67e29693f43031403e1ead72b3e8
+SAME_FILE,data/covers/full/ol-cover-7958146.jpg,3,/books/OL26368422M,ES,"Un aprendizaje, o, El libro de los placeres",Clarice Lispector,7958146,685e303f40e3b50b163f36ecdb11b8b197fe4b812b11e7dc562cd54d5e1c7f97
+SAME_FILE,data/covers/full/ol-cover-7958146.jpg,3,/books/OL2708763M,EN,"An apprenticeship, or, The book of delights",Clarice Lispector,7958146,685e303f40e3b50b163f36ecdb11b8b197fe4b812b11e7dc562cd54d5e1c7f97
+SAME_FILE,data/covers/full/ol-cover-7958146.jpg,3,/books/OL12529856M,FR,"Un apprentissage, ou, Le livre des plaisirs",Clarice Lispector,7958146,685e303f40e3b50b163f36ecdb11b8b197fe4b812b11e7dc562cd54d5e1c7f97
+SAME_FILE,data/covers/full/ol-cover-630847.jpg,2,/books/OL25558182M,ES,Marx y su concepto del hombre,Erich Fromm,630847,51bdb987bb10f9f08f8bba230f065018fb1e64e24b3283bc9e0d160bec4a879b
+SAME_FILE,data/covers/full/ol-cover-630847.jpg,2,/books/OL32113529M,FR,La conception de l'homme chez Marx,Erich Fromm,630847,51bdb987bb10f9f08f8bba230f065018fb1e64e24b3283bc9e0d160bec4a879b
+SAME_FILE,data/covers/full/ol-cover-5257313.jpg,3,/books/OL13191095M,ES,¿Qué es una nación?,Ernest Renan,5257313,4128416d51e883806c7325a1c8f6e28a5f136e4d3aed317c203b68230bcf057f
+SAME_FILE,data/covers/full/ol-cover-5257313.jpg,3,/books/OL31281956M,NL,Wat is een natie?,Ernest Renan,5257313,4128416d51e883806c7325a1c8f6e28a5f136e4d3aed317c203b68230bcf057f
+SAME_FILE,data/covers/full/ol-cover-5257313.jpg,3,/books/OL8889807M,FR,Qu’est-ce qu’une nation?,Ernest Renan,5257313,4128416d51e883806c7325a1c8f6e28a5f136e4d3aed317c203b68230bcf057f
+SAME_FILE,data/covers/full/ol-cover-347047.jpg,2,/books/OL13321693M,ES,La Naturaleza Y Los Griegos,Erwin Schrödinger | Roger Penrose,347047,a3259b146dca2730d70edc9743fd9d6f9057e86acfa967802d62eb824233ec6a
+SAME_FILE,data/covers/full/ol-cover-347047.jpg,2,/books/OL8834258M,FR,La nature et les Grecs,Erwin Schrödinger | Roger Penrose,347047,a3259b146dca2730d70edc9743fd9d6f9057e86acfa967802d62eb824233ec6a
+SAME_FILE,data/covers/full/ol-cover-477766.jpg,2,/books/OL13226768M,ES,Espadas contra la Muerte,Fritz Leiber,477766,fccfdc1a5a2dcbaf9c40f54fc7c8b37b119cbdd41263027444ee0511cf1d103e
+SAME_FILE,data/covers/full/ol-cover-477766.jpg,2,/books/OL26805470M,FR,Épées et mort,Fritz Leiber,477766,fccfdc1a5a2dcbaf9c40f54fc7c8b37b119cbdd41263027444ee0511cf1d103e
+SAME_FILE,data/covers/full/ol-cover-14192616.jpg,2,/books/OL22915766M,ES,Espadas entre la niebla,Fritz Leiber,14192616,ede73942f29eecefbfa81d645828b0f8fe1ee90fe861e6d6cc7c92e4f1735e63
+SAME_FILE,data/covers/full/ol-cover-14192616.jpg,2,/books/OL36689762M,DE,Schwerter im Nebel,Fritz Leiber,14192616,ede73942f29eecefbfa81d645828b0f8fe1ee90fe861e6d6cc7c92e4f1735e63
+SAME_FILE,data/covers/full/ol-cover-4362486.jpg,2,/books/OL25570472M,ES,Ha gase la oscuridad!,Fritz Leiber | Jonathan Davis,4362486,89ff76342a801834e14bf4e854cc0625535e31382d52a770c319019c1ea6ed69
+SAME_FILE,data/covers/full/ol-cover-4362486.jpg,2,/books/OL47326522M,DE,Das Licht der Finsternis,Fritz Leiber | Jonathan Davis,4362486,89ff76342a801834e14bf4e854cc0625535e31382d52a770c319019c1ea6ed69
+SAME_FILE,data/covers/full/ol-cover-6935763.jpg,2,/books/OL13226844M,ES,Soldado de Arete,Gene Wolfe,6935763,860f87696081d5e55b46ea66e9b0970fd0f41cba7fa23abcb414a23bf075a6d6
+SAME_FILE,data/covers/full/ol-cover-6935763.jpg,2,/books/OL8864595M,FR,Soldat d'Aretê,Gene Wolfe,6935763,860f87696081d5e55b46ea66e9b0970fd0f41cba7fa23abcb414a23bf075a6d6
+SAME_FILE,data/covers/full/ol-cover-10793645.jpg,3,/books/OL13231391M,ES,Los orígenes del totalitarismo,Hannah Arendt,10793645,503c9475eab3067fe26ddeb9117431199293abdf3bca7bfc602d4932a904c23d
+SAME_FILE,data/covers/full/ol-cover-10793645.jpg,3,/books/OL59620159M,NL,Totalitarisme,Hannah Arendt,10793645,503c9475eab3067fe26ddeb9117431199293abdf3bca7bfc602d4932a904c23d
+SAME_FILE,data/covers/full/ol-cover-10793645.jpg,3,/books/OL15219427M,FR,Les origines du totalitarianisme,Hannah Arendt,10793645,503c9475eab3067fe26ddeb9117431199293abdf3bca7bfc602d4932a904c23d
+SAME_FILE,data/covers/full/ol-cover-3222803.jpg,2,/books/OL26478934M,ES,Diablillo,Heike Hohlbein | Wolfgang Hohlbein,3222803,880acf16638408e824b695f42aee0bd5f74f573e8ab52e64ff6313a1410a71aa
+SAME_FILE,data/covers/full/ol-cover-3222803.jpg,2,/books/OL12763460M,DE,Teufelchen,Heike Hohlbein | Wolfgang Hohlbein,3222803,880acf16638408e824b695f42aee0bd5f74f573e8ab52e64ff6313a1410a71aa
+SAME_FILE,data/covers/full/ol-cover-10544254.jpg,3,/books/OL38574734M,ES,Moby Dick,Herman Melville,10544254,9ffd7e95ec40730edda8dfddb42e6591ca0bcc80fbf768a1e107c63f4ddf9810
+SAME_FILE,data/covers/full/ol-cover-10544254.jpg,3,/books/OL24353780M,NL,"Moby Dick, of De witte walvisch",Herman Melville,10544254,9ffd7e95ec40730edda8dfddb42e6591ca0bcc80fbf768a1e107c63f4ddf9810
+SAME_FILE,data/covers/full/ol-cover-10544254.jpg,3,/books/OL32370097M,FR,Moby Dick,Herman Melville,10544254,9ffd7e95ec40730edda8dfddb42e6591ca0bcc80fbf768a1e107c63f4ddf9810
+SAME_FILE,data/covers/full/ol-cover-471091.jpg,2,/books/OL13263794M,ES,Complice,Iain Banks,471091,2efa269d12d3636908710789da361e6d821b9993cea185ae2b9ee00c95cf61bf
+SAME_FILE,data/covers/full/ol-cover-471091.jpg,2,/books/OL31829235M,FR,Un homme de glace,Iain Banks,471091,2efa269d12d3636908710789da361e6d821b9993cea185ae2b9ee00c95cf61bf
+SAME_FILE,data/covers/full/ol-cover-5258763.jpg,3,/books/OL13191821M,ES,Homo ludens (COLECCION HISTORIA) (Historias / History),Johan Huizinga,5258763,1f333561506af8ad27f0eea7d2442c582c3ace47226c39492546ddf111a46960
+SAME_FILE,data/covers/full/ol-cover-5258763.jpg,3,/books/OL27043909M,NL,Homo ludens,Johan Huizinga,5258763,1f333561506af8ad27f0eea7d2442c582c3ace47226c39492546ddf111a46960
+SAME_FILE,data/covers/full/ol-cover-5258763.jpg,3,/books/OL20402061M,FR,Homo ludens,Johan Huizinga,5258763,1f333561506af8ad27f0eea7d2442c582c3ace47226c39492546ddf111a46960
+SAME_FILE,data/covers/full/ol-cover-6276933.jpg,2,/books/OL13264724M,ES,Donde Esta Carmen Sandiego?,John Peel,6276933,868ec72682c5c4f2e8ab7171478706167f50a7d19a470eda3352def644bb92a8
+SAME_FILE,data/covers/full/ol-cover-6276933.jpg,2,/books/OL1752022M,EN,Where in America's past is Carmen Sandiego?,John Peel,6276933,868ec72682c5c4f2e8ab7171478706167f50a7d19a470eda3352def644bb92a8
+SAME_FILE,data/covers/full/ol-cover-675806.jpg,2,/books/OL13192916M,ES,El utilitarismo,John Stuart Mill,675806,5e4bbcfac8b5a67377a508bb93ffaac2ad9f37d95e9ce66d0ddc4e2f0a16e9e8
+SAME_FILE,data/covers/full/ol-cover-675806.jpg,2,/books/OL32122746M,FR,L'utilitarisme,John Stuart Mill,675806,5e4bbcfac8b5a67377a508bb93ffaac2ad9f37d95e9ce66d0ddc4e2f0a16e9e8
+SAME_FILE,data/covers/full/ol-cover-966821.jpg,3,/books/OL13356935M,ES,Ensayo Sobre La Libertad,John Stuart Mill,966821,b9f77adda733e61d344eb3ab605bf99006ebb3579fb7a3731feb3a48e55cfa58
+SAME_FILE,data/covers/full/ol-cover-966821.jpg,3,/books/OL37044660M,EN,On Liberty,John Stuart Mill,966821,b9f77adda733e61d344eb3ab605bf99006ebb3579fb7a3731feb3a48e55cfa58
+SAME_FILE,data/covers/full/ol-cover-966821.jpg,3,/books/OL8837549M,FR,De la liberté,John Stuart Mill,966821,b9f77adda733e61d344eb3ab605bf99006ebb3579fb7a3731feb3a48e55cfa58
+SAME_FILE,data/covers/full/ol-cover-4127091.jpg,2,/books/OL25337613M,ES,La lógica de las ciencias morales,John Stuart Mill,4127091,ed046fdff0ccee79df729e090fd67392b4225cc8466aca75ef2b5e75cbf3c66b
+SAME_FILE,data/covers/full/ol-cover-4127091.jpg,2,/books/OL5953169M,EN,On the logic of the moral sciences.,John Stuart Mill,4127091,ed046fdff0ccee79df729e090fd67392b4225cc8466aca75ef2b5e75cbf3c66b
+SAME_FILE,data/covers/full/ol-cover-3330410.jpg,2,/books/OL13311455M,ES,La ciudad situada / The Situated City (Libros Del Tiempo / Books of Time),Johnny Lorenz | Clarice Lispector,3330410,d7b37966a15df6f80e6128705bf79fc2c973d61f019dc75ea7c790677eed515e
+SAME_FILE,data/covers/full/ol-cover-3330410.jpg,2,/books/OL27342607M,EN,The Besieged City,Johnny Lorenz | Clarice Lispector,3330410,d7b37966a15df6f80e6128705bf79fc2c973d61f019dc75ea7c790677eed515e
+SAME_FILE,data/covers/full/ol-cover-12749276.jpg,2,/books/OL487112M,ES,La formación de las almas,José Murilo de Carvalho,12749276,d2e1b728e51970c582c8788c6c9e6589dc7c4b09f63893218394154f5aa142e4
+SAME_FILE,data/covers/full/ol-cover-12749276.jpg,2,/books/OL25367293M,EN,The formation of souls,José Murilo de Carvalho,12749276,d2e1b728e51970c582c8788c6c9e6589dc7c4b09f63893218394154f5aa142e4
+SAME_FILE,data/covers/full/ol-cover-12958803.jpg,3,/books/OL57353418M,ES,Por siempre Ambar,Kathleen Winsor,12958803,c97f98b2f45cb2be8dfeedc05b500dc3993306a0d253f1ee5fca2af6e4d1bf1c
+SAME_FILE,data/covers/full/ol-cover-12958803.jpg,3,/books/OL48567381M,EN,Forever Amber / Kathleen Winsor,Kathleen Winsor,12958803,c97f98b2f45cb2be8dfeedc05b500dc3993306a0d253f1ee5fca2af6e4d1bf1c
+SAME_FILE,data/covers/full/ol-cover-12958803.jpg,3,/books/OL32076705M,FR,Ambre,Kathleen Winsor,12958803,c97f98b2f45cb2be8dfeedc05b500dc3993306a0d253f1ee5fca2af6e4d1bf1c
+SAME_FILE,data/covers/full/ol-cover-8242341.jpg,2,/books/OL17868882M,ES,Seis personajes en busca de autor,Luigi Pirandello,8242341,52de70765f02d9cf42e7040be189e3ffd1488f94e551fa4f642cdff53ad4ca12
+SAME_FILE,data/covers/full/ol-cover-8242341.jpg,2,/books/OL37044617M,EN,Six Characters in Search of an Author,Luigi Pirandello,8242341,52de70765f02d9cf42e7040be189e3ffd1488f94e551fa4f642cdff53ad4ca12
+SAME_FILE,data/covers/full/ol-cover-6254568.jpg,2,/books/OL13116267M,ES,Gravedad Artificial,M. T. Anderson,6254568,15e9fd169045b06f73e2397963149ad1c6f228e1823a11f7ece42a1f1fb37a72
+SAME_FILE,data/covers/full/ol-cover-6254568.jpg,2,/books/OL39492463M,FR,Interface,M. T. Anderson,6254568,15e9fd169045b06f73e2397963149ad1c6f228e1823a11f7ece42a1f1fb37a72
+SAME_FILE,data/covers/full/ol-cover-647501.jpg,3,/books/OL26906847M,ES,Don Casmurro,Machado de Assis,647501,c5085aa7cbfdf71269e6677d84e5681c21b6fa787d82c0c3c3320796afde02fa
+SAME_FILE,data/covers/full/ol-cover-647501.jpg,3,/books/OL22170762M,EN,Dom Casmurro,Machado de Assis,647501,c5085aa7cbfdf71269e6677d84e5681c21b6fa787d82c0c3c3320796afde02fa
+SAME_FILE,data/covers/full/ol-cover-647501.jpg,3,/books/OL12634777M,FR,Dom Casmurro et les yeux de ressac,Machado de Assis,647501,c5085aa7cbfdf71269e6677d84e5681c21b6fa787d82c0c3c3320796afde02fa
+SAME_FILE,data/covers/full/ol-cover-647504.jpg,2,/books/OL13279231M,ES,El Alienista,Machado de Assis,647504,9323b3490c888a83ab91c35581430eb67e75ea13ec934a864347b30d5a2fd289
+SAME_FILE,data/covers/full/ol-cover-647504.jpg,2,/books/OL30660494M,EN,The alienist,Machado de Assis,647504,9323b3490c888a83ab91c35581430eb67e75ea13ec934a864347b30d5a2fd289
+SAME_FILE,data/covers/full/ol-cover-123420.jpg,2,/books/OL39334884M,ES,Quincas Borba,Machado de Assis,123420,57ccb755dac008cbf09059898e0793c7b1f16a5eb0532b02eaa611abff872bd2
+SAME_FILE,data/covers/full/ol-cover-123420.jpg,2,/books/OL681114M,EN,Quincas Borba,Machado de Assis,123420,57ccb755dac008cbf09059898e0793c7b1f16a5eb0532b02eaa611abff872bd2
+SAME_FILE,data/covers/full/ol-cover-12726168.jpg,2,/books/OL51153409M,ES,El príncipe,Niccolò Machiavelli,12726168,633153e94a12c977db74906fdfdf98f024cc7c673ec55cfb8471d1611b4bbeb3
+SAME_FILE,data/covers/full/ol-cover-12726168.jpg,2,/books/OL20602176M,FR,Le prince,Niccolò Machiavelli,12726168,633153e94a12c977db74906fdfdf98f024cc7c673ec55cfb8471d1611b4bbeb3
+SAME_FILE,data/covers/full/ol-cover-9345484.jpg,2,/books/OL49348350M,ES,El hombre ilustrado,Ray Bradbury,9345484,f4937a275ae9ac2b2ab7a30ad99025acfe19cdc14afede6b7b5a048cacb8f6fe
+SAME_FILE,data/covers/full/ol-cover-9345484.jpg,2,/books/OL47830245M,NL,De Geïllustreerde Man,Ray Bradbury,9345484,f4937a275ae9ac2b2ab7a30ad99025acfe19cdc14afede6b7b5a048cacb8f6fe
+SAME_FILE,data/covers/full/ol-cover-14831327.jpg,2,/books/OL60471607M,ES,El vino del estío,Ray Bradbury,14831327,4886c4b542e911550bc1d9fd010b9455005a7b39a1fd07744611df9717a43d80
+SAME_FILE,data/covers/full/ol-cover-14831327.jpg,2,/books/OL59424849M,FR,Le Vin de l'été,Ray Bradbury,14831327,4886c4b542e911550bc1d9fd010b9455005a7b39a1fd07744611df9717a43d80
+SAME_FILE,data/covers/full/ol-cover-14828150.jpg,2,/books/OL13268239M,ES,Fantasmas de lo nuevo,Ray Bradbury,14828150,0cb556957dd10fe5776372acb6f3a4c1238b117f0d515d9660051e12ad5e5a97
+SAME_FILE,data/covers/full/ol-cover-14828150.jpg,2,/books/OL8864564M,FR,Je chante le corps électrique,Ray Bradbury,14828150,0cb556957dd10fe5776372acb6f3a4c1238b117f0d515d9660051e12ad5e5a97
+SAME_FILE,data/covers/full/ol-cover-14828094.jpg,2,/books/OL47506176M,ES,Las doradas manzanas del sol,Ray Bradbury,14828094,44fafd2dee75e76e2bd9534394b8eebb98952b61af5630de3e8b357cd0965a29
+SAME_FILE,data/covers/full/ol-cover-14828094.jpg,2,/books/OL32852063M,NL,De gouden appels van de zon,Ray Bradbury,14828094,44fafd2dee75e76e2bd9534394b8eebb98952b61af5630de3e8b357cd0965a29
+SAME_FILE,data/covers/full/ol-cover-9346519.jpg,2,/books/OL13268138M,ES,Las maquinarias de la alegría,Ray Bradbury,9346519,596bc0d2c1dadf4c53e51bc075c71d562b5a501fbffd4b5b0310ae29a7c187bb
+SAME_FILE,data/covers/full/ol-cover-9346519.jpg,2,/books/OL12451937M,FR,Les machines à bonheur,Ray Bradbury,9346519,596bc0d2c1dadf4c53e51bc075c71d562b5a501fbffd4b5b0310ae29a7c187bb
+SAME_FILE,data/covers/full/ol-cover-12617998.jpg,2,/books/OL13201933M,ES,Memoria de Crimenes,Ray Bradbury,12617998,be8f04ccdf7a491b008ecc514d149253077d6c384fab5fc915e94e283209c6a6
+SAME_FILE,data/covers/full/ol-cover-12617998.jpg,2,/books/OL27278499M,FR,Monstrueusement vôtre,Ray Bradbury,12617998,be8f04ccdf7a491b008ecc514d149253077d6c384fab5fc915e94e283209c6a6
+SAME_FILE,data/covers/full/ol-cover-9346376.jpg,2,/books/OL13268157M,ES,Mucho después de medianoche,Ray Bradbury,9346376,0f609b5644cbc231dbdb6be531e4837dd91899c0ef993f286f60ca568684b089
+SAME_FILE,data/covers/full/ol-cover-9346376.jpg,2,/books/OL8864450M,FR,Bien après minuit,Ray Bradbury,9346376,0f609b5644cbc231dbdb6be531e4837dd91899c0ef993f286f60ca568684b089
+SAME_FILE,data/covers/full/ol-cover-14828124.jpg,2,/books/OL13268313M,ES,Remedio para melancólicos,Ray Bradbury,14828124,cd497ed9b42e07c1ae6bbf1e0db905f96e1e897f8095a8d457e88ecd99883359
+SAME_FILE,data/covers/full/ol-cover-14828124.jpg,2,/books/OL8864559M,FR,Un remède à la mélancolie,Ray Bradbury,14828124,cd497ed9b42e07c1ae6bbf1e0db905f96e1e897f8095a8d457e88ecd99883359
+SAME_FILE,data/covers/full/ol-cover-8293120.jpg,3,/books/OL6479060M,ES,El financiero,Theodore Dreiser,8293120,1c73be7cf0c630a8e4fdfa9b3245a1da5dadadb6729e3bbe3c9137900ed9f312
+SAME_FILE,data/covers/full/ol-cover-8293120.jpg,3,/books/OL21048575M,DE,Der financier.,Theodore Dreiser,8293120,1c73be7cf0c630a8e4fdfa9b3245a1da5dadadb6729e3bbe3c9137900ed9f312
+SAME_FILE,data/covers/full/ol-cover-8293120.jpg,3,/books/OL51733502M,EN,The Financier,Theodore Dreiser,8293120,1c73be7cf0c630a8e4fdfa9b3245a1da5dadadb6729e3bbe3c9137900ed9f312
+SAME_FILE,data/covers/full/ol-cover-12728401.jpg,3,/books/OL13275165M,ES,Una tragedia americana (An American Tragedy) (Narrativa (Punto de Lectura)),Theodore Dreiser,12728401,def730f8c6b2131ffa6917185567e26da74afc7025f75a27790cf7cc6dce0429
+SAME_FILE,data/covers/full/ol-cover-12728401.jpg,3,/books/OL6715553M,DE,Eine amerikanische Tragödie,Theodore Dreiser,12728401,def730f8c6b2131ffa6917185567e26da74afc7025f75a27790cf7cc6dce0429
+SAME_FILE,data/covers/full/ol-cover-12728401.jpg,3,/books/OL37847175M,EN,An American Tragedy,Theodore Dreiser,12728401,def730f8c6b2131ffa6917185567e26da74afc7025f75a27790cf7cc6dce0429
+SAME_FILE,data/covers/full/ol-cover-5484189.jpg,2,/books/OL58286432M,ES,Nosotros,Евгений Иванович Замятин,5484189,19eb2ea2d5394300a57d1e7d00104dcabb47333983bbb17e8dd114286783a32d
+SAME_FILE,data/covers/full/ol-cover-5484189.jpg,2,/books/OL4419969M,FR,Nous autres,Евгений Иванович Замятин,5484189,19eb2ea2d5394300a57d1e7d00104dcabb47333983bbb17e8dd114286783a32d
+SAME_FILE,data/covers/full/ol-cover-448639.jpg,2,/books/OL50528596M,DE,Aliens - Die Rückkehr,Alan Dean Foster,448639,b0e8e97ed546426d3ef7aa8db320bdc06b92fe9dea2a31ce795c1c9af2fde181
+SAME_FILE,data/covers/full/ol-cover-448639.jpg,2,/books/OL12514179M,FR,Aliens - Le Retour,Alan Dean Foster,448639,b0e8e97ed546426d3ef7aa8db320bdc06b92fe9dea2a31ce795c1c9af2fde181
+SAME_FILE,data/covers/full/ol-cover-6564962.jpg,2,/books/OL9035060M,DE,Star Wars. Skywalkers Rückkehr.,Alan Dean Foster,6564962,39c54d3c492ed51b99a95a17592f231bfd3edd9b9d1ecc1ae3e13bfad4eba006
+SAME_FILE,data/covers/full/ol-cover-6564962.jpg,2,/books/OL4558013M,EN,Splinter of the Mind's Eye,Alan Dean Foster,6564962,39c54d3c492ed51b99a95a17592f231bfd3edd9b9d1ecc1ae3e13bfad4eba006
+SAME_FILE,data/covers/full/ol-cover-1054459.jpg,3,/books/OL31387258M,DE,Rot ist mein Name,Amankeldī Qūrmet | Orhan Pamuk,1054459,e4c2f8d52042e902ed51ded2dfc5fa62712c408e37a77201ce18d965422c3230
+SAME_FILE,data/covers/full/ol-cover-1054459.jpg,3,/books/OL32806048M,NL,Ik heet Karmozijn,Amankeldī Qūrmet | Orhan Pamuk,1054459,e4c2f8d52042e902ed51ded2dfc5fa62712c408e37a77201ce18d965422c3230
+SAME_FILE,data/covers/full/ol-cover-1054459.jpg,3,/books/OL8839851M,FR,Mon nom est Rouge,Amankeldī Qūrmet | Orhan Pamuk,1054459,e4c2f8d52042e902ed51ded2dfc5fa62712c408e37a77201ce18d965422c3230
+SAME_FILE,data/covers/full/ol-cover-239666.jpg,2,/books/OL9064129M,DE,Die Nacht der Dämonen.,Amelia Atwater-Rhodes,239666,4e434a650ce6eff1159e470103fbbd345af74f01a46eac83ac8af214ee844b89
+SAME_FILE,data/covers/full/ol-cover-239666.jpg,2,/books/OL7520052M,EN,Demon in My View (Laurel-Leaf Books),Amelia Atwater-Rhodes,239666,4e434a650ce6eff1159e470103fbbd345af74f01a46eac83ac8af214ee844b89
+SAME_FILE,data/covers/full/ol-cover-1470822.jpg,3,/books/OL9064065M,DE,In den Wäldern tiefer Nacht.,Amelia Atwater-Rhodes,1470822,a2564b920877446c8bc565a461581a7d4a41fb70aa618e531bdd07eabcfbfc7f
+SAME_FILE,data/covers/full/ol-cover-1470822.jpg,3,/books/OL33003266M,NL,In de wouden van de nacht,Amelia Atwater-Rhodes,1470822,a2564b920877446c8bc565a461581a7d4a41fb70aa618e531bdd07eabcfbfc7f
+SAME_FILE,data/covers/full/ol-cover-1470822.jpg,3,/books/OL23243582M,EN,In the forests of the night,Amelia Atwater-Rhodes,1470822,a2564b920877446c8bc565a461581a7d4a41fb70aa618e531bdd07eabcfbfc7f
+SAME_FILE,data/covers/full/ol-cover-7267444.jpg,2,/books/OL27467730M,DE,Drachen der Finsternis,Antonia Michaelis,7267444,cecbda1b6b277161a7420c22e338dbe800311ab0c15bb3fd3a8a6f7a275b55c3
+SAME_FILE,data/covers/full/ol-cover-7267444.jpg,2,/books/OL23079049M,EN,The Dragons of Darkness,Antonia Michaelis,7267444,cecbda1b6b277161a7420c22e338dbe800311ab0c15bb3fd3a8a6f7a275b55c3
+SAME_FILE,data/covers/full/ol-cover-5419665.jpg,2,/books/OL1584964M,DE,"Der einsame Reiter und Babar, König der Elefanten",Ariel Dorfman,5419665,8fc3d8664153c10754d692f85ab4cd82bd05e56ac33c40f018337b6f1819671b
+SAME_FILE,data/covers/full/ol-cover-5419665.jpg,2,/books/OL18441028M,EN,The empire's old clothes,Ariel Dorfman,5419665,8fc3d8664153c10754d692f85ab4cd82bd05e56ac33c40f018337b6f1819671b
+SAME_FILE,data/covers/full/ol-cover-409356.jpg,3,/books/OL12689524M,DE,Der blonde Vampir. ( Unheimlicher Roman),Christopher Pike,409356,d6566d758d4f42913cade3d7d1e67f41873390036ae83aaba062c60e6562d168
+SAME_FILE,data/covers/full/ol-cover-409356.jpg,3,/books/OL7667117M,EN,The LAST VAMPIRE (LAST VAMPIRE 1),Christopher Pike,409356,d6566d758d4f42913cade3d7d1e67f41873390036ae83aaba062c60e6562d168
+SAME_FILE,data/covers/full/ol-cover-409356.jpg,3,/books/OL12508738M,FR,La Vampire - La promesse,Christopher Pike,409356,d6566d758d4f42913cade3d7d1e67f41873390036ae83aaba062c60e6562d168
+SAME_FILE,data/covers/full/ol-cover-4034038.jpg,2,/books/OL9025851M,DE,Sati. Mystischer Thriller.,Christopher Pike,4034038,345438adde98a14e61fa686e084e0d2ef159a38b489855e23657df5d02b0b5fb
+SAME_FILE,data/covers/full/ol-cover-4034038.jpg,2,/books/OL1881664M,EN,Sati,Christopher Pike,4034038,345438adde98a14e61fa686e084e0d2ef159a38b489855e23657df5d02b0b5fb
+SAME_FILE,data/covers/full/ol-cover-406345.jpg,2,/books/OL31887217M,DE,Spook City,Christopher Pike,406345,a5013a67a56918c2e6c7804a144895d4cebf589cdd72a721d4de6fd4d1b2e395
+SAME_FILE,data/covers/full/ol-cover-406345.jpg,2,/books/OL32945912M,EN,The Deadly Past,Christopher Pike,406345,a5013a67a56918c2e6c7804a144895d4cebf589cdd72a721d4de6fd4d1b2e395
+SAME_FILE,data/covers/full/ol-cover-855212.jpg,2,/books/OL32200218M,DE,Das Grüne Millennium,Fritz Leiber,855212,22a65a2289d5027850ae9e9b0ce46bb24aa3bc0a0dbc7af8782e088beea2745e
+SAME_FILE,data/covers/full/ol-cover-855212.jpg,2,/books/OL27266065M,FR,Le Millénaire vert,Fritz Leiber,855212,22a65a2289d5027850ae9e9b0ce46bb24aa3bc0a0dbc7af8782e088beea2745e
+SAME_FILE,data/covers/full/ol-cover-10544920.jpg,2,/books/OL27305287M,DE,Ein Gespenst sucht Texas heim,Fritz Leiber,10544920,df98315145681f38a32abc912280a8fbf00316d7410490d96d252dcb4c8e4e35
+SAME_FILE,data/covers/full/ol-cover-10544920.jpg,2,/books/OL31858514M,FR,Un spectre hante le Texas,Fritz Leiber,10544920,df98315145681f38a32abc912280a8fbf00316d7410490d96d252dcb4c8e4e35
+SAME_FILE,data/covers/full/ol-cover-6637857.jpg,2,/books/OL25572908M,DE,Ritter und Knappe des Schwerts,Fritz Leiber | Neil Gaiman | Jonathan Davis,6637857,1e5a47ab2b1eaf6a61e86bad67e420f1df37d8130fd73061b3d3714184ccf321
+SAME_FILE,data/covers/full/ol-cover-6637857.jpg,2,/books/OL7525799M,EN,The Knight and Knave of Swords,Fritz Leiber | Neil Gaiman | Jonathan Davis,6637857,1e5a47ab2b1eaf6a61e86bad67e420f1df37d8130fd73061b3d3714184ccf321
+SAME_FILE,data/covers/full/ol-cover-13760653.jpg,2,/books/OL47792145M,DE,Wirst du da sein?,Guillaume Musso,13760653,6a1d9ae2d697b3112951699f501fd2ad3f53ec10c8c1143bbebb9609a35760cd
+SAME_FILE,data/covers/full/ol-cover-13760653.jpg,2,/books/OL35442742M,FR,Seras-tu là?,Guillaume Musso,13760653,6a1d9ae2d697b3112951699f501fd2ad3f53ec10c8c1143bbebb9609a35760cd
+SAME_FILE,data/covers/full/ol-cover-7996284.jpg,2,/books/OL9036327M,DE,Pierre. Oder die Doppeldeutigkeiten.,Herman Melville,7996284,cf17c5036ec590816442b6778b96864b136507e6cd9e5702f83c02e6f4862405
+SAME_FILE,data/covers/full/ol-cover-7996284.jpg,2,/books/OL8839239M,FR,Pierre ou les ambiguïtés,Herman Melville,7996284,cf17c5036ec590816442b6778b96864b136507e6cd9e5702f83c02e6f4862405
+SAME_FILE,data/covers/full/ol-cover-9337669.jpg,2,/books/OL21077185M,DE,"Weissjacke, oder, Die Welt auf einem Kriegsschiff",Herman Melville,9337669,61870a4b98978523e6b61ea89616c7cd35b4de986cfbc9e6f85d936e1fe91619
+SAME_FILE,data/covers/full/ol-cover-9337669.jpg,2,/books/OL5656987M,FR,La Vareuse blanche.,Herman Melville,9337669,61870a4b98978523e6b61ea89616c7cd35b4de986cfbc9e6f85d936e1fe91619
+SAME_FILE,data/covers/full/ol-cover-44077.jpg,3,/books/OL27029179M,DE,Das Spiel Azad,Iain Banks,44077,23a1d527c91116a406c86fe505a82c1d792baa1322481b57e4fda638a57fe49c
+SAME_FILE,data/covers/full/ol-cover-44077.jpg,3,/books/OL2052117M,EN,The player of games,Iain Banks,44077,23a1d527c91116a406c86fe505a82c1d792baa1322481b57e4fda638a57fe49c
+SAME_FILE,data/covers/full/ol-cover-44077.jpg,3,/books/OL27034747M,FR,L'homme des jeux,Iain Banks,44077,23a1d527c91116a406c86fe505a82c1d792baa1322481b57e4fda638a57fe49c
+SAME_FILE,data/covers/full/ol-cover-1174791.jpg,3,/books/OL26733101M,DE,Die Sphären,Iain Banks,1174791,7e6a03c16a9a1a90fe88c6b2c4d60399e223091830aaea36e1aa66db5be8233a
+SAME_FILE,data/covers/full/ol-cover-1174791.jpg,3,/books/OL27078657M,EN,Matter,Iain Banks,1174791,7e6a03c16a9a1a90fe88c6b2c4d60399e223091830aaea36e1aa66db5be8233a
+SAME_FILE,data/covers/full/ol-cover-1174791.jpg,3,/books/OL37754032M,FR,Trames,Iain Banks,1174791,7e6a03c16a9a1a90fe88c6b2c4d60399e223091830aaea36e1aa66db5be8233a
+SAME_FILE,data/covers/full/ol-cover-369628.jpg,2,/books/OL47516910M,DE,Förchtbar Maschien,Iain Banks,369628,3f4d8733a69e85eee3e0da8dad8048ccd7fe638120057fe4310ae2e848a4c2d3
+SAME_FILE,data/covers/full/ol-cover-369628.jpg,2,/books/OL1272822M,EN,Feersum endjinn,Iain Banks,369628,3f4d8733a69e85eee3e0da8dad8048ccd7fe638120057fe4310ae2e848a4c2d3
+SAME_FILE,data/covers/full/ol-cover-6617349.jpg,2,/books/OL62086423M,DE,Die Tochter des Hirsch-Clans,Joan Wolf,6617349,c238fea2c6ccae01642685ee4cd665ef6ecb7bbbccfacc27344e547500c9eb54
+SAME_FILE,data/covers/full/ol-cover-6617349.jpg,2,/books/OL1534957M,EN,Daughter of the Red Deer,Joan Wolf,6617349,c238fea2c6ccae01642685ee4cd665ef6ecb7bbbccfacc27344e547500c9eb54
+SAME_FILE,data/covers/full/ol-cover-223259.jpg,2,/books/OL9066279M,DE,Das neue Leben.,Orhan Pamuk,223259,b5a08fbd6bc264764153fbb884ac35521fcf5986f1b4f36d3c7977c520666ef0
+SAME_FILE,data/covers/full/ol-cover-223259.jpg,2,/books/OL8839436M,FR,La Vie nouvelle,Orhan Pamuk,223259,b5a08fbd6bc264764153fbb884ac35521fcf5986f1b4f36d3c7977c520666ef0
+SAME_FILE,data/covers/full/ol-cover-6878773.jpg,2,/books/OL9066111M,DE,Das schwarze Buch.,Orhan Pamuk,6878773,f954c77ee4b6450ac40a7094a6aa8e208340a7eaef957b12b216703e3c49917f
+SAME_FILE,data/covers/full/ol-cover-6878773.jpg,2,/books/OL8838989M,FR,Le Livre noir,Orhan Pamuk,6878773,f954c77ee4b6450ac40a7094a6aa8e208340a7eaef957b12b216703e3c49917f
+SAME_FILE,data/covers/full/ol-cover-5273368.jpg,2,/books/OL50528416M,DE,Das stille Haus,Orhan Pamuk,5273368,f4ddb37fe150bddb72acfbfc99673de600423c1fd78dcedb5a959cc540709651
+SAME_FILE,data/covers/full/ol-cover-5273368.jpg,2,/books/OL36693177M,NL,Het huis van de stilte,Orhan Pamuk,5273368,f4ddb37fe150bddb72acfbfc99673de600423c1fd78dcedb5a959cc540709651
+SAME_FILE,data/covers/full/ol-cover-590257.jpg,3,/books/OL27948709M,DE,Die Weiße Festung,Orhan Pamuk,590257,54553ca71d48c6ca7cfd4ebcaccbefbab4a4f1c8fd2c9789a31404ac577ecffd
+SAME_FILE,data/covers/full/ol-cover-590257.jpg,3,/books/OL34852484M,NL,De witte vesting,Orhan Pamuk,590257,54553ca71d48c6ca7cfd4ebcaccbefbab4a4f1c8fd2c9789a31404ac577ecffd
+SAME_FILE,data/covers/full/ol-cover-590257.jpg,3,/books/OL8839332M,FR,Le Château blanc,Orhan Pamuk,590257,54553ca71d48c6ca7cfd4ebcaccbefbab4a4f1c8fd2c9789a31404ac577ecffd
+SAME_FILE,data/covers/full/ol-cover-9327854.jpg,2,/books/OL2114307M,DE,Bufo & Spallanzani,Rubem Fonseca,9327854,0d7701883b51ccae1f74d09feee59136388feff7c695c61b825738d02e73c405
+SAME_FILE,data/covers/full/ol-cover-9327854.jpg,2,/books/OL2203817M,EN,Bufo & Spallanzani,Rubem Fonseca,9327854,0d7701883b51ccae1f74d09feee59136388feff7c695c61b825738d02e73c405
+SAME_FILE,data/covers/full/ol-cover-8369941.jpg,2,/books/OL16335199M,DE,"Das ""genie,"" roman.",Theodore Dreiser,8369941,3c4cad9f80e5f12262391411decdf74dc26d81105e1e466aa4b8e428b837b898
+SAME_FILE,data/covers/full/ol-cover-8369941.jpg,2,/books/OL32060731M,EN,The Genius,Theodore Dreiser,8369941,3c4cad9f80e5f12262391411decdf74dc26d81105e1e466aa4b8e428b837b898
+SAME_FILE,data/covers/full/ol-cover-5905674.jpg,2,/books/OL15149185M,DE,Das Buch über mich selbst,Theodore Dreiser,5905674,bde5e1b031f102b518cce474e6332d30653f356cf7932c274cd2b71bb1244864
+SAME_FILE,data/covers/full/ol-cover-5905674.jpg,2,/books/OL24178983M,EN,A book about myself,Theodore Dreiser,5905674,bde5e1b031f102b518cce474e6332d30653f356cf7932c274cd2b71bb1244864
+SAME_FILE,data/covers/full/ol-cover-9330147.jpg,2,/books/OL6726711M,DE,Der Titan,Theodore Dreiser,9330147,47810c8abc3035d0eb48751f5a375a82a0e91a147e662be4a50ab20c6850ca23
+SAME_FILE,data/covers/full/ol-cover-9330147.jpg,2,/books/OL32060649M,EN,The Titan,Theodore Dreiser,9330147,47810c8abc3035d0eb48751f5a375a82a0e91a147e662be4a50ab20c6850ca23
+SAME_FILE,data/covers/full/ol-cover-9330051.jpg,2,/books/OL14261765M,DE,Der unentwegte,Theodore Dreiser,9330051,c0dbdc6af209e6c5f9dbda21779f9e529a23cc2874091e5fef7274d2c4cd41bc
+SAME_FILE,data/covers/full/ol-cover-9330051.jpg,2,/books/OL6515095M,EN,The stoic.,Theodore Dreiser,9330051,c0dbdc6af209e6c5f9dbda21779f9e529a23cc2874091e5fef7274d2c4cd41bc
+SAME_FILE,data/covers/full/ol-cover-8293201.jpg,2,/books/OL13717918M,DE,Jennie Gerhardt.,Theodore Dreiser,8293201,21f63232fb1e329b20c84ed16ba7b8604f5feeb04a5804aeafaaa584f0d3ce80
+SAME_FILE,data/covers/full/ol-cover-8293201.jpg,2,/books/OL32060640M,EN,Jennie Gerhardt,Theodore Dreiser,8293201,21f63232fb1e329b20c84ed16ba7b8604f5feeb04a5804aeafaaa584f0d3ce80
+SAME_FILE,data/covers/full/ol-cover-6742526.jpg,2,/books/OL12824718M,DE,Das dunkle Herz.,Timothy Findley,6742526,76f45afa8abc35f2ffa2e83aa9c0111496a30d14d848fa80462833813b69808e
+SAME_FILE,data/covers/full/ol-cover-6742526.jpg,2,/books/OL17957042M,FR,Chasseur de t^etes,Timothy Findley,6742526,76f45afa8abc35f2ffa2e83aa9c0111496a30d14d848fa80462833813b69808e
+SAME_FILE,data/covers/full/ol-cover-22826.jpg,3,/books/OL12811675M,DE,Der Gesandte,Timothy Findley,22826,536a858f0b5d740c01f42fed8563b78581068cd73b2ce64ecedc0e5591c5812f
+SAME_FILE,data/covers/full/ol-cover-22826.jpg,3,/books/OL19920334M,NL,Pelgrim,Timothy Findley,22826,536a858f0b5d740c01f42fed8563b78581068cd73b2ce64ecedc0e5591c5812f
+SAME_FILE,data/covers/full/ol-cover-22826.jpg,3,/books/OL32133443M,FR,Pilgrim,Timothy Findley,22826,536a858f0b5d740c01f42fed8563b78581068cd73b2ce64ecedc0e5591c5812f
+SAME_FILE,data/covers/full/ol-cover-9325224.jpg,2,/books/OL17397934M,DE,Krieg und die Kröte,Timothy Findley,9325224,d8c2d9e7d34eb062a6649418875e1e5f8a7e38d5be67c8bb2f170c73e61fa691
+SAME_FILE,data/covers/full/ol-cover-9325224.jpg,2,/books/OL20166471M,FR,Guerres,Timothy Findley,9325224,d8c2d9e7d34eb062a6649418875e1e5f8a7e38d5be67c8bb2f170c73e61fa691
+SAME_FILE,data/covers/full/ol-cover-5309092.jpg,2,/books/OL12811678M,DE,Mauberleys Ende,Timothy Findley,5309092,3059884b6159b0732709f9a0f68bd3004ba69177c0a2a2c1edd33e59a2bc8845
+SAME_FILE,data/covers/full/ol-cover-5309092.jpg,2,/books/OL32117088M,FR,Le Grand Elysium Hôtel,Timothy Findley,5309092,3059884b6159b0732709f9a0f68bd3004ba69177c0a2a2c1edd33e59a2bc8845
+SAME_FILE,data/covers/full/ol-cover-8148374.jpg,2,/books/OL26388363M,NL,Gestolen leven,Adam Johnson,8148374,cbbe6c96068dffa5486cb73ddb3766802e6083c212a244a77163e3ae4269c3da
+SAME_FILE,data/covers/full/ol-cover-8148374.jpg,2,/books/OL26388382M,FR,La Vie volée de Jun Do,Adam Johnson,8148374,cbbe6c96068dffa5486cb73ddb3766802e6083c212a244a77163e3ae4269c3da
+SAME_FILE,data/covers/full/ol-cover-7284069.jpg,2,/books/OL25448735M,NL,Het ijs,Anna Kavan,7284069,615b24aeab07c3eb492062b257c8f8962394fd93f18bd389c42807fc27afb3b8
+SAME_FILE,data/covers/full/ol-cover-7284069.jpg,2,/books/OL25448722M,FR,Neige,Anna Kavan,7284069,615b24aeab07c3eb492062b257c8f8962394fd93f18bd389c42807fc27afb3b8
+SAME_FILE,data/covers/full/ol-cover-6296465.jpg,2,/books/OL1163209M,NL,De huurders,Bernard Malamud,6296465,f239fd960fc4e72f33b923d78855324310acd7d8341de3f516aefeeebaf69909
+SAME_FILE,data/covers/full/ol-cover-6296465.jpg,2,/books/OL1163204M,FR,Les locataires,Bernard Malamud,6296465,f239fd960fc4e72f33b923d78855324310acd7d8341de3f516aefeeebaf69909
+SAME_FILE,data/covers/full/ol-cover-6515025.jpg,2,/books/OL16414079M,NL,Het huis aan het strand,Daphne du Maurier,6515025,f5e46c0588035832ebe5f279922ff05a9ad0d7fedfe1c2bba3b44a292e66a4a0
+SAME_FILE,data/covers/full/ol-cover-6515025.jpg,2,/books/OL15946692M,FR,"La maison sur le rivage, ou, L'elixir de double vie",Daphne du Maurier,6515025,f5e46c0588035832ebe5f279922ff05a9ad0d7fedfe1c2bba3b44a292e66a4a0
+SAME_FILE,data/covers/full/ol-cover-4459037.jpg,2,/books/OL22156610M,NL,Mary Anne,Daphne du Maurier,4459037,f9a4711e45e8e8aa16edf8e054c9d9795cfbcb644c4f80ba275c4bfc4859be0a
+SAME_FILE,data/covers/full/ol-cover-4459037.jpg,2,/books/OL8984044M,FR,Mary Anne,Daphne du Maurier,4459037,f9a4711e45e8e8aa16edf8e054c9d9795cfbcb644c4f80ba275c4bfc4859be0a
+SAME_FILE,data/covers/full/ol-cover-12887819.jpg,2,/books/OL24395388M,NL,De naakte aap,Desmond Morris,12887819,426b41dcd134cc409843eadee674a86df4b2a4e8a84b0771ba2994ba9d6c0bc1
+SAME_FILE,data/covers/full/ol-cover-12887819.jpg,2,/books/OL22193808M,FR,Le singe nu,Desmond Morris,12887819,426b41dcd134cc409843eadee674a86df4b2a4e8a84b0771ba2994ba9d6c0bc1
+SAME_FILE,data/covers/full/ol-cover-7560524.jpg,2,/books/OL33336086M,NL,De avonturen van Marco Polo,Elisabetta Dami,7560524,113cfc2aa83a5389e3e66af31ab92b71900a1d0f213f90391976f0bce0c6adfe
+SAME_FILE,data/covers/full/ol-cover-7560524.jpg,2,/books/OL32362247M,FR,Les aventures de Marco Polo,Elisabetta Dami,7560524,113cfc2aa83a5389e3e66af31ab92b71900a1d0f213f90391976f0bce0c6adfe
+SAME_FILE,data/covers/full/ol-cover-9258937.jpg,2,/books/OL26443638M,NL,Duivels,Fyodor Dostoyevsky,9258937,7c471089ab0f8bea18d32314e705596178bcd85076def254ad2fd4ecb983aafb
+SAME_FILE,data/covers/full/ol-cover-9258937.jpg,2,/books/OL46542082M,FR,Les possédés,Fyodor Dostoyevsky,9258937,7c471089ab0f8bea18d32314e705596178bcd85076def254ad2fd4ecb983aafb
+SAME_FILE,data/covers/full/ol-cover-2891112.jpg,2,/books/OL25892052M,NL,Memoires Van De Gallische Oorlog,Gaius Julius Caesar,2891112,1b1e5c3a1f67119ae4bdd1f51065b07372a726ea8d22b865d92ce9f6e190df48
+SAME_FILE,data/covers/full/ol-cover-2891112.jpg,2,/books/OL13961083M,FR,La guerre des Gaules,Gaius Julius Caesar,2891112,1b1e5c3a1f67119ae4bdd1f51065b07372a726ea8d22b865d92ce9f6e190df48
+SAME_FILE,data/covers/full/ol-cover-1230419.jpg,2,/books/OL35328799M,NL,Schipbreuk,Gordon Korman,1230419,1ef4838d4dad3222d17fee9440dfd9e2aff121c94a6402019db08fcb319bdfbf
+SAME_FILE,data/covers/full/ol-cover-1230419.jpg,2,/books/OL32128424M,FR,Naufragés,Gordon Korman,1230419,1ef4838d4dad3222d17fee9440dfd9e2aff121c94a6402019db08fcb319bdfbf
+SAME_FILE,data/covers/full/ol-cover-4220427.jpg,2,/books/OL16569395M,NL,Monseigneur Quichot,Graham Greene,4220427,7413dc16b4ba471a20fd9ad5f8add0504453f1741644478f96b86a76c5d35880
+SAME_FILE,data/covers/full/ol-cover-4220427.jpg,2,/books/OL28935327M,FR,Monsignor Quichotte,Graham Greene,4220427,7413dc16b4ba471a20fd9ad5f8add0504453f1741644478f96b86a76c5d35880
+SAME_FILE,data/covers/full/ol-cover-5329124.jpg,2,/books/OL21376719M,NL,Stamboel expres,Graham Greene,5329124,fadfede901ff04716d45da94650d34593ad8e8a5bce9796a12aba49936cc48e3
+SAME_FILE,data/covers/full/ol-cover-5329124.jpg,2,/books/OL20332707M,FR,Orient-express,Graham Greene,5329124,fadfede901ff04716d45da94650d34593ad8e8a5bce9796a12aba49936cc48e3
+SAME_FILE,data/covers/full/ol-cover-3872981.jpg,2,/books/OL32361177M,NL,Kolkende kloof,Gregory Benford,3872981,d7b21c12661bb36fe684ae26e5c9679365e48cfceba0b741c280a79dff4fe2fb
+SAME_FILE,data/covers/full/ol-cover-3872981.jpg,2,/books/OL8887906M,FR,Les Profondeurs furieuses,Gregory Benford,3872981,d7b21c12661bb36fe684ae26e5c9679365e48cfceba0b741c280a79dff4fe2fb
+SAME_FILE,data/covers/full/ol-cover-6005610.jpg,2,/books/OL13490057M,NL,De slavernij.,Harriet Stowe | Harriet Beecher Stowe,6005610,e8c257e8ed99fba85fdcc5d24b2771e39f4418b0ad5b50615682bea4d8c1ccc6
+SAME_FILE,data/covers/full/ol-cover-6005610.jpg,2,/books/OL25400903M,FR,La clef de la case l'Oncle Tom,Harriet Stowe | Harriet Beecher Stowe,6005610,e8c257e8ed99fba85fdcc5d24b2771e39f4418b0ad5b50615682bea4d8c1ccc6
+SAME_FILE,data/covers/full/ol-cover-2786155.jpg,2,/books/OL45912730M,NL,De vierde seconde / druk 1,James Patterson | Maxine Paetro,2786155,5fad7c0604fa7dc88344bb4607ff6779314aa4bbb3449181424f139bfde74b9f
+SAME_FILE,data/covers/full/ol-cover-2786155.jpg,2,/books/OL37833369M,FR,4 Fers Au Feu,James Patterson | Maxine Paetro,2786155,5fad7c0604fa7dc88344bb4607ff6779314aa4bbb3449181424f139bfde74b9f
+SAME_FILE,data/covers/full/ol-cover-7396124.jpg,2,/books/OL49376080M,NL,Niet te doen! (Het leven van een Loser) (Dutch Edition),Jeff Kinney,7396124,e183762acdf76ed9b3928b9fbb485192d103577bba7ba13e24315e0de6f22da3
+SAME_FILE,data/covers/full/ol-cover-7396124.jpg,2,/books/OL39209645M,FR,Journal d'un dégonflé - Tome 5 - La Vérité toute moche,Jeff Kinney,7396124,e183762acdf76ed9b3928b9fbb485192d103577bba7ba13e24315e0de6f22da3
+SAME_FILE,data/covers/full/ol-cover-5731773.jpg,2,/books/OL38230705M,NL,Paper towns,John Green,5731773,5f8862fe51f2d0a799fc1d112203bf58dddb2e27d3a84d8c1516f42f253ae6b0
+SAME_FILE,data/covers/full/ol-cover-5731773.jpg,2,/books/OL32113915M,FR,La face cachée de Margo,John Green,5731773,5f8862fe51f2d0a799fc1d112203bf58dddb2e27d3a84d8c1516f42f253ae6b0
+SAME_FILE,data/covers/full/ol-cover-6290636.jpg,2,/books/OL47217005M,NL,Huiver,Maggie Stiefvater,6290636,84c26599f54aaf7cf13b96e5b581a76e01c408c6d169493c2b7702a112dd3106
+SAME_FILE,data/covers/full/ol-cover-6290636.jpg,2,/books/OL47408046M,FR,Frisson,Maggie Stiefvater,6290636,84c26599f54aaf7cf13b96e5b581a76e01c408c6d169493c2b7702a112dd3106
+SAME_FILE,data/covers/full/ol-cover-6837023.jpg,2,/books/OL25651510M,NL,Verlaten,Michael Grant | Michael Grant,6837023,eacf2032c3f39e9afebeda437ab9e3c6ec5bfe55847e1e46603c7f623089aa7c
+SAME_FILE,data/covers/full/ol-cover-6837023.jpg,2,/books/OL32361858M,FR,Gone,Michael Grant | Michael Grant,6837023,eacf2032c3f39e9afebeda437ab9e3c6ec5bfe55847e1e46603c7f623089aa7c
+SAME_FILE,data/covers/full/ol-cover-9998014.jpg,2,/books/OL23395196M,NL,Beteekenis en oorsprong van het Russische communisme,Nikolaĭ Berdi͡aev,9998014,adbf0686bb8b3d8782ad458e9ac29edab7b6bfbaf81e440e6553e45655bff4f6
+SAME_FILE,data/covers/full/ol-cover-9998014.jpg,2,/books/OL14636899M,EN,The origin of Russian communism,Nikolaĭ Berdi͡aev,9998014,adbf0686bb8b3d8782ad458e9ac29edab7b6bfbaf81e440e6553e45655bff4f6
+SAME_FILE,data/covers/full/ol-cover-8345310.jpg,2,/books/OL37736738M,NL,Het rollenspel,Peter Abrahams,8345310,dce2a4b3afbcf142b3e5abfbc5375a383fe32356151959c44569f80ac9e335e5
+SAME_FILE,data/covers/full/ol-cover-8345310.jpg,2,/books/OL45095M,EN,Crying wolf,Peter Abrahams,8345310,dce2a4b3afbcf142b3e5abfbc5375a383fe32356151959c44569f80ac9e335e5
+SAME_FILE,data/covers/full/ol-cover-14465920.jpg,2,/books/OL25199004M,NL,De vrouw en de ledenpop,Pierre Louÿs,14465920,cb3b99b9069ecbc07062165e28e706c7410ca0b4eb0dc6e5d6f961275f3aabad
+SAME_FILE,data/covers/full/ol-cover-14465920.jpg,2,/books/OL23308824M,FR,La femme et le pantin,Pierre Louÿs,14465920,cb3b99b9069ecbc07062165e28e706c7410ca0b4eb0dc6e5d6f961275f3aabad
+SAME_FILE,data/covers/full/ol-cover-7254305.jpg,2,/books/OL47846019M,NL,Lean in / druk 4,Sheryl Sandberg | Nell Scovell,7254305,1f989b1b86b8d74269b7bfa477e2872096bb5e38131a78dd313345dfb5b606ce
+SAME_FILE,data/covers/full/ol-cover-7254305.jpg,2,/books/OL28937743M,FR,En avant toutes,Sheryl Sandberg | Nell Scovell,7254305,1f989b1b86b8d74269b7bfa477e2872096bb5e38131a78dd313345dfb5b606ce
+SAME_FILE,data/covers/full/ol-cover-14652203.jpg,2,/books/OL32780065M,NL,Duma,Stephen King,14652203,185f1e2f58c548ad06dcf2ae402310b6a3dc5968cf33590584cc2e2a6f9934df
+SAME_FILE,data/covers/full/ol-cover-14652203.jpg,2,/books/OL32812223M,FR,Duma Key,Stephen King,14652203,185f1e2f58c548ad06dcf2ae402310b6a3dc5968cf33590584cc2e2a6f9934df
+SAME_FILE,data/covers/full/ol-cover-50545.jpg,2,/books/OL35616341M,NL,Shiva's vuur,Suzanne Fisher Staples,50545,0414ba31f587c48a0035d13a6816d921188933287027e51bcb14880f0787ed7f
+SAME_FILE,data/covers/full/ol-cover-50545.jpg,2,/books/OL12396364M,FR,Le Feu de Shiva,Suzanne Fisher Staples,50545,0414ba31f587c48a0035d13a6816d921188933287027e51bcb14880f0787ed7f
+SAME_FILE,data/covers/full/ol-cover-1015632.jpg,2,/books/OL20216705M,NL,Kobus Kruls parmantige kattenboek,T. S. Eliot,1015632,abe43a8627b571fc17761d76a74b06a066205296a2d665bfe3e453207b68aa97
+SAME_FILE,data/covers/full/ol-cover-1015632.jpg,2,/books/OL18763039M,FR,Chats !,T. S. Eliot,1015632,abe43a8627b571fc17761d76a74b06a066205296a2d665bfe3e453207b68aa97
+SAME_FILE,data/covers/full/ol-cover-9358336.jpg,2,/books/OL27296285M,NL,de Duistere Engel,V.C. Andrews,9358336,4a1f679925f8e5281686a77e5e8f2c7561e2e04d94b06f4a1862b9d603c5b60d
+SAME_FILE,data/covers/full/ol-cover-9358336.jpg,2,/books/OL32069827M,FR,L'ange de la nuit,V.C. Andrews,9358336,4a1f679925f8e5281686a77e5e8f2c7561e2e04d94b06f4a1862b9d603c5b60d
+SAME_FILE,data/covers/full/ol-cover-14348580.jpg,2,/books/OL32362100M,NL,Hemel zonder Engelen,V.C. Andrews,14348580,b0c109b599a3a3fa6f38a6c005b8f5f07421a7c1aa8a7f168c93031e5cb2fa63
+SAME_FILE,data/covers/full/ol-cover-14348580.jpg,2,/books/OL32069777M,FR,Les enfants des collines,V.C. Andrews,14348580,b0c109b599a3a3fa6f38a6c005b8f5f07421a7c1aa8a7f168c93031e5cb2fa63
+SAME_FILE,data/covers/full/ol-cover-13274634.jpg,2,/books/OL38226768M,NL,Divergent 1 Inwijding,Veronica Roth,13274634,cda88e2a5bd4e6297ac390459145a5935bb1b374e89bb187251412ab68728698
+SAME_FILE,data/covers/full/ol-cover-13274634.jpg,2,/books/OL31882977M,FR,Divergence,Veronica Roth,13274634,cda88e2a5bd4e6297ac390459145a5935bb1b374e89bb187251412ab68728698
+SAME_FILE,data/covers/full/ol-cover-7083755.jpg,2,/books/OL40269277M,NL,Opstand,Veronica Roth,7083755,d66926bd8bb8b8c334be847335e8115a853eaf9ba457842b24e57e8807884ae9
+SAME_FILE,data/covers/full/ol-cover-7083755.jpg,2,/books/OL37824153M,FR,Divergente 2,Veronica Roth,7083755,d66926bd8bb8b8c334be847335e8115a853eaf9ba457842b24e57e8807884ae9
+SAME_FILE,data/covers/full/ol-cover-7276393.jpg,2,/books/OL27097133M,NL,Samensmelting: haar keuze bepaalt alles,Veronica Roth,7276393,edfba52bf97a95c4aa449f9d50691f409272afc4eb6822b98feed2bda4a46edc
+SAME_FILE,data/covers/full/ol-cover-7276393.jpg,2,/books/OL26775221M,FR,Allégeance,Veronica Roth,7276393,edfba52bf97a95c4aa449f9d50691f409272afc4eb6822b98feed2bda4a46edc
+SAME_FILE,data/covers/full/ol-cover-9283645.jpg,2,/books/OL13793219M,NL,Goya,Werner Hofmann,9283645,de98a8a023e4df5d985468c2d7ad6834091a1da70fbd12e699218552279cabda
+SAME_FILE,data/covers/full/ol-cover-9283645.jpg,2,/books/OL20218498M,FR,Goya,Werner Hofmann,9283645,de98a8a023e4df5d985468c2d7ad6834091a1da70fbd12e699218552279cabda
+SAME_FILE,data/covers/full/ol-cover-116833.jpg,3,/books/OL21016368M,NL,"Hendrik IV, eerste deel",William Shakespeare,116833,3ff30210fa6c2b3834a2a663faff687f470c90469467dca588afdb52fdbd0986
+SAME_FILE,data/covers/full/ol-cover-116833.jpg,3,/books/OL43530392M,EN,King Henry the Fourth Part I,William Shakespeare,116833,3ff30210fa6c2b3834a2a663faff687f470c90469467dca588afdb52fdbd0986
+SAME_FILE,data/covers/full/ol-cover-116833.jpg,3,/books/OL32221332M,FR,Henri IV (1re partie),William Shakespeare,116833,3ff30210fa6c2b3834a2a663faff687f470c90469467dca588afdb52fdbd0986
+SAME_FILE,data/covers/full/ol-cover-5755397.jpg,2,/books/OL24334789M,NL,Oblomow,Ива́н Алекса́ндрович Гончаро́в,5755397,601fd9141762a3eea0f5c1a0f87d805f611c96a79e235116387bc442e690040d
+SAME_FILE,data/covers/full/ol-cover-5755397.jpg,2,/books/OL20109835M,FR,Oblomov,Ива́н Алекса́ндрович Гончаро́в,5755397,601fd9141762a3eea0f5c1a0f87d805f611c96a79e235116387bc442e690040d
+SAME_FILE,data/covers/full/ol-cover-4715368.jpg,2,/books/OL8070282M,EN,Deleuze,Alain Badiou,4715368,4462dd3d89dff6a8e957b33ceaf88602f2652db4ba00c01afb095fd49a5cbc23
+SAME_FILE,data/covers/full/ol-cover-4715368.jpg,2,/books/OL756293M,FR,Deleuze,Alain Badiou,4715368,4462dd3d89dff6a8e957b33ceaf88602f2652db4ba00c01afb095fd49a5cbc23
+SAME_FILE,data/covers/full/ol-cover-895624.jpg,2,/books/OL3402521M,EN,Metapolitics,Alain Badiou,895624,2f75f1900b2bbc7dfb34379f231bece4b0201a1e034ba80d0294589687c8d38e
+SAME_FILE,data/covers/full/ol-cover-895624.jpg,2,/books/OL64800M,FR,Abrégé de métapolitique,Alain Badiou,895624,2f75f1900b2bbc7dfb34379f231bece4b0201a1e034ba80d0294589687c8d38e
+SAME_FILE,data/covers/full/ol-cover-2133710.jpg,2,/books/OL16819140M,EN,Conditions,Alain Badiou | Badiou | Steven Corcoran | Alain Badiou,2133710,eac2cbd8d316aafd33b0acb65d2cc39f355cdc79a2cdd106b6ad4ee6c6d9a5ef
+SAME_FILE,data/covers/full/ol-cover-2133710.jpg,2,/books/OL8834366M,FR,Conditions (L'Ordre philosophique),Alain Badiou | Badiou | Steven Corcoran | Alain Badiou,2133710,eac2cbd8d316aafd33b0acb65d2cc39f355cdc79a2cdd106b6ad4ee6c6d9a5ef
+SAME_FILE,data/covers/full/ol-cover-1213003.jpg,2,/books/OL1562191M,EN,Games for actors and non-actors,Augusto Boal,1213003,8cc7c5753fe45de95b9a77f60fec9264296d287ebc08dec4de5ae426f4fa7897
+SAME_FILE,data/covers/full/ol-cover-1213003.jpg,2,/books/OL19785961M,FR,Jeux pour acteurs et non-acteurs,Augusto Boal,1213003,8cc7c5753fe45de95b9a77f60fec9264296d287ebc08dec4de5ae426f4fa7897
+SAME_FILE,data/covers/full/ol-cover-409358.jpg,2,/books/OL18422360M,EN,Black blood,Christopher Pike,409358,6b2f4f4392896aa5879761f6e036e90c6b46e8c641e44150b3b5cb23f9f42ce2
+SAME_FILE,data/covers/full/ol-cover-409358.jpg,2,/books/OL12508740M,FR,La Vampire,Christopher Pike,409358,6b2f4f4392896aa5879761f6e036e90c6b46e8c641e44150b3b5cb23f9f42ce2
+SAME_FILE,data/covers/full/ol-cover-408207.jpg,2,/books/OL7664034M,EN,Monster,Christopher Pike,408207,81eacdaa25d507ca19285db56e3cc7b0564dc6de87144fc89f8da12b4ef248c5
+SAME_FILE,data/covers/full/ol-cover-408207.jpg,2,/books/OL12514712M,FR,Monstres,Christopher Pike,408207,81eacdaa25d507ca19285db56e3cc7b0564dc6de87144fc89f8da12b4ef248c5
+SAME_FILE,data/covers/full/ol-cover-201927.jpg,2,/books/OL7664035M,EN,Road to Nowhere,Christopher Pike,201927,a81790477cf1fa1d2d229290cd2d8a8615f671dbe7dc3ee33918ba8369726b17
+SAME_FILE,data/covers/full/ol-cover-201927.jpg,2,/books/OL12514713M,FR,Ultime voyage,Christopher Pike,201927,a81790477cf1fa1d2d229290cd2d8a8615f671dbe7dc3ee33918ba8369726b17
+SAME_FILE,data/covers/full/ol-cover-6995608.jpg,2,/books/OL3665979M,EN,Scavenger hunt,Christopher Pike,6995608,d1bbdb3469aa80f3a5551194c7758345d1873fcd492c1dd8a104a69ad6122701
+SAME_FILE,data/covers/full/ol-cover-6995608.jpg,2,/books/OL32608549M,FR,Diaboliquement vôtre,Christopher Pike,6995608,d1bbdb3469aa80f3a5551194c7758345d1873fcd492c1dd8a104a69ad6122701
+SAME_FILE,data/covers/full/ol-cover-383790.jpg,2,/books/OL7887652M,EN,Slumber Party (Point Paperback),Christopher Pike,383790,396bd5387c71e9cc6165ad8830cfaeee7447b37c01702b751746608975a505f5
+SAME_FILE,data/covers/full/ol-cover-383790.jpg,2,/books/OL32084564M,FR,Cette nuit-la,Christopher Pike,383790,396bd5387c71e9cc6165ad8830cfaeee7447b37c01702b751746608975a505f5
+SAME_FILE,data/covers/full/ol-cover-4982527.jpg,2,/books/OL1111997M,EN,The cold one,Christopher Pike,4982527,0f979bf5e49a4ea1306786c1e5e36f7a3e9806f56dc74495492180f2e16466da
+SAME_FILE,data/covers/full/ol-cover-4982527.jpg,2,/books/OL12514432M,FR,L'ombre froide,Christopher Pike,4982527,0f979bf5e49a4ea1306786c1e5e36f7a3e9806f56dc74495492180f2e16466da
+SAME_FILE,data/covers/full/ol-cover-5082301.jpg,2,/books/OL31934986M,EN,The howling ghost,Christopher Pike,5082301,f324f66f5feeba7fb1b6e196d6a65d950dd43bfb896f70ab40e8bab7c8729b15
+SAME_FILE,data/covers/full/ol-cover-5082301.jpg,2,/books/OL32806024M,FR,"Spooksville, tome 2. Le fantôme de l'océan",Christopher Pike,5082301,f324f66f5feeba7fb1b6e196d6a65d950dd43bfb896f70ab40e8bab7c8729b15
+SAME_FILE,data/covers/full/ol-cover-406336.jpg,2,/books/OL22958480M,EN,The last vampire 5,Christopher Pike,406336,7fba80b0347b0f4ef46cd53c9ead3311c71c1fabf9bfbbb1ffb429f6cebd76b9
+SAME_FILE,data/covers/full/ol-cover-406336.jpg,2,/books/OL12508736M,FR,La soif du mal,Christopher Pike,406336,7fba80b0347b0f4ef46cd53c9ead3311c71c1fabf9bfbbb1ffb429f6cebd76b9
+SAME_FILE,data/covers/full/ol-cover-2403282.jpg,2,/books/OL7540571M,EN,Weekend (Point),Christopher Pike,2403282,191edda0ce291e2285374f657e9a366ab02dda4732c21d74c2e4b008872e65bf
+SAME_FILE,data/covers/full/ol-cover-2403282.jpg,2,/books/OL12514948M,FR,Week-end fatal,Christopher Pike,2403282,191edda0ce291e2285374f657e9a366ab02dda4732c21d74c2e4b008872e65bf
+SAME_FILE,data/covers/full/ol-cover-201808.jpg,2,/books/OL24934563M,EN,Witch,Christopher Pike,201808,65ae9556cb95080d10c1bdc648aa59d327a4f35891a6f95809348df5f0120e1d
+SAME_FILE,data/covers/full/ol-cover-201808.jpg,2,/books/OL12514720M,FR,Prémonitions,Christopher Pike,201808,65ae9556cb95080d10c1bdc648aa59d327a4f35891a6f95809348df5f0120e1d
+SAME_FILE,data/covers/full/ol-cover-13786858.jpg,2,/books/OL1873680M,EN,Near to the wild heart,Clarice Lispector,13786858,d1ea044fe9e29e18fd13961495e6db0c1bae3a5d8efe14f9b00697bdf290dc49
+SAME_FILE,data/covers/full/ol-cover-13786858.jpg,2,/books/OL3277227M,FR,Près du cœur sauvage,Clarice Lispector,13786858,d1ea044fe9e29e18fd13961495e6db0c1bae3a5d8efe14f9b00697bdf290dc49
+SAME_FILE,data/covers/full/ol-cover-7433819.jpg,2,/books/OL25223654M,EN,Água viva,Clarice Lispector,7433819,97c6703c511daa9b3e5d75f713cfcf92da95ae454dd020293882932b246c4002
+SAME_FILE,data/covers/full/ol-cover-7433819.jpg,2,/books/OL8933456M,FR,Agua viva,Clarice Lispector,7433819,97c6703c511daa9b3e5d75f713cfcf92da95ae454dd020293882932b246c4002
+SAME_FILE,data/covers/full/ol-cover-476421.jpg,2,/books/OL24929580M,EN,Look to windward,Iain Banks,476421,d8ec0e563ad737efb9ac96f3e4dc8a8abcda8bcba03177dd59f31b253e209b57
+SAME_FILE,data/covers/full/ol-cover-476421.jpg,2,/books/OL27046578M,FR,Le Sens du Vent,Iain Banks,476421,d8ec0e563ad737efb9ac96f3e4dc8a8abcda8bcba03177dd59f31b253e209b57
+SAME_FILE,data/covers/full/ol-cover-862387.jpg,2,/books/OL26839917M,EN,Principles of political economy,John Stuart Mill,862387,8248d5c9084587f0fcc4fa3a8d0ad07a59bf8d7ef091ac00f607a876a30f5ae6
+SAME_FILE,data/covers/full/ol-cover-862387.jpg,2,/books/OL23538874M,FR,Principes d'économie politique: avec quelques-unes de leurs applications a l'économie sociale,John Stuart Mill,862387,8248d5c9084587f0fcc4fa3a8d0ad07a59bf8d7ef091ac00f607a876a30f5ae6
+SAME_FILE,data/covers/full/ol-cover-14032761.jpg,2,/books/OL5940809M,EN,"Wanderers eastward, wanderers west.",Kathleen Winsor,14032761,6aad249718c2b374f14761468742556c857c7dcd344a5d0971b519edaa23bed9
+SAME_FILE,data/covers/full/ol-cover-14032761.jpg,2,/books/OL50560470M,FR,D'or et d'argent (French Edition),Kathleen Winsor,14032761,6aad249718c2b374f14761468742556c857c7dcd344a5d0971b519edaa23bed9
+SAME_FILE,data/covers/full/ol-cover-1271797.jpg,2,/books/OL658412M,EN,Parallel universe,Nicola Baxter,1271797,10b3d2cdedbe45238b796e7910e6a1d1012771fa936ee50965e9f503379639c9
+SAME_FILE,data/covers/full/ol-cover-1271797.jpg,2,/books/OL16695428M,FR,A la chasse aux erreurs - a travers l'histoire,Nicola Baxter,1271797,10b3d2cdedbe45238b796e7910e6a1d1012771fa936ee50965e9f503379639c9
+SAME_FILE,data/covers/full/ol-cover-14002662.jpg,2,/books/OL24060389M,EN,Self-knowledge,Nikolaĭ Berdi͡aev,14002662,73555c323283e04ee78149a17c34f4a066be268296e0da55f2a9e2280f10c4ae
+SAME_FILE,data/covers/full/ol-cover-14002662.jpg,2,/books/OL22157760M,FR,Essai d'autobiographie spirituelle,Nikolaĭ Berdi͡aev,14002662,73555c323283e04ee78149a17c34f4a066be268296e0da55f2a9e2280f10c4ae
+SAME_FILE,data/covers/full/ol-cover-14002480.jpg,2,/books/OL24060390M,EN,Spirit and reality,Nikolaĭ Berdi͡aev,14002480,e4fa7317221f928544b709e3d2158b67f37b3996727e1aee2f8cf6aa43fa6acd
+SAME_FILE,data/covers/full/ol-cover-14002480.jpg,2,/books/OL23395191M,FR,Esprit et réalité,Nikolaĭ Berdi͡aev,14002480,e4fa7317221f928544b709e3d2158b67f37b3996727e1aee2f8cf6aa43fa6acd
+SAME_FILE,data/covers/full/ol-cover-9555176.jpg,2,/books/OL23530545M,EN,The end of our time,Nikolaĭ Berdi͡aev,9555176,a0c01dfeb93aa8ff6bf61ecccf2b86fb8146b41f18eed3c4f56542c62f0ad590
+SAME_FILE,data/covers/full/ol-cover-9555176.jpg,2,/books/OL20848477M,FR,Le nouveau Moyen Âge,Nikolaĭ Berdi͡aev,9555176,a0c01dfeb93aa8ff6bf61ecccf2b86fb8146b41f18eed3c4f56542c62f0ad590
+SAME_FILE,data/covers/full/ol-cover-913736.jpg,2,/books/OL26155045M,EN,Ethics Radical Thinkers,Peter Hallward | Alain Badiou,913736,ae113e0c6b0b758cadbd7fe8d0ea2e432f9fefe39d13afff0cd1da0d4d29bd34
+SAME_FILE,data/covers/full/ol-cover-913736.jpg,2,/books/OL22383901M,FR,L 'éthique,Peter Hallward | Alain Badiou,913736,ae113e0c6b0b758cadbd7fe8d0ea2e432f9fefe39d13afff0cd1da0d4d29bd34
+SAME_FILE,data/covers/full/ol-cover-1278173.jpg,2,/books/OL14521145M,EN,Spanish Islam,Reinhart Dozy,1278173,45adece2e3624b69d68e2e3b6a258b6659ab786d0518bf72ee5a69abd61cee8b
+SAME_FILE,data/covers/full/ol-cover-1278173.jpg,2,/books/OL23398784M,FR,Histoire des Musulmans d'Espagne jusqu'à la conquête de l'Andalousie,Reinhart Dozy,1278173,45adece2e3624b69d68e2e3b6a258b6659ab786d0518bf72ee5a69abd61cee8b
+SAME_FILE,data/covers/full/ol-cover-6074024.jpg,2,/books/OL1917446M,EN,17 letters,Seneca the Younger,6074024,c8ac2f3f76d6f344d6c062da2441eff7761db61e8fd06a79286008d1029e6138
+SAME_FILE,data/covers/full/ol-cover-6074024.jpg,2,/books/OL4951644M,FR,"Lettres à Lucilius, extraits.",Seneca the Younger,6074024,c8ac2f3f76d6f344d6c062da2441eff7761db61e8fd06a79286008d1029e6138
+SAME_FILE,data/covers/full/ol-cover-4604657.jpg,2,/books/OL7240767M,EN,"Minor dialogues, together with the dialogue On clemency.",Seneca the Younger,4604657,61b47f59e4601989e458bccfedde9dc8675bd34e3afe9c471c81345da28da0f1
+SAME_FILE,data/covers/full/ol-cover-4604657.jpg,2,/books/OL16814820M,FR,Dialogues,Seneca the Younger,4604657,61b47f59e4601989e458bccfedde9dc8675bd34e3afe9c471c81345da28da0f1
+SAME_FILE,data/covers/full/ol-cover-702346.jpg,2,/books/OL8296080M,EN,Reflections on Japanese Taste,Shuzo Kuki,702346,770187d642d26aba7677096cdcfb21a50ccbd6cb7de816795d937d3fe2958480
+SAME_FILE,data/covers/full/ol-cover-702346.jpg,2,/books/OL2758324M,FR,Structure de l'iki,Shuzo Kuki,702346,770187d642d26aba7677096cdcfb21a50ccbd6cb7de816795d937d3fe2958480
+SAME_FILE,data/covers/full/ol-cover-1861457.jpg,2,/books/OL47705163M,EN,"Captain Fracasse, parts I, 2 & 3",Théophile Gautier,1861457,b8895f9e69e181c09831c251cc207e04b0192d60d1e85a528fdd5b6e70e4d360
+SAME_FILE,data/covers/full/ol-cover-1861457.jpg,2,/books/OL24195724M,FR,Le capitaine Fracasse,Théophile Gautier,1861457,b8895f9e69e181c09831c251cc207e04b0192d60d1e85a528fdd5b6e70e4d360
+SAME_FILE,data/covers/full/ol-cover-5750444.jpg,2,/books/OL23357708M,EN,Voyage en Russie,Théophile Gautier,5750444,6c91903c5dafa050c01e052effe55e07a2f9808a73327d5275988a8c1c12e03a
+SAME_FILE,data/covers/full/ol-cover-5750444.jpg,2,/books/OL10501234M,FR,Voyage en Russie,Théophile Gautier,5750444,6c91903c5dafa050c01e052effe55e07a2f9808a73327d5275988a8c1c12e03a
+SAME_FILE,data/covers/full/ol-cover-10403857.jpg,2,/books/OL7002378M,EN,The sincere Huron,Voltaire,10403857,05cfc6a56d399c6da8c4330b806135468b6c20e55b3bdcc76ae81a09655ea34a
+SAME_FILE,data/covers/full/ol-cover-10403857.jpg,2,/books/OL21757146M,FR,L' ingénu,Voltaire,10403857,05cfc6a56d399c6da8c4330b806135468b6c20e55b3bdcc76ae81a09655ea34a

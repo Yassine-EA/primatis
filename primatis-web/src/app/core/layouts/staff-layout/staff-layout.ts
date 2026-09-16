@@ -1,23 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { Navigation } from '../../../shared/navigation/navigation';
+import { StaffAdminShell } from '../staff-admin-shell/staff-admin-shell';
 
 @Component({
   selector: 'app-staff-layout',
-  imports: [RouterOutlet, Navigation],
+  imports: [RouterOutlet, StaffAdminShell],
   template: `
-    <div class="layout-shell">
-      <header class="layout-header">
-        <strong>Espace personnel</strong>
-        <app-navigation />
-      </header>
-
-      <main class="layout-content">
-        <router-outlet />
-      </main>
-    </div>
+    <app-staff-admin-shell zoneTitle="Espace bibliothécaire">
+      <router-outlet />
+    </app-staff-admin-shell>
   `,
-  styleUrl: './staff-layout.scss',
 })
 export class StaffLayout {}

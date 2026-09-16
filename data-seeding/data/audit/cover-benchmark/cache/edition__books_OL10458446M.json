@@ -1,0 +1,51 @@
+{
+  "title": "Aucassin Et Nicolette",
+  "authors": [
+    {
+      "key": "/authors/OL2231875A"
+    },
+    {
+      "key": "/authors/OL3437209A"
+    }
+  ],
+  "publish_date": "October 29, 1968",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "physical_format": "Hardcover",
+  "weight": "8 ounces",
+  "publishers": [
+    "French & European Pubns"
+  ],
+  "isbn_13": [
+    "9780320062483"
+  ],
+  "isbn_10": [
+    "0320062481"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "General",
+    "Fiction"
+  ],
+  "physical_dimensions": "8.6 x 5.4 x 0.6 inches",
+  "source_records": [
+    "amazon:0320062481"
+  ],
+  "key": "/books/OL10458446M",
+  "number_of_pages": 150,
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-03-01T13:48:41.028974"
+  }
+}

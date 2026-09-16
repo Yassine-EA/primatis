@@ -57,6 +57,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./articles/pages/article-detail-page/article-detail-page').then((m) => m.ArticleDetailPage),
       },
+      {
+        // Page éditoriale dédiée à Georges Lemaître (DEV-15.4) : contenu
+        // statique, aucun guard — même principe exact que 'catalogue'/
+        // 'articles'. Lazy loading pour ne pas alourdir le bundle initial.
+        path: 'georges-lemaitre',
+        loadComponent: () =>
+          import('./shared/pages/georges-lemaitre/georges-lemaitre').then((m) => m.GeorgesLemaitrePage),
+      },
     ],
   },
   {

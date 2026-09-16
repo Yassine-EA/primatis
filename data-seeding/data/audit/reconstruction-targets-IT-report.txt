@@ -1,0 +1,32 @@
+DEV-16 RECONSTRUCTION — IT TARGETS
+==================================
+
+Total targets : 165
+
+BY CATEGORY
+===========
+ITALIAN_CANON                  : 55
+TWENTIETH_CENTURY              : 40
+CONTEMPORARY                   : 25
+ESSAYS_PHILOSOPHY              : 15
+HISTORY_SOCIETY                : 10
+YOUTH                          : 10
+GRAPHIC                        : 10
+
+POLICY
+======
+
+The 165 rows are editorial work targets, not editions.
+No ISBN, publisher, year, page count or cover is invented.
+Original Italian-language works are preferred.
+Major authors and landmark works take precedence over availability.
+Existing preserved catalogue titles must be matched before acquisition.
+One physical edition cannot occupy two acquisition slots.
+A usable cover remains mandatory for final acquisition.
+page_count must be integrated later when reliably recoverable.
+
+No Open Library request performed.
+No bundle modification.
+No database write.
+
+STATUS : PASS

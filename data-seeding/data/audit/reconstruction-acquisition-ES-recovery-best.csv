@@ -1,0 +1,24 @@
+target_index,language,category,priority,target_author,target_work,query_mode,work_key,work_title,work_authors,edition_key,edition_title,edition_subtitle,edition_languages,isbn,publisher,publish_date,page_count,cover_id,title_score,author_score,candidate_score,cover_state,cover_width,cover_height,cover_format,cover_local_path,recovery_state
+15,ES,SPANISH_CANON,1,Santa Teresa de Jesús,Libro de la vida,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+16,ES,SPANISH_CANON,1,Francisco de Quevedo,El Buscón,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+27,ES,SPANISH_CANON,1,Leopoldo Alas Clarín,La Regenta,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+36,ES,SPANISH_CANON,1,Pío Baroja,Zalacaín el aventurero,BROAD,/works/OL23303833W,Zalacaín el aventurero,Pío Baroja,/books/OL32346226M,Zalacaín el aventurero,,spa,9788489669949,El País,2003,,10970474,1.0,1.0,0.9900000000000001,VALID_COVER,305,500,JPEG,data/audit/reconstruction-ES-recovery-covers/ES-recovery-036-OL32346226M.jpeg,RECOVERED
+38,ES,SPANISH_CANON,1,Ramón del Valle-Inclán,Sonata de otoño,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+46,ES,LATIN_AMERICAN_CANON,1,Jorge Luis Borges,Ficciones,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+59,ES,LATIN_AMERICAN_CANON,1,Mario Vargas Llosa,La guerra del fin del mundo,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+63,ES,LATIN_AMERICAN_CANON,1,Alejo Carpentier,Los pasos perdidos,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+85,ES,LATIN_AMERICAN_CANON,1,Ernesto Sábato,Sobre héroes y tumbas,BROAD,/works/OL617876W,Sobre héroes y tumbas,Ernesto Sabato,/books/OL24927818M,Sobre héroes y tumbas,,spa,9788432230141,Seix Barral,1988,,15240286,1.0,1.0,0.9900000000000001,VALID_COVER,332,500,JPEG,data/audit/reconstruction-ES-recovery-covers/ES-recovery-085-OL24927818M.jpeg,RECOVERED
+93,ES,SPAIN_MODERN_CONTEMPORARY,2,Carmen Laforet,Nada,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+101,ES,SPAIN_MODERN_CONTEMPORARY,2,Miguel Delibes,El camino,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+114,ES,SPAIN_MODERN_CONTEMPORARY,2,Manuel Vázquez Montalbán,Los mares del Sur,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+117,ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Isabel Allende,De amor y de sombra,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+119,ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Roberto Bolaño,2666,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+129,ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Laura Restrepo,Delirio,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+132,ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Samanta Schweblin,Distancia de rescate,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+134,ES,LATIN_AMERICA_MODERN_CONTEMPORARY,2,Valeria Luiselli,Los ingrávidos,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+144,ES,ESSAYS_PHILOSOPHY,2,María Zambrano,El hombre y lo divino,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+148,ES,ESSAYS_PHILOSOPHY,2,Carlos Fuentes,La nueva novela hispanoamericana,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+159,ES,HISTORY_SOCIETY,2,Javier Cercas,Anatomía de un instante,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+168,ES,YOUTH,3,María Elena Walsh,Cuentopos de Gulubú,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED
+170,ES,GRAPHIC,3,Héctor Germán Oesterheld,El Eternauta,BROAD,/works/OL16497355W,El eternauta,H. G. Oesterheld,/books/OL32721673M,El eternauta,edición especial literatura complementaria,spa,9789879085332,Doedytores,2012,,11348505,1.0,0.7368421052631579,0.9189473684210527,VALID_COVER,500,359,JPEG,data/audit/reconstruction-ES-recovery-covers/ES-recovery-170-OL32721673M.jpeg,RECOVERED
+171,ES,GRAPHIC,3,Paco Roca,Arrugas,,,,,,,,,,,,,,,,,,,,,,STILL_UNRESOLVED

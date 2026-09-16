@@ -1,0 +1,31 @@
+language,category,editorial_rank,target_author,target_work,query_mode,work_key,work_title,work_authors,edition_key,edition_title,edition_subtitle,edition_languages,isbn,publisher,publish_date,page_count,cover_id,title_score,author_score,candidate_score,cover_state,cover_width,cover_height,cover_format,cover_local_path,search_result
+IT,GRAPHIC,1,Zerocalcare,Dodici,TITLE_AUTHOR,/works/OL22913083W,Dodici,Zerocalcare,/books/OL30822902M,Dodici,,ita,9788865431801,Bao Publishing,2013,,13900798,1.0,1.0,0.9900000000000001,VALID_COVER,365,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-GRAPHIC-01-OL30822902M.jpeg,BEST_CANDIDATE_FOUND
+IT,GRAPHIC,2,Zerocalcare,Scheletri,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,GRAPHIC,3,Gipi,S.,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,GRAPHIC,4,Gipi,Momenti straordinari con applausi finti,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,GRAPHIC,5,Manuele Fior,Rosso Oltremare,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,GRAPHIC,6,Manuele Fior,Le variazioni d'Orsay,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,GRAPHIC,7,Igort,Pagine nomadi,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,GRAPHIC,8,Lorenzo Mattotti,Jekyll & Hyde,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,GRAPHIC,9,Vittorio Giardino,Rapsodia ungherese,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,GRAPHIC,10,Guido Crepax,Valentina,BROAD,/works/OL3835050W,Guido Crepax,Guido Crepax,/books/OL22687250M,Guido Crepax,"Valentina, la forma del tempo",ita,9788888482958,C. Cambi,2008,,13268279,0.95,1.0,0.9635,VALID_COVER,379,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-GRAPHIC-10-OL22687250M.jpeg,BEST_CANDIDATE_FOUND
+IT,TWENTIETH_CENTURY,1,Ignazio Silone,Fontamara,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,TWENTIETH_CENTURY,2,Ignazio Silone,Pane e vino,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,TWENTIETH_CENTURY,3,Vasco Pratolini,Cronache di poveri amanti,TITLE_AUTHOR,/works/OL27713538W,Cronache di poveri amanti,Vasco Pratolini,/books/OL37807392M,Cronache di poveri amanti,,ita,9788804414674,Mondadori,1996,,12714833,1.0,1.0,0.9900000000000001,VALID_COVER,322,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-TWENTIETH_CENTURY-03-OL37807392M.jpeg,BEST_CANDIDATE_FOUND
+IT,TWENTIETH_CENTURY,4,Vasco Pratolini,Metello,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,TWENTIETH_CENTURY,5,Alberto Moravia,Il conformista,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,TWENTIETH_CENTURY,6,Dino Buzzati,Il colombre,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,TWENTIETH_CENTURY,7,Natalia Ginzburg,È stato così,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,TWENTIETH_CENTURY,8,Leonardo Sciascia,Il contesto,TITLE_AUTHOR,/works/OL10448163W,Il contesto,Leonardo Sciascia,/books/OL18592978M,Il contesto,una parodia,ita,8807815230,Feltrinelli,2000,,5427392,1.0,1.0,0.9900000000000001,VALID_COVER,128,205,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-TWENTIETH_CENTURY-08-OL18592978M.jpeg,BEST_CANDIDATE_FOUND
+IT,TWENTIETH_CENTURY,9,Mario Tobino,Le libere donne di Magliano,TITLE_AUTHOR,/works/OL768403W,Le libere donne di Magliano,Mario Tobino,/books/OL772969M,Le libere donne di Magliano,,ita,8804340894,A. Mondadori,1990,,13172422,1.0,1.0,0.9900000000000001,VALID_COVER,322,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-TWENTIETH_CENTURY-09-OL772969M.jpeg,BEST_CANDIDATE_FOUND
+IT,TWENTIETH_CENTURY,10,Carlo Cassola,La ragazza di Bube,TITLE_AUTHOR,/works/OL2889709W,La ragazza di Bube,Carlo Cassola,/books/OL1937799M,La ragazza di Bube,,ita,8817113506,Biblioteca universale Rizzoli,1989,,11664967,1.0,1.0,0.9900000000000001,VALID_COVER,315,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-TWENTIETH_CENTURY-10-OL1937799M.jpeg,BEST_CANDIDATE_FOUND
+IT,YOUTH,1,Italo Calvino,Fiabe italiane,BROAD,/works/OL8969792W,Le piú belle fiabe italiane,Italo Calvino,/books/OL13428900M,Le piu belle fiabe itali,,ita,9788828600930,"Einaudi Scuola, Elemond Divisione Scuola",,,12685935,0.95,1.0,0.9485,VALID_COVER,290,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-YOUTH-01-OL13428900M.jpeg,BEST_CANDIDATE_FOUND
+IT,YOUTH,2,Gianni Rodari,Grammatica della fantasia,TITLE_AUTHOR,/works/OL29317167W,Grammatica della fantasia,Gianni Rodari,/books/OL40296613M,Grammatica della fantasia,introduzione all'arte di inventare storie,ita,9788879262439,Einaudi ragazzi,1997,,13002465,1.0,1.0,0.9900000000000001,VALID_COVER,271,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-YOUTH-02-OL40296613M.jpeg,BEST_CANDIDATE_FOUND
+IT,YOUTH,3,Bianca Pitzorno,Polissena del Porcello,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,YOUTH,4,Bianca Pitzorno,La casa sull'albero,TITLE_AUTHOR,/works/OL2284308W,"Casa del Arbol, La",Bianca Pitzorno,/books/OL23040014M,La casa sull'albero,,ita,8804444797,Mondadori,1998,,9331901,1.0,1.0,0.9900000000000001,VALID_COVER,305,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-YOUTH-04-OL23040014M.jpeg,BEST_CANDIDATE_FOUND
+IT,YOUTH,5,Roberto Piumini,Motu-Iti,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,YOUTH,6,Stefano Benni,Stranalandia,TITLE_AUTHOR,/works/OL959599W,I meravigliosi animali di Stranalandia,Stefano Benni,/books/OL1617876M,I meravigliosi animali di Stranalandia,,ita,8807810794,Feltrinelli,1990,,13072446,0.95,1.0,0.9635,VALID_COVER,293,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-YOUTH-06-OL1617876M.jpeg,BEST_CANDIDATE_FOUND
+IT,YOUTH,7,Luigi Garlando,Per questo mi chiamo Giovanni,TITLE_AUTHOR,/works/OL24142112W,Per questo mi chiamo Giovanni,Luigi Garlando,/books/OL31848035M,Per questo mi chiamo Giovanni,,ita,9788817141727,Rizzoli,"Apr 30, 2019",,10539712,1.0,1.0,0.9900000000000001,VALID_COVER,321,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-YOUTH-07-OL31848035M.jpeg,BEST_CANDIDATE_FOUND
+IT,YOUTH,8,Susanna Tamaro,Cuore di ciccia,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,YOUTH,9,Beatrice Masini,La bambina che parlava ai libri,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+IT,YOUTH,10,Silvana Gandolfi,La memoria dell'acqua,TITLE_AUTHOR,/works/OL24167774W,La memoria dell'acqua,Silvana Gandolfi,/books/OL31897490M,La memoria dell'acqua,,ita,9788877826442,Salani,1999,,10583165,1.0,1.0,0.9900000000000001,VALID_COVER,325,500,JPEG,data/audit/reconstruction-IT-final-gap-covers/IT-final-gap-YOUTH-10-OL31897490M.jpeg,BEST_CANDIDATE_FOUND

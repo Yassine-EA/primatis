@@ -1,5 +1,6 @@
-import { CurrencyPipe } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { RouterLink } from '@angular/router';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 
@@ -11,6 +12,10 @@ import { FineApiService } from '../../../../fines/services/fine-api.service';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  fineStatusSeverity as sharedFineStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
 
 const DEFAULT_PAGE_SIZE = 20;
 
@@ -31,12 +36,13 @@ const DEFAULT_PAGE_SIZE = 20;
  */
 @Component({
   selector: 'app-member-fines-page',
-  imports: [TableModule, TagModule, CurrencyPipe, LoadingState, EmptyState, ErrorState],
+  imports: [RouterLink, TableModule, TagModule, LoadingState, EmptyState, ErrorState],
   templateUrl: './member-fines-page.html',
   styleUrl: './member-fines-page.scss',
 })
 export class MemberFinesPage {
   private readonly fineApiService = inject(FineApiService);
+  private readonly titleService = inject(Title);
 
   readonly rows = signal<FineResponse[]>([]);
   readonly totalRecords = signal(0);
@@ -45,11 +51,26 @@ export class MemberFinesPage {
   // PrimeNG au montage — même principe que MemberLoansPage.
   readonly loading = signal(true);
   readonly error = signal<AppError | null>(null);
+  readonly unpaidCount = computed(
+    () => this.rows().filter((fine) => fine.fineStatus === 'UNPAID').length,
+  );
+  readonly paidCount = computed(
+    () => this.rows().filter((fine) => fine.fineStatus === 'PAID').length,
+  );
+  readonly cancelledCount = computed(
+    () => this.rows().filter((fine) => fine.fineStatus === 'CANCELLED').length,
+  );
+  readonly unpaidAmount = computed(() =>
+    this.rows()
+      .filter((fine) => fine.fineStatus === 'UNPAID')
+      .reduce((total, fine) => total + fine.amount, 0),
+  );
 
   private lastPage = 0;
   private lastSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
+    this.titleService.setTitle('Mes amendes — PRIMATIS');
     this.load(0, DEFAULT_PAGE_SIZE);
   }
 
@@ -68,15 +89,8 @@ export class MemberFinesPage {
     this.load(this.lastPage, this.lastSize);
   }
 
-  fineStatusSeverity(status: FineStatus): 'danger' | 'success' | 'secondary' {
-    switch (status) {
-      case 'UNPAID':
-        return 'danger';
-      case 'PAID':
-        return 'success';
-      case 'CANCELLED':
-        return 'secondary';
-    }
+  fineStatusSeverity(status: FineStatus): StatusTagSeverity {
+    return sharedFineStatusSeverity(status);
   }
 
   fineStatusLabel(status: FineStatus): string {
@@ -88,6 +102,35 @@ export class MemberFinesPage {
       case 'CANCELLED':
         return 'Annulée';
     }
+  }
+
+  formatAmount(value: number): string {
+    return new Intl.NumberFormat('fr-BE', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  }
+
+  formatDate(value: string | null): string {
+    if (!value) {
+      return '—';
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return new Intl.DateTimeFormat('fr-BE', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    })
+      .format(date)
+      .replace('.', '');
   }
 
   private load(page: number, size: number): void {

@@ -1,0 +1,42 @@
+# Socle éditorial EN — voir fr.toml pour le format/principe (identiques
+# pour chaque langue). Élargi DEV-16.5 §4/§5.
+
+[[authors]]
+author_key = "OL9388A"
+full_name = "William Shakespeare"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=William+Shakespeare"
+work_count_at_verification = 12911
+period = "classique (XVIe-XVIIe siècle)"
+form = "théâtre, poésie"
+selection_rationale = "Figure canonique de la littérature anglophone, largement référencée sur Open Library."
+
+[[authors]]
+author_key = "OL21594A"
+full_name = "Jane Austen"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Jane+Austen"
+work_count_at_verification = 2225
+period = "classique (XIXe siècle)"
+form = "roman"
+selection_rationale = "Figure majeure du roman anglais classique, apporte une diversité de genre au socle EN."
+
+[[authors]]
+author_key = "OL19450A"
+full_name = "Virginia Woolf"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Virginia+Woolf"
+work_count_at_verification = 2011
+period = "moderne (XXe siècle)"
+form = "roman, essai"
+selection_rationale = "Figure majeure du modernisme anglophone, apporte une diversité de période et de forme au socle EN."
+
+[[authors]]
+author_key = "OL31120A"
+full_name = "Toni Morrison"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Toni+Morrison"
+work_count_at_verification = 101
+period = "contemporaine (XXe-XXIe siècle)"
+form = "roman"
+selection_rationale = "Autrice contemporaine majeure (prix Nobel 1993), apporte une diversité culturelle et chronologique au socle EN."

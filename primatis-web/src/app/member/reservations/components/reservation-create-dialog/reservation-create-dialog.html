@@ -2,27 +2,46 @@
   [visible]="visible()"
   [modal]="true"
   header="Réserver un titre"
+  styleClass="reservation-create-dialog"
+  [style]="{ width: 'min(42rem, calc(100vw - 2rem))' }"
   [closable]="!submitting()"
   (onHide)="cancel()"
 >
-  <section aria-labelledby="reservation-create-title-heading">
-    <h3 id="reservation-create-title-heading">Titre</h3>
+  <section class="reservation-create-form" aria-labelledby="reservation-create-title-heading">
+    <div class="reservation-create-intro">
+      <span class="reservation-create-icon" aria-hidden="true">
+        <i class="pi pi-bookmark"></i>
+      </span>
+      <div>
+        <h3 id="reservation-create-title-heading">Choisir un ouvrage</h3>
+        <p>Recherchez un titre du catalogue puis confirmez votre réservation.</p>
+      </div>
+    </div>
 
     @if (selectedTitle(); as title) {
       <p class="reservation-create-selection">
-        <span>{{ title.title }}</span>
+        <span>
+          <small>Titre sélectionné</small>
+          <strong>{{ title.title }}</strong>
+        </span>
         <button type="button" class="link-button" (click)="changeTitle()">Changer</button>
       </p>
     } @else {
-      <label for="reservation-create-title-search">Rechercher un titre</label>
-      <input
-        pInputText
-        id="reservation-create-title-search"
-        type="search"
-        [ngModel]="titleSearchTerm()"
-        (ngModelChange)="onTitleSearchInput($event)"
-        placeholder="Titre…"
-      />
+      <div class="reservation-create-field">
+        <label for="reservation-create-title-search">Titre</label>
+        <span class="reservation-create-search">
+          <i class="pi pi-search" aria-hidden="true"></i>
+          <input
+            pInputText
+            id="reservation-create-title-search"
+            type="search"
+            [ngModel]="titleSearchTerm()"
+            (ngModelChange)="onTitleSearchInput($event)"
+            placeholder="Rechercher dans le catalogue…"
+          />
+        </span>
+        <small>Saisissez quelques lettres du titre recherché.</small>
+      </div>
 
       @if (titleSearchError(); as currentError) {
         <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retryTitleSearch()" />
@@ -34,7 +53,12 @@
         <ul class="reservation-create-list">
           @for (result of titleSearchResults(); track result.id) {
             <li>
-              <span>{{ result.title }}</span>
+              <span>
+                <strong>{{ result.title }}</strong>
+                @if (result.publicationYear) {
+                  <small>{{ result.publicationYear }}</small>
+                }
+              </span>
               <button type="button" class="link-button" (click)="selectTitle(result)">Sélectionner</button>
             </li>
           }

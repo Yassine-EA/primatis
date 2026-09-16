@@ -1,0 +1,41 @@
+# Socle éditorial NL — voir fr.toml. Élargi DEV-16.5 §4/§5.
+
+[[authors]]
+author_key = "OL51132A"
+full_name = "Multatuli"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Multatuli"
+work_count_at_verification = 78
+period = "classique (XIXe siècle)"
+form = "roman"
+selection_rationale = "Pseudonyme d'Eduard Douwes Dekker, figure majeure de la littérature néerlandophone (Max Havelaar)."
+
+[[authors]]
+author_key = "OL153950A"
+full_name = "Joost van den Vondel"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Joost+van+den+Vondel"
+work_count_at_verification = 138
+period = "classique (XVIIe siècle, âge d'or néerlandais)"
+form = "théâtre, poésie"
+selection_rationale = "Figure fondatrice de la littérature néerlandaise classique, apporte une diversité de période et de forme au socle NL."
+
+[[authors]]
+author_key = "OL51237A"
+full_name = "Harry Mulisch"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Harry+Mulisch"
+work_count_at_verification = 107
+period = "moderne (XXe siècle)"
+form = "roman"
+selection_rationale = "Figure majeure du roman néerlandais moderne (De ontdekking van de hemel)."
+
+[[authors]]
+author_key = "OL49585A"
+full_name = "Cees Nooteboom"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Cees+Nooteboom"
+work_count_at_verification = 164
+period = "contemporain (XXe-XXIe siècle)"
+form = "roman, essai, récit de voyage"
+selection_rationale = "Auteur néerlandais contemporain majeur, apporte une diversité chronologique et de forme au socle NL."

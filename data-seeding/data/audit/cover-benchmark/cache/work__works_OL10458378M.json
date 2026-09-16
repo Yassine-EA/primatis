@@ -1,0 +1,53 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "6740831"
+    ]
+  },
+  "title": "Andes Toit de L'amerique",
+  "authors": [
+    {
+      "key": "/authors/OL1725170A"
+    },
+    {
+      "key": "/authors/OL3437180A"
+    }
+  ],
+  "publish_date": "January 1965",
+  "publishers": [
+    "French & European Pubns"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_13": [
+    "9780320061073"
+  ],
+  "physical_format": "Hardcover",
+  "isbn_10": [
+    "0320061078"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Special Interest - General",
+    "Travel"
+  ],
+  "source_records": [
+    "amazon:0320061078"
+  ],
+  "key": "/books/OL10458378M",
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-06T08:36:07.178467"
+  }
+}

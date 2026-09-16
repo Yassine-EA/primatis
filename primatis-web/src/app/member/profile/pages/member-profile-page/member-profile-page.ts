@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,6 +11,12 @@ import { AppError } from '../../../../core/errors/api-error';
 import { toAppError } from '../../../../core/errors/api-error.util';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  accountStatusSeverity as sharedAccountStatusSeverity,
+  memberStatusSeverity as sharedMemberStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
+import { AccountStatus } from '../../../../user/models/account-status';
 import { MemberStatus } from '../../../../user/models/member-status';
 import { MeProfileResponse } from '../../../../user/models/me-profile-response';
 import { ResidenceResponse } from '../../../../user/models/residence-response';
@@ -29,7 +36,15 @@ const CURRENT_RESIDENCE_NOT_FOUND_CODE = 'CURRENT_RESIDENCE_NOT_FOUND';
  */
 @Component({
   selector: 'app-member-profile-page',
-  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, MessageModule, TagModule, LoadingState, ErrorState],
+  imports: [
+    ReactiveFormsModule,
+    ButtonModule,
+    InputTextModule,
+    MessageModule,
+    TagModule,
+    LoadingState,
+    ErrorState,
+  ],
   templateUrl: './member-profile-page.html',
   styleUrl: './member-profile-page.scss',
 })
@@ -38,6 +53,7 @@ export class MemberProfilePage {
   private readonly residenceApiService = inject(ResidenceApiService);
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly messageService = inject(MessageService);
+  private readonly titleService = inject(Title);
 
   readonly profile = signal<MeProfileResponse | null>(null);
   readonly profileLoading = signal(true);
@@ -56,6 +72,7 @@ export class MemberProfilePage {
   private phoneBaseline = '';
 
   constructor() {
+    this.titleService.setTitle('Mon profil — PRIMATIS');
     this.loadProfile();
     this.loadResidence();
   }
@@ -72,15 +89,49 @@ export class MemberProfilePage {
     return this.phoneSubmitting() || this.isPhoneBlank || this.isPhoneUnchanged;
   }
 
-  memberStatusSeverity(status: MemberStatus): 'success' | 'danger' | 'warn' {
+  memberStatusSeverity(status: MemberStatus): StatusTagSeverity {
+    return sharedMemberStatusSeverity(status);
+  }
+
+  accountStatusSeverity(status: AccountStatus): StatusTagSeverity {
+    return sharedAccountStatusSeverity(status);
+  }
+
+  memberStatusLabel(status: MemberStatus): string {
     switch (status) {
       case 'ACTIVE':
-        return 'success';
+        return 'Actif';
       case 'BLOCKED':
-        return 'danger';
+        return 'Bloqué';
       case 'EXPIRED':
-        return 'warn';
+        return 'Expiré';
     }
+  }
+
+  accountStatusLabel(status: AccountStatus): string {
+    return status === 'ACTIVE' ? 'Actif' : 'Désactivé';
+  }
+
+  initials(profile: MeProfileResponse): string {
+    return `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`.toUpperCase();
+  }
+
+  formatDate(value: string | null): string {
+    if (!value) {
+      return '—';
+    }
+
+    const date = new Date(`${value}T00:00:00Z`);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return new Intl.DateTimeFormat('fr-BE', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    }).format(date);
   }
 
   submitPhone(): void {

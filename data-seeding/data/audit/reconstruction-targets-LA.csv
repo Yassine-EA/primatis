@@ -1,0 +1,55 @@
+language,category,priority,author,target_work
+LA,CLASSICAL_LITERATURE,1,Virgile,Aeneis
+LA,CLASSICAL_LITERATURE,1,Virgile,Georgica
+LA,CLASSICAL_LITERATURE,1,Virgile,Eclogae
+LA,CLASSICAL_LITERATURE,1,Ovide,Metamorphoses
+LA,CLASSICAL_LITERATURE,1,Ovide,Ars Amatoria
+LA,CLASSICAL_LITERATURE,1,Ovide,Tristia
+LA,CLASSICAL_LITERATURE,1,Horace,Carmina
+LA,CLASSICAL_LITERATURE,1,Horace,Sermones
+LA,CLASSICAL_LITERATURE,1,Plaute,Miles Gloriosus
+LA,CLASSICAL_LITERATURE,1,Plaute,Menaechmi
+LA,CLASSICAL_LITERATURE,1,Térence,Andria
+LA,CLASSICAL_LITERATURE,1,Sénèque,Medea
+LA,CLASSICAL_LITERATURE,1,Sénèque,Phaedra
+LA,CLASSICAL_LITERATURE,1,Lucain,Pharsalia
+LA,CLASSICAL_LITERATURE,1,Apulée,Metamorphoses
+LA,CLASSICAL_LITERATURE,1,Pétrone,Satyricon
+LA,CLASSICAL_LITERATURE,1,Catulle,Carmina
+LA,CLASSICAL_LITERATURE,1,Juvénal,Saturae
+LA,CLASSICAL_LITERATURE,1,Martial,Epigrammata
+LA,CLASSICAL_LITERATURE,1,Properce,Elegiae
+LA,PHILOSOPHY_RHETORIC,1,Cicéron,De Officiis
+LA,PHILOSOPHY_RHETORIC,1,Cicéron,De Re Publica
+LA,PHILOSOPHY_RHETORIC,1,Cicéron,De Legibus
+LA,PHILOSOPHY_RHETORIC,1,Cicéron,De Oratore
+LA,PHILOSOPHY_RHETORIC,1,Cicéron,Tusculanae Disputationes
+LA,PHILOSOPHY_RHETORIC,1,Sénèque,Epistulae Morales ad Lucilium
+LA,PHILOSOPHY_RHETORIC,1,Sénèque,De Brevitate Vitae
+LA,PHILOSOPHY_RHETORIC,1,Sénèque,De Clementia
+LA,PHILOSOPHY_RHETORIC,1,Lucrèce,De Rerum Natura
+LA,PHILOSOPHY_RHETORIC,1,Lucrèce,De Rerum Natura — alternate scholarly edition
+LA,PHILOSOPHY_RHETORIC,1,Quintilien,Institutio Oratoria
+LA,PHILOSOPHY_RHETORIC,1,Quintilien,Declamationes
+LA,PHILOSOPHY_RHETORIC,1,Boèce,De Consolatione Philosophiae
+LA,PHILOSOPHY_RHETORIC,1,Augustin,Confessiones
+LA,HISTORY,1,Tite-Live,Ab Urbe Condita
+LA,HISTORY,1,Tite-Live,Ab Urbe Condita — alternate volume or edition
+LA,HISTORY,1,Tacite,Annales
+LA,HISTORY,1,Tacite,Historiae
+LA,HISTORY,1,Tacite,Germania
+LA,HISTORY,1,Salluste,Bellum Catilinae
+LA,HISTORY,1,Salluste,Bellum Iugurthinum
+LA,HISTORY,1,Suétone,De Vita Caesarum
+LA,HISTORY,1,Jules César,De Bello Gallico
+LA,HISTORY,1,Jules César,De Bello Civili
+LA,LATE_MEDIEVAL_RENAISSANCE,2,Thomas d'Aquin,Summa Theologiae
+LA,LATE_MEDIEVAL_RENAISSANCE,2,Érasme,Moriae Encomium
+LA,LATE_MEDIEVAL_RENAISSANCE,2,Thomas More,Utopia
+LA,LATE_MEDIEVAL_RENAISSANCE,2,Pétrarque,Secretum
+LA,LATE_MEDIEVAL_RENAISSANCE,2,Pic de la Mirandole,Oratio de Hominis Dignitate
+LA,LATE_MEDIEVAL_RENAISSANCE,2,Bède le Vénérable,Historia Ecclesiastica Gentis Anglorum
+LA,SCIENCE_CIVILISATION,2,Pline l'Ancien,Naturalis Historia
+LA,SCIENCE_CIVILISATION,2,Vitruve,De Architectura
+LA,SCIENCE_CIVILISATION,2,Nicolas Copernic,De Revolutionibus Orbium Coelestium
+LA,SCIENCE_CIVILISATION,2,Isaac Newton,Philosophiae Naturalis Principia Mathematica

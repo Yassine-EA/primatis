@@ -1,0 +1,56 @@
+DEV-16 RECONSTRUCTION — IT MASS REPLACEMENT
+===========================================
+
+Open IT slots            : 46
+Editorial alternatives   : 94
+Usable alternatives      : 46
+Selected replacements    : 41
+
+BY CATEGORY
+===========
+ITALIAN_CANON                  needed= 7 usable= 9 selected= 7
+TWENTIETH_CENTURY              needed=11 usable=10 selected=10
+CONTEMPORARY                   needed= 7 usable=10 selected= 7
+ESSAYS_PHILOSOPHY              needed= 5 usable= 5 selected= 5
+HISTORY_SOCIETY                needed= 4 usable= 4 selected= 4
+YOUTH                          needed= 6 usable= 4 selected= 4
+GRAPHIC                        needed= 6 usable= 4 selected= 4
+
+SELECTED METADATA
+=================
+
+ISBN       : 36/41
+Publisher  : 41/41
+Date       : 41/41
+Page count : 0/41
+Valid cover: 41/41
+
+SHORTFALLS
+==========
+- TWENTIETH_CENTURY: 1 slot(s) still missing
+- YOUTH: 2 slot(s) still missing
+- GRAPHIC: 2 slot(s) still missing
+
+GLOBAL IT
+=========
+
+Resolved before replacements : 119/165
+Replacement slots resolved   : 41/46
+Current total                : 160/165
+
+IT FINAL STATUS : INCOMPLETE
+
+POLICY
+======
+
+Replacement works are editorial alternatives, not filler.
+Original 165 target works are excluded from the replacement pool.
+Previously used editions are excluded.
+Italian language proof is mandatory at edition level.
+A validated physical cover is mandatory.
+One edition can occupy only one slot.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

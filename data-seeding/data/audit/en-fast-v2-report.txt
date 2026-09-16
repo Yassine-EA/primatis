@@ -1,0 +1,67 @@
+DEV-16 — EN FAST CONSOLIDATION v2
+=================================
+
+SOURCE
+======
+
+EN v1 selected          : 697
+EN v1 reserve           : 200
+
+PROMOTIONS
+==========
+
+YOUTH                   : +2
+GRAPHIC                 : +1
+
+- YOUTH | Lois Lowry | Anastasia has the answers | /books/OL7973963M
+- YOUTH | Madeleine L'Engle | Anytime Prayers | /books/OL1434553M
+- GRAPHIC | Chris Ware | Floyd Farland, citizen of the future | /books/OL8321396M
+
+FINAL
+=====
+
+SELECTED                : 700/700
+RESERVE                 : 197
+
+BY CATEGORY
+===========
+ENGLISH_LANGUAGE_CANON       140
+TWENTIETH_CENTURY            160
+CONTEMPORARY                 150
+YOUTH                         80
+HISTORY_SOCIETY               60
+ESSAYS_PHILOSOPHY             50
+SCIENCE_CULTURE               35
+GRAPHIC                       25
+
+METADATA
+========
+
+ISBN       : 700/700
+Publisher  : 700/700
+Date       : 700/700
+Page count : 0/700
+Valid cover: 700/700
+
+INTEGRITY
+=========
+
+Duplicate editions      : 0
+Duplicate works         : 0
+Invalid covers          : 0
+Invalid EN languages    : 0
+
+POLICY
+======
+
+No web request performed.
+No cover download performed.
+All promoted rows were already AUTO_ACCEPT candidates from the validated EN reserve.
+Only 3 reserve items were promoted.
+Controlled per-author extension is limited to +1 above max_selected.
+No author may exceed max_total.
+Page count remains deferred to the global metadata enrichment phase.
+No bundle modification.
+No database write.
+
+STATUS : PASS

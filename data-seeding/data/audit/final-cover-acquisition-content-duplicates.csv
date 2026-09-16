@@ -1,0 +1,33 @@
+sha256,owner_count,edition_count,language,author,title,edition_key,path
+ec7078fbf95ab672a53a570ea01f8107f79ef4b4f969f8a0d24467c860a50c21,2,1,EN,Samuel Beckett,"Collected poems, 1930-1978",/books/OL2890858M,data/cache/en-mass-editorial-engine/covers/EN-OL2890858M.jpeg
+ec7078fbf95ab672a53a570ea01f8107f79ef4b4f969f8a0d24467c860a50c21,2,1,FR,Samuel Beckett,"Collected poems, 1930-1978",/books/OL2890858M,data/cache/fr-mass-editorial-engine/covers/FR-OL2890858M.jpeg
+bf70116c293a81d3aadc47175f439f67147880e32f0b8b721d890a119339dcb4,2,1,EN,Samuel Beckett,Collected poems in English and French,/books/OL4600087M,data/cache/en-mass-editorial-engine/covers/EN-OL4600087M.jpeg
+bf70116c293a81d3aadc47175f439f67147880e32f0b8b721d890a119339dcb4,2,1,FR,Samuel Beckett,Collected poems in English and French,/books/OL4600087M,data/cache/fr-mass-editorial-engine/covers/FR-OL4600087M.jpeg
+d019f3abc5d16354ccafe19e61c5f84a9869493b904c598fea53a56fca0d674b,2,2,FR,Tahar Ben Jelloun,L Auberge DES Pauvres,/books/OL8834915M,data/cache/fr-mass-editorial-engine/covers/FR-OL8834915M.jpeg
+d019f3abc5d16354ccafe19e61c5f84a9869493b904c598fea53a56fca0d674b,2,2,FR,Tahar Ben Jelloun,L' auberge des pauvres,/books/OL99922M,data/cache/fr-mass-editorial-engine/covers/FR-OL99922M.jpeg
+521b4132e7587227ea71580087a982fded766802a3fbeb6a6974da985e053ef1,2,2,FR,Tahar Ben Jelloun,La nuit de l'erreur,/books/OL758805M,data/cache/fr-mass-editorial-engine/covers/FR-OL758805M.jpeg
+521b4132e7587227ea71580087a982fded766802a3fbeb6a6974da985e053ef1,2,2,FR,Tahar Ben Jelloun,La Nuit De L'Erreur,/books/OL8834444M,data/cache/fr-mass-editorial-engine/covers/FR-OL8834444M.jpeg
+6718baececdc8e0fabc4a2fdfa74a491b2b0a5a0cd3b07b9be8582737d5b587d,2,2,FR,Roland Barthes,L' aventure sémiologique,/books/OL2768526M,data/cache/fr-mass-editorial-engine/covers/FR-OL2768526M.jpeg
+6718baececdc8e0fabc4a2fdfa74a491b2b0a5a0cd3b07b9be8582737d5b587d,2,2,FR,Roland Barthes,L' Aventure sémiologique,/books/OL21756582M,data/cache/fr-mass-editorial-engine/covers/FR-OL21756582M.jpeg
+aa372c1d4b740599fc054c147a951dfef6100a26dd4d7a7dfc6cb5446f536177,2,2,FR,Gérard de Nerval,Euvres,/books/OL8837018M,data/cache/fr-mass-editorial-engine/covers/FR-OL8837018M.jpeg
+aa372c1d4b740599fc054c147a951dfef6100a26dd4d7a7dfc6cb5446f536177,2,2,FR,Gérard de Nerval,Œuvres,/books/OL4982897M,data/cache/fr-mass-editorial-engine/covers/FR-OL4982897M.jpeg
+534d2f1ae341bdaf63b47a76a9dfee30df1a7cdae10c51aa7f7e7af99d6b5273,2,2,FR,Stéphane Mallarmé,Euvres,/books/OL8934420M,data/cache/fr-mass-editorial-engine/covers/FR-OL8934420M.jpeg
+534d2f1ae341bdaf63b47a76a9dfee30df1a7cdae10c51aa7f7e7af99d6b5273,2,2,FR,Stéphane Mallarmé,Œuvres,/books/OL2636984M,data/cache/fr-mass-editorial-engine/covers/FR-OL2636984M.jpeg
+3aa4c11f993c8e3575db6ff787cb17fead7c393a2f935a9a87b75067ff809b24,2,2,FR,Fernand Braudel,La Dynamique du capitalisme,/books/OL2770378M,data/cache/fr-mass-editorial-engine/covers/FR-OL2770378M.jpeg
+3aa4c11f993c8e3575db6ff787cb17fead7c393a2f935a9a87b75067ff809b24,2,2,FR,Fernand Braudel,La dynamique du capitalisme,/books/OL21796463M,data/cache/fr-mass-editorial-engine/covers/FR-OL21796463M.jpeg
+1bf96662fe7b1dd9fd050117b47aad3e9ae87c7150f21772173b127fb1b9917e,2,2,FR,Henry Rousso,La collaboration,/books/OL21808445M,data/cache/fr-mass-editorial-engine/covers/FR-OL21808445M.jpeg
+1bf96662fe7b1dd9fd050117b47aad3e9ae87c7150f21772173b127fb1b9917e,2,2,FR,Henry Rousso,La collaboration,/books/OL2077304M,data/cache/fr-mass-editorial-engine/covers/FR-OL2077304M.jpeg
+4ce1b4345346eeaba186e05f4b594f8468c5a0c95558c9ec49368545293cca66,2,2,FR,Lucien Febvre,L' Europe,/books/OL6851757M,data/cache/fr-mass-editorial-engine/covers/FR-OL6851757M.jpeg
+4ce1b4345346eeaba186e05f4b594f8468c5a0c95558c9ec49368545293cca66,2,2,FR,Lucien Febvre,L'Europe: Genese d'une civilisation,/books/OL8889069M,data/cache/fr-mass-editorial-engine/covers/FR-OL8889069M.jpeg
+aff8caa26e31f9d333444a37e81729e82bd03bdac3226381c3f4594f5b674a52,2,2,FR,Michel Serres,Hermès,/books/OL5719137M,data/cache/fr-mass-editorial-engine/covers/FR-OL5719137M.jpeg
+aff8caa26e31f9d333444a37e81729e82bd03bdac3226381c3f4594f5b674a52,2,2,FR,Michel Serres,La traduction,/books/OL3520948M,data/cache/fr-mass-editorial-engine/covers/FR-OL3520948M.jpeg
+723c223a1bea32428bdb24ddb9b151bc8d4eff4b104655e43c3e025a1d5a820f,2,2,FR,Aimé Césaire,"Nègre je suis, nègre je resterai",/books/OL19270225M,data/cache/fr-mass-editorial-engine/covers/FR-OL19270225M.jpeg
+723c223a1bea32428bdb24ddb9b151bc8d4eff4b104655e43c3e025a1d5a820f,2,2,FR,Aimé Césaire,"Negre je suis, negre je resterai",/books/OL20654314M,data/cache/fr-mass-editorial-engine/covers/FR-OL20654314M.jpeg
+b351f41ec07de72d86daf10fd705c65656e97858c2181ceb5cd1d601c1528b3a,2,2,FR,Claude Simon,Claude Simon,/books/OL15249271M,data/cache/fr-mass-editorial-engine/covers/FR-OL15249271M.jpeg
+b351f41ec07de72d86daf10fd705c65656e97858c2181ceb5cd1d601c1528b3a,2,2,FR,Claude Simon,Claude Simon,/books/OL20714419M,data/cache/fr-mass-editorial-engine/covers/FR-OL20714419M.jpeg
+eebd4e4e490bab1807af089240722a498d8dfc38531ae5b2c02ba3a8db948761,2,2,FR,Marcel Aymé,Ecrits sur la politique,/books/OL22558278M,data/cache/fr-mass-editorial-engine/covers/FR-OL22558278M.jpeg
+eebd4e4e490bab1807af089240722a498d8dfc38531ae5b2c02ba3a8db948761,2,2,FR,Marcel Aymé,Écrits sur la politique (1933-1967),/books/OL16209201M,data/cache/fr-mass-editorial-engine/covers/FR-OL16209201M.jpeg
+4ce485e75b844dc51213424ed3a7f0b8dee4acc280394d93411048df1ccbd3b5,2,2,FR,Roger Martin du Gard,Le Lieutenant Colonel De Maumoort,/books/OL8837020M,data/cache/fr-mass-editorial-engine/covers/FR-OL8837020M.jpeg
+4ce485e75b844dc51213424ed3a7f0b8dee4acc280394d93411048df1ccbd3b5,2,2,FR,Roger Martin du Gard,Le lieutenant-colonel de Maumort,/books/OL2910011M,data/cache/fr-mass-editorial-engine/covers/FR-OL2910011M.jpeg
+395fddb854c1eda129d5c94674f8c946ae82556744275f927c9372dec1d3190f,2,2,FR,Grégoire Solotareff,Quand Je Serai Grand,/books/OL8864754M,data/cache/fr-mass-editorial-engine/covers/FR-OL8864754M.jpeg
+395fddb854c1eda129d5c94674f8c946ae82556744275f927c9372dec1d3190f,2,2,FR,Grégoire Solotareff,Quand je serai grand je serai le père Noël,/books/OL1593761M,data/cache/fr-mass-editorial-engine/covers/FR-OL1593761M.jpeg

@@ -1,23 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { Navigation } from '../../../shared/navigation/navigation';
+import { PublicShell } from './public-shell/public-shell';
 
 @Component({
   selector: 'app-public-layout',
-  imports: [RouterOutlet, Navigation],
+  imports: [RouterOutlet, PublicShell],
   template: `
-    <div class="layout-shell">
-      <header class="layout-header">
-        <strong>PRIMATIS</strong>
-        <app-navigation />
-      </header>
-
-      <main class="layout-content">
-        <router-outlet />
-      </main>
-    </div>
+    <app-public-shell>
+      <router-outlet />
+    </app-public-shell>
   `,
-  styleUrl: './public-layout.scss',
 })
 export class PublicLayout {}

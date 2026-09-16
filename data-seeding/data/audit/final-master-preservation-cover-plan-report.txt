@@ -1,0 +1,67 @@
+DEV-16 — FINAL MASTER PRESERVATION + COVER RESCUE PLAN v1
+=========================================================
+
+MASTER COMPOSITION
+==================
+
+Language | Target | KEEP | Acquisition | Preservation
+---------|--------|------|-------------|-------------
+FR       |   6727 | 2660 |        2580 |         1487
+EN       |   3525 | 1861 |         700 |          964
+NL       |   2120 |  767 |         800 |          553
+DE       |   1102 |  468 |         111 |          523
+ES       |    849 |  342 |         172 |          335
+IT       |    497 |  143 |         163 |          191
+LA       |    180 |   56 |          50 |           74
+
+PRESERVATION COMPOSITION
+========================
+
+FR: STRONG=87 PROMISING=1399 REVIEW=1/126 WEAK=0 UNCOVERED_RESCUE=1486
+EN: STRONG=58 PROMISING=886 REVIEW=20/207 WEAK=0 UNCOVERED_RESCUE=944
+NL: STRONG=23 PROMISING=473 REVIEW=57/101 WEAK=0 UNCOVERED_RESCUE=496
+DE: STRONG=6 PROMISING=450 REVIEW=65/65 WEAK=2 UNCOVERED_RESCUE=458
+ES: STRONG=12 PROMISING=271 REVIEW=51/51 WEAK=1 UNCOVERED_RESCUE=284
+IT: STRONG=1 PROMISING=151 REVIEW=37/37 WEAK=2 UNCOVERED_RESCUE=154
+LA: STRONG=0 PROMISING=36 REVIEW=34/34 WEAK=4 UNCOVERED_RESCUE=40
+
+GLOBAL PRESERVATION
+===================
+
+Required preservation   : 4127
+STRONG + PROMISING      : 3853
+Covered REVIEW required : 265
+WEAK required           : 9
+
+COVER RESCUE
+============
+
+Uncovered rescue targets : 3862
+Guaranteed KEEP covers   : 6297
+Guaranteed acquisitions  : 4576
+Guaranteed REVIEW covers : 265
+Guaranteed before rescue : 11138
+
+Minimum catalogue covers : 13350/15000 (89%)
+Additional rescues needed : 2212
+Required rescue rate     : 57.28%
+
+POLICY
+======
+
+All uncovered STRONG and PROMISING titles are preserved.
+Covered REVIEW titles are used before WEAK uncovered titles.
+Only the minimum unavoidable WEAK rows are retained.
+VERY_WEAK rows are never required.
+No title is removed or inserted into the Full bundle here.
+No cover search is performed here.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/final-master-cover-rescue-targets.csv
+data/audit/final-master-required-weak-selection.csv
+data/audit/final-master-preservation-cover-plan-report.txt
+
+STATUS : PASS

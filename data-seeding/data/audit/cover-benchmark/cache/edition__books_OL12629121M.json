@@ -1,0 +1,53 @@
+{
+  "title": "Histoire du greffier 2000",
+  "authors": [
+    {
+      "key": "/authors/OL3967963A"
+    }
+  ],
+  "publish_date": "June 27, 2002",
+  "publishers": [
+    "Sofiac"
+  ],
+  "weight": "1 pounds",
+  "isbn_10": [
+    "2851301756"
+  ],
+  "isbn_13": [
+    "9782851301758"
+  ],
+  "physical_format": "Paperback",
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "9.2 x 6.1 x 0.6 inches",
+  "source_records": [
+    "amazon:2851301756",
+    "marc:harvard_bibliographic_metadata/20220215_039.bib.mrc:154150483:1150"
+  ],
+  "key": "/books/OL12629121M",
+  "works": [
+    {
+      "key": "/works/OL10002565W"
+    }
+  ],
+  "oclc_numbers": [
+    "237392126"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "number_of_pages": 186,
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-05-19T12:53:42.671127"
+  }
+}

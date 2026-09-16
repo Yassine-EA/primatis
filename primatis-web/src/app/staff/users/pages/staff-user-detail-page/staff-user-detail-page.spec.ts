@@ -91,6 +91,14 @@ describe('StaffUserDetailPage', () => {
     expect(residenceApiServiceMock.getResidenceHistory).toHaveBeenCalledWith(7);
   });
 
+  it('should set the document title to "<Prénom> <Nom> — PRIMATIS" (DEV-15.8)', () => {
+    configure('7');
+
+    createComponent();
+
+    expect(document.title).toBe('Marie Curie — PRIMATIS');
+  });
+
   it('should never call any API with NaN for a non-numeric id', () => {
     configure('abc');
 
@@ -177,6 +185,32 @@ describe('StaffUserDetailPage', () => {
 
     expect(fixture.nativeElement.querySelector('app-error-state')).not.toBeNull();
     expect(fixture.nativeElement.querySelector('h1')).toBeNull();
+  });
+
+
+  it('should render the VISUAL-RESET-18 consultation hierarchy and back link', () => {
+    configure('7');
+
+    createComponent();
+
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.querySelector('.staff-user-detail-hero')).not.toBeNull();
+    expect(root.querySelector('#identity-heading')?.textContent).toContain('Identité et accès');
+    expect(root.querySelector('#membership-heading')?.textContent).toContain('Adhésion');
+    expect(root.querySelector('#residence-heading')?.textContent).toContain('Résidence actuelle');
+    expect(root.querySelector('#residence-history-heading')?.textContent).toContain('Historique des résidences');
+    expect(root.querySelector('a[href="/staff/users"]')?.textContent).toContain('Retour aux utilisateurs');
+  });
+
+  it('should render a readable non-member label when membership is absent', () => {
+    configure('7');
+    userApiServiceMock.getUser.mockReturnValue(
+      of({ user: buildUser({ memberNumber: null, memberStatus: null, registrationDate: null, memberExpirationDate: null }), roles: [] }),
+    );
+
+    createComponent();
+
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Non adhérent');
   });
 
   it('should never render an edit control or USER_MANAGE action', () => {

@@ -4,11 +4,21 @@ Sous-projet Python autonome destiné à préparer, valider, générer et, dans l
 
 ## Statut actuel
 
-DEV-13.3 initialise uniquement le socle technique.
+> Note (DEV-16.1/DEV-16.3) : cette section date de DEV-13.3 et était
+> restée obsolète depuis (signalé DEV-13.20 §22, corrigé ici a minima —
+> pas de refonte documentaire complète, hors périmètre DEV-16.3 §26).
 
-Aucun dataset bibliographique n'est téléchargé.
-Aucun chargement PostgreSQL n'est implémenté.
-Aucune migration Flyway n'est créée ou modifiée.
+Le pipeline `small`/`medium` (acquisition Open Library réelle,
+normalisation, déduplication, mapping, chargement PostgreSQL
+CHECK/APPLY, idempotence) est opérationnel et validé de bout en bout
+(DEV-13, `.claude/logs/DEV-13 FINAL GATE — DATA SEEDING.md`). Un second
+pipeline par lots (`pipeline.batch`, DEV-16.3, voir plus bas) permet une
+collecte pilote traçable par (langue, catégorie documentaire, taille) —
+il ne remplace pas le pipeline `small`/`medium`, il le complète en vue
+des profils `large`/`full`.
+
+Aucune migration Flyway n'est créée ou modifiée par ce sous-projet
+(Flyway reste l'unique autorité de schéma, `.claude/rules/database.md`).
 
 ## Python
 
@@ -50,6 +60,40 @@ python -m primatis_data_seeding.main --profile small
 ```
 
 La commande ne charge aucune donnée. Elle valide uniquement le profil et la base cible configurée.
+
+## Pipeline par lots (DEV-16.3)
+
+Collecte pilote traçable, indépendante du pipeline `small`/`medium` —
+voir `.claude/logs/DEV-16.3 — PIPELINE COLLECTE VALIDATION PAR LOTS.md`
+pour le détail complet (politique qualité, mojibake, biography,
+provenance).
+
+```python
+from datetime import date
+from pathlib import Path
+from primatis_data_seeding.pipeline.batch import BatchCriteria, run_batch
+
+criteria = BatchCriteria(
+    profile="large",  # small/medium/large/full — cible DB (config/profiles.toml)
+    language="IT",
+    documentary_category="history",
+    count=12,
+)
+report = run_batch(
+    criteria,
+    contact="<email>",
+    output_dir=Path("data/validated/batches"),
+    reference_date=date.today(),
+)
+```
+
+Produit, sous `data/validated/batches/<batch_id>/` : `raw_search.json`,
+`selected.jsonl`, `provenance.jsonl`, `quarantine.jsonl` (jamais chargé
+en base — DEC-16.3-03) et `batch_report.json`. `large`/`full` sont
+reconnus au niveau `BatchCriteria`/`config/profiles.toml`/
+`load/guard.py` ; leurs quotas linguistiques/documentaires définitifs
+restent une décision DEV-16.4+ après mesure (DEC-16.3-01) — ce module ne
+prétend pas encore produire les volumes cibles 5000/15000 Titles.
 
 ## Secrets
 

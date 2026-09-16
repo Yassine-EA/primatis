@@ -1,23 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { Navigation } from '../../../shared/navigation/navigation';
+import { StaffAdminShell } from '../staff-admin-shell/staff-admin-shell';
 
 @Component({
   selector: 'app-admin-layout',
-  imports: [RouterOutlet, Navigation],
+  imports: [RouterOutlet, StaffAdminShell],
   template: `
-    <div class="layout-shell">
-      <header class="layout-header">
-        <strong>Administration</strong>
-        <app-navigation />
-      </header>
-
-      <main class="layout-content">
-        <router-outlet />
-      </main>
-    </div>
+    <app-staff-admin-shell zoneTitle="Administration">
+      <router-outlet />
+    </app-staff-admin-shell>
   `,
-  styleUrl: './admin-layout.scss',
 })
 export class AdminLayout {}

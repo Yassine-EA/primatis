@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: primatis-api
+
+  datasource:
+    # URL fixe et non surchargeable par SPRING_DATASOURCE_URL, même
+    # convention que application.yml (dev) et application-test.yml (test) :
+    # une suite Playwright ne doit jamais pouvoir cibler accidentellement
+    # primatis_dev ou primatis_test (DEV-DEC-0066). primatis_e2e est une
+    # base dédiée, distincte, réservée aux tests navigateur E2E.
+    url: jdbc:postgresql://localhost:5432/primatis_e2e
+    username: ${SPRING_DATASOURCE_USERNAME:primatis}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    # Mêmes migrations Flyway que primatis_dev/primatis_test — le schéma
+    # E2E est strictement identique au schéma de production (aucune
+    # migration dédiée E2E, conforme .claude/rules/database.md "Test
+    # database schema").
+    locations: classpath:db/migration
+
+# JWT (issuer/audience/durée/clés) : aucune surcharge ici, le profil "e2e"
+# hérite de application.yml (paire RSA locale réelle, mêmes variables
+# d'environnement PRIMATIS_JWT_PRIVATE_KEY_PATH/PUBLIC_KEY_PATH que
+# primatis_dev — profil "e2e" démarre l'application réelle, pas un
+# contexte de test JUnit, donc JwtTestKeysConfig ne s'applique pas ici).
+
+# Schedulers Loan/Reservation : neutralisés à 1h (DEV-DEC-0071, résout
+# OPEN DECISION E2E-SCHEDULER-01) — même mécanisme et même valeur exacte
+# que application-test.yml, pour la même raison : aucune suite E2E ne
+# dure une heure, la cadence métier par défaut (1 minute) reste inchangée
+# en production. Nécessaire car le Clock ajustable (DEV-DEC-0070) peut
+# être avancé pendant un test (fines.spec.ts) — un déclenchement
+# scheduler concurrent observerait alors ce temps avancé, risque de
+# course non déterministe. Aucun scénario E2E sourcé ne dépend d'un
+# déclenchement automatique réel (development-workflow.md §21).
+primatis:
+  loan:
+    due-soon:
+      fixed-delay-ms: 3600000
+      initial-delay-ms: 3600000
+    overdue:
+      fixed-delay-ms: 3600000
+      initial-delay-ms: 3600000
+  reservation:
+    expiration:
+      fixed-delay-ms: 3600000
+      initial-delay-ms: 3600000
+  # DEV-ARTICLES-MEDIA (DEV-DEC-0079) : dossier dédié, distinct de
+  # application.yml (dev) — même principe d'isolation par environnement
+  # que primatis_e2e vs primatis_dev, appliqué ici au stockage filesystem
+  # pour ne jamais polluer le dossier média réel de développement pendant
+  # une suite Playwright.
+  article-media:
+    storage-path: ${PRIMATIS_ARTICLE_MEDIA_STORAGE_PATH:./public/media/articles-e2e}

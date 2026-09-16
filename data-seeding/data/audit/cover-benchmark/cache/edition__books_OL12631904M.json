@@ -1,0 +1,57 @@
+{
+  "publishers": [
+    "L'Harmattan"
+  ],
+  "physical_format": "Paperback",
+  "subtitle": "Histoire et enjeux d'un code",
+  "title": "Questions de nationalité",
+  "number_of_pages": 256,
+  "isbn_13": [
+    "9782858029396"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_10": [
+    "2858029393"
+  ],
+  "publish_date": "January 1, 1987",
+  "key": "/books/OL12631904M",
+  "authors": [
+    {
+      "key": "/authors/OL3969242A"
+    }
+  ],
+  "oclc_numbers": [
+    "17590671",
+    "22704173"
+  ],
+  "works": [
+    {
+      "key": "/works/OL10003727W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/ab.bib.14.20150123.full.mrc:252118490:596",
+    "marc:harvard_bibliographic_metadata/ab.bib.01.20150123.full.mrc:706213503:1245",
+    "marc:UniversityOfMichiganMarcCatalogRecords/umich_bib.mrc:143323907:688"
+  ],
+  "lc_classifications": [
+    "KJV4187 .Q47 1987"
+  ],
+  "latest_revision": 6,
+  "revision": 6,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-05-04T02:44:22.321440"
+  }
+}

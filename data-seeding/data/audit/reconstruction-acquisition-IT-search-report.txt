@@ -1,0 +1,102 @@
+DEV-16 RECONSTRUCTION — IT MASS ACQUISITION SEARCH
+=================================================
+
+Acquisition targets      : 163
+Best candidates found    : 108
+No usable candidate      : 55
+Edition collisions       : 0
+
+SELECTED METADATA
+=================
+
+ISBN       : 88/108
+Publisher  : 108/108
+Date       : 108/108
+Page count : 0/108
+Valid cover: 108/108
+
+BY CATEGORY
+===========
+CONTEMPORARY                   total= 25 found= 15 missing= 10
+ESSAYS_PHILOSOPHY              total= 15 found= 10 missing=  5
+GRAPHIC                        total= 10 found=  4 missing=  6
+HISTORY_SOCIETY                total= 10 found=  5 missing=  5
+ITALIAN_CANON                  total= 53 found= 41 missing= 12
+TWENTIETH_CENTURY              total= 40 found= 29 missing= 11
+YOUTH                          total= 10 found=  4 missing=  6
+
+EDITION COLLISIONS
+==================
+NONE
+
+TARGETS WITHOUT USABLE CANDIDATE
+================================
+- #3 Dante Alighieri / Convivio
+- #6 Francesco Petrarca / Trionfi
+- #11 Ludovico Ariosto / Satire
+- #13 Torquato Tasso / Aminta
+- #17 Francesco Guicciardini / Ricordi
+- #19 Benvenuto Cellini / Vita
+- #24 Carlo Goldoni / Il servitore di due padroni
+- #26 Vittorio Alfieri / Saul
+- #31 Alessandro Manzoni / Adelchi
+- #34 Giovanni Verga / I Malavoglia
+- #35 Giovanni Verga / Mastro-don Gesualdo
+- #47 Italo Svevo / Una vita
+- #59 Salvatore Quasimodo / Ed è subito sera
+- #61 Alberto Moravia / La noia
+- #62 Cesare Pavese / Paesi tuoi
+- #63 Cesare Pavese / La luna e i falò
+- #74 Italo Calvino / Il sentiero dei nidi di ragno
+- #75 Italo Calvino / Il barone rampante
+- #78 Elsa Morante / La storia
+- #80 Pier Paolo Pasolini / Una vita violenta
+- #83 Gesualdo Bufalino / Diceria dell'untore
+- #84 Natalia Ginzburg / Lessico famigliare
+- #92 Cesare Pavese / Dialoghi con Leucò
+- #98 Umberto Eco / Baudolino
+- #100 Antonio Tabucchi / Notturno indiano
+- #104 Elena Ferrante / Storia del nuovo cognome
+- #105 Elena Ferrante / Storia di chi fugge e di chi resta
+- #113 Margaret Mazzantini / Non ti muovere
+- #115 Roberto Saviano / Gomorra
+- #116 Paolo Giordano / La solitudine dei numeri primi
+- #117 Paolo Cognetti / Le otto montagne
+- #119 Domenico Starnone / Lacci
+- #120 Michela Murgia / Accabadora
+- #125 Norberto Bobbio / Destra e sinistra
+- #126 Umberto Eco / Opera aperta
+- #127 Umberto Eco / Apocalittici e integrati
+- #132 Giordano Bruno / De l'infinito, universo e mondi
+- #134 Giacomo Leopardi / Zibaldone
+- #138 Mario Rigoni Stern / Il sergente nella neve
+- #139 Nuto Revelli / Il mondo dei vinti
+- #140 Carlo Ginzburg / Il formaggio e i vermi
+- #144 Piero Calamandrei / Uomini e città della Resistenza
+- #145 Benedetto Croce / Storia d'Italia dal 1871 al 1915
+- #147 Gianni Rodari / Il romanzo di Cipollino
+- #148 Gianni Rodari / La freccia azzurra
+- #150 Gianni Rodari / C'era due volte il barone Lamberto
+- #151 Bianca Pitzorno / L'incredibile storia di Lavinia
+- #154 Silvana Gandolfi / L'isola del tempo perso
+- #155 Angela Nanetti / Mio nonno era un ciliegio
+- #158 Gipi / Appunti per una storia di guerra
+- #159 Gipi / La terra dei figli
+- #161 Zerocalcare / Kobane Calling
+- #162 Igort / Quaderni ucraini
+- #164 Lorenzo Mattotti / Fuochi
+- #165 Vittorio Giardino / Jonas Fink: L'infanzia
+
+POLICY
+======
+
+Search covers all 163 unmatched IT editorial targets.
+Processing is internally batched and resumable.
+Italian proof is mandatory at edition level: language=ita.
+A valid physical cover is mandatory.
+BEST_CANDIDATE_FOUND is not final editorial approval.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

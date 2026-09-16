@@ -1,0 +1,57 @@
+target_index,language,category,priority,target_author,target_work,query_mode,work_key,work_title,work_authors,edition_key,edition_title,edition_subtitle,edition_languages,isbn,publisher,publish_date,page_count,cover_id,title_score,author_score,candidate_score,cover_state,cover_width,cover_height,cover_format,cover_local_path,candidate_state,acquisition_search_state,audit_decision,audit_reason
+3,IT,ITALIAN_CANON,1,Dante Alighieri,Convivio,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+6,IT,ITALIAN_CANON,1,Francesco Petrarca,Trionfi,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+11,IT,ITALIAN_CANON,1,Ludovico Ariosto,Satire,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+13,IT,ITALIAN_CANON,1,Torquato Tasso,Aminta,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+17,IT,ITALIAN_CANON,1,Francesco Guicciardini,Ricordi,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+19,IT,ITALIAN_CANON,1,Benvenuto Cellini,Vita,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+24,IT,ITALIAN_CANON,1,Carlo Goldoni,Il servitore di due padroni,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+26,IT,ITALIAN_CANON,1,Vittorio Alfieri,Saul,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+31,IT,ITALIAN_CANON,1,Alessandro Manzoni,Adelchi,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+34,IT,ITALIAN_CANON,1,Giovanni Verga,I Malavoglia,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+35,IT,ITALIAN_CANON,1,Giovanni Verga,Mastro-don Gesualdo,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+47,IT,ITALIAN_CANON,1,Italo Svevo,Una vita,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+59,IT,TWENTIETH_CENTURY,1,Salvatore Quasimodo,Ed è subito sera,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+61,IT,TWENTIETH_CENTURY,1,Alberto Moravia,La noia,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+62,IT,TWENTIETH_CENTURY,1,Cesare Pavese,Paesi tuoi,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+63,IT,TWENTIETH_CENTURY,1,Cesare Pavese,La luna e i falò,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+74,IT,TWENTIETH_CENTURY,1,Italo Calvino,Il sentiero dei nidi di ragno,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+75,IT,TWENTIETH_CENTURY,1,Italo Calvino,Il barone rampante,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+78,IT,TWENTIETH_CENTURY,1,Elsa Morante,La storia,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+80,IT,TWENTIETH_CENTURY,1,Pier Paolo Pasolini,Una vita violenta,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+83,IT,TWENTIETH_CENTURY,1,Gesualdo Bufalino,Diceria dell'untore,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+84,IT,TWENTIETH_CENTURY,1,Natalia Ginzburg,Lessico famigliare,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+92,IT,TWENTIETH_CENTURY,1,Cesare Pavese,Dialoghi con Leucò,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+98,IT,CONTEMPORARY,2,Umberto Eco,Baudolino,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+100,IT,CONTEMPORARY,2,Antonio Tabucchi,Notturno indiano,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+104,IT,CONTEMPORARY,2,Elena Ferrante,Storia del nuovo cognome,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+105,IT,CONTEMPORARY,2,Elena Ferrante,Storia di chi fugge e di chi resta,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+113,IT,CONTEMPORARY,2,Margaret Mazzantini,Non ti muovere,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+115,IT,CONTEMPORARY,2,Roberto Saviano,Gomorra,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+116,IT,CONTEMPORARY,2,Paolo Giordano,La solitudine dei numeri primi,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+117,IT,CONTEMPORARY,2,Paolo Cognetti,Le otto montagne,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+119,IT,CONTEMPORARY,2,Domenico Starnone,Lacci,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+120,IT,CONTEMPORARY,2,Michela Murgia,Accabadora,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+125,IT,ESSAYS_PHILOSOPHY,2,Norberto Bobbio,Destra e sinistra,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+126,IT,ESSAYS_PHILOSOPHY,2,Umberto Eco,Opera aperta,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+127,IT,ESSAYS_PHILOSOPHY,2,Umberto Eco,Apocalittici e integrati,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+132,IT,ESSAYS_PHILOSOPHY,2,Giordano Bruno,"De l'infinito, universo e mondi",,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+134,IT,ESSAYS_PHILOSOPHY,2,Giacomo Leopardi,Zibaldone,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+138,IT,HISTORY_SOCIETY,2,Mario Rigoni Stern,Il sergente nella neve,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+139,IT,HISTORY_SOCIETY,2,Nuto Revelli,Il mondo dei vinti,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+140,IT,HISTORY_SOCIETY,2,Carlo Ginzburg,Il formaggio e i vermi,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+143,IT,HISTORY_SOCIETY,2,Antonio Gramsci,Lettere dal carcere,BROAD,/works/OL23983936W,"Sardegna, infanzia e letteratura oltre le sbarre",Antoni Arca,/books/OL31685373M,"Sardegna, infanzia e letteratura oltre le sbarre",Antonio Gramsci animatore alla lettura attraverso le Lettere dal carcere,ita,8873560520,Condaghes,2004,,13205386,0.95,0.6923076923076923,0.879,VALID_COVER,355,500,JPEG,data/audit/reconstruction-IT-candidate-covers/IT-143-OL31685373M.jpeg,USABLE_CANDIDATE,BEST_CANDIDATE_FOUND,REJECT_FALSE_POSITIVE,Le candidat trouvé n'est pas l'œuvre cible. Le titre cible apparaît seulement comme sujet ou référence secondaire.
+144,IT,HISTORY_SOCIETY,2,Piero Calamandrei,Uomini e città della Resistenza,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+145,IT,HISTORY_SOCIETY,2,Benedetto Croce,Storia d'Italia dal 1871 al 1915,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+147,IT,YOUTH,3,Gianni Rodari,Il romanzo di Cipollino,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+148,IT,YOUTH,3,Gianni Rodari,La freccia azzurra,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+150,IT,YOUTH,3,Gianni Rodari,C'era due volte il barone Lamberto,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+151,IT,YOUTH,3,Bianca Pitzorno,L'incredibile storia di Lavinia,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+154,IT,YOUTH,3,Silvana Gandolfi,L'isola del tempo perso,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+155,IT,YOUTH,3,Angela Nanetti,Mio nonno era un ciliegio,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+158,IT,GRAPHIC,3,Gipi,Appunti per una storia di guerra,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+159,IT,GRAPHIC,3,Gipi,La terra dei figli,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+161,IT,GRAPHIC,3,Zerocalcare,Kobane Calling,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+162,IT,GRAPHIC,3,Igort,Quaderni ucraini,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+164,IT,GRAPHIC,3,Lorenzo Mattotti,Fuochi,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.
+165,IT,GRAPHIC,3,Vittorio Giardino,Jonas Fink: L'infanzia,,,,,,,,,,,,,,,,,,,,,,,NO_USABLE_CANDIDATE,RECOVERY_REQUIRED,Aucun candidat exploitable au premier passage.

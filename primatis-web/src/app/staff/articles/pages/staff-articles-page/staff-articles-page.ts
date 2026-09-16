@@ -1,5 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 
@@ -8,6 +10,10 @@ import { toAppError } from '../../../../core/errors/api-error.util';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  articleStatusSeverity as sharedArticleStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
 import { ArticleStatus } from '../../../../articles/models/article-status';
 import { StaffArticleSummaryResponse } from '../../../../articles/models/staff-article-summary-response';
 import { StaffArticleApiService } from '../../../../articles/services/staff-article-api.service';
@@ -25,12 +31,13 @@ const DEFAULT_PAGE_SIZE = 20;
  */
 @Component({
   selector: 'app-staff-articles-page',
-  imports: [RouterLink, TableModule, TagModule, LoadingState, EmptyState, ErrorState],
+  imports: [RouterLink, ButtonModule, TableModule, TagModule, LoadingState, EmptyState, ErrorState],
   templateUrl: './staff-articles-page.html',
   styleUrl: './staff-articles-page.scss',
 })
 export class StaffArticlesPage {
   private readonly staffArticleApiService = inject(StaffArticleApiService);
+  private readonly titleService = inject(Title);
 
   readonly rows = signal<StaffArticleSummaryResponse[]>([]);
   readonly totalRecords = signal(0);
@@ -41,6 +48,7 @@ export class StaffArticlesPage {
   private lastSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
+    this.titleService.setTitle('Articles — PRIMATIS');
     this.load(0, DEFAULT_PAGE_SIZE);
   }
 
@@ -58,14 +66,19 @@ export class StaffArticlesPage {
     return `${author.firstName} ${author.lastName}`;
   }
 
-  articleStatusSeverity(status: ArticleStatus): 'success' | 'warn' | 'secondary' {
-    if (status === 'PUBLISHED') {
-      return 'success';
+  articleStatusSeverity(status: ArticleStatus): StatusTagSeverity {
+    return sharedArticleStatusSeverity(status);
+  }
+
+  articleStatusLabel(status: ArticleStatus): string {
+    switch (status) {
+      case 'DRAFT':
+        return 'Brouillon';
+      case 'PUBLISHED':
+        return 'Publié';
+      case 'ARCHIVED':
+        return 'Archivé';
     }
-    if (status === 'DRAFT') {
-      return 'warn';
-    }
-    return 'secondary';
   }
 
   private load(page: number, size: number): void {

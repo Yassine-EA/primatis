@@ -1,0 +1,57 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "5857649"
+    ]
+  },
+  "title": "Images du bouddhisme vivant",
+  "subtitle": "La Birmanie",
+  "authors": [
+    {
+      "key": "/authors/OL3970610A"
+    }
+  ],
+  "publish_date": "January 1, 1986",
+  "publishers": [
+    "Trismegiste"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "isbn_13": [
+    "9782865090235"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_10": [
+    "286509023X"
+  ],
+  "physical_format": "Paperback",
+  "source_records": [
+    "amazon:286509023X",
+    "marc:UniversityOfMichiganMarcCatalogRecords/umich_bib.mrc:142663073:969"
+  ],
+  "key": "/books/OL12635013M",
+  "number_of_pages": 86,
+  "works": [
+    {
+      "key": "/works/OL10004889W"
+    }
+  ],
+  "oclc_numbers": [
+    "19868408"
+  ],
+  "latest_revision": 6,
+  "revision": 6,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-05-04T01:22:00.045680"
+  }
+}

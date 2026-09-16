@@ -8,6 +8,20 @@ spring:
     url: jdbc:postgresql://localhost:5432/primatis_test
     username: ${SPRING_DATASOURCE_USERNAME:primatis}
     password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      # DEV-16.8 SS12 : le defaut Spring Boot (10) multiplie par le nombre de
+      # contextes Spring distincts crees pendant la suite complete (chaque
+      # @TestPropertySource different = un nouveau HikariPool, jamais ferme
+      # avant la fin du run car tous restent en cache). Mesure reelle avant
+      # correctif : pic ~90 connexions simultanees sur primatis_test,
+      # echec a l'ouverture du 11e pool ("remaining connection slots are
+      # reserved for roles with the SUPERUSER attribute", max_connections
+      # PostgreSQL=100). Aucun test de ce profil "par defaut" n'exige de
+      # connexions reellement simultanees pour sa correctness (les tests de
+      # concurrence qui en ont besoin surchargent deja explicitement cette
+      # valeur via leur propre @TestPropertySource, ex. LoanServiceConcurrencyTests
+      # a 25) — seule la latence d'acquisition augmente legerement ici.
+      maximum-pool-size: 4
 
   jpa:
     hibernate:

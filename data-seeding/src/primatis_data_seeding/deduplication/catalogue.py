@@ -92,17 +92,23 @@ def _candidate_fingerprint(edition: NormalizedEdition) -> str | None:
     if not authors:
         return None
 
+    # DEC-16.3-07 (DEV-16.2 §9.3): publication_year is deliberately EXCLUDED
+    # from the grouping key. Two editions sharing title/subtitle/language/
+    # publisher/authors but with a DIFFERENT year are very plausibly
+    # legitimate distinct editions (a reprint/re-edition), not a true
+    # duplicate — they still need to be visible as review candidates
+    # (never silently invisible to the dedup report), just classified
+    # `EDITION_VARIANT_CANDIDATE` instead of `EXACT_METADATA_CANDIDATE_NO_ISBN`
+    # by the grouping step below. Neither classification ever triggers an
+    # automatic merge — this fingerprint only identifies review candidates.
     fields = (
         _fold_text(edition.title),
         _fold_text(edition.subtitle),
         edition.language,
-        str(edition.publication_year or ""),
         _fold_text(edition.publisher),
         authors,
     )
 
-    # This fingerprint only identifies review candidates. It is deliberately
-    # NOT an automatic merge key.
     return "||".join(fields)
 
 
@@ -187,10 +193,20 @@ def deduplicate_editions(
     for fingerprint in sorted(candidate_groups):
         group = candidate_groups[fingerprint]
         if len(group) > 1:
+            # DEV-16.2 §9.3 / DEC-16.3-07: traceability only, no change to
+            # fusion behavior — every member of the group is still kept
+            # individually (no automatic merge either way). A differing
+            # publication_year across the group is a strong signal of
+            # legitimate distinct editions (reprints/re-editions), not a
+            # true duplicate, so it is labeled `edition_variant` instead
+            # of the generic `ambiguous_match` — purely so a human
+            # reviewer can triage the two situations differently.
+            years = {e.publication_year for e in group if e.publication_year is not None}
+            reason = "EDITION_VARIANT_CANDIDATE" if len(years) > 1 else "EXACT_METADATA_CANDIDATE_NO_ISBN"
             result.candidates.append(
                 DuplicateCandidate(
                     source_keys=tuple(sorted(e.source_key for e in group)),
-                    reason="EXACT_METADATA_CANDIDATE_NO_ISBN",
+                    reason=reason,
                     fingerprint=fingerprint,
                 )
             )

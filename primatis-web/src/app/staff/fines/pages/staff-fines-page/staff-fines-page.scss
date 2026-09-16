@@ -1,3 +1,15 @@
 :host {
   display: block;
 }
+
+.staff-fine-member {
+  color: var(--primatis-navy-900);
+}
+
+.staff-fine-unpaid {
+  color: var(--primatis-danger, #b42318);
+}
+
+.staff-fine-actions {
+  white-space: nowrap;
+}

@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -29,8 +30,17 @@ function buildFine(overrides: Partial<FineResponse> = {}): FineResponse {
   };
 }
 
-function buildPage(content: FineResponse[], totalElements = content.length): PageResponse<FineResponse> {
-  return { content, page: 0, size: 20, totalElements, totalPages: Math.max(1, Math.ceil(totalElements / 20)) };
+function buildPage(
+  content: FineResponse[],
+  totalElements = content.length,
+): PageResponse<FineResponse> {
+  return {
+    content,
+    page: 0,
+    size: 20,
+    totalElements,
+    totalPages: Math.max(1, Math.ceil(totalElements / 20)),
+  };
 }
 
 function apiHttpError(code: string, message: string): HttpErrorResponse {
@@ -50,14 +60,17 @@ function apiHttpError(code: string, message: string): HttpErrorResponse {
 
 describe('MemberFinesPage', () => {
   let fixture: ComponentFixture<MemberFinesPage>;
-  let fineApiServiceMock: { listOwnFines: ReturnType<typeof vi.fn>; listFines: ReturnType<typeof vi.fn> };
+  let fineApiServiceMock: {
+    listOwnFines: ReturnType<typeof vi.fn>;
+    listFines: ReturnType<typeof vi.fn>;
+  };
 
   function configure(): void {
     fineApiServiceMock = { listOwnFines: vi.fn(), listFines: vi.fn() };
 
     TestBed.configureTestingModule({
       imports: [MemberFinesPage],
-      providers: [{ provide: FineApiService, useValue: fineApiServiceMock }],
+      providers: [provideRouter([]), { provide: FineApiService, useValue: fineApiServiceMock }],
     });
   }
 
@@ -78,6 +91,15 @@ describe('MemberFinesPage', () => {
 
     expect(fineApiServiceMock.listOwnFines).toHaveBeenCalledWith(0, 20);
     expect(fineApiServiceMock.listOwnFines).toHaveBeenCalledTimes(1);
+  });
+
+  it('should set the document title (DEV-15.6)', () => {
+    configure();
+    fineApiServiceMock.listOwnFines.mockReturnValue(of(buildPage([buildFine()])));
+
+    createComponent();
+
+    expect(document.title).toBe('Mes amendes — PRIMATIS');
   });
 
   it('should never call the staff listFines endpoint', () => {
@@ -123,7 +145,9 @@ describe('MemberFinesPage', () => {
 
   it('should render an UNPAID fine', () => {
     configure();
-    fineApiServiceMock.listOwnFines.mockReturnValue(of(buildPage([buildFine({ fineStatus: 'UNPAID' })])));
+    fineApiServiceMock.listOwnFines.mockReturnValue(
+      of(buildPage([buildFine({ fineStatus: 'UNPAID' })])),
+    );
 
     createComponent();
 
@@ -179,7 +203,7 @@ describe('MemberFinesPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('2026-08-10T09:00:00Z');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('10 août 2026');
   });
 
   it('should render a placeholder, not a raw null, when paidAt is absent', () => {
@@ -201,12 +225,14 @@ describe('MemberFinesPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('2026-08-11T09:00:00Z');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('11 août 2026');
   });
 
   it('should render a placeholder, not a raw null, when cancelledAt is absent', () => {
     configure();
-    fineApiServiceMock.listOwnFines.mockReturnValue(of(buildPage([buildFine({ cancelledAt: null })])));
+    fineApiServiceMock.listOwnFines.mockReturnValue(
+      of(buildPage([buildFine({ cancelledAt: null })])),
+    );
 
     createComponent();
 
@@ -221,7 +247,9 @@ describe('MemberFinesPage', () => {
 
   it('should show the loading state before the first response arrives', () => {
     configure();
-    fineApiServiceMock.listOwnFines.mockReturnValue({ subscribe: () => ({ unsubscribe: () => {} }) });
+    fineApiServiceMock.listOwnFines.mockReturnValue({
+      subscribe: () => ({ unsubscribe: () => {} }),
+    });
 
     createComponent();
 
@@ -236,12 +264,16 @@ describe('MemberFinesPage', () => {
 
     const emptyState = fixture.nativeElement.querySelector('app-empty-state');
     expect(emptyState).not.toBeNull();
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Aucune amende à afficher.');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
+      "Vous n'avez aucune amende.",
+    );
   });
 
   it('should show the error state on a failed request', () => {
     configure();
-    fineApiServiceMock.listOwnFines.mockReturnValue(throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')));
+    fineApiServiceMock.listOwnFines.mockReturnValue(
+      throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')),
+    );
 
     createComponent();
 
@@ -250,7 +282,9 @@ describe('MemberFinesPage', () => {
 
   it('should retry the last request when retry is triggered', () => {
     configure();
-    fineApiServiceMock.listOwnFines.mockReturnValue(throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')));
+    fineApiServiceMock.listOwnFines.mockReturnValue(
+      throwError(() => apiHttpError('INTERNAL_ERROR', 'Erreur serveur.')),
+    );
     createComponent();
     fineApiServiceMock.listOwnFines.mockClear();
     fineApiServiceMock.listOwnFines.mockReturnValue(of(buildPage([buildFine()])));
@@ -282,7 +316,9 @@ describe('MemberFinesPage', () => {
 
     createComponent();
 
-    const buttons: HTMLButtonElement[] = Array.from(fixture.nativeElement.querySelectorAll('button'));
+    const buttons: HTMLButtonElement[] = Array.from(
+      fixture.nativeElement.querySelectorAll('button'),
+    );
     const nonPaginatorButtons = buttons.filter((button) => !button.closest('.p-paginator'));
     expect(nonPaginatorButtons).toHaveLength(0);
   });

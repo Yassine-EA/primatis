@@ -1,0 +1,8 @@
+language,target_total,accepted_keep,uncovered_strong,uncovered_promising,uncovered_weak,uncovered_very_weak,uncovered_total,review_pending,existing_replace,preserve_floor,replacement_floor,replacement_ceiling
+FR,6727,2660,87,1399,2132,100,3718,126,223,4146,2455,2581
+EN,3525,1861,58,886,307,63,1314,207,143,2805,513,720
+NL,2120,767,23,473,596,35,1127,101,125,1263,756,857
+DE,1102,468,6,450,102,2,560,65,9,924,113,178
+ES,849,342,12,271,152,4,439,51,17,625,173,224
+IT,497,143,1,151,139,1,292,37,25,295,165,202
+LA,180,56,0,36,32,0,68,34,22,92,54,88

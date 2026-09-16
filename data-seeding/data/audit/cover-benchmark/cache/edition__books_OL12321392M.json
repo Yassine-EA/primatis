@@ -1,0 +1,55 @@
+{
+  "title": "Choisis Une Couleur (A Mon Tour/My Turn)",
+  "authors": [
+    {
+      "key": "/authors/OL540303A"
+    },
+    {
+      "key": "/authors/OL225620A"
+    }
+  ],
+  "publish_date": "March 2002",
+  "isbn_13": [
+    "9781587281693"
+  ],
+  "physical_format": "Board book",
+  "weight": "8.6 ounces",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publishers": [
+    "Editions du Carrousel"
+  ],
+  "edition_name": "Brdbk edition",
+  "isbn_10": [
+    "1587281694"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Concepts - Colors",
+    "Readers - Beginner",
+    "Juvenile Nonfiction",
+    "Children's Baby - Boardbooks",
+    "Children: Kindergarten"
+  ],
+  "physical_dimensions": "8.7 x 8.6 x 0.3 inches",
+  "source_records": [
+    "amazon:1587281694"
+  ],
+  "key": "/books/OL12321392M",
+  "number_of_pages": 12,
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-03-16T09:27:54.518566"
+  }
+}

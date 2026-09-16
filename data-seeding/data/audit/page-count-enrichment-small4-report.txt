@@ -1,0 +1,90 @@
+DEV-16 — PAGE_COUNT ENRICHMENT SMALL 4 v1.1
+===========================================
+
+FINAL ACQUISITION CONTRACT
+==========================
+
+LA : 50
+IT : 163
+ES : 172
+DE : 111
+--------
+TOTAL : 496
+
+STAGE RECONSTRUCTION
+====================
+
+LA
+  initial     : 37
+  recovery    : 11
+  replacement : 1
+  final slot  : 1
+
+IT
+  initial     : 107
+  recovery    : 10
+  replacement : 41
+  final gap   : 5
+
+ES
+  initial     : 149
+  recovery    : 3
+  replacement : 20
+
+DE
+  initial     : 81
+  recovery    : 11
+  replacement : 19
+
+PHYSICAL EDITIONS
+=================
+
+Source rows              : 496
+Unique physical editions : 496
+Collision editions       : 0
+Duplicate occurrences    : 0
+
+PAGE_COUNT BY LANGUAGE
+======================
+LA: 42/50 (84.00%)
+IT: 147/163 (90.18%)
+ES: 149/172 (86.63%)
+DE: 97/111 (87.39%)
+
+GLOBAL
+======
+
+Page count present/recovered : 435/496
+Still NULL                   : 61
+Coverage                     : 87.70%
+
+FETCH
+=====
+
+Cache responses : 0
+Web responses   : 496
+Fetch errors    : 0
+
+POLICY
+======
+
+Only previously validated final acquisitions are reconstructed.
+Recovery-best files accept validated candidate states.
+Every stage remains protected by exact cardinality checks.
+The exact Open Library physical edition is used for page_count.
+Existing valid page_count values are preserved.
+No page count is inferred or invented.
+Missing source values remain NULL.
+Physical-edition collisions are reported, not silently removed.
+No bundle modification.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/page-count-enrichment-small4-final-acquisitions.csv
+data/audit/page-count-enrichment-small4-unresolved.csv
+data/audit/page-count-enrichment-small4-edition-collisions.csv
+data/audit/page-count-enrichment-small4-report.txt
+
+STATUS : PASS

@@ -1,0 +1,35 @@
+{
+  "title": "Politique et philosophie chez Aristote",
+  "key": "/works/OL10006437W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3972453A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Political science",
+    "Philosophy",
+    "Et la science politique",
+    "Pensée politique et sociale",
+    "Contributions in political science",
+    "Contributions in philosophy"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:20.117391"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-02-14T12:22:13.456190"
+  }
+}

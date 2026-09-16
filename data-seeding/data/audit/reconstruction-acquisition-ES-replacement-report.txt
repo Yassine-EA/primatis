@@ -1,0 +1,57 @@
+DEV-16 RECONSTRUCTION — ES MASS REPLACEMENT
+===========================================
+
+Open ES slots            : 20
+Editorial alternatives   : 52
+Usable alternatives      : 39
+Selected replacements    : 20
+
+BY CATEGORY
+===========
+SPANISH_CANON                          needed= 4 usable= 8 selected= 4
+LATIN_AMERICAN_CANON                   needed= 3 usable= 7 selected= 3
+SPAIN_MODERN_CONTEMPORARY              needed= 3 usable= 6 selected= 3
+LATIN_AMERICA_MODERN_CONTEMPORARY      needed= 5 usable= 7 selected= 5
+ESSAYS_PHILOSOPHY                      needed= 2 usable= 5 selected= 2
+HISTORY_SOCIETY                        needed= 1 usable= 3 selected= 1
+YOUTH                                  needed= 1 usable= 2 selected= 1
+GRAPHIC                                needed= 1 usable= 1 selected= 1
+
+SELECTED METADATA
+=================
+
+ISBN       : 17/20
+Publisher  : 20/20
+Date       : 20/20
+Page count : 0/20
+Valid cover: 20/20
+
+SHORTFALLS
+==========
+NONE
+
+GLOBAL ES
+=========
+
+1 existing
++ 149 first-pass acquisitions
++ 3 recovered acquisitions
++ 20 selected replacements
+= 173/173 objectives resolved
+
+ES FINAL STATUS : 173/173 RESOLVED
+
+POLICY
+======
+
+Replacement works are editorial alternatives, not filler.
+Original 173 target works are excluded from the replacement pool.
+Previously selected physical editions are excluded.
+Spanish must be explicit at edition level: spa.
+A validated physical cover is mandatory.
+One physical edition can occupy only one slot.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

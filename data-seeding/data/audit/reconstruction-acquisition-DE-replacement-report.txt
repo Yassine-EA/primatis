@@ -1,0 +1,55 @@
+DEV-16 RECONSTRUCTION — DE MASS REPLACEMENT
+===========================================
+
+Open DE slots            : 19
+Editorial alternatives   : 50
+Usable alternatives      : 34
+Selected replacements    : 19
+
+BY CATEGORY
+===========
+GERMAN_LANGUAGE_CANON          needed= 1 usable= 4 selected= 1
+TWENTIETH_CENTURY              needed= 3 usable= 7 selected= 3
+CONTEMPORARY                   needed= 7 usable= 8 selected= 7
+HISTORY_SOCIETY                needed= 5 usable= 9 selected= 5
+YOUTH                          needed= 1 usable= 3 selected= 1
+SCIENCE_CULTURE                needed= 2 usable= 3 selected= 2
+
+SELECTED METADATA
+=================
+
+ISBN       : 18/19
+Publisher  : 19/19
+Date       : 19/19
+Page count : 0/19
+Valid cover: 19/19
+
+SHORTFALLS
+==========
+NONE
+
+GLOBAL DE
+=========
+
+2 existing
++ 81 first-pass acquisitions
++ 11 recovered acquisitions
++ 19 selected replacements
+= 113/113 objectives resolved
+
+DE FINAL STATUS : 113/113 RESOLVED
+
+POLICY
+======
+
+Replacement works are editorial alternatives, not filler.
+Original 113 target works are excluded from the replacement pool.
+Previously selected physical editions are excluded.
+German must be explicit at edition level: ger or deu.
+A validated physical cover is mandatory.
+One physical edition can occupy only one slot.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

@@ -2,6 +2,10 @@
   display: block;
 }
 
+.page-header {
+  margin-bottom: var(--primatis-space-md);
+}
+
 form {
   display: flex;
   flex-direction: column;

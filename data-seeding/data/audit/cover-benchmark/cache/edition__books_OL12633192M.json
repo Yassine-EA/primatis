@@ -1,0 +1,54 @@
+{
+  "publishers": [
+    "Pub - Publications de la"
+  ],
+  "subtitle": "Actes du colloque d'Epicure du jeudi 7 décembre 1989",
+  "isbn_10": [
+    "2859442014"
+  ],
+  "number_of_pages": 109,
+  "isbn_13": [
+    "9782859442019"
+  ],
+  "physical_format": "Hardcover",
+  "publish_date": "April 12, 1995",
+  "key": "/books/OL12633192M",
+  "authors": [
+    {
+      "key": "/authors/OL3969743A"
+    }
+  ],
+  "title": "Le Droit, l'informatique et l'arbitraire",
+  "works": [
+    {
+      "key": "/works/OL10004214W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "lc_classifications": [
+    "K87 .D76x 1991"
+  ],
+  "oclc_numbers": [
+    "83906844"
+  ],
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/ab.bib.02.20150123.full.mrc:241620316:1423"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-13T20:25:30.449579"
+  }
+}

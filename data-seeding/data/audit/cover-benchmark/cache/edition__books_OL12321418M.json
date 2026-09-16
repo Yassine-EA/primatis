@@ -1,0 +1,56 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "872145"
+    ]
+  },
+  "title": "Le Moyen Age (Jeux D'historie/My World)",
+  "authors": [
+    {
+      "key": "/authors/OL24394A"
+    }
+  ],
+  "publish_date": "March 2002",
+  "publishers": [
+    "Two-Can Publishers"
+  ],
+  "weight": "5 ounces",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_13": [
+    "9781587281952"
+  ],
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "1587281953"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "History - General",
+    "History - Medieval",
+    "Juvenile Nonfiction",
+    "Children's 9-12 - History - General",
+    "Children: Grades 2-3"
+  ],
+  "physical_dimensions": "9.8 x 9 x 0.1 inches",
+  "source_records": [
+    "amazon:1587281953"
+  ],
+  "key": "/books/OL12321418M",
+  "number_of_pages": 32,
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-23T19:34:16.249060"
+  }
+}

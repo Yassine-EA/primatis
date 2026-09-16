@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="1740" viewBox="0 0 1600 1740">
+  <rect width="1600" height="1740" fill="#f7f5f1"/>
+  <text x="70" y="76" fill="#082c46" font-family="Georgia, serif" font-size="44">PRIMATIS — Georges Lemaître</text>
+  <text x="70" y="114" fill="#53616f" font-family="Arial, sans-serif" font-size="20">ASSET-RESET-02.5 · planche de validation</text>
+
+  <text x="70" y="170" fill="#082c46" font-family="Arial, sans-serif" font-weight="700" font-size="18">HERO DESKTOP · COMPOSITION DES COUCHES</text>
+  <defs>
+    <clipPath id="hero"><rect x="70" y="195" width="1460" height="487"/></clipPath>
+    <clipPath id="mobile"><rect x="1120" y="750" width="360" height="450" rx="20"/></clipPath>
+  </defs>
+  <image x="70" y="195" width="1460" height="487" preserveAspectRatio="xMidYMid slice" clip-path="url(#hero)" xlink:href="../hero/georges-lemaitre-background-1920.webp"/>
+  <image x="540" y="220" width="450" height="600" preserveAspectRatio="xMidYMid meet" clip-path="url(#hero)" xlink:href="../hero/georges-lemaitre-portrait-768.webp"/>
+  <text x="120" y="320" fill="#fff" font-family="Georgia, serif" font-size="54" font-weight="700">Georges Lemaître</text>
+  <text x="120" y="365" fill="#f4eee5" font-family="Georgia, serif" font-size="23">Physicien, mathématicien et astronome belge</text>
+  <text x="120" y="410" fill="#f4eee5" font-family="Georgia, serif" font-size="22" font-style="italic">Texte et citations conservés en HTML.</text>
+
+  <text x="70" y="745" fill="#082c46" font-family="Arial, sans-serif" font-weight="700" font-size="18">SECTIONS SCIENTIFIQUES</text>
+  <image x="70" y="775" width="490" height="276" preserveAspectRatio="xMidYMid slice" xlink:href="../science/universe-expansion-640.webp"/>
+  <text x="90" y="825" fill="#fff" font-family="Georgia, serif" font-size="32" font-weight="700">L’Univers en expansion</text>
+  <image x="590" y="775" width="490" height="276" preserveAspectRatio="xMidYMid slice" xlink:href="../science/primitive-atom-1280.webp"/>
+  <text x="615" y="825" fill="#fff" font-family="Georgia, serif" font-size="32" font-weight="700">L’atome primitif</text>
+
+  <image x="1120" y="750" width="360" height="450" preserveAspectRatio="xMidYMid slice" clip-path="url(#mobile)" xlink:href="../hero/georges-lemaitre-background-768-mobile.webp"/>
+  <image x="1180" y="825" width="245" height="327" preserveAspectRatio="xMidYMid meet" clip-path="url(#mobile)" xlink:href="../hero/georges-lemaitre-portrait-480.webp"/>
+  <text x="1145" y="1175" fill="#fff" font-family="Georgia, serif" font-size="25" font-weight="700">Hero mobile composé</text>
+
+  <text x="70" y="1250" fill="#082c46" font-family="Arial, sans-serif" font-weight="700" font-size="18">ÉDITORIAL</text>
+  <image x="70" y="1280" width="700" height="394" preserveAspectRatio="xMidYMid slice" xlink:href="../editorial/charleroi-link-960-decorative.webp"/>
+  <rect x="95" y="1510" width="410" height="110" rx="12" fill="#f7f5f1" fill-opacity=".88"/>
+  <text x="120" y="1555" fill="#082c46" font-family="Georgia, serif" font-size="25" font-weight="700">Georges Lemaître et Charleroi</text>
+  <text x="120" y="1590" fill="#53616f" font-family="Arial, sans-serif" font-size="16">Décor générique — texte historique en HTML.</text>
+
+  <image x="810" y="1280" width="720" height="394" preserveAspectRatio="xMidYMid slice" xlink:href="../editorial/why-primatis-1920.webp"/>
+  <rect x="1060" y="1395" width="400" height="130" rx="12" fill="#f7f5f1" fill-opacity=".86"/>
+  <text x="1090" y="1445" fill="#082c46" font-family="Georgia, serif" font-size="25" font-weight="700">Pourquoi PRIMATIS ?</text>
+  <text x="1090" y="1483" fill="#53616f" font-family="Arial, sans-serif" font-size="16">Composition décorative, contenu en HTML.</text>
+</svg>

@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -16,8 +17,15 @@ import { FieldError } from '../../../../core/models/field-error';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  copyAvailabilityStatusSeverity,
+  copyConditionSeverity as sharedCopyConditionSeverity,
+  titleStatusSeverity as sharedTitleStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
 import { AuthorResponse } from '../../../../catalogue/models/author-response';
 import { AvailabilityStatus } from '../../../../catalogue/models/availability-status';
+import { CopyCondition } from '../../../../catalogue/models/copy-condition';
 import { CopyResponse } from '../../../../catalogue/models/copy-response';
 import { GenreResponse } from '../../../../catalogue/models/genre-response';
 import { Language } from '../../../../catalogue/models/language';
@@ -55,6 +63,7 @@ function parseTitleId(rawId: string | null): number | null {
   selector: 'app-staff-title-detail-page',
   imports: [
     ReactiveFormsModule,
+    RouterLink,
     InputTextModule,
     SelectModule,
     MessageModule,
@@ -78,6 +87,7 @@ export class StaffTitleDetailPage {
   private readonly authService = inject(AuthService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly titleService = inject(Title);
 
   private titleId: number | null = null;
 
@@ -155,8 +165,52 @@ export class StaffTitleDetailPage {
     return this.lastUpdateFieldErrors.find((fieldError) => fieldError.field === field)?.message;
   }
 
-  titleStatusSeverity(status: TitleStatus): 'success' | 'warn' {
-    return status === 'ACTIVE' ? 'success' : 'warn';
+  titleStatusSeverity(status: TitleStatus): StatusTagSeverity {
+    return sharedTitleStatusSeverity(status);
+  }
+
+  // Même précédent exact que StaffCataloguePage.titleStatusLabel (DEV-15.8).
+  titleStatusLabel(status: TitleStatus): string {
+    switch (status) {
+      case 'ACTIVE':
+        return 'Actif';
+      case 'WITHDRAWN':
+        return 'Retiré';
+    }
+  }
+
+  copyAvailabilitySeverity(status: AvailabilityStatus): StatusTagSeverity {
+    return copyAvailabilityStatusSeverity(status);
+  }
+
+  copyAvailabilityLabel(status: AvailabilityStatus): string {
+    switch (status) {
+      case 'AVAILABLE':
+        return 'Disponible';
+      case 'ON_LOAN':
+        return 'En prêt';
+      case 'RESERVED':
+        return 'Réservé';
+      case 'UNAVAILABLE':
+        return 'Indisponible';
+    }
+  }
+
+  copyConditionSeverity(condition: CopyCondition): StatusTagSeverity {
+    return sharedCopyConditionSeverity(condition);
+  }
+
+  copyConditionLabel(condition: CopyCondition): string {
+    switch (condition) {
+      case 'GOOD':
+        return 'Bon état';
+      case 'DAMAGED':
+        return 'Endommagé';
+      case 'LOST':
+        return 'Perdu';
+      case 'OUT_OF_SERVICE':
+        return 'Hors service';
+    }
   }
 
   onAuthorsChange(authors: AuthorResponse[]): void {
@@ -180,6 +234,7 @@ export class StaffTitleDetailPage {
         this.title.set(value);
         this.resetFormFromTitle(value);
         this.titleLoading.set(false);
+        this.titleService.setTitle(`${value.title} — PRIMATIS`);
       },
       error: (err: unknown) => {
         this.titleLoading.set(false);
@@ -261,6 +316,7 @@ export class StaffTitleDetailPage {
         this.updateSubmitting.set(false);
         this.title.set(response);
         this.resetFormFromTitle(response);
+        this.titleService.setTitle(`${response.title} — PRIMATIS`);
         this.messageService.add({ severity: 'success', summary: 'Titre modifié', detail: response.title });
       },
       error: (err: unknown) => {
@@ -341,6 +397,8 @@ export class StaffTitleDetailPage {
         next === 'WITHDRAWN'
           ? 'Voulez-vous vraiment retirer ce titre du catalogue ?'
           : 'Voulez-vous réintégrer ce titre au catalogue ?',
+      acceptLabel: 'Oui',
+      rejectLabel: 'Non',
       accept: () => this.performToggleStatus(next),
     });
   }
@@ -423,6 +481,8 @@ export class StaffTitleDetailPage {
         next === 'UNAVAILABLE'
           ? `Voulez-vous rendre l'exemplaire ${copy.inventoryCode} indisponible ?`
           : `Voulez-vous rendre l'exemplaire ${copy.inventoryCode} disponible ?`,
+      acceptLabel: 'Oui',
+      rejectLabel: 'Non',
       accept: () => this.performToggleAvailability(copy, next),
     });
   }

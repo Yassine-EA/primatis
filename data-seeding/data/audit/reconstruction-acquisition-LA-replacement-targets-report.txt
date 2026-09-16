@@ -1,0 +1,31 @@
+DEV-16 RECONSTRUCTION — LA REPLACEMENT TARGETS
+==============================================
+
+Unresolved original targets : 2
+Replacement targets         : 2
+
+REPLACEMENTS
+============
+
+#45 Pétrarque / Secretum
+  -> Érasme / Colloquia familiaria
+
+#46 Pic de la Mirandole / Oratio de Hominis Dignitate
+  -> Lorenzo Valla / Elegantiae linguae latinae
+
+CATEGORY
+========
+
+Both replacements remain in LATE_MEDIEVAL_RENAISSANCE.
+
+POLICY
+======
+
+No filler title.
+Editorial significance selected before edition availability.
+A usable Latin edition with validated physical cover is still mandatory.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

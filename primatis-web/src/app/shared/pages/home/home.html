@@ -1,0 +1,320 @@
+<section class="home-hero">
+  <picture class="home-hero-background" aria-hidden="true">
+    <source
+      media="(max-width: 767px)"
+      srcset="/assets/public/home/hero/hero-background-768-mobile.webp"
+    />
+    <source
+      media="(max-width: 1279px)"
+      srcset="/assets/public/home/hero/hero-background-1280.webp"
+    />
+    <img src="/assets/public/home/hero/hero-background-1920.webp" alt="" />
+  </picture>
+
+  <div class="content-container home-hero-inner">
+    <div class="home-hero-text">
+      <h1 class="hero-title home-hero-title">PRIMATIS</h1>
+      <p class="home-hero-subtitle">Bibliothèque publique Georges Lemaître</p>
+      <p class="home-hero-tagline">Lire. Découvrir. Comprendre.<br />Pour un monde de demain.</p>
+
+      <form
+        class="home-hero-search"
+        role="search"
+        aria-label="Rechercher dans le catalogue"
+        (submit)="searchCatalogue($event, searchInput.value)"
+      >
+        <label for="home-catalogue-search" class="visually-hidden"
+          >Rechercher un livre, un auteur ou un sujet</label
+        >
+        <input
+          #searchInput
+          id="home-catalogue-search"
+          name="q"
+          type="search"
+          placeholder="Rechercher un livre, un auteur, un sujet…"
+          autocomplete="off"
+        />
+        <button type="submit" aria-label="Lancer la recherche">
+          <img
+            src="/assets/icons/editorial/search.svg"
+            alt=""
+            width="24"
+            height="24"
+            aria-hidden="true"
+          />
+        </button>
+      </form>
+
+      <div class="home-hero-actions">
+        <a routerLink="/catalogue" class="cta cta--primary">
+          <img
+            src="/assets/icons/editorial/catalogue-book.svg"
+            alt=""
+            width="22"
+            height="22"
+            aria-hidden="true"
+          />
+          Découvrir le catalogue
+        </a>
+        <a routerLink="/georges-lemaitre" class="cta cta--secondary">
+          <img
+            src="/assets/icons/editorial/users-group.svg"
+            alt=""
+            width="22"
+            height="22"
+            aria-hidden="true"
+          />
+          Georges Lemaître
+        </a>
+      </div>
+
+      <p class="home-hero-location">
+        <img
+          src="/assets/icons/editorial/location.svg"
+          alt=""
+          width="20"
+          height="20"
+          aria-hidden="true"
+        />
+        Bibliothèque Georges Lemaître · Charleroi, Belgique
+      </p>
+    </div>
+
+    <picture class="home-hero-figure">
+      <source
+        media="(max-width: 767px)"
+        srcset="/assets/shared/portraits/georges-lemaitre-480.webp"
+      />
+      <source
+        media="(max-width: 1279px)"
+        srcset="/assets/shared/portraits/georges-lemaitre-768.webp"
+      />
+      <img
+        class="home-hero-portrait"
+        src="/assets/shared/portraits/georges-lemaitre-1024.webp"
+        width="1024"
+        height="1024"
+        alt="Illustration de Georges Lemaître"
+      />
+    </picture>
+
+    <p
+      class="home-hero-formula"
+      aria-label="Loi de Hubble-Lemaître : la vitesse de récession est égale à la constante de Hubble multipliée par la distance"
+    >
+      v = H<sub>0</sub>&nbsp;d
+    </p>
+  </div>
+</section>
+
+<section class="home-section home-quick-access" aria-labelledby="home-quick-access-title">
+  <div class="section-header home-section-header">
+    <h2 id="home-quick-access-title" class="section-title-lg">Accès rapides</h2>
+    <a routerLink="/catalogue" class="section-link"
+      >Explorer le catalogue <i class="pi pi-arrow-right" aria-hidden="true"></i
+    ></a>
+  </div>
+
+  <ul class="home-quick-access-grid">
+    <li>
+      <a routerLink="/catalogue" class="home-quick-access-card">
+        <img
+          class="home-quick-access-icon"
+          src="/assets/icons/editorial/catalogue-book.svg"
+          alt=""
+          aria-hidden="true"
+        />
+        <span class="home-quick-access-card-body">
+          <span class="card-title">Catalogue</span>
+          <span class="text-small">Des milliers de livres à découvrir.</span>
+        </span>
+        <i class="pi pi-arrow-right" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/articles" class="home-quick-access-card">
+        <img
+          class="home-quick-access-icon"
+          src="/assets/icons/editorial/articles-document.svg"
+          alt=""
+          aria-hidden="true"
+        />
+        <span class="home-quick-access-card-body">
+          <span class="card-title">Articles</span>
+          <span class="text-small">Sciences, culture et patrimoine.</span>
+        </span>
+        <i class="pi pi-arrow-right" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/georges-lemaitre" class="home-quick-access-card">
+        <img
+          class="home-quick-access-icon"
+          src="/assets/icons/editorial/globe.svg"
+          alt=""
+          aria-hidden="true"
+        />
+        <span class="home-quick-access-card-body">
+          <span class="card-title">Georges Lemaître</span>
+          <span class="text-small">Un pionnier de la cosmologie moderne.</span>
+        </span>
+        <i class="pi pi-arrow-right" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li>
+      <a [routerLink]="accountQuickAccess().routerLink" class="home-quick-access-card">
+        <img
+          class="home-quick-access-icon"
+          [src]="accountQuickAccess().iconPath"
+          alt=""
+          aria-hidden="true"
+        />
+        <span class="home-quick-access-card-body">
+          <span class="card-title">{{ accountQuickAccess().label }}</span>
+          <span class="text-small">{{ accountQuickAccess().description }}</span>
+        </span>
+        <i class="pi pi-arrow-right" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</section>
+
+<section class="home-section" aria-labelledby="home-articles-title">
+  <div class="section-header">
+    <h2 id="home-articles-title" class="section-title-lg">À la une</h2>
+    <a routerLink="/articles" class="section-link"
+      >Voir tous les articles <i class="pi pi-arrow-right" aria-hidden="true"></i
+    ></a>
+  </div>
+
+  @if (articlesLoading() && articles().length === 0 && !articlesError()) {
+    <app-loading-state message="Chargement des articles…" />
+  } @else if (articlesError(); as currentError) {
+    <app-error-state
+      [message]="currentError.message"
+      [showRetry]="true"
+      (retry)="retryArticles()"
+    />
+  } @else if (articles().length === 0) {
+    <app-empty-state
+      title="Aucune actualité"
+      message="Aucun article n'est publié pour le moment."
+    />
+  } @else {
+    <ul class="home-articles-grid">
+      @for (article of articles(); track article.id) {
+        <li>
+          <a [routerLink]="['/articles', article.slug]" class="home-article-card">
+            <span class="home-article-card-visual" aria-hidden="true">
+              <img [src]="articleVisual($index)" alt="" loading="lazy" />
+            </span>
+            <span class="home-article-card-body">
+              <span class="card-title">{{ article.title }}</span>
+              @if (article.summary) {
+                <span class="home-article-card-summary text-small">{{ article.summary }}</span>
+              }
+              <span class="text-meta">{{ article.publishedAt | date: 'dd/MM/yyyy' }}</span>
+            </span>
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</section>
+
+<section class="home-section" aria-labelledby="home-catalogue-title">
+  <div class="section-header">
+    <div>
+      <h2 id="home-catalogue-title" class="section-title-lg">Sélection du catalogue</h2>
+      @if (titlesTotalCount(); as total) {
+        <p class="text-small home-section-meta">
+          {{ total }} titre{{ total > 1 ? 's' : '' }} disponible{{ total > 1 ? 's' : '' }} au
+          catalogue public.
+        </p>
+      }
+    </div>
+    <a routerLink="/catalogue" class="section-link"
+      >Voir tout le catalogue <i class="pi pi-arrow-right" aria-hidden="true"></i
+    ></a>
+  </div>
+
+  @if (titlesLoading() && titles().length === 0 && !titlesError()) {
+    <app-loading-state message="Chargement du catalogue…" />
+  } @else if (titlesError(); as currentError) {
+    <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retryTitles()" />
+  } @else if (titles().length === 0) {
+    <app-empty-state
+      title="Catalogue vide"
+      message="Aucun titre n'est disponible pour le moment."
+    />
+  } @else {
+    <ul class="home-titles-grid">
+      @for (title of titles(); track title.id) {
+        <li>
+          <a [routerLink]="['/catalogue', title.id]" class="home-title-card">
+            <span class="home-title-card-cover">
+              @if (title.coverImageUrl) {
+                <img [src]="title.coverImageUrl" [alt]="'Couverture de ' + title.title" />
+              } @else {
+                <img
+                  class="home-title-card-fallback"
+                  src="/assets/fallbacks/cover.svg"
+                  alt=""
+                  aria-hidden="true"
+                />
+              }
+            </span>
+            <span class="home-title-card-title">{{ title.title }}</span>
+            @if (title.publicationYear) {
+              <span class="text-meta">{{ title.publicationYear }}</span>
+            }
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</section>
+
+<section class="home-lemaitre-band" aria-labelledby="home-lemaitre-title">
+  <div class="content-container home-lemaitre-inner">
+    <div class="home-lemaitre-text">
+      <h2 id="home-lemaitre-title" class="page-title-public home-lemaitre-title">
+        Georges Lemaître
+      </h2>
+      <p class="home-lemaitre-lede">Un pionnier. Un héritage. Une source d'inspiration.</p>
+      <p class="home-section-text">
+        Physicien, mathématicien et astronome belge, Georges Lemaître a ouvert la voie à une
+        nouvelle compréhension de l'Univers. Né à Charleroi en 1894, il incarne la rencontre entre
+        science, humanisme et quête de sens.
+      </p>
+
+      <a routerLink="/georges-lemaitre" class="cta cta--primary">
+        Découvrir son parcours
+        <i class="pi pi-arrow-right" aria-hidden="true"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="home-institutional" aria-label="Repère institutionnel">
+  <div class="content-container home-institutional-inner">
+    <p class="editorial-title home-institutional-quote">
+      Une bibliothèque ancrée dans sa ville, ouverte sur le monde.
+    </p>
+
+    <div class="home-institutional-facts">
+      @if (titlesTotalCount(); as total) {
+        <p class="home-institutional-stat">
+          <strong>{{ total }}</strong
+          ><span>titre{{ total > 1 ? 's' : '' }} au catalogue</span>
+        </p>
+      }
+      <p class="home-institutional-stat">
+        <strong>Public</strong><span>un catalogue ouvert à tous</span>
+      </p>
+      <p class="home-institutional-stat">
+        <strong>Culture</strong><span>science et patrimoine</span>
+      </p>
+    </div>
+  </div>
+</section>

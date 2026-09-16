@@ -1,81 +1,138 @@
-<h1>Amendes</h1>
+<div class="page-shell staff-loans-page staff-fines-page">
+  <header class="page-header staff-loans-hero staff-fines-hero">
+    <div class="staff-loans-hero-copy">
+      <span class="staff-page-kicker">Suivi financier</span>
+      <h1 class="page-title">Gestion des amendes</h1>
+      <p class="page-description">
+        Consultez les montants dus par les membres, confirmez les règlements reçus et clôturez les
+        dossiers concernés.
+      </p>
+    </div>
+  </header>
 
-@if (loading() && rows().length === 0 && !error()) {
-  <app-loading-state message="Chargement des amendes…" />
-} @else if (error(); as currentError) {
-  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
-} @else if (rows().length === 0) {
-  <app-empty-state title="Aucune amende" message="Aucune amende ne correspond à cette page." />
-} @else {
-  <p-table
-    [value]="rows()"
-    [lazy]="true"
-    [lazyLoadOnInit]="false"
-    [paginator]="true"
-    [rows]="20"
-    [first]="0"
-    [totalRecords]="totalRecords()"
-    [loading]="loading()"
-    (onLazyLoad)="onLazyLoad($event)"
+  <section
+    class="staff-loans-register staff-fines-register"
+    aria-labelledby="staff-fines-register-title"
   >
-    <ng-template pTemplate="header">
-      <tr>
-        <th scope="col">Membre</th>
-        <th scope="col">N° adhérent</th>
-        <th scope="col">Motif</th>
-        <th scope="col">Montant</th>
-        <th scope="col">Date d'émission</th>
-        <th scope="col">Exemplaire</th>
-        <th scope="col">Statut</th>
-        <th scope="col">Date de paiement</th>
-        <th scope="col">Date d'annulation</th>
-        @if (canManageFines) {
-          <th scope="col">Actions</th>
-        }
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-fine>
-      <tr>
-        <td>{{ fine.borrower.firstName }} {{ fine.borrower.lastName }}</td>
-        <td>{{ fine.borrower.memberNumber }}</td>
-        <td>{{ fine.reason }}</td>
-        <td>{{ fine.amount | currency: 'EUR' }}</td>
-        <td>{{ fine.issuedAt }}</td>
-        <td>{{ fine.loan.copy.inventoryCode }}</td>
-        <td>
-          <p-tag [value]="fineStatusLabel(fine.fineStatus)" [severity]="fineStatusSeverity(fine.fineStatus)" />
-        </td>
-        <td>{{ fine.paidAt ?? '—' }}</td>
-        <td>{{ fine.cancelledAt ?? '—' }}</td>
-        @if (canManageFines) {
-          <td>
-            @if (isActionable(fine)) {
-              <button
-                type="button"
-                pButton
-                severity="secondary"
-                label="Confirmer paiement"
-                [disabled]="isBusy(fine)"
-                [attr.aria-label]="
-                  'Confirmer le paiement de l\'amende de ' + fine.borrower.firstName + ' ' + fine.borrower.lastName
-                "
-                (click)="confirmPaymentPrompt(fine)"
-              ></button>
-              <button
-                type="button"
-                pButton
-                severity="secondary"
-                label="Annuler"
-                [disabled]="isBusy(fine)"
-                [attr.aria-label]="
-                  'Annuler l\'amende de ' + fine.borrower.firstName + ' ' + fine.borrower.lastName
-                "
-                (click)="confirmCancelPrompt(fine)"
-              ></button>
-            }
-          </td>
-        }
-      </tr>
-    </ng-template>
-  </p-table>
-}
+    <div class="staff-loans-register-heading">
+      <div>
+        <span class="staff-page-kicker">Registre</span>
+        <h2 id="staff-fines-register-title">Amendes enregistrées</h2>
+      </div>
+      @if (!loading() && !error()) {
+        <span class="staff-loans-count">
+          {{ totalRecords() }} amende{{ totalRecords() === 1 ? '' : 's' }}
+        </span>
+      }
+    </div>
+
+    @if (loading() && rows().length === 0 && !error()) {
+      <div class="staff-loans-feedback">
+        <app-loading-state message="Chargement des amendes…" />
+      </div>
+    } @else if (error(); as currentError) {
+      <div class="staff-loans-feedback">
+        <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+      </div>
+    } @else if (rows().length === 0) {
+      <div class="staff-loans-empty staff-fines-empty">
+        <img src="/assets/fallbacks/empty-states/fines.svg" alt="" width="210" height="140" />
+        <app-empty-state
+          title="Aucune amende"
+          message="Aucune amende ne correspond à cette page."
+        />
+      </div>
+    } @else {
+      <div class="staff-table-container staff-fines-table">
+        <p-table
+          [value]="rows()"
+          [lazy]="true"
+          [lazyLoadOnInit]="false"
+          [paginator]="true"
+          [rows]="20"
+          [first]="0"
+          [totalRecords]="totalRecords()"
+          [loading]="loading()"
+          (onLazyLoad)="onLazyLoad($event)"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th scope="col">Membre</th>
+              <th scope="col">N° adhérent</th>
+              <th scope="col">Montant</th>
+              <th scope="col">Statut</th>
+              <th scope="col">Date d'émission</th>
+              <th scope="col" class="staff-col-muted">Motif</th>
+              <th scope="col" class="staff-col-muted">Exemplaire</th>
+              <th scope="col" class="staff-col-muted">Clôturée le</th>
+              @if (canManageFines) {
+                <th scope="col">Actions</th>
+              }
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-fine>
+            <tr [class.staff-fine-row-alert]="fine.fineStatus === 'UNPAID'">
+              <td data-label="Membre">
+                <strong class="staff-fine-member"
+                  >{{ fine.borrower.firstName }} {{ fine.borrower.lastName }}</strong
+                >
+              </td>
+              <td data-label="N° adhérent">{{ fine.borrower.memberNumber }}</td>
+              <td data-label="Montant" [class.staff-fine-unpaid]="fine.fineStatus === 'UNPAID'">
+                <strong>{{ fine.amount | currency: 'EUR' }}</strong>
+              </td>
+              <td data-label="Statut">
+                <p-tag
+                  [value]="fineStatusLabel(fine.fineStatus)"
+                  [severity]="fineStatusSeverity(fine.fineStatus)"
+                />
+              </td>
+              <td data-label="Date d'émission">{{ fine.issuedAt }}</td>
+              <td data-label="Motif" class="staff-col-muted">{{ fine.reason }}</td>
+              <td data-label="Exemplaire" class="staff-col-muted">
+                <span class="staff-inventory-code">{{ fine.loan.copy.inventoryCode }}</span>
+              </td>
+              <td data-label="Clôturée le" class="staff-col-muted">
+                {{ fine.paidAt ?? fine.cancelledAt ?? '—' }}
+              </td>
+              @if (canManageFines) {
+                <td data-label="Actions" class="staff-fine-actions">
+                  @if (isActionable(fine)) {
+                    <button
+                      type="button"
+                      pButton
+                      severity="secondary"
+                      label="Confirmer paiement"
+                      [disabled]="isBusy(fine)"
+                      [attr.aria-label]="
+                        'Confirmer le paiement de l\'amende de ' +
+                        fine.borrower.firstName +
+                        ' ' +
+                        fine.borrower.lastName
+                      "
+                      (click)="confirmPaymentPrompt(fine)"
+                    ></button>
+                    <button
+                      type="button"
+                      pButton
+                      severity="secondary"
+                      label="Annuler"
+                      [disabled]="isBusy(fine)"
+                      [attr.aria-label]="
+                        'Annuler l\'amende de ' +
+                        fine.borrower.firstName +
+                        ' ' +
+                        fine.borrower.lastName
+                      "
+                      (click)="confirmCancelPrompt(fine)"
+                    ></button>
+                  }
+                </td>
+              }
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    }
+  </section>
+</div>

@@ -1,0 +1,36 @@
+{
+  "title": "Le tabac en son temps",
+  "key": "/works/OL10004259W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3969797A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Smoking",
+    "Tobacco use",
+    "Tobacco",
+    "History",
+    "Tabagisme",
+    "Social aspects",
+    "Law and legislation"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-10-23T15:06:37.269951"
+  }
+}

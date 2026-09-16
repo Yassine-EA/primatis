@@ -1,0 +1,45 @@
+{
+  "title": "France",
+  "subjects": [
+    "Maps, charts & atlases",
+    "Travel / road maps & atlases",
+    "Travel",
+    "Travel - Foreign",
+    "France",
+    "Atlases - General",
+    "Europe - France",
+    "France, guidebooks"
+  ],
+  "key": "/works/OL10782530W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL2727318A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL272171A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T03:34:45.823877"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2021-10-04T01:00:07.186145"
+  }
+}

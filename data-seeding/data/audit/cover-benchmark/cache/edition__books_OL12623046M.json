@@ -1,0 +1,61 @@
+{
+  "publishers": [
+    "Dar al-Nahar"
+  ],
+  "languages": [
+    {
+      "key": "/languages/ara"
+    },
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "source_records": [
+    "marc:marc_loc_2016/BooksAll.2016.part27.utf8:214285033:1283",
+    "marc:marc_columbia/Columbia-extract-20221130-005.mrc:496354823:1291",
+    "marc:harvard_bibliographic_metadata/20220215_015.bib.mrc:177944218:1626"
+  ],
+  "title": "Kitabat Juzif Mughayzil",
+  "lccn": [
+    "98963212"
+  ],
+  "isbn_13": [
+    "9782842890452"
+  ],
+  "edition_name": "al-Tabah 1 edition",
+  "physical_format": "Unknown Binding",
+  "lc_classifications": [
+    "DS87 .M824 1997"
+  ],
+  "publish_date": "1997",
+  "key": "/books/OL12623046M",
+  "authors": [
+    {
+      "key": "/authors/OL3965115A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10000135W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "isbn_10": [
+    "2842890450"
+  ],
+  "oclc_numbers": [
+    "44102875"
+  ],
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-09-01T20:52:19.435879"
+  }
+}

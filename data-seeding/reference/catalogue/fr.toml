@@ -1,0 +1,66 @@
+# Socle éditorial FR — DEV-16.2 §4/DEC-16.3-02, élargi DEV-16.5 §4/§5.
+#
+# Liste éditoriale EXPLICITE, traçable, révisable : une sélection
+# d'auteurs de référence francophones utilisée pour PILOTER une partie
+# de la composition du fonds FR, PAS pour remplacer la collecte
+# bibliographique générale. Aucune métadonnée bibliographique n'est
+# inventée ici — seul `author_key` est utilisé, et sert uniquement à
+# ORIENTER une requête Open Library réelle, jamais à fabriquer un Title.
+#
+# Chaque `author_key` a été vérifié RÉELLEMENT via
+# `https://openlibrary.org/search/authors.json?q=<nom>` — jamais deviné.
+# `work_count` est la valeur réelle observée à la vérification
+# (indicatif, non maintenu à jour automatiquement).
+#
+# Diversité visée (DEV-16.5 §5) : classique / moderne / contemporain,
+# plusieurs formes (roman, théâtre, poésie, essai).
+
+[[authors]]
+author_key = "OL107571A"
+full_name = "Victor Hugo"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Victor+Hugo"
+work_count_at_verification = 4623
+period = "classique (XIXe siècle)"
+form = "roman, poésie"
+selection_rationale = "Figure majeure de la littérature française du XIXe siècle, œuvre abondante et bibliographiquement bien référencée sur Open Library."
+
+[[authors]]
+author_key = "OL6899222A"
+full_name = "Molière"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Moli%C3%A8re"
+work_count_at_verification = 2397
+period = "classique (XVIIe siècle)"
+form = "théâtre"
+selection_rationale = "Figure fondatrice du théâtre classique français, largement référencée sur Open Library."
+
+[[authors]]
+author_key = "OL117429A"
+full_name = "Charles Baudelaire"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Charles+Baudelaire"
+work_count_at_verification = 1267
+period = "classique (XIXe siècle)"
+form = "poésie"
+selection_rationale = "Figure majeure de la poésie française (Les Fleurs du mal), apporte une diversité de forme (poésie) au socle FR."
+
+[[authors]]
+author_key = "OL124171A"
+full_name = "Albert Camus"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Albert+Camus"
+work_count_at_verification = 510
+period = "moderne (XXe siècle)"
+form = "roman, essai"
+selection_rationale = "Auteur moderne majeur (prix Nobel 1957), apporte une diversité de période (XXe siècle) et de forme (essai) au socle FR."
+
+[[authors]]
+author_key = "OL20371A"
+full_name = "Marguerite Yourcenar"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Marguerite+Yourcenar"
+work_count_at_verification = 424
+period = "moderne/contemporaine (XXe siècle)"
+form = "roman"
+selection_rationale = "Autrice moderne majeure, première femme élue à l'Académie française, apporte une diversité culturelle et de genre au socle FR."

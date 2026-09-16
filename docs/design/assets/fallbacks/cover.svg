@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 520" role="img" aria-labelledby="title">
+  <title id="title">Couverture indisponible</title>
+  <rect width="360" height="520" rx="8" fill="#082B40"/>
+  <path d="M48 56h264M48 464h264" stroke="#D7A16E" stroke-width="2" opacity=".5"/>
+  <g transform="translate(80 142)">
+    <g fill="none" stroke="#D7A16E" stroke-width="2" opacity=".8"><ellipse cx="100" cy="100" rx="90" ry="46"/><ellipse cx="100" cy="100" rx="90" ry="46" transform="rotate(60 100 100)"/><ellipse cx="100" cy="100" rx="90" ry="46" transform="rotate(120 100 100)"/></g>
+    <path d="M100 75 106 94 125 100 106 106 100 125 94 106 75 100 94 94Z" fill="#FAF9F6"/>
+  </g>
+  <g fill="#F6F1E8" opacity=".78"><rect x="82" y="382" width="196" height="8" rx="4"/><rect x="116" y="404" width="128" height="6" rx="3" opacity=".55"/></g>
+</svg>

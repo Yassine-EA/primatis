@@ -1,0 +1,53 @@
+{
+  "publishers": [
+    "Institut du monde arabe"
+  ],
+  "key": "/books/OL12650106M",
+  "title": "Croisement de signes",
+  "isbn_13": [
+    "9782906062207"
+  ],
+  "physical_format": "Unknown Binding",
+  "isbn_10": [
+    "2906062200"
+  ],
+  "publish_date": "January 1, 1989",
+  "authors": [
+    {
+      "key": "/authors/OL3977342A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10010810W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "oclc_numbers": [
+    "79217302"
+  ],
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/ab.bib.01.20150123.full.mrc:779428090:1138"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    },
+    {
+      "key": "/languages/ara"
+    }
+  ],
+  "number_of_pages": 65,
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-14T10:45:20.765455"
+  }
+}

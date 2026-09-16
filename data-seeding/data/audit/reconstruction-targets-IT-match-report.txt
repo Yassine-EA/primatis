@@ -1,0 +1,42 @@
+DEV-16 RECONSTRUCTION — IT MATCHING
+===================================
+
+Editorial targets     : 165
+Preserved IT titles   : 143
+
+MATCH RESULTS
+=============
+
+EXACT_MATCH           : 2
+LIKELY_MATCH          : 0
+NO_MATCH / ACQUIRE    : 163
+
+BY CATEGORY
+===========
+CONTEMPORARY                   total= 25 exact=  0 likely=  0 acquire= 25
+ESSAYS_PHILOSOPHY              total= 15 exact=  0 likely=  0 acquire= 15
+GRAPHIC                        total= 10 exact=  0 likely=  0 acquire= 10
+HISTORY_SOCIETY                total= 10 exact=  0 likely=  0 acquire= 10
+ITALIAN_CANON                  total= 55 exact=  2 likely=  0 acquire= 53
+TWENTIETH_CENTURY              total= 40 exact=  0 likely=  0 acquire= 40
+YOUTH                          total= 10 exact=  0 likely=  0 acquire= 10
+
+POLICY
+======
+
+EXACT_MATCH is considered already represented.
+LIKELY_MATCH requires human confirmation before acquisition.
+NO_MATCH becomes an acquisition target.
+LIKELY_MATCH rows are excluded from acquisition search for now.
+No Open Library request performed.
+No bundle modification.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/reconstruction-targets-IT-match.csv
+data/audit/reconstruction-targets-IT-likely-review.csv
+data/audit/reconstruction-acquisition-targets-IT.csv
+
+STATUS : PASS

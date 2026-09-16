@@ -1,0 +1,35 @@
+FULL COVERED CORPUS — EDITORIAL CONSOLIDATION
+==============================================
+
+titles           : 7482
+unique           : 7482
+
+KEEP_CORE        : 4243
+KEEP_TRANSLATION : 2054
+REVIEW           : 621
+REPLACE          : 564
+----------------------------------------------
+TOTAL            : 7482
+
+KEEP TOTAL       : 6297
+NON-FINAL        : 1185
+KEEP RATE        : 84.16%
+
+BY LANGUAGE
+===========
+LA TOTAL= 112 CORE=  35 TR=  21 REV= 34 REP= 22 KEEP=  56 RATE= 50.00%
+IT TOTAL= 205 CORE=  61 TR=  82 REV= 37 REP= 25 KEEP= 143 RATE= 69.76%
+ES TOTAL= 410 CORE= 252 TR=  90 REV= 51 REP= 17 KEEP= 342 RATE= 83.41%
+DE TOTAL= 542 CORE= 385 TR=  83 REV= 65 REP=  9 KEEP= 468 RATE= 86.35%
+NL TOTAL= 993 CORE= 241 TR= 526 REV=101 REP=125 KEEP= 767 RATE= 77.24%
+EN TOTAL=2211 CORE=1688 TR= 173 REV=207 REP=143 KEEP=1861 RATE= 84.17%
+FR TOTAL=3009 CORE=1581 TR=1079 REV=126 REP=223 KEEP=2660 RATE= 88.40%
+
+GLOBAL
+======
+
+Editorially accepted covered titles : 6297
+Titles still requiring review       : 621
+Titles to replace                    : 564
+
+STATUS : PASS

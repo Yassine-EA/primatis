@@ -1,0 +1,36 @@
+{
+  "title": "Bernard Delicieux et l'Inquisition albigeoise (1300-1320)",
+  "key": "/works/OL10004541W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3970146A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Christian heresies",
+    "History",
+    "Inquisition",
+    "Albigenses",
+    "Middle Ages",
+    "Albigenser",
+    "Katharer"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-21T14:35:00.949442"
+  }
+}

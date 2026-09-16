@@ -1,0 +1,41 @@
+# Socle éditorial IT — voir fr.toml. Élargi DEV-16.5 §4/§5.
+
+[[authors]]
+author_key = "OL29303A"
+full_name = "Dante Alighieri"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Dante+Alighieri"
+work_count_at_verification = 2380
+period = "classique (XIVe siècle)"
+form = "poésie"
+selection_rationale = "Figure fondatrice de la littérature italienne (Divina Commedia), largement référencée sur Open Library."
+
+[[authors]]
+author_key = "OL45982A"
+full_name = "Giacomo Leopardi"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Giacomo+Leopardi"
+work_count_at_verification = 740
+period = "classique/romantique (XIXe siècle)"
+form = "poésie"
+selection_rationale = "Figure majeure de la poésie italienne du XIXe siècle, apporte une diversité de période au socle IT."
+
+[[authors]]
+author_key = "OL49630A"
+full_name = "Alessandro Manzoni"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Alessandro+Manzoni"
+work_count_at_verification = 468
+period = "classique (XIXe siècle)"
+form = "roman"
+selection_rationale = "Auteur du roman fondateur de la littérature italienne moderne (I promessi sposi), apporte une diversité de forme (roman) au socle IT."
+
+[[authors]]
+author_key = "OL4326372A"
+full_name = "Italo Calvino"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Italo+Calvino"
+work_count_at_verification = 470
+period = "moderne/contemporain (XXe siècle)"
+form = "roman"
+selection_rationale = "Figure majeure de la littérature italienne moderne et contemporaine, apporte une diversité chronologique au socle IT."

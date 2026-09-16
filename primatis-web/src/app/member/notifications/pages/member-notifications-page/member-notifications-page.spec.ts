@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
@@ -24,8 +25,17 @@ function buildNotification(overrides: Partial<NotificationResponse> = {}): Notif
   };
 }
 
-function buildPage(content: NotificationResponse[], totalElements = content.length): PageResponse<NotificationResponse> {
-  return { content, page: 0, size: 20, totalElements, totalPages: Math.max(1, Math.ceil(totalElements / 20)) };
+function buildPage(
+  content: NotificationResponse[],
+  totalElements = content.length,
+): PageResponse<NotificationResponse> {
+  return {
+    content,
+    page: 0,
+    size: 20,
+    totalElements,
+    totalPages: Math.max(1, Math.ceil(totalElements / 20)),
+  };
 }
 
 function apiHttpError(status: number, code: string, message: string): HttpErrorResponse {
@@ -51,7 +61,11 @@ describe('MemberNotificationsPage', () => {
     markAsRead: ReturnType<typeof vi.fn>;
     markAllAsRead: ReturnType<typeof vi.fn>;
   };
-  let unreadStateMock: { refresh: ReturnType<typeof vi.fn>; decrement: ReturnType<typeof vi.fn>; reset: ReturnType<typeof vi.fn> };
+  let unreadStateMock: {
+    refresh: ReturnType<typeof vi.fn>;
+    decrement: ReturnType<typeof vi.fn>;
+    reset: ReturnType<typeof vi.fn>;
+  };
   let messageServiceMock: { add: ReturnType<typeof vi.fn> };
 
   function configure(): void {
@@ -67,6 +81,7 @@ describe('MemberNotificationsPage', () => {
     TestBed.configureTestingModule({
       imports: [MemberNotificationsPage],
       providers: [
+        provideRouter([]),
         { provide: NotificationApiService, useValue: notificationApiServiceMock },
         { provide: NotificationUnreadStateService, useValue: unreadStateMock },
         { provide: MessageService, useValue: messageServiceMock },
@@ -85,16 +100,55 @@ describe('MemberNotificationsPage', () => {
 
   it('should call listOwnNotifications(0, 20) on initial load', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
 
     createComponent();
 
     expect(notificationApiServiceMock.listOwnNotifications).toHaveBeenCalledWith(0, 20);
   });
 
+  it('should set the document title (DEV-15.6)', () => {
+    configure();
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
+
+    createComponent();
+
+    expect(document.title).toBe('Notifications — PRIMATIS');
+  });
+
+  it('should show a category icon reflecting the NotificationType origin (DEV-15.6)', () => {
+    configure();
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(
+        buildPage([
+          buildNotification({ id: 1, notificationType: 'LOAN_OVERDUE' }),
+          buildNotification({ id: 2, notificationType: 'RESERVATION_READY' }),
+          buildNotification({ id: 3, notificationType: 'FINE_ISSUED' }),
+          buildNotification({ id: 4, notificationType: 'ARTICLE_PUBLISHED' }),
+        ]),
+      ),
+    );
+
+    createComponent();
+
+    expect(fixture.componentInstance.notificationIcon('LOAN_OVERDUE')).toBe('pi-book');
+    expect(fixture.componentInstance.notificationIcon('RESERVATION_READY')).toBe('pi-bookmark');
+    expect(fixture.componentInstance.notificationIcon('FINE_ISSUED')).toBe('pi-euro');
+    expect(fixture.componentInstance.notificationIcon('ARTICLE_PUBLISHED')).toBe('pi-file');
+    expect(
+      fixture.nativeElement.querySelectorAll('.pi-book, .pi-bookmark, .pi-euro, .pi-file').length,
+    ).toBe(4);
+  });
+
   it('should refresh the shared unread state on initial load', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
 
     createComponent();
 
@@ -104,7 +158,11 @@ describe('MemberNotificationsPage', () => {
   it('should render the notifications returned by the API (title/message/date)', () => {
     configure();
     notificationApiServiceMock.listOwnNotifications.mockReturnValue(
-      of(buildPage([buildNotification({ title: 'Prêt en retard', message: 'Votre prêt est en retard.' })])),
+      of(
+        buildPage([
+          buildNotification({ title: 'Prêt en retard', message: 'Votre prêt est en retard.' }),
+        ]),
+      ),
     );
 
     createComponent();
@@ -112,12 +170,14 @@ describe('MemberNotificationsPage', () => {
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(text).toContain('Prêt en retard');
     expect(text).toContain('Votre prêt est en retard.');
-    expect(text).toContain('2026-08-05T10:00:00Z');
+    expect(text).toContain('05 août 2026');
   });
 
   it('should map a PrimeNG lazy load event to page/size and call listOwnNotifications again', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()], 100)));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()], 100)),
+    );
     createComponent();
     expect(fixture.componentInstance.totalRecords()).toBe(100);
     notificationApiServiceMock.listOwnNotifications.mockClear();
@@ -129,7 +189,9 @@ describe('MemberNotificationsPage', () => {
 
   it('should default to page 0 / size 20 when the lazy load event omits first/rows', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
     createComponent();
     notificationApiServiceMock.listOwnNotifications.mockClear();
 
@@ -144,7 +206,9 @@ describe('MemberNotificationsPage', () => {
 
   it('should show the loading state before the first response arrives', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue({ subscribe: () => ({ unsubscribe: () => {} }) });
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue({
+      subscribe: () => ({ unsubscribe: () => {} }),
+    });
 
     createComponent();
 
@@ -159,7 +223,9 @@ describe('MemberNotificationsPage', () => {
 
     const emptyState = fixture.nativeElement.querySelector('app-empty-state');
     expect(emptyState).not.toBeNull();
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Aucune notification à afficher.');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
+      "Vous n'avez aucune notification.",
+    );
   });
 
   it('should show the error state on a failed request', () => {
@@ -180,7 +246,9 @@ describe('MemberNotificationsPage', () => {
     );
     createComponent();
     notificationApiServiceMock.listOwnNotifications.mockClear();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
 
     fixture.componentInstance.retry();
 
@@ -205,7 +273,11 @@ describe('MemberNotificationsPage', () => {
   it('should render a distinct label for a READ notification', () => {
     configure();
     notificationApiServiceMock.listOwnNotifications.mockReturnValue(
-      of(buildPage([buildNotification({ notificationStatus: 'READ', readAt: '2026-08-06T09:00:00Z' })])),
+      of(
+        buildPage([
+          buildNotification({ notificationStatus: 'READ', readAt: '2026-08-06T09:00:00Z' }),
+        ]),
+      ),
     );
 
     createComponent();
@@ -227,7 +299,11 @@ describe('MemberNotificationsPage', () => {
   it('should never show the "Marquer comme lue" action for a READ notification', () => {
     configure();
     notificationApiServiceMock.listOwnNotifications.mockReturnValue(
-      of(buildPage([buildNotification({ notificationStatus: 'READ', readAt: '2026-08-06T09:00:00Z' })])),
+      of(
+        buildPage([
+          buildNotification({ notificationStatus: 'READ', readAt: '2026-08-06T09:00:00Z' }),
+        ]),
+      ),
     );
 
     createComponent();
@@ -238,12 +314,22 @@ describe('MemberNotificationsPage', () => {
   it('should never hide a notification after it becomes READ (full history always visible)', () => {
     configure();
     notificationApiServiceMock.listOwnNotifications.mockReturnValue(
-      of(buildPage([buildNotification({ id: 1, title: 'Ancienne notification lue', notificationStatus: 'READ' })])),
+      of(
+        buildPage([
+          buildNotification({
+            id: 1,
+            title: 'Ancienne notification lue',
+            notificationStatus: 'READ',
+          }),
+        ]),
+      ),
     );
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Ancienne notification lue');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
+      'Ancienne notification lue',
+    );
   });
 
   // ---------------------------------------------------------------
@@ -267,7 +353,11 @@ describe('MemberNotificationsPage', () => {
   it('should replace the row with the exact backend response after a successful markAsRead, without fabricating readAt', () => {
     configure();
     const notification = buildNotification({ id: 1, notificationStatus: 'UNREAD' });
-    const read = buildNotification({ id: 1, notificationStatus: 'READ', readAt: '2026-08-21T10:00:00Z' });
+    const read = buildNotification({
+      id: 1,
+      notificationStatus: 'READ',
+      readAt: '2026-08-21T10:00:00Z',
+    });
     notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([notification])));
     notificationApiServiceMock.markAsRead.mockReturnValue(of(read));
     createComponent();
@@ -296,7 +386,9 @@ describe('MemberNotificationsPage', () => {
     const notification = buildNotification({ id: 1, notificationStatus: 'UNREAD' });
     notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([notification])));
     notificationApiServiceMock.markAsRead.mockReturnValue(
-      throwError(() => apiHttpError(404, 'NOTIFICATION_NOT_FOUND', 'Aucune notification pour cet identifiant.')),
+      throwError(() =>
+        apiHttpError(404, 'NOTIFICATION_NOT_FOUND', 'Aucune notification pour cet identifiant.'),
+      ),
     );
     createComponent();
 
@@ -304,14 +396,21 @@ describe('MemberNotificationsPage', () => {
 
     expect(fixture.componentInstance.rows()).toEqual([notification]);
     expect(messageServiceMock.add).toHaveBeenCalledWith(
-      expect.objectContaining({ severity: 'error', detail: 'Aucune notification pour cet identifiant.' }),
+      expect.objectContaining({
+        severity: 'error',
+        detail: 'Aucune notification pour cet identifiant.',
+      }),
     );
     expect(unreadStateMock.decrement).not.toHaveBeenCalled();
   });
 
   it('should never call markAsRead for an already READ notification (defensive no-op)', () => {
     configure();
-    const notification = buildNotification({ id: 1, notificationStatus: 'READ', readAt: '2026-08-06T09:00:00Z' });
+    const notification = buildNotification({
+      id: 1,
+      notificationStatus: 'READ',
+      readAt: '2026-08-06T09:00:00Z',
+    });
     notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([notification])));
     createComponent();
 
@@ -324,7 +423,9 @@ describe('MemberNotificationsPage', () => {
     configure();
     const notification = buildNotification({ id: 1, notificationStatus: 'UNREAD' });
     notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([notification])));
-    notificationApiServiceMock.markAsRead.mockReturnValue({ subscribe: () => ({ unsubscribe: () => {} }) });
+    notificationApiServiceMock.markAsRead.mockReturnValue({
+      subscribe: () => ({ unsubscribe: () => {} }),
+    });
     createComponent();
 
     fixture.componentInstance.markAsRead(notification);
@@ -338,7 +439,9 @@ describe('MemberNotificationsPage', () => {
 
   it('should render the "Tout marquer comme lu" action', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
 
     createComponent();
 
@@ -347,7 +450,9 @@ describe('MemberNotificationsPage', () => {
 
   it('should call markAllAsRead when the action is triggered', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
     notificationApiServiceMock.markAllAsRead.mockReturnValue(of({ updatedCount: 3 }));
     createComponent();
 
@@ -358,7 +463,9 @@ describe('MemberNotificationsPage', () => {
 
   it('should reload the current page from the server after a successful markAllAsRead (Option A)', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()], 100)));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()], 100)),
+    );
     notificationApiServiceMock.markAllAsRead.mockReturnValue(of({ updatedCount: 3 }));
     createComponent();
     fixture.componentInstance.onLazyLoad({ first: 20, rows: 20 }); // page courante = 1
@@ -372,7 +479,9 @@ describe('MemberNotificationsPage', () => {
 
   it('should refresh the shared unread count after a successful markAllAsRead, never fabricating it locally', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
     notificationApiServiceMock.markAllAsRead.mockReturnValue(of({ updatedCount: 3 }));
     createComponent();
     unreadStateMock.refresh.mockClear();
@@ -384,31 +493,42 @@ describe('MemberNotificationsPage', () => {
 
   it('should show a success toast with the exact updatedCount returned by the backend', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
     notificationApiServiceMock.markAllAsRead.mockReturnValue(of({ updatedCount: 3 }));
     createComponent();
 
     fixture.componentInstance.markAllAsRead();
 
     expect(messageServiceMock.add).toHaveBeenCalledWith(
-      expect.objectContaining({ severity: 'success', detail: '3 notification(s) marquée(s) comme lue(s).' }),
+      expect.objectContaining({
+        severity: 'success',
+        detail: '3 notification(s) marquée(s) comme lue(s).',
+      }),
     );
   });
 
   it('should treat updatedCount = 0 as a normal success (idempotence), not an error', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
     notificationApiServiceMock.markAllAsRead.mockReturnValue(of({ updatedCount: 0 }));
     createComponent();
 
     fixture.componentInstance.markAllAsRead();
 
-    expect(messageServiceMock.add).toHaveBeenCalledWith(expect.objectContaining({ severity: 'success' }));
+    expect(messageServiceMock.add).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'success' }),
+    );
   });
 
   it('should show an error toast when markAllAsRead fails, without reloading the list', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
     notificationApiServiceMock.markAllAsRead.mockReturnValue(
       throwError(() => apiHttpError(500, 'INTERNAL_ERROR', 'Erreur serveur.')),
     );
@@ -417,14 +537,20 @@ describe('MemberNotificationsPage', () => {
 
     fixture.componentInstance.markAllAsRead();
 
-    expect(messageServiceMock.add).toHaveBeenCalledWith(expect.objectContaining({ severity: 'error' }));
+    expect(messageServiceMock.add).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'error' }),
+    );
     expect(notificationApiServiceMock.listOwnNotifications).not.toHaveBeenCalled();
   });
 
   it('should disable the "Tout marquer comme lu" button while the mutation is in flight', () => {
     configure();
-    notificationApiServiceMock.listOwnNotifications.mockReturnValue(of(buildPage([buildNotification()])));
-    notificationApiServiceMock.markAllAsRead.mockReturnValue({ subscribe: () => ({ unsubscribe: () => {} }) });
+    notificationApiServiceMock.listOwnNotifications.mockReturnValue(
+      of(buildPage([buildNotification()])),
+    );
+    notificationApiServiceMock.markAllAsRead.mockReturnValue({
+      subscribe: () => ({ unsubscribe: () => {} }),
+    });
     createComponent();
 
     fixture.componentInstance.markAllAsRead();

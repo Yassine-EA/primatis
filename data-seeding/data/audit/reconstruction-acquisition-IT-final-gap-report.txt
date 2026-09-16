@@ -1,0 +1,30 @@
+DEV-16 RECONSTRUCTION — IT FINAL GAP
+====================================
+
+Remaining slots       : 5
+Editorial alternatives: 30
+Usable alternatives   : 12
+Selected              : 5
+
+BY CATEGORY
+===========
+TWENTIETH_CENTURY              needed= 1 usable= 4 selected= 1
+YOUTH                          needed= 2 usable= 6 selected= 2
+GRAPHIC                        needed= 2 usable= 2 selected= 2
+
+SHORTFALLS
+==========
+NONE
+
+FINAL STATUS
+============
+
+Previous resolved : 160/165
+Final additions   : 5/5
+
+IT FINAL STATUS : 165/165 RESOLVED
+
+No bundle modification.
+No database write.
+
+STATUS : PASS

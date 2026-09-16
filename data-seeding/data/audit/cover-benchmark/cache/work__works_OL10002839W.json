@@ -1,0 +1,33 @@
+{
+  "title": "Cent ans de peche a Terre-Neuve (Kronos)",
+  "key": "/works/OL10002839W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3968284A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Atlantic cod fishing",
+    "History",
+    "Fisheries",
+    "Fishing boats"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:38.254267"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-21T11:44:38.142926"
+  }
+}

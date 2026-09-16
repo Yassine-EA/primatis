@@ -1,0 +1,32 @@
+{
+  "title": "L'invention des syndicalismes",
+  "key": "/works/OL10004223W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3969753A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Labor unions",
+    "History",
+    "Syndicalism"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-08-03T17:53:31.914220"
+  }
+}

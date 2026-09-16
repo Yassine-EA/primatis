@@ -1,0 +1,24 @@
+@if (authenticated()) {
+  <a routerLink="/member/notifications" class="nav-bell" aria-label="Notifications" title="Notifications">
+    @if (unreadCount() > 0) {
+      <p-overlaybadge [value]="unreadCount().toString()" severity="danger">
+        <i class="pi pi-bell" aria-hidden="true"></i>
+      </p-overlaybadge>
+    } @else {
+      <i class="pi pi-bell" aria-hidden="true"></i>
+    }
+  </a>
+  <button
+    type="button"
+    pButton
+    text
+    severity="secondary"
+    icon="pi pi-sign-out"
+    label="Déconnexion"
+    class="nav-logout"
+    aria-label="Déconnexion"
+    (click)="logout()"
+  ></button>
+} @else {
+  <a routerLink="/login" class="account-menu-login">Connexion</a>
+}

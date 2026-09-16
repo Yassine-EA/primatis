@@ -1,0 +1,35 @@
+{
+  "title": "Joseph-Emile Gridel",
+  "key": "/works/OL10010430W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3976909A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "In art",
+    "Travel",
+    "Notebooks, sketchbooks",
+    "Description and travel",
+    "Costume",
+    "Pictorial works"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:57.594996"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-08T23:30:17.556993"
+  }
+}

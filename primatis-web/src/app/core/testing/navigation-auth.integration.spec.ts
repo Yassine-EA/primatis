@@ -5,7 +5,7 @@ import { Router, provideRouter } from '@angular/router';
 import { vi } from 'vitest';
 
 import { AuthService } from '../../auth/services/auth.service';
-import { Navigation } from '../../shared/navigation/navigation';
+import { PublicNavigation } from '../layouts/public-layout/public-navigation/public-navigation';
 import { API_BASE_URL } from '../api/api-base-url.token';
 
 const STORAGE_KEY = 'primatis.accessToken';
@@ -26,16 +26,19 @@ function futureExp(): number {
 }
 
 /**
- * DEV-04.12 : `Navigation` avec un `AuthService` réel (jamais mocké,
- * contrairement à `navigation.spec.ts`) — preuve que la visibilité des
- * liens et le logout fonctionnent avec la chaîne réelle sessionStorage ->
- * claims -> Signals-like accessors, pas seulement avec un double de test.
+ * DEV-04.12 / DEV-15.3 : `PublicNavigation` (ex-`Navigation` monolithique,
+ * remplacée par une navigation dédiée par univers) avec un `AuthService`
+ * réel (jamais mocké, contrairement à `public-navigation.spec.ts`) —
+ * preuve que la visibilité des liens et le logout (via `AccountMenu`,
+ * rendu par `PublicNavigation`) fonctionnent avec la chaîne réelle
+ * sessionStorage -> claims -> Signals-like accessors, pas seulement avec
+ * un double de test.
  */
-describe('Navigation + real AuthService integration', () => {
+describe('PublicNavigation + real AuthService integration', () => {
   let router: Router;
 
   function renderWithClaims(claims: Record<string, unknown> | null): {
-    fixture: ComponentFixture<Navigation>;
+    fixture: ComponentFixture<PublicNavigation>;
     authService: AuthService;
   } {
     sessionStorage.clear();
@@ -44,7 +47,7 @@ describe('Navigation + real AuthService integration', () => {
     }
 
     TestBed.configureTestingModule({
-      imports: [Navigation],
+      imports: [PublicNavigation],
       providers: [
         provideRouter([]),
         provideHttpClient(),
@@ -56,7 +59,7 @@ describe('Navigation + real AuthService integration', () => {
     router = TestBed.inject(Router);
     vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
     const authService = TestBed.inject(AuthService);
-    const fixture = TestBed.createComponent(Navigation);
+    const fixture = TestBed.createComponent(PublicNavigation);
     fixture.detectChanges();
 
     return { fixture, authService };
@@ -66,18 +69,20 @@ describe('Navigation + real AuthService integration', () => {
     sessionStorage.clear();
   });
 
-  function linkLabels(fixture: ComponentFixture<Navigation>): string[] {
-    const anchors: HTMLAnchorElement[] = Array.from(fixture.nativeElement.querySelectorAll('.nav-list a'));
+  function linkLabels(fixture: ComponentFixture<PublicNavigation>): string[] {
+    const anchors: HTMLAnchorElement[] = Array.from(
+      fixture.nativeElement.querySelectorAll('.public-navigation-desktop .nav-list a'),
+    );
     return anchors.map((anchor) => anchor.textContent?.trim() ?? '');
   }
 
-  it('should show only Accueil, Catalogue, Articles and Connexion for a real anonymous AuthService', () => {
+  it('should show only Accueil, Catalogue, Articles, Georges Lemaître and Connexion for a real anonymous AuthService', () => {
     const { fixture } = renderWithClaims(null);
 
-    // DEV-06.8/DEV-11.11 : Catalogue et Articles sont désormais toujours
-    // visibles (aucun requiredRoles), même statut qu'Accueil — déviation
-    // mécanique, pas une régression.
-    expect(linkLabels(fixture)).toEqual(['Accueil', 'Catalogue', 'Articles']);
+    // DEV-06.8/DEV-11.11/DEV-15.4 : Catalogue, Articles et Georges Lemaître
+    // sont toujours visibles (aucun requiredRoles), même statut qu'Accueil —
+    // déviation mécanique, pas une régression.
+    expect(linkLabels(fixture)).toEqual(['Accueil', 'Catalogue', 'Articles', 'Georges Lemaître']);
     expect(fixture.nativeElement.textContent).toContain('Connexion');
   });
 
@@ -114,7 +119,7 @@ describe('Navigation + real AuthService integration', () => {
     expect(linkLabels(fixture)).toContain('Administration');
   });
 
-  it('should really clear sessionStorage and reset AuthService state when logging out from Navigation', () => {
+  it('should really clear sessionStorage and reset AuthService state when logging out from PublicNavigation', () => {
     const { fixture, authService } = renderWithClaims({
       sub: '2',
       roles: ['ROLE_LIBRARIAN'],

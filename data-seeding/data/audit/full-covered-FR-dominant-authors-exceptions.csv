@@ -1,0 +1,34 @@
+source_key,title,subtitle,authors,author_count,isbn,publication_year,publisher,genres,duplicate_like_count,decision,reason,dominant_authors,dominant_author_counts,exception_flags
+/books/OL3951036M,A bilingual edition of the major epics of Victor Hugo,,Victor Hugo,1,9780773472396,2002,Edwin Mellen Press,,0,,,Victor Hugo,Victor Hugo=31,FOREIGN_EN_2 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL23277136M,"Angelo, tyrant of Padua",drama in five acts.,Victor Hugo,1,,1905,Rullman,,0,,,Victor Hugo,Victor Hugo=31,FOREIGN_EN_1
+/books/OL16887637M,L' Archipel de la Mancha,The Channel Islands,Victor Hugo,1,9780861200122,1985,Haule Books,Voyage,0,,,Victor Hugo,Victor Hugo=31,FOREIGN_EN_1
+/books/OL6921692M,Sur les bords du Rhin,,Victor Hugo,1,,1902,H. Holt and company,Voyage,0,,,Victor Hugo,Victor Hugo=31,FOREIGN_PUBLISHER_SIGNAL
+/books/OL6945557M,The destroyer of the second republic,being Napoleon the Little.,Victor Hugo,1,,1870,Sheldon,Histoire,0,,,Victor Hugo,Victor Hugo=31,FOREIGN_EN_2
+/books/OL8301814M,"The Distance, the Shadows (Poetica)",,Victor Hugo,1,9780856463457,2003,Anvil Press,,0,,,Victor Hugo,Victor Hugo=31,FOREIGN_EN_1
+/books/OL22878927M,Dr. Ox's experiment,and other stories.,Jules Verne,1,,1875,J.R. Osgood,Fantasy | Fiction,0,,,Jules Verne,Jules Verne=20,FOREIGN_EN_1
+/books/OL7073251M,Five weeks in a balloon,"or, journeys and discoveries in Africa by three Englishmen.",Jules Verne,1,,1889,Hurst,Fiction | Science-fiction | Thriller | Voyage,0,,,Jules Verne,Jules Verne=20,FOREIGN_EN_2
+/books/OL6904898M,Michel Strogoff,,Jules Verne,1,,1893,Henry Holt and Company,Fiction | Histoire | Thriller,0,,,Jules Verne,Jules Verne=20,FOREIGN_PUBLISHER_SIGNAL
+/books/OL5868731M,The wreck of the Chancellor,"diary of J. R. Kazallon, passenger.",Jules Verne,1,,1876,Porter & Coates,Fiction | Thriller,0,,,Jules Verne,Jules Verne=20,FOREIGN_EN_2
+/books/OL6682530M,Twenty thousand leagues under the sea,,Jules Verne,1,,1925,C. Scribner's Sons,Fiction | Jeunes adultes | Jeunesse | Science-fiction | Thriller,0,,,Jules Verne,Jules Verne=20,FOREIGN_EN_2 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL8863689M,Les Aventures de Tintin,L'Ile Noire (French Edition of The Black Island),Hergé,1,9782203001060,1999,Casterman Editions,BD et romans graphiques | Fiction,0,,,Hergé,Hergé=19,FOREIGN_EN_2
+/books/OL9005954M,"Lucky Luke, tome 25",Nitroglycérine,Lo Hartog van Banda | Morris | Lo Hartog Van Banda | Morris,4,9782882570000,1996,Dargaud,Fiction,0,,,Morris | Morris,Morris=18 | Morris=18,MULTI_AUTHOR
+/books/OL5447196M,Descartes dictionary.,,René Descartes,1,9780802220462,1971,Philosophical Library,Philosophie,0,,,René Descartes,René Descartes=18,FOREIGN_EN_1
+/books/OL21221218M,"Descartes, philosophical writings",,René Descartes,1,,1958,Modern Library,Histoire | Philosophie,0,,,René Descartes,René Descartes=18,FOREIGN_EN_1 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL6188938M,Discurso del método.,,René Descartes,1,,1954,Universdad de Puerto Rico,Sciences,0,,,René Descartes,René Descartes=18,FOREIGN_ES_2
+/books/OL13525626M,Philosophical works,,René Descartes,1,,1955,Dover Publications,Philosophie,0,,,René Descartes,René Descartes=18,FOREIGN_EN_1 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL4468971M,Philosophical writings,,René Descartes,1,,1971,Bobbs-Merrill,Philosophie,0,,,René Descartes,René Descartes=18,FOREIGN_EN_1 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL6017179M,"Candide, and other stories",,Voltaire,1,,1966,Oxford U. P.,Fiction,0,,,Voltaire,Voltaire=15,FOREIGN_EN_1 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL17363989M,Ingenu.,,Voltaire,1,9780631005902,1960,Blackwell,,0,,,Voltaire,Voltaire=15,FOREIGN_PUBLISHER_SIGNAL
+/books/OL5849617M,Philosophical dictionary.,,Voltaire,1,,1962,Basic Books,Philosophie,0,,,Voltaire,Voltaire=15,FOREIGN_EN_2 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL14721037M,The princess of Babylon,,Voltaire,1,,1927,Nonesuch Press,Fiction,0,,,Voltaire,Voltaire=15,FOREIGN_EN_2 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL6950599M,"Zadig, and other stories",,Voltaire,1,,1905,D.C. Heath & Co.,,0,,,Voltaire,Voltaire=15,FOREIGN_EN_1
+/books/OL18338399M,New essays on human understanding,,Gottfried Wilhelm Leibniz,1,9780521298360,1989,Cambridge University Press,Philosophie,0,,,Gottfried Wilhelm Leibniz,Gottfried Wilhelm Leibniz=14,FOREIGN_PUBLISHER_SIGNAL
+/books/OL2059019M,Philosophical essays,,Gottfried Wilhelm Leibniz,1,9780872200623,1989,Hackett Pub. Co.,Philosophie,0,,,Gottfried Wilhelm Leibniz,Gottfried Wilhelm Leibniz=14,FOREIGN_EN_1 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL428772M,Philosophischer Briefwechsel,,Gottfried Wilhelm Leibniz,1,9783787310913,1997,F. Meiner,Philosophie,0,,,Gottfried Wilhelm Leibniz,Gottfried Wilhelm Leibniz=14,FOREIGN_DE_1 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL6937488M,A winter in Russia.,,Théophile Gautier,1,,1874,H. Holt and company,Voyage,0,,,Théophile Gautier,Théophile Gautier=13,FOREIGN_EN_1 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL6978150M,One of Cleopatra's nights,and other fantastic romances.,Théophile Gautier,1,,1882,R. Worthington,,0,,,Théophile Gautier,Théophile Gautier=13,FOREIGN_EN_2
+/books/OL34402727M,Sa Majesté des Puces,,Harold Hutchins | Dav Pilkey | Jose Garibaldi | George Beard,4,9781443173063,2018,"Scholastic Canada, Limited",BD et romans graphiques,0,,,Dav Pilkey,Dav Pilkey=11,MULTI_AUTHOR
+/books/OL15522162M,Gérard Fromanger,,Sarah Wilson | Gilles Deleuze | Michel Foucault | Adrian Rifkin,4,9781901033564,1999,Black Dog Publishing,Arts,0,,,Michel Foucault,Michel Foucault=11,MULTI_AUTHOR
+/books/OL17088603M,The order of things,an archaeology of the human sciences,Michel Foucault,1,9780415267366,2002,Routledge,Histoire | Philosophie,0,,,Michel Foucault,Michel Foucault=11,FOREIGN_EN_3 | FOREIGN_PUBLISHER_SIGNAL
+/books/OL16569518M,Le petit omnibus = The little horse bus,,Graham Greene,1,,1955,Desclée de Brouwer,Fiction,0,,,Graham Greene,Graham Greene=10,FOREIGN_EN_1
+/books/OL16569089M,Routes sans lois = [The lawless roads],,Graham Greene,1,,1949,La Table Ronde,Voyage,0,,,Graham Greene,Graham Greene=10,FOREIGN_EN_1

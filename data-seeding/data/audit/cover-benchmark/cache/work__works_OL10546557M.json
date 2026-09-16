@@ -1,0 +1,50 @@
+{
+  "title": "Cameroon Road Map (Macmillan Traveller's Maps)",
+  "authors": [
+    {
+      "key": "/authors/OL2626105A"
+    }
+  ],
+  "publish_date": "January 1990",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "physical_format": "Map",
+  "publishers": [
+    "Macmillan Education Ltd"
+  ],
+  "isbn_13": [
+    "9780333426739"
+  ],
+  "isbn_10": [
+    "0333426738"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Maps, charts & atlases",
+    "Travel / road maps & atlases",
+    "Africa",
+    "Cameroon",
+    "General",
+    "Travel - Foreign"
+  ],
+  "source_records": [
+    "amazon:0333426738"
+  ],
+  "key": "/books/OL10546557M",
+  "number_of_pages": 1,
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-29T07:00:23.270966"
+  }
+}

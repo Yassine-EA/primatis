@@ -1,0 +1,47 @@
+# Socle éditorial LA — voir fr.toml. Élargi DEV-16.5 §4/§5.
+#
+# Le latin n'ayant pas de période « contemporaine » (langue non
+# vernaculaire depuis l'Antiquité), la diversité visée porte ici sur les
+# genres/époques de la littérature latine antique (épopée, poésie
+# lyrique, rhétorique/philosophie) plutôt que sur classique/moderne/
+# contemporain.
+
+[[authors]]
+author_key = "OL28294A"
+full_name = "Publius Vergilius Maro"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Publius+Vergilius+Maro"
+work_count_at_verification = 2511
+period = "antique (Ier siècle av. J.-C., époque augustéenne)"
+form = "poésie épique"
+selection_rationale = "Auteur latin majeur (Énéide), largement référencé sur Open Library sous des éditions bibliographiquement cohérentes."
+
+[[authors]]
+author_key = "OL18770A"
+full_name = "Ovid"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Ovid"
+work_count_at_verification = 1307
+period = "antique (Ier siècle av./ap. J.-C., époque augustéenne)"
+form = "poésie (Métamorphoses)"
+selection_rationale = "Auteur latin majeur, largement référencé sur Open Library, apporte une diversité de forme poétique au socle LA."
+
+[[authors]]
+author_key = "OL28743A"
+full_name = "Cicero"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Cicero"
+work_count_at_verification = 3491
+period = "antique (Ier siècle av. J.-C., fin de la République)"
+form = "rhétorique, philosophie, essai"
+selection_rationale = "Figure majeure de la prose latine (rhétorique/philosophie), apporte une diversité de forme (hors poésie) au socle LA."
+
+[[authors]]
+author_key = "OL20088A"
+full_name = "Horace"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Quintus+Horatius+Flaccus"
+work_count_at_verification = 817
+period = "antique (Ier siècle av. J.-C., époque augustéenne)"
+form = "poésie lyrique, satire"
+selection_rationale = "Figure majeure de la poésie latine lyrique et satirique, largement référencée sur Open Library."

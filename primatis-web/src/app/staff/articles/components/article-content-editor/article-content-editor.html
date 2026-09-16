@@ -1,0 +1,134 @@
+<p-editor
+  [formControl]="internalControl"
+  [formats]="formats"
+  [placeholder]="placeholder()"
+  [readonly]="disabled()"
+  (onInit)="onEditorInit($event)"
+  (onBlur)="editorBlur.emit()"
+>
+  <ng-template pTemplate="header">
+    <span class="ql-formats">
+      <select class="ql-header" aria-label="Style de titre">
+        <option value="2">Titre 2</option>
+        <option value="3">Titre 3</option>
+        <option value="4">Titre 4</option>
+        <option value="" selected>Normal</option>
+      </select>
+    </span>
+    <span class="ql-formats">
+      <button type="button" class="ql-bold" aria-label="Gras"></button>
+      <button type="button" class="ql-italic" aria-label="Italique"></button>
+      <button type="button" class="ql-underline" aria-label="Souligné"></button>
+    </span>
+    <span class="ql-formats">
+      <button type="button" class="ql-list" value="ordered" aria-label="Liste numérotée"></button>
+      <button type="button" class="ql-list" value="bullet" aria-label="Liste à puces"></button>
+      <button type="button" class="ql-blockquote" aria-label="Citation"></button>
+    </span>
+    <span class="ql-formats">
+      <button type="button" class="ql-link" aria-label="Insérer un lien"></button>
+      <button type="button" class="ql-clean" aria-label="Supprimer la mise en forme"></button>
+    </span>
+    <span class="ql-formats">
+      <button
+        type="button"
+        class="article-content-editor-image-btn"
+        aria-label="Insérer une image"
+        [disabled]="disabled() || uploading()"
+        (click)="triggerImageSelection(imageFileInput)"
+      >
+        @if (uploading()) {
+          <span class="pi pi-spin pi-spinner" aria-hidden="true"></span>
+        } @else {
+          <span class="pi pi-image" aria-hidden="true"></span>
+        }
+      </button>
+      <input
+        #imageFileInput
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        hidden
+        (change)="onImageFileSelected($event)"
+      />
+    </span>
+    <span class="ql-formats">
+      <button
+        type="button"
+        class="article-content-editor-history-btn"
+        aria-label="Annuler"
+        (click)="undo()"
+      >
+        <span class="pi pi-undo" aria-hidden="true"></span>
+      </button>
+      <button
+        type="button"
+        class="article-content-editor-history-btn article-content-editor-history-btn--redo"
+        aria-label="Rétablir"
+        (click)="redo()"
+      >
+        <span class="pi pi-undo" aria-hidden="true"></span>
+      </button>
+    </span>
+  </ng-template>
+</p-editor>
+
+@if (uploadError(); as message) {
+  <p-message severity="error" [text]="message" styleClass="article-content-editor-upload-error" />
+}
+
+<p-dialog
+  [visible]="altDialogVisible()"
+  [modal]="true"
+  header="Texte alternatif de l'image"
+  [closable]="!uploading()"
+  (onHide)="cancelImageInsertion()"
+>
+  <p class="article-content-editor-alt-hint">
+    Décrivez brièvement l'image pour les personnes utilisant un lecteur d'écran.
+  </p>
+
+  @if (altDialogError(); as message) {
+    <p-message severity="error" [text]="message" styleClass="form-banner-error" />
+  }
+
+  <div class="article-content-editor-alt-field">
+    <label for="article-content-editor-alt-input">Texte alternatif</label>
+    <input
+      pInputText
+      id="article-content-editor-alt-input"
+      [ngModel]="altText()"
+      (ngModelChange)="altText.set($event)"
+      [disabled]="decorativeImage()"
+      maxlength="255"
+    />
+  </div>
+
+  <div class="article-content-editor-decorative-field">
+    <p-checkbox
+      [ngModel]="decorativeImage()"
+      (ngModelChange)="decorativeImage.set($event)"
+      [binary]="true"
+      inputId="article-content-editor-decorative"
+    />
+    <label for="article-content-editor-decorative">Image décorative (sans texte alternatif)</label>
+  </div>
+
+  <div class="article-content-editor-alt-actions">
+    <button
+      type="button"
+      pButton
+      label="Annuler"
+      severity="secondary"
+      [disabled]="uploading()"
+      (click)="cancelImageInsertion()"
+    ></button>
+    <button
+      type="button"
+      pButton
+      label="Insérer"
+      icon="pi pi-check"
+      [disabled]="uploading()"
+      (click)="confirmImageInsertion()"
+    ></button>
+  </div>
+</p-dialog>

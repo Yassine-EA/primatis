@@ -1,0 +1,33 @@
+{
+  "title": "Science et vie intellectuelle à Alexandrie",
+  "key": "/works/OL10004562W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3970190A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Ancient Science",
+    "History",
+    "Intellectual life",
+    "Civilization"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-07-06T05:25:41.015543"
+  }
+}

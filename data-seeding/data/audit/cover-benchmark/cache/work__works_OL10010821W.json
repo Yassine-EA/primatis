@@ -1,0 +1,32 @@
+{
+  "title": "Ghana",
+  "key": "/works/OL10010821W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3977355A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Ghanaian Art",
+    "Exhibitions",
+    "Civilization"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:57.594996"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2020-12-07T23:02:04.651530"
+  }
+}

@@ -1,0 +1,108 @@
+.staff-fines-empty img {
+  width: min(9.5rem, 42vw);
+  margin-bottom: 0.2rem;
+}
+
+.staff-fines-table .p-datatable-table {
+  min-width: 86rem;
+}
+
+.staff-fine-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.staff-fine-actions .p-button {
+  min-height: 2.25rem;
+  padding: 0.45rem 0.7rem;
+}
+
+.staff-fine-actions .p-button:first-child {
+  border-color: var(--primatis-navy-700);
+  color: #fff;
+  background: var(--primatis-navy-700);
+}
+
+.staff-fine-actions .p-button:first-child:hover {
+  border-color: var(--primatis-navy-800);
+  background: var(--primatis-navy-800);
+}
+
+@media (max-width: 767px) {
+  .staff-fines-table {
+    overflow: visible;
+    padding: 0.85rem;
+  }
+
+  .staff-fines-table .p-datatable-table {
+    min-width: 0;
+  }
+
+  .staff-fines-table .p-datatable-thead {
+    display: none;
+  }
+
+  .staff-fines-table .p-datatable-tbody,
+  .staff-fines-table .p-datatable-tbody > tr,
+  .staff-fines-table .p-datatable-tbody > tr > td {
+    display: block;
+    width: 100%;
+  }
+
+  .staff-fines-table .p-datatable-tbody > tr {
+    margin-bottom: 0.85rem;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--primatis-ivory-200);
+    border-radius: var(--primatis-radius-sm);
+    box-shadow: 0 6px 18px rgba(8, 43, 64, 0.06);
+  }
+
+  .staff-fines-table .p-datatable-tbody > tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .staff-fines-table .p-datatable-tbody > tr.staff-fine-row-alert {
+    border-left: 3px solid var(--primatis-danger, #b42318);
+  }
+
+  .staff-fines-table .p-datatable-tbody > tr > td {
+    display: grid;
+    grid-template-columns: minmax(7.5rem, 40%) 1fr;
+    align-items: start;
+    gap: 0.65rem;
+    padding: 0.7rem 0.8rem;
+    text-align: right;
+  }
+
+  .staff-fines-table .p-datatable-tbody > tr > td::before {
+    color: var(--primatis-navy-800);
+    content: attr(data-label);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .staff-fines-table .staff-fine-actions {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    padding-top: 0.9rem;
+  }
+
+  .staff-fines-table .staff-fine-actions::before {
+    display: none;
+  }
+
+  .staff-fines-table .staff-fine-actions .p-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .staff-fines-table .p-paginator {
+    flex-wrap: wrap;
+  }
+}

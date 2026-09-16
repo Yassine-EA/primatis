@@ -79,6 +79,57 @@ class ArticleSanitizerTests {
     }
 
     // ---------------------------------------------------------------
+    // Image intégrée (DEV-ARTICLES-MEDIA, DEV-DEC-0079)
+    // ---------------------------------------------------------------
+
+    @Test
+    void keepsInternalRelativeImageSrcWithAlt() {
+        String result = sanitizer.sanitize(
+                "<p>Texte</p><img src=\"/media/articles/abc.webp\" alt=\"Illustration\">");
+
+        assertThat(result)
+                .contains("<img src=\"/media/articles/abc.webp\" alt=\"Illustration\">")
+                .contains("<p>Texte</p>");
+    }
+
+    @Test
+    void keepsAbsoluteHttpsImageSrc() {
+        String result = sanitizer.sanitize("<img src=\"https://primatis.test/media/articles/abc.webp\" alt=\"ok\">");
+
+        assertThat(result).contains("src=\"https://primatis.test/media/articles/abc.webp\"");
+    }
+
+    @Test
+    void removesJavascriptUriFromImageSrc() {
+        String result = sanitizer.sanitize("<img src=\"javascript:alert(1)\" alt=\"x\">");
+
+        assertThat(result).doesNotContain("javascript:").doesNotContain("alert(");
+    }
+
+    @Test
+    void removesDataUriFromImageSrc() {
+        String result = sanitizer.sanitize(
+                "<img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
+                        + "YPhfz0AEYBxVSF+FAAAAAElFTkSuQmCC\" alt=\"x\">");
+
+        assertThat(result).doesNotContain("data:").doesNotContain("base64");
+    }
+
+    @Test
+    void removesArbitraryAttributesFromImage() {
+        String result = sanitizer.sanitize(
+                "<img src=\"/media/articles/abc.webp\" alt=\"x\" style=\"width:9999px\" "
+                        + "onerror=\"alert(1)\" onclick=\"alert(1)\" class=\"evil\" width=\"1\" height=\"1\" "
+                        + "srcset=\"/media/articles/abc.webp 2x\" data-track=\"1\">");
+
+        assertThat(result)
+                .doesNotContain("style=").doesNotContain("onerror").doesNotContain("onclick")
+                .doesNotContain("class=").doesNotContain("width=").doesNotContain("height=")
+                .doesNotContain("srcset=").doesNotContain("data-track").doesNotContain("alert(");
+        assertThat(result).contains("src=\"/media/articles/abc.webp\"").contains("alt=\"x\"");
+    }
+
+    // ---------------------------------------------------------------
     // Contenu dangereux neutralisé
     // ---------------------------------------------------------------
 

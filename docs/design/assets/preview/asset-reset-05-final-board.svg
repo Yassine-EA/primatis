@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600">
+  <defs><style>
+    .serif{font-family:Georgia,serif;fill:#082b40}.sans{font-family:Arial,sans-serif;fill:#405268}
+    .label{font-family:Arial,sans-serif;font-weight:700;fill:#082b40;font-size:22px}.small{font-family:Arial,sans-serif;fill:#526276;font-size:17px}
+  </style></defs>
+  <rect width="1600" height="1600" fill="#faf9f6"/>
+  <text x="80" y="90" class="serif" font-size="52">PRIMATIS — Asset Library Final Gate</text>
+  <text x="80" y="132" class="sans" font-size="22">ASSET-RESET-05 · consolidation canonique</text>
+
+  <g transform="translate(70 180)">
+    <rect width="340" height="130" rx="18" fill="#082b40"/><text x="28" y="52" font-family="Arial" font-size="20" fill="#d7a16e">ASSETS NORMALISÉS</text><text x="28" y="104" font-family="Georgia" font-size="48" fill="#fff">88</text>
+  </g>
+  <g transform="translate(435 180)">
+    <rect width="340" height="130" rx="18" fill="#fff" stroke="#e2d8ca"/><text x="28" y="52" class="small">POIDS CUMULÉ</text><text x="28" y="104" class="serif" font-size="45">2,01 Mio</text>
+  </g>
+  <g transform="translate(800 180)">
+    <rect width="340" height="130" rx="18" fill="#fff" stroke="#e2d8ca"/><text x="28" y="52" class="small">DOUBLONS RUNTIME</text><text x="28" y="104" class="serif" font-size="48">0</text>
+  </g>
+  <g transform="translate(1165 180)">
+    <rect width="365" height="130" rx="18" fill="#fff" stroke="#e2d8ca"/><text x="28" y="52" class="small">SVG VALIDES</text><text x="28" y="104" class="serif" font-size="48">59 / 59</text>
+  </g>
+
+  <text x="80" y="380" class="label">APERÇU DES FAMILLES PUBLIQUES</text>
+  <g>
+    <rect x="70" y="410" width="460" height="250" rx="18" fill="#fff" stroke="#e2d8ca"/><text x="95" y="640" class="label">Home</text>
+    <rect x="570" y="410" width="460" height="250" rx="18" fill="#fff" stroke="#e2d8ca"/><text x="595" y="640" class="label">Catalogue</text>
+    <rect x="1070" y="410" width="460" height="250" rx="18" fill="#fff" stroke="#e2d8ca"/><text x="1095" y="640" class="label">Articles</text>
+    <rect x="70" y="700" width="460" height="250" rx="18" fill="#fff" stroke="#e2d8ca"/><text x="95" y="930" class="label">Georges Lemaître</text>
+    <rect x="570" y="700" width="460" height="250" rx="18" fill="#fff" stroke="#e2d8ca"/><text x="595" y="930" class="label">Login</text>
+    <rect x="1070" y="700" width="460" height="250" rx="18" fill="#fff" stroke="#e2d8ca"/><text x="1095" y="930" class="label">Member</text>
+  </g>
+
+  <text x="80" y="1030" class="label">ARBORESCENCE CANONIQUE</text>
+  <g font-family="Arial,sans-serif" font-size="19" fill="#082b40">
+    <rect x="70" y="1060" width="210" height="80" rx="15" fill="#fff" stroke="#e2d8ca"/><text x="175" y="1108" text-anchor="middle">brand</text>
+    <rect x="295" y="1060" width="210" height="80" rx="15" fill="#fff" stroke="#e2d8ca"/><text x="400" y="1108" text-anchor="middle">patterns</text>
+    <rect x="520" y="1060" width="210" height="80" rx="15" fill="#fff" stroke="#e2d8ca"/><text x="625" y="1108" text-anchor="middle">icons</text>
+    <rect x="745" y="1060" width="210" height="80" rx="15" fill="#fff" stroke="#e2d8ca"/><text x="850" y="1108" text-anchor="middle">fallbacks</text>
+    <rect x="970" y="1060" width="210" height="80" rx="15" fill="#f4e6d8" stroke="#b87333"/><text x="1075" y="1108" text-anchor="middle">shared</text>
+    <rect x="1195" y="1060" width="160" height="80" rx="15" fill="#fff" stroke="#e2d8ca"/><text x="1275" y="1108" text-anchor="middle">public</text>
+    <rect x="1370" y="1060" width="160" height="80" rx="15" fill="#fff" stroke="#e2d8ca"/><text x="1450" y="1095" text-anchor="middle">member</text><text x="1450" y="1120" text-anchor="middle">staff-admin</text>
+  </g>
+  <rect x="70" y="1185" width="1460" height="250" rx="18" fill="#082b40"/>
+  <text x="105" y="1240" font-family="Arial" font-size="22" font-weight="700" fill="#d7a16e">FINAL GATE</text>
+  <text x="105" y="1290" font-family="Georgia" font-size="38" fill="#fff">Une seule source par asset. Aucun visuel ne fabrique le métier.</text>
+  <text x="105" y="1340" font-family="Arial" font-size="19" fill="#d8e0e4">Formats, poids, accessibilité, provenance et chemins d’intégration contrôlés.</text>
+  <text x="105" y="1390" font-family="Arial" font-size="19" fill="#d8e0e4">84 intégrables · 4 icônes sociales conservées mais explicitement désactivées.</text>
+
+  <text x="80" y="1515" class="small">Statut : PASS TECHNIQUE · en attente de validation finale du propriétaire</text>
+</svg>

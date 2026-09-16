@@ -1,0 +1,65 @@
+{
+  "publishers": [
+    "Réunion des musées nationaux",
+    "Réunion des Musées Nationaux"
+  ],
+  "number_of_pages": 118,
+  "weight": "10.6 ounces",
+  "source_records": [
+    "marc:marc_loc_2016/BooksAll.2016.part01.utf8:134613361:910",
+    "promise:bwb_daily_pallets_2023-02-02:KS-175-300",
+    "marc:marc_columbia/Columbia-extract-20221130-006.mrc:221246072:1231",
+    "marc:harvard_bibliographic_metadata/20220215_002.bib.mrc:120881463:4857"
+  ],
+  "title": "Courbet et la Commune",
+  "type": {
+    "key": "/type/edition"
+  },
+  "identifiers": {
+    "goodreads": [
+      "2594275"
+    ]
+  },
+  "isbn_13": [
+    "9782711840069"
+  ],
+  "isbn_10": [
+    "2711840069"
+  ],
+  "publish_date": "February 26, 2000",
+  "key": "/books/OL12527002M",
+  "works": [
+    {
+      "key": "/works/OL11227042W"
+    }
+  ],
+  "physical_format": "Paperback",
+  "physical_dimensions": "8.4 x 6.1 x 0.4 inches",
+  "local_id": [
+    "urn:bwbsku:KS-175-300"
+  ],
+  "lccn": [
+    "00359354"
+  ],
+  "lc_classifications": [
+    "ND553.C9 A4 2000"
+  ],
+  "oclc_numbers": [
+    "43803450"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 8,
+  "revision": 8,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-04-27T23:38:30.445323"
+  }
+}

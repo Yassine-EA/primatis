@@ -1,0 +1,61 @@
+{
+  "publishers": [
+    "Le Félin"
+  ],
+  "subtitle": "la flore et la faune",
+  "weight": "10.9 ounces",
+  "physical_format": "Paperback",
+  "key": "/books/OL12635717M",
+  "authors": [
+    {
+      "key": "/authors/OL3971009A"
+    }
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "title": "La toponymie celtique: L'origine des noms de lieux en Bretagne ",
+  "number_of_pages": 247,
+  "isbn_13": [
+    "9782866451387"
+  ],
+  "isbn_10": [
+    "2866451384"
+  ],
+  "publish_date": "April 23, 1993",
+  "works": [
+    {
+      "key": "/works/OL10005238W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "8.3 x 5.5 x 0.8 inches",
+  "lc_classifications": [
+    "DC611.B854 P59 1989g",
+    "DC611.B854 P59 1989"
+  ],
+  "oclc_numbers": [
+    "21877119"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-002.mrc:381117055:1502",
+    "marc:harvard_bibliographic_metadata/ab.bib.01.20150123.full.mrc:801502569:1091"
+  ],
+  "lccn": [
+    "90128886"
+  ],
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-18T11:22:54.707847"
+  }
+}

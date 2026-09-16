@@ -1,0 +1,56 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "6511490"
+    ]
+  },
+  "title": "Juliette, Georges",
+  "subtitle": "Et Les Autres, Vieillir a Domicile",
+  "authors": [
+    {
+      "key": "/authors/OL689779A"
+    },
+    {
+      "key": "/authors/OL2857779A"
+    }
+  ],
+  "publish_date": "November 1998",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publishers": [
+    "Thomas T Beeler"
+  ],
+  "isbn_13": [
+    "9782890352131"
+  ],
+  "edition_name": "Largeprint edition",
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "2890352137"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Human Services",
+    "Social Science",
+    "Sociology"
+  ],
+  "source_records": [
+    "amazon:2890352137"
+  ],
+  "key": "/books/OL12646515M",
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-17T03:12:17.169544"
+  }
+}

@@ -1,7 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { Router, provideRouter } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { Select } from 'primeng/select';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -13,7 +15,15 @@ import { StaffCatalogueApiService } from '../../../../catalogue/services/staff-c
 import { StaffTitleCreatePage } from './staff-title-create-page';
 
 function buildAuthor(overrides: Partial<AuthorResponse> = {}): AuthorResponse {
-  return { id: 1, fullName: 'Victor Hugo', birthDate: null, deathDate: null, nationality: null, biography: null, ...overrides };
+  return {
+    id: 1,
+    fullName: 'Victor Hugo',
+    birthDate: null,
+    deathDate: null,
+    nationality: null,
+    biography: null,
+    ...overrides,
+  };
 }
 
 function buildGenre(overrides: Partial<GenreResponse> = {}): GenreResponse {
@@ -69,8 +79,14 @@ describe('StaffTitleCreatePage', () => {
   function configure(): void {
     staffCatalogueApiServiceMock = {
       createTitle: vi.fn().mockReturnValue(of(buildTitleDetail())),
-      searchAuthors: vi.fn().mockReturnValue(of({ content: [], page: 0, size: 20, totalElements: 0, totalPages: 0 })),
-      searchGenres: vi.fn().mockReturnValue(of({ content: [buildGenre()], page: 0, size: 100, totalElements: 1, totalPages: 1 })),
+      searchAuthors: vi
+        .fn()
+        .mockReturnValue(of({ content: [], page: 0, size: 20, totalElements: 0, totalPages: 0 })),
+      searchGenres: vi
+        .fn()
+        .mockReturnValue(
+          of({ content: [buildGenre()], page: 0, size: 100, totalElements: 1, totalPages: 1 }),
+        ),
     };
 
     TestBed.configureTestingModule({
@@ -93,6 +109,32 @@ describe('StaffTitleCreatePage', () => {
   }
 
   beforeEach(() => configure());
+
+  it('should render the three editorial sections and a return link to the catalogue', () => {
+    createComponent();
+
+    const headings = Array.from(fixture.nativeElement.querySelectorAll('section h2')).map(
+      (heading) => (heading as HTMLElement).textContent?.trim(),
+    );
+    const backLink: HTMLAnchorElement | null = fixture.nativeElement.querySelector(
+      'a[href="/staff/catalogue"]',
+    );
+
+    expect(headings).toEqual([
+      'Identité bibliographique',
+      'Données de publication',
+      'Auteurs et classification',
+    ]);
+    expect(backLink).not.toBeNull();
+  });
+
+  it('should append the language options overlay to the body', () => {
+    createComponent();
+
+    const select = fixture.debugElement.query(By.directive(Select));
+
+    expect(select.componentInstance.appendTo()).toBe('body');
+  });
 
   it('should require title, language and at least one author', () => {
     createComponent();
@@ -133,7 +175,12 @@ describe('StaffTitleCreatePage', () => {
     component.submit();
 
     const request = staffCatalogueApiServiceMock.createTitle.mock.calls[0][0] as CreateTitleRequest;
-    expect(request).toEqual({ title: 'Germinal', language: 'FR', authorIds: [5], publicationYear: 1885 });
+    expect(request).toEqual({
+      title: 'Germinal',
+      language: 'FR',
+      authorIds: [5],
+      publicationYear: 1885,
+    });
   });
 
   it('should include genreIds only when at least one genre is selected', () => {
@@ -162,7 +209,9 @@ describe('StaffTitleCreatePage', () => {
   });
 
   it('should show the backend error message on failure', () => {
-    staffCatalogueApiServiceMock.createTitle.mockReturnValue(throwError(() => apiHttpError('ISBN_ALREADY_EXISTS', 'Un titre existe déjà avec cet ISBN.')));
+    staffCatalogueApiServiceMock.createTitle.mockReturnValue(
+      throwError(() => apiHttpError('ISBN_ALREADY_EXISTS', 'Un titre existe déjà avec cet ISBN.')),
+    );
     createComponent();
     component.form.controls.title.setValue('Germinal');
     component.form.controls.language.setValue('FR');

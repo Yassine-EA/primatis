@@ -1,0 +1,62 @@
+DEV-16 — FINAL COVER SOURCE AUDIT v1
+====================================
+
+ACQUISITION CORPUS
+==================
+
+Final acquisitions       : 4576
+
+DE: 111
+EN: 700
+ES: 172
+FR: 2580
+IT: 163
+LA: 50
+NL: 800
+
+LOCAL COVER STATE
+=================
+
+LOCAL_FILE_OK            : 4576
+
+LOCAL FILES BY LANGUAGE
+=======================
+DE: 111/111 (100.00%)
+EN: 700/700 (100.00%)
+ES: 172/172 (100.00%)
+FR: 2580/2580 (100.00%)
+IT: 163/163 (100.00%)
+LA: 50/50 (100.00%)
+NL: 800/800 (100.00%)
+
+CONTENT DUPLICATES
+==================
+
+Duplicate SHA-256 groups   : 16
+Duplicate occurrences      : 16
+
+EXISTING COVERED KEEP
+=====================
+
+KEEP rows                  : 6297
+Detected cover-like columns: NONE
+KEEP with ≥1 cover ref     : 0/6297
+
+POLICY
+======
+
+This audit performs no copy and no deletion.
+Only exact final acquisition rows are inspected.
+Caches remain untouched.
+Physical image duplicates are detected by SHA-256.
+Existing KEEP cover references are inventoried, not modified.
+data/covers remains untouched.
+
+OUTPUTS
+=======
+
+data/audit/final-cover-acquisition-source-manifest.csv
+data/audit/final-cover-acquisition-unresolved.csv
+data/audit/final-cover-acquisition-content-duplicates.csv
+data/audit/final-cover-existing-keep-reference-audit.csv
+data/audit/final-cover-source-audit-report.txt

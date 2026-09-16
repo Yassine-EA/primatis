@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TagModule } from 'primeng/tag';
 
 import { AppError } from '../../../../core/errors/api-error';
@@ -8,6 +9,13 @@ import { toAppError } from '../../../../core/errors/api-error.util';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  accountStatusSeverity as sharedAccountStatusSeverity,
+  memberStatusSeverity as sharedMemberStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
+import { AccountStatus } from '../../../../user/models/account-status';
+import { MemberStatus } from '../../../../user/models/member-status';
 import { ResidenceResponse } from '../../../../user/models/residence-response';
 import { UserResponse } from '../../../../user/models/user-response';
 import { ResidenceApiService } from '../../../../user/services/residence-api.service';
@@ -25,7 +33,7 @@ const INVALID_USER_ID_ERROR: AppError = { message: "Identifiant d'utilisateur in
  */
 @Component({
   selector: 'app-staff-user-detail-page',
-  imports: [TagModule, LoadingState, EmptyState, ErrorState],
+  imports: [RouterLink, TagModule, LoadingState, EmptyState, ErrorState],
   templateUrl: './staff-user-detail-page.html',
   styleUrl: './staff-user-detail-page.scss',
 })
@@ -33,6 +41,7 @@ export class StaffUserDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly userApiService = inject(UserApiService);
   private readonly residenceApiService = inject(ResidenceApiService);
+  private readonly titleService = inject(Title);
 
   readonly user = signal<UserResponse | null>(null);
   readonly userLoading = signal(false);
@@ -61,6 +70,30 @@ export class StaffUserDetailPage {
     });
   }
 
+  accountStatusSeverity(status: AccountStatus): StatusTagSeverity {
+    return sharedAccountStatusSeverity(status);
+  }
+
+  memberStatusSeverity(status: MemberStatus): StatusTagSeverity {
+    return sharedMemberStatusSeverity(status);
+  }
+
+  // Même précédent exact que StaffUsersPage/MemberProfilePage (DEV-15.8/DEV-15.6).
+  accountStatusLabel(status: AccountStatus): string {
+    return status === 'ACTIVE' ? 'Actif' : 'Désactivé';
+  }
+
+  memberStatusLabel(status: MemberStatus): string {
+    switch (status) {
+      case 'ACTIVE':
+        return 'Actif';
+      case 'BLOCKED':
+        return 'Bloqué';
+      case 'EXPIRED':
+        return 'Expiré';
+    }
+  }
+
   private loadUser(id: number): void {
     this.userLoading.set(true);
     this.userError.set(null);
@@ -68,6 +101,7 @@ export class StaffUserDetailPage {
       next: (value) => {
         this.user.set(value.user);
         this.userLoading.set(false);
+        this.titleService.setTitle(`${value.user.firstName} ${value.user.lastName} — PRIMATIS`);
       },
       error: (err: unknown) => {
         this.userLoading.set(false);

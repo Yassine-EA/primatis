@@ -1,0 +1,27 @@
+DEV-16 RECONSTRUCTION — LA REPLACEMENT SEARCH
+=============================================
+
+Replacement targets     : 2
+Best candidates found   : 1
+No candidate            : 1
+
+RESULTS
+=======
+- Érasme / Colloquia familiaria -> BEST_CANDIDATE_FOUND
+  edition : Colloquia Familiaria...
+  key     : /books/OL50818108M
+  langs   : lat
+  cover   : VALID_COVER
+- Lorenzo Valla / Elegantiae linguae latinae -> NO_CANDIDATE
+
+POLICY
+======
+
+Replacement works were selected for editorial value first.
+Latin is mandatory at edition level.
+Valid physical cover is mandatory.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

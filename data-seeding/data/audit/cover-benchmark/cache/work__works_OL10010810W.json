@@ -1,0 +1,32 @@
+{
+  "title": "Croisement de signes",
+  "key": "/works/OL10010810W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3977342A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Semiotics in art",
+    "Exhibitions",
+    "Semiotics"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:57.594996"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-14T10:45:20.765455"
+  }
+}

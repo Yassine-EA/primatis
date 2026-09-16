@@ -107,6 +107,15 @@ describe('StaffLoansPage', () => {
     expect(loanApiServiceMock.listLoans).toHaveBeenCalledWith(0, 20);
   });
 
+  it('should set the document title (DEV-15.7)', () => {
+    configure();
+    loanApiServiceMock.listLoans.mockReturnValue(of(buildPage([buildLoan()])));
+
+    createComponent();
+
+    expect(document.title).toBe('Prêts et retours — PRIMATIS');
+  });
+
   it('should render borrower firstName/lastName/memberNumber', () => {
     configure();
     loanApiServiceMock.listLoans.mockReturnValue(
@@ -138,7 +147,7 @@ describe('StaffLoansPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('ACTIVE');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('En cours');
   });
 
   it('should render OVERDUE loans', () => {
@@ -147,7 +156,7 @@ describe('StaffLoansPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('OVERDUE');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('En retard');
   });
 
   it('should render RETURNED loans', () => {
@@ -158,7 +167,7 @@ describe('StaffLoansPage', () => {
 
     createComponent();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('RETURNED');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Retourné');
   });
 
   it('should render a placeholder, not a raw null, when returnDate is absent', () => {

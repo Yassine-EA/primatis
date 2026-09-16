@@ -1,0 +1,42 @@
+{
+  "title": "Telliamed",
+  "key": "/works/OL10566311W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL4389097A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL1083214A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Science",
+    "Early works to 1800",
+    "Evolution",
+    "History",
+    "Geology"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T03:11:07.075113"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2023-12-10T14:16:18.747550"
+  }
+}

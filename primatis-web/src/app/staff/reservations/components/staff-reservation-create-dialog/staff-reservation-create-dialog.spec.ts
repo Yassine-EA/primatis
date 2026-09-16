@@ -233,6 +233,29 @@ describe('StaffReservationCreateDialog', () => {
     expect(component.memberSearchTerm()).toBe('');
   });
 
+  it('should re-run the exact same member search across two dialog sessions (DEV-15.8 regression)', () => {
+    // Bug réel identique à LoanCreateDialog (DEV-15.7) : le dialog n'est
+    // jamais détruit entre deux ouvertures (seuls les Signals sont
+    // réinitialisés), un `distinctUntilChanged()` sur le Subject de
+    // recherche supprimait silencieusement une seconde recherche
+    // identique à la première.
+    createComponent();
+    component.onMemberSearchInput('M000000001');
+    vi.advanceTimersByTime(300);
+    expect(userApiServiceMock.listUsers).toHaveBeenCalledTimes(1);
+
+    fixture.componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    userApiServiceMock.listUsers.mockClear();
+
+    component.onMemberSearchInput('M000000001');
+    vi.advanceTimersByTime(300);
+
+    expect(userApiServiceMock.listUsers).toHaveBeenCalledWith(0, 20, 'M000000001');
+  });
+
   // ---------------------------------------------------------------
   // Titre
   // ---------------------------------------------------------------
@@ -264,6 +287,28 @@ describe('StaffReservationCreateDialog', () => {
     vi.advanceTimersByTime(300);
 
     expect(catalogueApiServiceMock.searchTitles).not.toHaveBeenCalled();
+  });
+
+  it('should re-run the exact same title search across two dialog sessions (DEV-15.8 regression)', () => {
+    createComponent();
+    component.onTitleSearchInput('Les Misérables');
+    vi.advanceTimersByTime(300);
+    expect(staffCatalogueApiServiceMock.searchTitles).toHaveBeenCalledTimes(1);
+
+    fixture.componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    staffCatalogueApiServiceMock.searchTitles.mockClear();
+
+    component.onTitleSearchInput('Les Misérables');
+    vi.advanceTimersByTime(300);
+
+    expect(staffCatalogueApiServiceMock.searchTitles).toHaveBeenCalledWith({
+      q: 'Les Misérables',
+      page: 0,
+      size: 20,
+    });
   });
 
   it('should display title results', () => {

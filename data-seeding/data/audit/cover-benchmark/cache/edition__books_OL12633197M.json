@@ -1,0 +1,58 @@
+{
+  "publishers": [
+    "Pub - Publications de la"
+  ],
+  "subtitle": "Hildegarde de Bingen, abbesse et prophétesse rhénane",
+  "weight": "12 ounces",
+  "physical_format": "Paperback",
+  "key": "/books/OL12633197M",
+  "authors": [
+    {
+      "key": "/authors/OL3969749A"
+    }
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "title": "La Sibylle du Rhin",
+  "number_of_pages": 211,
+  "isbn_13": [
+    "9782859442972"
+  ],
+  "isbn_10": [
+    "2859442979"
+  ],
+  "publish_date": "January 1, 1996",
+  "works": [
+    {
+      "key": "/works/OL10004219W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "9.4 x 6.3 x 0.5 inches",
+  "oclc_numbers": [
+    "222116028",
+    "36229816"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-004.mrc:445852338:1136",
+    "marc:harvard_bibliographic_metadata/20220215_030.bib.mrc:66453357:1711"
+  ],
+  "lc_classifications": [
+    "BX890.H523 G58 1996"
+  ],
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-29T18:42:11.100913"
+  }
+}

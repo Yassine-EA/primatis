@@ -1,45 +1,76 @@
 <p-dialog
   [visible]="visible()"
   [modal]="true"
+  [draggable]="false"
+  appendTo="body"
+  styleClass="staff-catalogue-dialog staff-genre-dialog"
   [header]="isCreate ? 'Nouveau genre' : 'Modifier le genre'"
   [closable]="!submitting()"
   (onHide)="cancel()"
 >
-  <form [formGroup]="form" (ngSubmit)="submit()">
+  <form class="staff-catalogue-dialog-form" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="staff-catalogue-dialog-intro">
+      <span aria-hidden="true"><i class="pi pi-tags"></i></span>
+      <div>
+        <strong>{{ isCreate ? 'Créer une catégorie' : 'Mettre à jour la catégorie' }}</strong>
+        <p>Le code reste la référence stable utilisée par le catalogue.</p>
+      </div>
+    </div>
+
     @if (errorMessage(); as message) {
       <p-message severity="error" [text]="message" styleClass="form-banner-error" />
     }
 
-    <div class="form-field">
-      <label for="genre-code">Code</label>
-      <input pInputText id="genre-code" formControlName="code" />
-      @if (form.controls.code.invalid && form.controls.code.touched) {
-        <p-message severity="error" text="Le code est requis." />
-      }
-      @if (fieldError('code'); as message) {
-        <p-message severity="error" [text]="message" />
-      }
-    </div>
+    <div class="staff-catalogue-dialog-grid">
+      <div class="form-field">
+        <label for="genre-code">Code <span aria-hidden="true">*</span></label>
+        <input pInputText id="genre-code" formControlName="code" placeholder="Ex. SCIENCE" />
+        @if (form.controls.code.invalid && form.controls.code.touched) {
+          <p-message severity="error" text="Le code est requis." />
+        }
+        @if (fieldError('code'); as message) {
+          <p-message severity="error" [text]="message" />
+        }
+      </div>
 
-    <div class="form-field">
-      <label for="genre-label">Libellé</label>
-      <input pInputText id="genre-label" formControlName="label" />
-      @if (form.controls.label.invalid && form.controls.label.touched) {
-        <p-message severity="error" text="Le libellé est requis." />
-      }
-      @if (fieldError('label'); as message) {
-        <p-message severity="error" [text]="message" />
-      }
-    </div>
+      <div class="form-field">
+        <label for="genre-label">Libellé <span aria-hidden="true">*</span></label>
+        <input pInputText id="genre-label" formControlName="label" placeholder="Ex. Sciences" />
+        @if (form.controls.label.invalid && form.controls.label.touched) {
+          <p-message severity="error" text="Le libellé est requis." />
+        }
+        @if (fieldError('label'); as message) {
+          <p-message severity="error" [text]="message" />
+        }
+      </div>
 
-    <div class="form-field">
-      <label for="genre-description">Description</label>
-      <input pInputText id="genre-description" formControlName="description" />
+      <div class="form-field staff-catalogue-dialog-wide">
+        <label for="genre-description">Description</label>
+        <textarea
+          id="genre-description"
+          formControlName="description"
+          rows="4"
+          placeholder="Précisez le périmètre de ce genre…"
+        ></textarea>
+      </div>
     </div>
 
     <div class="form-actions">
-      <button type="button" pButton label="Annuler" severity="secondary" [disabled]="submitting()" (click)="cancel()"></button>
-      <button type="submit" pButton label="Enregistrer" [disabled]="submitting()"></button>
+      <button
+        type="button"
+        pButton
+        label="Annuler"
+        severity="secondary"
+        [disabled]="submitting()"
+        (click)="cancel()"
+      ></button>
+      <button
+        type="submit"
+        pButton
+        icon="pi pi-check"
+        label="Enregistrer"
+        [disabled]="submitting()"
+      ></button>
     </div>
   </form>
 </p-dialog>

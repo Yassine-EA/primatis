@@ -1,49 +1,130 @@
-<h1>Articles</h1>
+<div class="page-shell staff-loans-page staff-articles-page">
+  <header class="page-header staff-loans-hero staff-articles-hero">
+    <div class="staff-loans-hero-copy">
+      <span class="staff-page-kicker">Contenus éditoriaux</span>
+      <h1 class="page-title">Gestion des articles</h1>
+      <p class="page-description">
+        Consultez les publications, suivez leur statut éditorial et accédez à leur gestion.
+      </p>
+    </div>
 
-<div class="page-actions">
-  <a routerLink="/staff/articles/new" class="create-link">Créer un article</a>
-  <a routerLink="/staff/articles/tags" class="tags-link">Gérer les tags</a>
-</div>
+    <div class="staff-articles-hero-actions">
+      <a
+        pButton
+        routerLink="/staff/articles/tags"
+        icon="pi pi-tags"
+        label="Gérer les tags"
+        severity="secondary"
+        class="staff-articles-tags-link"
+      ></a>
+      <a
+        pButton
+        routerLink="/staff/articles/new"
+        icon="pi pi-plus"
+        label="Créer un article"
+        class="staff-loans-create-button staff-articles-create-link"
+      ></a>
+    </div>
+  </header>
 
-@if (loading() && rows().length === 0 && !error()) {
-  <app-loading-state message="Chargement des articles…" />
-} @else if (error(); as currentError) {
-  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
-} @else if (rows().length === 0) {
-  <app-empty-state title="Aucun article" message="Aucun article n'a encore été créé." />
-} @else {
-  <p-table
-    [value]="rows()"
-    [lazy]="true"
-    [lazyLoadOnInit]="false"
-    [paginator]="true"
-    [rows]="20"
-    [first]="0"
-    [totalRecords]="totalRecords()"
-    [loading]="loading()"
-    (onLazyLoad)="onLazyLoad($event)"
+  <section
+    class="staff-loans-register staff-articles-register"
+    aria-labelledby="staff-articles-register-title"
   >
-    <ng-template pTemplate="header">
-      <tr>
-        <th scope="col">Titre</th>
-        <th scope="col">Statut</th>
-        <th scope="col">Auteur</th>
-        <th scope="col">Modifié le</th>
-        <th scope="col">Publié le</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-row>
-      <tr>
-        <td>
-          <a [routerLink]="['/staff/articles', row.id]" [attr.aria-label]="'Voir l\'article ' + row.title">{{ row.title }}</a>
-        </td>
-        <td>
-          <p-tag [value]="row.articleStatus" [severity]="articleStatusSeverity(row.articleStatus)" />
-        </td>
-        <td>{{ authorName(row.author) }}</td>
-        <td>{{ row.updatedAt }}</td>
-        <td>{{ row.publishedAt ?? '—' }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-}
+    <div class="staff-loans-register-heading">
+      <div>
+        <span class="staff-page-kicker">Registre éditorial</span>
+        <h2 id="staff-articles-register-title">Articles enregistrés</h2>
+      </div>
+
+      @if (!loading() && !error()) {
+        <span class="staff-loans-count">
+          {{ totalRecords() }} article{{ totalRecords() === 1 ? '' : 's' }}
+        </span>
+      }
+    </div>
+
+    @if (loading() && rows().length === 0 && !error()) {
+      <div class="staff-loans-feedback">
+        <app-loading-state message="Chargement des articles…" />
+      </div>
+    } @else if (error(); as currentError) {
+      <div class="staff-loans-feedback">
+        <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+      </div>
+    } @else if (rows().length === 0) {
+      <div class="staff-loans-empty staff-articles-empty">
+        <img
+          src="/assets/staff-admin/empty-states/management-empty.svg"
+          alt=""
+          width="210"
+          height="140"
+        />
+        <app-empty-state title="Aucun article" message="Aucun article n'a encore été créé." />
+      </div>
+    } @else {
+      <div class="staff-table-container staff-articles-table">
+        <p-table
+          [value]="rows()"
+          [lazy]="true"
+          [lazyLoadOnInit]="false"
+          [paginator]="true"
+          [rows]="20"
+          [first]="0"
+          [totalRecords]="totalRecords()"
+          [loading]="loading()"
+          (onLazyLoad)="onLazyLoad($event)"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th scope="col">Article</th>
+              <th scope="col">Statut</th>
+              <th scope="col">Auteur</th>
+              <th scope="col" class="staff-col-muted">Modifié le</th>
+              <th scope="col" class="staff-col-muted">Publié le</th>
+              <th scope="col">Action</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td data-label="Article">
+                <div class="staff-article-title-cell">
+                  <span class="staff-article-icon" aria-hidden="true">
+                    <i class="pi pi-file-edit"></i>
+                  </span>
+                  <div>
+                    <strong>{{ row.title }}</strong>
+                    @if (row.summary) {
+                      <span class="staff-article-summary">{{ row.summary }}</span>
+                    }
+                  </div>
+                </div>
+              </td>
+              <td data-label="Statut">
+                <p-tag
+                  [value]="articleStatusLabel(row.articleStatus)"
+                  [severity]="articleStatusSeverity(row.articleStatus)"
+                />
+              </td>
+              <td data-label="Auteur">{{ authorName(row.author) }}</td>
+              <td data-label="Modifié le" class="staff-col-muted">{{ row.updatedAt }}</td>
+              <td data-label="Publié le" class="staff-col-muted">{{ row.publishedAt ?? '—' }}</td>
+              <td data-label="Action" class="staff-article-action">
+                <a
+                  pButton
+                  severity="secondary"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  label="Consulter"
+                  [routerLink]="['/staff/articles', row.id]"
+                  [attr.aria-label]="'Voir l\'article ' + row.title"
+                ></a>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    }
+  </section>
+</div>

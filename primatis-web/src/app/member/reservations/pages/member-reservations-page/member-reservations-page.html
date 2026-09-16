@@ -1,68 +1,192 @@
-<div class="page-header">
-  <h1>Mes réservations</h1>
-  <button type="button" pButton label="Nouvelle réservation" severity="secondary" (click)="openCreateDialog()"></button>
-</div>
+<div class="member-reservations-v3">
+  <header class="member-reservations-v3-hero">
+    <picture aria-hidden="true">
+      <source
+        media="(max-width: 768px)"
+        srcset="/assets/member/shared/member-hero-768-mobile.webp"
+      />
+      <source media="(max-width: 1439px)" srcset="/assets/member/shared/member-hero-1280.webp" />
+      <img src="/assets/member/shared/member-hero-1920.webp" alt="" />
+    </picture>
+    <div class="member-reservations-v3-hero-content">
+      <p class="member-reservations-v3-kicker">Espace membre</p>
+      <h1>Mes réservations</h1>
+      <p>Des livres qui vous attendent.</p>
+    </div>
+  </header>
 
-<app-reservation-create-dialog
-  [visible]="createDialogVisible()"
-  (closed)="closeCreateDialog()"
-  (saved)="onReservationCreated($event)"
-/>
+  <div class="member-reservations-v3-content">
+    <div class="member-reservations-v3-toolbar">
+      <div>
+        <p class="member-reservations-v3-kicker">Votre sélection</p>
+        <h2>Réservations</h2>
+        <p>
+          {{ totalRecords() }} réservation{{ totalRecords() > 1 ? 's' : '' }} enregistrée{{
+            totalRecords() > 1 ? 's' : ''
+          }}
+        </p>
+      </div>
+      <button
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        label="Nouvelle réservation"
+        (click)="openCreateDialog()"
+      ></button>
+    </div>
 
-@if (loading() && rows().length === 0 && !error()) {
-  <app-loading-state message="Chargement de vos réservations…" />
-} @else if (error(); as currentError) {
-  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
-} @else if (rows().length === 0) {
-  <app-empty-state title="Aucune réservation" message="Aucune réservation à afficher." />
-} @else {
-  <p-table
-    [value]="rows()"
-    [lazy]="true"
-    [lazyLoadOnInit]="false"
-    [paginator]="true"
-    [rows]="20"
-    [first]="0"
-    [totalRecords]="totalRecords()"
-    [loading]="loading()"
-    (onLazyLoad)="onLazyLoad($event)"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th scope="col">Titre</th>
-        <th scope="col">Date de réservation</th>
-        <th scope="col">Expiration</th>
-        <th scope="col">Exemplaire</th>
-        <th scope="col">Statut</th>
-        <th scope="col">Action</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-reservation>
-      <tr>
-        <td>{{ reservation.title.title }}</td>
-        <td>{{ reservation.reservationDate }}</td>
-        <td>{{ reservation.expirationDate ?? '—' }}</td>
-        <td>{{ reservation.assignedCopy?.inventoryCode ?? '—' }}</td>
-        <td>
-          <p-tag
-            [value]="reservation.reservationStatus"
-            [severity]="reservationStatusSeverity(reservation.reservationStatus)"
-          />
-        </td>
-        <td>
-          @if (isCancellable(reservation)) {
-            <button
-              type="button"
-              pButton
-              severity="secondary"
-              label="Annuler"
-              [disabled]="cancellingReservationId() === reservation.id"
-              [attr.aria-label]="'Annuler la réservation de ' + reservation.title.title"
-              (click)="confirmCancel(reservation)"
-            ></button>
+    <app-reservation-create-dialog
+      [visible]="createDialogVisible()"
+      (closed)="closeCreateDialog()"
+      (saved)="onReservationCreated($event)"
+    />
+
+    @if (loading() && rows().length === 0 && !error()) {
+      <section class="member-reservations-v3-state">
+        <app-loading-state message="Chargement de vos réservations…" />
+      </section>
+    } @else if (error(); as currentError) {
+      <section class="member-reservations-v3-state">
+        <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+      </section>
+    } @else if (rows().length === 0) {
+      <section class="member-reservations-v3-state">
+        <div class="member-reservations-v3-state-content">
+          <img src="/assets/fallbacks/empty-states/reservations.svg" alt="" aria-hidden="true" />
+          <app-empty-state title="Aucune réservation" message="Vous n'avez aucune réservation." />
+        </div>
+      </section>
+    } @else {
+      <div class="member-reservations-v3-layout">
+        <section
+          class="member-reservations-v3-list"
+          aria-labelledby="member-reservations-list-title"
+        >
+          <div class="member-reservations-v3-summary">
+            <h2 id="member-reservations-list-title">Toutes les réservations</h2>
+            <div aria-label="Synthèse de la page affichée">
+              <span
+                ><strong>{{ waitingCount() }}</strong> en attente</span
+              >
+              <span
+                ><strong>{{ readyCount() }}</strong> prête{{ readyCount() > 1 ? 's' : '' }}</span
+              >
+            </div>
+          </div>
+
+          <div class="member-reservations-v3-cards">
+            @for (reservation of rows(); track reservation.id) {
+              <article>
+                <img src="/assets/fallbacks/cover-compact.svg" alt="" aria-hidden="true" />
+                <div class="member-reservations-v3-book">
+                  <a [routerLink]="['/catalogue', reservation.title.id]">{{
+                    reservation.title.title
+                  }}</a>
+                  @if (reservation.title.isbn) {
+                    <span>ISBN {{ reservation.title.isbn }}</span>
+                  }
+                  <span>Réservée le {{ formatDate(reservation.reservationDate) }}</span>
+                </div>
+
+                <div class="member-reservations-v3-status">
+                  <p-tag
+                    [value]="reservationStatusLabel(reservation.reservationStatus)"
+                    [severity]="reservationStatusSeverity(reservation.reservationStatus)"
+                  />
+                  @if (reservation.reservationStatus === 'READY') {
+                    <strong
+                      >Disponible jusqu’au {{ formatDate(reservation.expirationDate) }}</strong
+                    >
+                  } @else if (reservation.reservationStatus === 'WAITING') {
+                    <span>Vous serez informé dès sa mise à disposition.</span>
+                  } @else if (reservation.expirationDate) {
+                    <span>Échéance : {{ formatDate(reservation.expirationDate) }}</span>
+                  }
+                  @if (reservation.assignedCopy) {
+                    <span>Exemplaire {{ reservation.assignedCopy.inventoryCode }}</span>
+                  } @else {
+                    <span>Exemplaire —</span>
+                  }
+                </div>
+
+                <div class="member-reservations-v3-actions">
+                  <a
+                    pButton
+                    severity="secondary"
+                    [routerLink]="['/catalogue', reservation.title.id]"
+                    aria-label="Voir la notice"
+                  >
+                    <i class="pi pi-arrow-right" aria-hidden="true"></i>
+                    <span>Voir la notice</span>
+                  </a>
+                  @if (isCancellable(reservation)) {
+                    <button
+                      type="button"
+                      pButton
+                      severity="secondary"
+                      icon="pi pi-times"
+                      label="Annuler"
+                      [disabled]="cancellingReservationId() === reservation.id"
+                      [attr.aria-label]="'Annuler la réservation de ' + reservation.title.title"
+                      (click)="confirmCancel(reservation)"
+                    ></button>
+                  }
+                </div>
+              </article>
+            }
+          </div>
+
+          @if (totalRecords() > pageSize) {
+            <p-paginator
+              [first]="currentFirst()"
+              [rows]="pageSize"
+              [totalRecords]="totalRecords()"
+              (onPageChange)="onPageChange($event)"
+            />
           }
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-}
+        </section>
+
+        <aside class="member-reservations-v3-aside" aria-label="Informations sur les réservations">
+          <section>
+            <h2>Comment ça marche&nbsp;?</h2>
+            <ol>
+              <li>
+                <span>1</span>
+                <p>Réservez un titre depuis le catalogue.</p>
+              </li>
+              <li>
+                <span>2</span>
+                <p>La bibliothèque traite les demandes dans l’ordre prévu.</p>
+              </li>
+              <li>
+                <span>3</span>
+                <p>Vous êtes averti lorsque votre réservation est prête.</p>
+              </li>
+              <li>
+                <span>4</span>
+                <p>Retirez l’ouvrage avant l’échéance communiquée.</p>
+              </li>
+            </ol>
+          </section>
+          <section>
+            <h2>À savoir</h2>
+            <ul>
+              <li>
+                <i class="pi pi-book" aria-hidden="true"></i
+                ><span>La réservation porte sur un titre.</span>
+              </li>
+              <li>
+                <i class="pi pi-clock" aria-hidden="true"></i
+                ><span>Le délai dépend des paramètres de la bibliothèque.</span>
+              </li>
+              <li>
+                <i class="pi pi-bell" aria-hidden="true"></i
+                ><span>Suivez son évolution dans votre espace.</span>
+              </li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    }
+  </div>
+</div>

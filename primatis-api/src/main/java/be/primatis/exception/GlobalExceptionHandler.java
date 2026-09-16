@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -80,6 +81,28 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
         return build(HttpStatus.FORBIDDEN, "ACCESS_DENIED",
                 "Vous n'êtes pas autorisé à effectuer cette action.", request, List.of());
+    }
+
+    @ExceptionHandler(InvalidMediaFileException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidMediaFile(
+            InvalidMediaFileException ex, HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, ex.getCode(), ex.getMessage(), request, List.of());
+    }
+
+    /**
+     * Backstop défensif (DEV-ARTICLES-MEDIA) : {@code
+     * spring.servlet.multipart.max-file-size} (application.yml) est fixé
+     * volontairement au-dessus de la limite métier réelle (5 Mio,
+     * {@code ArticleMediaService}) pour que cette dernière s'applique
+     * normalement en premier avec un message clair — cette exception ne
+     * couvre donc que le cas résiduel d'un fichier dépassant même ce
+     * plafond technique.
+     */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiErrorResponse> handleMaxUploadSizeExceeded(
+            MaxUploadSizeExceededException ex, HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, "ARTICLE_MEDIA_FILE_TOO_LARGE",
+                "Le fichier dépasse la taille maximale autorisée (5 Mio).", request, List.of());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,0 +1,35 @@
+{
+  "title": "Nouvelles images France t.2 photographie",
+  "key": "/works/OL10004943W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3970672A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Photography",
+    "Directories",
+    "Digital techniques",
+    "Video art",
+    "Art and technology",
+    "Modern Art"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:02.183946"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-02-07T20:14:19.493786"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "3363421"
+    ]
+  },
+  "title": "UN Cow-Boy (On Dira Il Que Je Suis/I Wish I Were)",
+  "authors": [
+    {
+      "key": "/authors/OL225620A"
+    },
+    {
+      "key": "/authors/OL540303A"
+    }
+  ],
+  "publish_date": "March 2002",
+  "publishers": [
+    "Two-Can Publishers"
+  ],
+  "weight": "5 ounces",
+  "physical_format": "Paperback",
+  "subjects": [
+    "General",
+    "Games & Activities - General",
+    "Juvenile Nonfiction",
+    "Children's Books/Ages 4-8 Fiction",
+    "Children: Kindergarten"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_13": [
+    "9781587282041"
+  ],
+  "isbn_10": [
+    "1587282046"
+  ],
+  "oclc_numbers": [
+    "46776843"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "10.1 x 10.1 x 0.1 inches",
+  "source_records": [
+    "amazon:1587282046"
+  ],
+  "key": "/books/OL12321423M",
+  "number_of_pages": 24,
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-03T03:01:11.112042"
+  }
+}

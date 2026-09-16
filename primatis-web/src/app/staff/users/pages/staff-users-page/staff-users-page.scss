@@ -1,3 +1,15 @@
 :host {
   display: block;
 }
+
+.page-header {
+  margin-bottom: var(--primatis-space-md);
+}
+
+.staff-table-container {
+  overflow-x: auto;
+}
+
+.staff-col-muted {
+  color: var(--p-text-muted-color);
+}

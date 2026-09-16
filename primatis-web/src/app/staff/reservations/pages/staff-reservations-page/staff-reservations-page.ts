@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
@@ -13,6 +14,10 @@ import { ReservationApiService } from '../../../../reservations/services/reserva
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
+import {
+  reservationStatusSeverity as sharedReservationStatusSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
 import { StaffReservationCreateDialog } from '../../components/staff-reservation-create-dialog/staff-reservation-create-dialog';
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -86,6 +91,7 @@ export class StaffReservationsPage {
   private readonly authService = inject(AuthService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly titleService = inject(Title);
 
   readonly rows = signal<ReservationResponse[]>([]);
   readonly totalRecords = signal(0);
@@ -101,6 +107,7 @@ export class StaffReservationsPage {
   private lastSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
+    this.titleService.setTitle('Réservations — PRIMATIS');
     this.load(0, DEFAULT_PAGE_SIZE);
   }
 
@@ -123,18 +130,24 @@ export class StaffReservationsPage {
     this.load(this.lastPage, this.lastSize);
   }
 
-  reservationStatusSeverity(status: ReservationStatus): 'info' | 'success' | 'secondary' | 'danger' | 'warn' {
+  reservationStatusSeverity(status: ReservationStatus): StatusTagSeverity {
+    return sharedReservationStatusSeverity(status);
+  }
+
+  // Même précédent exact que MemberReservationsPage.reservationStatusLabel
+  // (DEV-15.6) : valeur métier transportée inchangée, label UI français.
+  reservationStatusLabel(status: ReservationStatus): string {
     switch (status) {
       case 'WAITING':
-        return 'info';
+        return 'En attente';
       case 'READY':
-        return 'success';
+        return 'Prête';
       case 'FULFILLED':
-        return 'secondary';
+        return 'Honorée';
       case 'CANCELLED':
-        return 'danger';
+        return 'Annulée';
       case 'EXPIRED':
-        return 'warn';
+        return 'Expirée';
     }
   }
 

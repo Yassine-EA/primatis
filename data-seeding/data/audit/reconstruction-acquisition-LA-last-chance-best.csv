@@ -1,0 +1,3 @@
+target_index,language,target_author,target_work,query_title,query_author,search_mode,work_key,work_title,work_authors,edition_key,edition_title,edition_subtitle,edition_languages,isbn,publisher,publish_date,page_count,cover_id,title_score,author_score,candidate_score,cover_state,cover_width,cover_height,cover_format,cover_local_path,candidate_state,last_chance_result
+45,LA,Pétrarque,Secretum,,,,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE
+46,LA,Pic de la Mirandole,Oratio de Hominis Dignitate,,,,,,,,,,,,,,,,,,,,,,,,,NO_CANDIDATE

@@ -1,0 +1,63 @@
+DEV-16 — GOOGLE BOOKS COVER RESCUE BENCHMARK v1.2
+==================================================
+
+SEARCH ERROR RETRY
+==================
+
+Original SEARCH_ERROR : 53
+NO_MATCHING_VOLUME: 40
+NO_VALID_PHYSICAL_COVER: 1
+RECOVERED: 12
+
+FINAL BENCHMARK
+===============
+
+Sample                  : 300
+Recovered               : 89
+Recovery rate           : 29.67%
+Remaining SEARCH_ERROR  : 0
+
+FINAL STATES
+============
+NO_MATCHING_VOLUME: 204
+NO_VALID_PHYSICAL_COVER: 7
+RECOVERED: 89
+
+BY LANGUAGE
+===========
+FR: 27/100 (27.00%)
+EN: 16/70 (22.86%)
+NL: 8/40 (20.00%)
+DE: 17/35 (48.57%)
+ES: 9/25 (36.00%)
+IT: 10/20 (50.00%)
+LA: 2/10 (20.00%)
+
+DECISION
+========
+
+PARTIAL — GOOGLE BOOKS USEFUL BUT NOT SUFFICIENT ALONE
+
+CONTEXT
+=======
+
+Current catalogue covers : 11515/15000
+Still required for 89%    : 1835
+
+POLICY
+======
+
+Only the original SEARCH_ERROR rows were retried.
+HTTP 429 uses Retry-After when provided.
+HTTP 429/503 use conservative exponential backoff.
+Requests are sequential and throttled.
+Existing successful benchmark results are preserved.
+No bundle modification.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/google-books-final-rescue-benchmark-search-error-retry.csv
+data/audit/google-books-final-rescue-benchmark-results-v1.2.csv
+data/audit/google-books-final-rescue-benchmark-report-v1.2.txt

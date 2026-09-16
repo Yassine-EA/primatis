@@ -1,0 +1,48 @@
+{
+  "title": "Médecine et philosophie au temps d'Hippocrate",
+  "key": "/works/OL10010490W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3976968A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Greek and Roman Medicine",
+    "Ancient Philosophy",
+    "Ancient History",
+    "Philosophy",
+    "History",
+    "Médecine grecque et romaine",
+    "Philosophie grecque",
+    "Médecine",
+    "Philosophie ancienne",
+    "Philosophie",
+    "Influence ; médecine grecque et romaine",
+    "Me?decine",
+    "Philosophie grecque antique",
+    "5e s. av. J.-C",
+    "Medicine"
+  ],
+  "description": {
+    "type": "/type/text",
+    "value": "\"Cet ouvrage se propose d'examiner les rapports entre la médecine et la philosophie dans la Grèce des cités au Ve siècle avant J.-C. La littérature médicale est souvent envisagée comme débitrice de la philosophie, et les auteurs médicaux considérés comme des éclectiques puisant dans les doctrines des philosophes, supposées constituées et cohérentes, ce qui leur paraît utile - la tâche de la médecine restant avant tout pratique. Cette façon d'aborder le problème n'est pas celle retenue ici. Par ailleurs on essaie de préciser le contexte socio-historique de l'exercice de la médecine. La question du statut du médecin se pose en particulier dans le cas des médecins dits publics, et dans le domaine juridique. La littérature médicale s'est développée au Ve siècle avant J.-C. Par ses échanges avec les autres domaines du savoir, en particulier la philosophie, par l'établissement et le respect d'une certaine tradition mais aussi par la confrontation avec les problèmes incontournables de la pratique - trois sources souvent en désaccord - elle est restée vivante durant toute l'antiquité.\"--Book cover."
+  },
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:57.594996"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-23T23:55:24.229023"
+  }
+}

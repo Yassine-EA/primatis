@@ -96,10 +96,19 @@ describe('StaffUsersPage', () => {
     expect(text).toContain('Marie Curie');
     expect(text).toContain('marie@primatis.test');
     expect(text).toContain('M000000001');
-    expect(text).toContain('ACTIVE');
+    expect(text).toContain('Actif');
   });
 
-  it('should render — for a null memberNumber and a null memberStatus', () => {
+  it('should set the document title (DEV-15.8)', () => {
+    configure();
+    userApiServiceMock.listUsers.mockReturnValue(of(buildPage([buildUser()])));
+
+    createComponent();
+
+    expect(document.title).toBe('Utilisateurs — PRIMATIS');
+  });
+
+  it('should render an explicit non-member label for a null memberStatus', () => {
     configure();
     userApiServiceMock.listUsers.mockReturnValue(
       of(buildPage([buildUser({ memberNumber: null, memberStatus: null })])),
@@ -109,6 +118,35 @@ describe('StaffUsersPage', () => {
 
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(text).toContain('—');
+    expect(text).toContain('Non adhérent');
+  });
+
+  it('should render the VISUAL-RESET-17 hero and user register hierarchy', () => {
+    configure();
+    userApiServiceMock.listUsers.mockReturnValue(of(buildPage([buildUser()], 23)));
+
+    createComponent();
+
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.querySelector('.staff-users-hero')).not.toBeNull();
+    expect(root.querySelector('.staff-users-register')).not.toBeNull();
+    expect(root.querySelector('#staff-users-register-title')?.textContent).toContain('Comptes enregistrés');
+    expect(root.textContent).toContain('23 utilisateurs');
+  });
+
+  it('should expose data labels required by the responsive user cards', () => {
+    configure();
+    userApiServiceMock.listUsers.mockReturnValue(of(buildPage([buildUser()])));
+
+    createComponent();
+
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.querySelector('td[data-label="Utilisateur"]')).not.toBeNull();
+    expect(root.querySelector('td[data-label="N° adhérent"]')).not.toBeNull();
+    expect(root.querySelector('td[data-label="Compte"]')).not.toBeNull();
+    expect(root.querySelector('td[data-label="Adhésion"]')).not.toBeNull();
+    expect(root.querySelector('td[data-label="Email"]')).not.toBeNull();
+    expect(root.querySelector('td[data-label="Action"]')).not.toBeNull();
   });
 
   it('should map a PrimeNG lazy load event to page/size and call listUsers again', () => {

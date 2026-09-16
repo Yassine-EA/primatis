@@ -1,0 +1,39 @@
+{
+  "title": "Poetique regard. litterature, perception, identité",
+  "key": "/works/OL10000114W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3965101A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Literature",
+    "Aesthetics",
+    "Philosophy",
+    "History and criticism",
+    "Literary Discourse analysis",
+    "Literary Style",
+    "Semiotics and literature"
+  ],
+  "genres": [
+    "/tags/OL174T"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:19.964652"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-08-30T07:16:17.781657"
+  }
+}

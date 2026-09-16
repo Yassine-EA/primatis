@@ -1,0 +1,68 @@
+DEV-16 RECONSTRUCTION — ES MASS RECOVERY
+========================================
+
+INITIAL AUDIT
+=============
+
+Editorial targets       : 173
+Already existing        : 1
+Initial ACCEPT          : 149
+Recovery targets        : 23
+
+Recovery composition:
+- First-pass missing    : 21
+- Edition collision     : 1
+- Metadata conflict     : 1
+
+RECOVERY
+========
+
+Recovered               : 3
+Still unresolved        : 20
+
+GLOBAL ES STATUS
+================
+
+Resolved objectives     : 153/173
+Still open              : 20
+
+UNRESOLVED TARGETS
+==================
+- #15 Santa Teresa de Jesús / Libro de la vida
+- #16 Francisco de Quevedo / El Buscón
+- #27 Leopoldo Alas Clarín / La Regenta
+- #38 Ramón del Valle-Inclán / Sonata de otoño
+- #46 Jorge Luis Borges / Ficciones
+- #59 Mario Vargas Llosa / La guerra del fin del mundo
+- #63 Alejo Carpentier / Los pasos perdidos
+- #93 Carmen Laforet / Nada
+- #101 Miguel Delibes / El camino
+- #114 Manuel Vázquez Montalbán / Los mares del Sur
+- #117 Isabel Allende / De amor y de sombra
+- #119 Roberto Bolaño / 2666
+- #129 Laura Restrepo / Delirio
+- #132 Samanta Schweblin / Distancia de rescate
+- #134 Valeria Luiselli / Los ingrávidos
+- #144 María Zambrano / El hombre y lo divino
+- #148 Carlos Fuentes / La nueva novela hispanoamericana
+- #159 Javier Cercas / Anatomía de un instante
+- #168 María Elena Walsh / Cuentopos de Gulubú
+- #171 Paco Roca / Arrugas
+
+POLICY
+======
+
+Don Quijote remains satisfied by the preserved catalogue.
+149 clean first-pass acquisitions are retained.
+Explicit spa+other-language editions are accepted as bilingual.
+The duplicated Sábato physical edition may occupy only one slot.
+The suspicious Eternauta edition is not trusted blindly.
+Recovery searches all 23 open targets in one batch.
+Spanish remains mandatory at edition level.
+A valid physical cover remains mandatory.
+Recovered candidates require final consolidated validation.
+No invented metadata.
+No bundle modification.
+No database write.
+
+STATUS : PASS

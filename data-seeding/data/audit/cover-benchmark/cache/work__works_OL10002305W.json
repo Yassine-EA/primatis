@@ -1,0 +1,42 @@
+{
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:57:38.254267"
+  },
+  "subjects": [
+    "History of art & design styles: from c 1900 -",
+    "Individual artists"
+  ],
+  "subject_people": [
+    "Marcel Poncet (1894-1953)"
+  ],
+  "key": "/works/OL10002305W",
+  "title": "Marcel Poncet",
+  "latest_revision": 4,
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3967645A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL51019A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2019-07-31T15:40:12.047691"
+  },
+  "revision": 4
+}

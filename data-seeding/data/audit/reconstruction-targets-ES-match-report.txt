@@ -1,0 +1,43 @@
+DEV-16 RECONSTRUCTION — ES MATCHING
+===================================
+
+Editorial targets     : 173
+Preserved ES titles   : 342
+
+MATCH RESULTS
+=============
+
+EXACT_MATCH           : 0
+LIKELY_MATCH          : 1
+NO_MATCH / ACQUIRE    : 172
+
+BY CATEGORY
+===========
+ESSAYS_PHILOSOPHY                      total= 12 exact=  0 likely=  0 acquire= 12
+GRAPHIC                                total=  5 exact=  0 likely=  0 acquire=  5
+HISTORY_SOCIETY                        total=  8 exact=  0 likely=  0 acquire=  8
+LATIN_AMERICAN_CANON                   total= 45 exact=  0 likely=  0 acquire= 45
+LATIN_AMERICA_MODERN_CONTEMPORARY      total= 25 exact=  0 likely=  0 acquire= 25
+SPAIN_MODERN_CONTEMPORARY              total= 25 exact=  0 likely=  0 acquire= 25
+SPANISH_CANON                          total= 45 exact=  0 likely=  1 acquire= 44
+YOUTH                                  total=  8 exact=  0 likely=  0 acquire=  8
+
+POLICY
+======
+
+EXACT_MATCH is considered already represented.
+LIKELY_MATCH requires human confirmation before acquisition.
+NO_MATCH becomes an acquisition target.
+LIKELY_MATCH rows are excluded from acquisition search for now.
+No Open Library request performed.
+No bundle modification.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/reconstruction-targets-ES-match.csv
+data/audit/reconstruction-targets-ES-likely-review.csv
+data/audit/reconstruction-acquisition-targets-ES.csv
+
+STATUS : PASS

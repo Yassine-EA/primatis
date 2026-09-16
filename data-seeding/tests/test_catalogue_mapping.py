@@ -53,17 +53,43 @@ def test_maps_author_without_inventing_optional_metadata() -> None:
     assert mapped.biography is None
 
 
-def test_maps_biography_from_normalized_author() -> None:
+_CONFIDENT_FRENCH_BIOGRAPHY = (
+    "Cet écrivain français était considéré, depuis son plus jeune âge, "
+    "comme l'un des auteurs les plus reconnus de son siècle."
+)
+
+
+def test_maps_confident_french_biography_from_normalized_author() -> None:
     result = map_catalogue(
-        [author(biography="Notice biographique enrichie.")], []
+        [author(biography=_CONFIDENT_FRENCH_BIOGRAPHY)], []
     )
 
-    assert result.authors[0].biography == "Notice biographique enrichie."
+    assert result.authors[0].biography == _CONFIDENT_FRENCH_BIOGRAPHY
+
+
+def test_non_french_biography_is_nulled_not_kept() -> None:
+    # DEC-16.3-04: a biography that is not confidently French becomes
+    # NULL — Open Library's `bio` carries no language tag and is
+    # frequently English (13/17 real medium biographies, DEV-16.3 §C).
+    result = map_catalogue(
+        [author(biography="This author was born in 1900 and wrote many books.")], []
+    )
+
+    assert result.authors[0].biography is None
+
+
+def test_ambiguous_short_biography_is_nulled_not_guessed() -> None:
+    # Too short/ambiguous to call with confidence -> NULL, never a guess.
+    result = map_catalogue(
+        [author(biography="Notice biographique.")], []
+    )
+
+    assert result.authors[0].biography is None
 
 
 def test_nationality_is_always_null_even_when_author_is_enriched() -> None:
     result = map_catalogue(
-        [author(biography="Notice biographique enrichie.")], []
+        [author(biography=_CONFIDENT_FRENCH_BIOGRAPHY)], []
     )
 
     assert result.authors[0].nationality is None

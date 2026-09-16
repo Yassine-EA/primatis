@@ -1,0 +1,49 @@
+<ng-template #navList>
+  <ul class="nav-list">
+    @for (item of visibleItems(); track item.routerLink) {
+      <li>
+        <a
+          [routerLink]="item.routerLink"
+          routerLinkActive="nav-link--active"
+          [routerLinkActiveOptions]="{ exact: item.routerLink === '/' }"
+          (click)="closeMobileMenu()"
+        >
+          {{ item.label }}
+        </a>
+      </li>
+    }
+  </ul>
+</ng-template>
+
+<nav class="public-navigation" aria-label="Navigation principale">
+  <div class="public-navigation-desktop">
+    <ng-container [ngTemplateOutlet]="navList" />
+  </div>
+
+  <button
+    type="button"
+    pButton
+    text
+    severity="secondary"
+    aria-label="Menu"
+    class="public-navigation-toggle"
+    aria-haspopup="true"
+    [attr.aria-expanded]="mobileMenuOpen()"
+    (click)="openMobileMenu()"
+  >
+    <img src="/assets/icons/editorial/menu.svg" alt="" width="24" height="24" aria-hidden="true" />
+  </button>
+
+  <div class="public-navigation-account">
+    <app-account-menu />
+  </div>
+</nav>
+
+<p-drawer
+  [(visible)]="mobileMenuOpen"
+  position="left"
+  header="Menu"
+  styleClass="public-navigation-drawer"
+>
+  <ng-container [ngTemplateOutlet]="navList" />
+</p-drawer>

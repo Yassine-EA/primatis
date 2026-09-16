@@ -1,0 +1,250 @@
+DEV-16 — FINAL MASTER INPUT PREFLIGHT v1
+========================================
+
+FINAL LANGUAGE TARGETS
+======================
+
+FR: 6727
+EN: 3525
+NL: 2120
+DE: 1102
+ES: 849
+IT: 497
+LA: 180
+----------
+TOTAL: 15000
+
+INPUT INVENTORY
+===============
+
+[COVERED_DECISIONS]
+path: data/audit/full-covered-all-languages-decisions.csv
+STATUS: FOUND
+rows: 7482
+columns: source_key, title, authors, publication_year, isbn, publisher, genres, decision, reason, language, subtitle, author_count, duplicate_like_count, review_group
+languages: {'DE': 542, 'EN': 2211, 'ES': 410, 'FR': 3009, 'IT': 205, 'LA': 112, 'NL': 993}
+decision: {'KEEP_CORE': 4243, 'KEEP_TRANSLATION': 2054, 'REPLACE': 564, 'REVIEW': 621}
+source_key: present=7482 unique=7482
+
+[RECONSTRUCTION_BACKLOG]
+path: data/audit/full-reconstruction-backlog.csv
+STATUS: FOUND
+rows: 15000
+columns: source_key, title, subtitle, language, isbn, publication_year, publisher, page_count, summary, work_key, cover_image_url, editorial_decision, editorial_reason, reconstruction_state
+languages: {'DE': 1102, 'EN': 3525, 'ES': 849, 'FR': 6727, 'IT': 497, 'LA': 180, 'NL': 2120}
+reconstruction_state: {'KEEP': 6297, 'REPLACE': 564, 'REVIEW': 621, 'UNCOVERED': 7518}
+source_key: present=15000 unique=15000
+work_key: present=0 unique=0
+
+[UNCOVERED_QUALITY]
+path: data/audit/full-uncovered-quality-baseline.csv
+STATUS: FOUND
+rows: 7518
+columns: source_key, title, subtitle, language, isbn, publication_year, publisher, page_count, summary, work_key, cover_image_url, editorial_decision, editorial_reason, reconstruction_state, quality_score, quality_bucket, quality_strengths, quality_weaknesses
+languages: {'DE': 560, 'EN': 1314, 'ES': 439, 'FR': 3718, 'IT': 292, 'LA': 68, 'NL': 1127}
+reconstruction_state: {'UNCOVERED': 7518}
+source_key: present=7518 unique=7518
+work_key: present=0 unique=0
+
+[FINAL_COVER_MANIFEST]
+path: data/audit/final-cover-consolidated-manifest.csv
+STATUS: FOUND
+rows: 10873
+columns: source_type, source_identity, source_key, edition_key, work_key, language, title, authors, decision, cover_id, source_path, source_size_bytes, sha256, image_format, canonical_cover_file, canonical_cover_asset
+languages: {'DE': 579, 'EN': 2561, 'ES': 514, 'FR': 5240, 'IT': 306, 'LA': 106, 'NL': 1567}
+decision: {'ACQUISITION': 4576, 'KEEP_CORE': 4243, 'KEEP_TRANSLATION': 2054}
+source_key: present=6297 unique=6297
+work_key: present=10873 unique=10578
+edition_key: present=4576 unique=4574
+
+[NL_SELECTED]
+path: data/audit/nl-fast-v2-selected-pagecount.csv
+STATUS: FOUND
+rows: 800
+columns: language, category, policy_author, tier, max_selected, max_total, work_key, work_title, work_authors, author_score, first_publish_year, edition_key, edition_title, edition_subtitle, edition_languages, edition_title_score, isbn, publisher, publish_date, page_count, cover_id, cover_state, cover_width, cover_height, cover_format, cover_local_path, collection_flag, suspicious_flag, pre_cover_score, final_score, classification, classification_reason, selection_state, selection_reason, page_count_state, page_count_source, cross_language_collision, cross_language_owner_count
+languages: {'NL': 800}
+classification: {'AUTO_ACCEPT': 800}
+selection_state: {'SELECTED': 800}
+work_key: present=800 unique=800
+edition_key: present=800 unique=800
+
+[NL_RESERVE]
+path: data/audit/nl-fast-v2-reserve.csv
+STATUS: FOUND
+rows: 171
+columns: language, category, policy_author, tier, max_selected, max_total, work_key, work_title, work_authors, author_score, first_publish_year, edition_key, edition_title, edition_subtitle, edition_languages, edition_title_score, isbn, publisher, publish_date, page_count, cover_id, cover_state, cover_width, cover_height, cover_format, cover_local_path, collection_flag, suspicious_flag, pre_cover_score, final_score, classification, classification_reason, selection_state, selection_reason
+languages: {'NL': 171}
+classification: {'AUTO_ACCEPT': 171}
+selection_state: {'RESERVE': 171}
+work_key: present=171 unique=171
+edition_key: present=171 unique=171
+
+[EN_SELECTED]
+path: data/audit/en-fast-v2-selected-pagecount.csv
+STATUS: FOUND
+rows: 700
+columns: language, category, policy_author, tier, max_selected, max_total, work_key, work_title, work_authors, author_score, first_publish_year, edition_key, edition_title, edition_subtitle, edition_languages, edition_title_score, isbn, publisher, publish_date, page_count, cover_id, cover_state, cover_width, cover_height, cover_format, cover_local_path, collection_flag, suspicious_flag, pre_cover_score, final_score, classification, classification_reason, selection_state, selection_reason, page_count_state, page_count_source, cross_language_collision, cross_language_owner_count
+languages: {'EN': 700}
+classification: {'AUTO_ACCEPT': 700}
+selection_state: {'SELECTED': 700}
+work_key: present=700 unique=700
+edition_key: present=700 unique=700
+
+[EN_RESERVE]
+path: data/audit/en-fast-v2-reserve.csv
+STATUS: FOUND
+rows: 197
+columns: language, category, policy_author, tier, max_selected, max_total, work_key, work_title, work_authors, author_score, first_publish_year, edition_key, edition_title, edition_subtitle, edition_languages, edition_title_score, isbn, publisher, publish_date, page_count, cover_id, cover_state, cover_width, cover_height, cover_format, cover_local_path, collection_flag, suspicious_flag, pre_cover_score, final_score, classification, classification_reason, selection_state, selection_reason
+languages: {'EN': 197}
+classification: {'AUTO_ACCEPT': 197}
+selection_state: {'RESERVE': 197}
+work_key: present=197 unique=197
+edition_key: present=197 unique=197
+
+[FR_SELECTED]
+path: data/audit/fr-fast-v2-selected-pagecount.csv
+STATUS: FOUND
+rows: 2580
+columns: language, category, policy_author, tier, max_selected, max_total, work_key, work_title, work_authors, author_score, first_publish_year, edition_key, edition_title, edition_subtitle, edition_languages, edition_title_score, isbn, publisher, publish_date, page_count, cover_id, cover_state, cover_width, cover_height, cover_format, cover_local_path, collection_flag, suspicious_flag, pre_cover_score, final_score, classification, classification_reason, selection_state, selection_reason, page_count_state, page_count_source, cross_language_collision, cross_language_owner_count
+languages: {'FR': 2580}
+classification: {'AUTO_ACCEPT': 2580}
+selection_state: {'SELECTED': 2580}
+work_key: present=2580 unique=2580
+edition_key: present=2580 unique=2580
+
+[FR_RESERVE]
+path: data/audit/fr-fast-v2-reserve.csv
+STATUS: FOUND
+rows: 91
+columns: language, category, policy_author, tier, max_selected, max_total, work_key, work_title, work_authors, author_score, first_publish_year, edition_key, edition_title, edition_subtitle, edition_languages, edition_title_score, isbn, publisher, publish_date, page_count, cover_id, cover_state, cover_width, cover_height, cover_format, cover_local_path, collection_flag, suspicious_flag, pre_cover_score, final_score, classification, classification_reason, selection_state, selection_reason
+languages: {'FR': 91}
+classification: {'AUTO_ACCEPT': 91}
+selection_state: {'RESERVE': 91}
+work_key: present=91 unique=91
+edition_key: present=91 unique=91
+
+[SMALL4_SELECTED]
+path: data/audit/page-count-enrichment-small4-final-acquisitions.csv
+STATUS: FOUND
+rows: 496
+columns: language, source_stage, target_index, category, target_author, target_work, work_key, edition_key, edition_title, edition_languages, isbn, publisher, publish_date, page_count, cover_id, cover_state, cover_local_path, page_count_state, page_count_source
+languages: {'DE': 111, 'ES': 172, 'IT': 163, 'LA': 50}
+work_key: present=496 unique=495
+edition_key: present=496 unique=496
+target_index: present=409 unique=163
+
+[LA_ACQUISITION_TARGETS]
+path: data/audit/reconstruction-acquisition-targets-LA.csv
+STATUS: FOUND
+rows: 50
+columns: language, category, priority, author, target_work, target_index, match_state, match_score, author_score, title_score, matched_source_key, matched_title, matched_subtitle, matched_authors, matched_isbn, matched_year, matched_publisher, matched_decision, candidate_1_score, candidate_1_source_key, candidate_1_title, candidate_1_authors, candidate_2_score, candidate_2_source_key, candidate_2_title, candidate_2_authors, candidate_3_score, candidate_3_source_key, candidate_3_title, candidate_3_authors, acquisition_state, resolution_reason
+languages: {'LA': 50}
+target_index: present=50 unique=50
+
+[IT_ACQUISITION_TARGETS]
+path: data/audit/reconstruction-acquisition-targets-IT.csv
+STATUS: FOUND
+rows: 163
+columns: language, category, priority, author, target_work, target_index, match_state, match_score, author_score, title_score, matched_source_key, matched_title, matched_subtitle, matched_authors, matched_isbn, matched_year, matched_publisher, matched_decision, candidate_1_score, candidate_1_title, candidate_1_authors, candidate_1_source_key, candidate_2_score, candidate_2_title, candidate_2_authors, candidate_2_source_key, candidate_3_score, candidate_3_title, candidate_3_authors, candidate_3_source_key
+languages: {'IT': 163}
+target_index: present=163 unique=163
+
+[ES_ACQUISITION_TARGETS]
+path: data/audit/reconstruction-acquisition-targets-ES.csv
+STATUS: FOUND
+rows: 172
+columns: language, category, priority, author, target_work, target_index, match_state, match_score, author_score, title_score, matched_source_key, matched_title, matched_subtitle, matched_authors, matched_isbn, matched_year, matched_publisher, matched_decision, candidate_1_score, candidate_1_title, candidate_1_authors, candidate_1_source_key, candidate_2_score, candidate_2_title, candidate_2_authors, candidate_2_source_key, candidate_3_score, candidate_3_title, candidate_3_authors, candidate_3_source_key
+languages: {'ES': 172}
+target_index: present=172 unique=172
+
+[DE_ACQUISITION_TARGETS]
+path: data/audit/reconstruction-acquisition-targets-DE.csv
+STATUS: FOUND
+rows: 111
+columns: language, category, priority, author, target_work, target_index, match_state, match_score, author_score, title_score, matched_source_key, matched_title, matched_subtitle, matched_authors, matched_isbn, matched_year, matched_publisher, matched_decision, candidate_1_score, candidate_1_title, candidate_1_authors, candidate_1_source_key, candidate_2_score, candidate_2_title, candidate_2_authors, candidate_2_source_key, candidate_3_score, candidate_3_title, candidate_3_authors, candidate_3_source_key
+languages: {'DE': 111}
+target_index: present=111 unique=111
+
+[LA_RECONSTRUCTION_TARGETS]
+path: data/audit/reconstruction-targets-LA.csv
+STATUS: FOUND
+rows: 54
+columns: language, category, priority, author, target_work
+languages: {'LA': 54}
+
+[IT_RECONSTRUCTION_TARGETS]
+path: data/audit/reconstruction-targets-IT.csv
+STATUS: FOUND
+rows: 165
+columns: language, category, priority, author, target_work
+languages: {'IT': 165}
+
+[ES_RECONSTRUCTION_TARGETS]
+path: data/audit/reconstruction-targets-ES.csv
+STATUS: FOUND
+rows: 173
+columns: language, category, priority, author, target_work
+languages: {'ES': 173}
+
+[DE_RECONSTRUCTION_TARGETS]
+path: data/audit/reconstruction-targets-DE.csv
+STATUS: FOUND
+rows: 113
+columns: language, category, priority, author, target_work
+languages: {'DE': 113}
+
+COVERED EDITORIAL BASELINE
+==========================
+
+FR: KEEP=2660 REVIEW=126 REPLACE=223 covered_total=3009
+EN: KEEP=1861 REVIEW=207 REPLACE=143 covered_total=2211
+NL: KEEP=767 REVIEW=101 REPLACE=125 covered_total=993
+DE: KEEP=468 REVIEW=65 REPLACE=9 covered_total=542
+ES: KEEP=342 REVIEW=51 REPLACE=17 covered_total=410
+IT: KEEP=143 REVIEW=37 REPLACE=25 covered_total=205
+LA: KEEP=56 REVIEW=34 REPLACE=22 covered_total=112
+
+UNCOVERED QUALITY BASELINE
+==========================
+
+quality field: NOT DETECTED
+
+BIG-3 ACQUISITION CAPACITY
+==========================
+
+NL: selected=800 reserve=171 capacity=971
+EN: selected=700 reserve=197 capacity=897
+FR: selected=2580 reserve=91 capacity=2671
+
+SMALL-4 FINAL ACQUISITIONS
+==========================
+
+LA: 50
+IT: 163
+ES: 172
+DE: 111
+TOTAL: 496
+
+FINAL COVER MANIFEST
+====================
+
+rows: 10873
+source types: {'ACQUISITION': 4576, 'KEEP': 6297}
+
+REQUIRED INPUT CHECK
+====================
+
+All core inputs present.
+
+POLICY
+======
+
+This preflight performs no selection.
+It performs no catalogue mutation.
+It performs no cover copy.
+It performs no bundle write.
+It performs no database write.
+Its sole purpose is to expose the exact source contracts
+before constructing the definitive 15000-title master.
+
+STATUS : PASS

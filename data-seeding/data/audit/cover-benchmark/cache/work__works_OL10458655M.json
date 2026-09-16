@@ -1,0 +1,55 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "6871027"
+    ]
+  },
+  "title": "Poemes Tricolores, a L'occasion Du Cinquantenaire De La Federation",
+  "subtitle": "Souvenirs De Vingt Cinq Annees 1945-1969",
+  "authors": [
+    {
+      "key": "/authors/OL3437273A"
+    },
+    {
+      "key": "/authors/OL3437274A"
+    }
+  ],
+  "publish_date": "May 1965",
+  "publishers": [
+    "French & European Pubns"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "isbn_13": [
+    "9780320065521"
+  ],
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "0320065529"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "General",
+    "Political Science",
+    "Politics/International Relations"
+  ],
+  "source_records": [
+    "amazon:0320065529"
+  ],
+  "key": "/books/OL10458655M",
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-01-22T05:37:38.394461"
+  }
+}

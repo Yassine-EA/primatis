@@ -1,3 +1,25 @@
 :host {
   display: block;
 }
+
+.page-header {
+  margin-bottom: var(--primatis-space-md);
+}
+
+.staff-table-container {
+  overflow-x: auto;
+}
+
+.staff-col-muted {
+  color: var(--p-text-muted-color);
+}
+
+// setting_key est un identifiant UPPER_SNAKE_CASE sans espace (DEV-15.11) :
+// sans point de cesure, le navigateur ne peut pas le retourner a la ligne,
+// ce qui forcait la colonne a ~380px et repoussait "Modifier" (seule action
+// de la page) hors du viewport a 768/1024px. Le contenu affiche reste
+// inchange, seul le point de cesure autorise change.
+.staff-key-cell {
+  min-width: 9rem;
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,69 @@
+{
+  "publishers": [
+    "Presses Universitaires de Vincennes (PUV)"
+  ],
+  "identifiers": {
+    "goodreads": [
+      "6888491"
+    ]
+  },
+  "weight": "9.9 ounces",
+  "title": "Médecine et philosophie au temps d'Hippocrate",
+  "number_of_pages": 187,
+  "isbn_13": [
+    "9782903981525"
+  ],
+  "physical_format": "Hardcover",
+  "authors": [
+    {
+      "key": "/authors/OL3976968A"
+    }
+  ],
+  "isbn_10": [
+    "2903981523"
+  ],
+  "publish_date": "April 12, 1995",
+  "key": "/books/OL12649223M",
+  "works": [
+    {
+      "key": "/works/OL10010490W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "physical_dimensions": "8.6 x 5.4 x 0.5 inches",
+  "lc_classifications": [
+    "R131 .V58 1989",
+    "R131"
+  ],
+  "oclc_numbers": [
+    "123109333",
+    "20732447",
+    "22196722"
+  ],
+  "source_records": [
+    "marc:marc_columbia/Columbia-extract-20221130-002.mrc:436968800:4818",
+    "marc:harvard_bibliographic_metadata/ab.bib.01.20150123.full.mrc:841768567:808",
+    "marc:harvard_bibliographic_metadata/20220215_039.bib.mrc:53819055:1952"
+  ],
+  "description": {
+    "type": "/type/text",
+    "value": "\"Cet ouvrage se propose d'examiner les rapports entre la médecine et la philosophie dans la Grèce des cités au Ve siècle avant J.-C. La littérature médicale est souvent envisagée comme débitrice de la philosophie, et les auteurs médicaux considérés comme des éclectiques puisant dans les doctrines des philosophes, supposées constituées et cohérentes, ce qui leur paraît utile - la tâche de la médecine restant avant tout pratique. Cette façon d'aborder le problème n'est pas celle retenue ici. Par ailleurs on essaie de préciser le contexte socio-historique de l'exercice de la médecine. La question du statut du médecin se pose en particulier dans le cas des médecins dits publics, et dans le domaine juridique. La littérature médicale s'est développée au Ve siècle avant J.-C. Par ses échanges avec les autres domaines du savoir, en particulier la philosophie, par l'établissement et le respect d'une certaine tradition mais aussi par la confrontation avec les problèmes incontournables de la pratique - trois sources souvent en désaccord - elle est restée vivante durant toute l'antiquité.\"--Book cover."
+  },
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "latest_revision": 7,
+  "revision": 7,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-05-15T22:13:41.329163"
+  }
+}

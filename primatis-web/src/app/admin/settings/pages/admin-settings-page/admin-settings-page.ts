@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 
@@ -42,6 +43,7 @@ import { SettingValueEditDialog } from '../../components/setting-value-edit-dial
 export class AdminSettingsPage {
   private readonly settingApiService = inject(SettingApiService);
   private readonly authService = inject(AuthService);
+  private readonly titleService = inject(Title);
 
   readonly rows = signal<SettingResponse[]>([]);
   // Initialisé à true : le premier chargement est déclenché explicitement
@@ -51,6 +53,7 @@ export class AdminSettingsPage {
   readonly editingSetting = signal<SettingResponse | null>(null);
 
   constructor() {
+    this.titleService.setTitle("Paramètres de l'application — PRIMATIS");
     this.load();
   }
 
@@ -88,6 +91,19 @@ export class AdminSettingsPage {
       return 'Jamais modifié';
     }
     return `${setting.updatedAt} — ${setting.updatedByUser.firstName} ${setting.updatedByUser.lastName}`;
+  }
+
+  /**
+   * `settingKey` est un identifiant UPPER_SNAKE_CASE sans espace (DEV-15.11) :
+   * sans point de césure explicite, le navigateur ne peut pas le retourner à
+   * la ligne et la colonne "Clé" s'étalait sur toute la largeur disponible,
+   * repoussant "Modifier" hors du viewport à 768/1024px. Découpage en
+   * segments affichés avec un `<wbr>` après chaque "_" (jamais un
+   * `overflow-wrap: anywhere` seul, qui coupe au milieu d'un mot) : la
+   * césure ne peut se produire qu'après un "_", jamais au milieu d'un mot.
+   */
+  keySegments(settingKey: string): string[] {
+    return settingKey.split('_');
   }
 
   valueTypeLabel(setting: SettingResponse): string {

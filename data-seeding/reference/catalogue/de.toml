@@ -1,0 +1,51 @@
+# Socle éditorial DE — voir fr.toml. Élargi DEV-16.5 §4/§5.
+
+[[authors]]
+author_key = "OL13193A"
+full_name = "Johann Wolfgang von Goethe"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Johann+Wolfgang+von+Goethe"
+work_count_at_verification = 5376
+period = "classique (XVIIIe-XIXe siècle)"
+form = "roman, théâtre, poésie"
+selection_rationale = "Figure majeure de la littérature germanophone, œuvre abondante et bien référencée sur Open Library."
+
+[[authors]]
+author_key = "OL22973A"
+full_name = "Thomas Mann"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Thomas+Mann"
+work_count_at_verification = 1501
+period = "moderne (XXe siècle)"
+form = "roman"
+selection_rationale = "Figure majeure du roman allemand moderne (prix Nobel 1929), apporte une diversité de période au socle DE."
+
+[[authors]]
+author_key = "OL33146A"
+full_name = "Franz Kafka"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Franz+Kafka"
+work_count_at_verification = 1853
+period = "moderne (XXe siècle)"
+form = "roman, nouvelle"
+selection_rationale = "Figure majeure de la littérature germanophone du XXe siècle, largement référencée sur Open Library."
+
+[[authors]]
+author_key = "OL673748A"
+full_name = "Bertolt Brecht"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Bertolt+Brecht"
+work_count_at_verification = 1465
+period = "moderne (XXe siècle)"
+form = "théâtre"
+selection_rationale = "Figure majeure du théâtre germanophone moderne, apporte une diversité de forme (théâtre) au socle DE."
+
+[[authors]]
+author_key = "OL673325A"
+full_name = "Rainer Maria Rilke"
+verified_at = "2026-09-11"
+verified_via = "openlibrary.org/search/authors.json?q=Rainer+Maria+Rilke"
+work_count_at_verification = 1593
+period = "moderne (XIXe-XXe siècle)"
+form = "poésie"
+selection_rationale = "Figure majeure de la poésie germanophone moderne, apporte une diversité de forme (poésie) au socle DE."

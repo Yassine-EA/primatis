@@ -1,0 +1,73 @@
+DEV-16 — PAGE_COUNT ENRICHMENT BIG 3 v1.1
+=========================================
+
+SCOPE
+=====
+
+NL selected acquisitions : 800
+EN selected acquisitions : 700
+FR selected acquisitions : 2580
+-------------------------------
+Source rows               : 4080
+Unique physical editions  : 4078
+
+CROSS-LANGUAGE COLLISIONS
+=========================
+
+Physical editions shared  : 2
+Duplicate occurrences     : 2
+
+These collisions do not block page-count enrichment.
+They MUST be resolved later during global master reconstruction
+by retaining one owner and replacing the other occurrence from
+the corresponding validated language reserve.
+
+RESULTS BY LANGUAGE
+===================
+NL: 700/800 (87.50%)
+EN: 626/700 (89.43%)
+FR: 2297/2580 (89.03%)
+
+GLOBAL ROW COVERAGE
+===================
+
+Page count recovered/present : 3623/4080
+Still NULL                   : 457
+Coverage                     : 88.80%
+
+UNIQUE EDITION FETCH
+====================
+
+Unique editions              : 4078
+Recovered page_count         : 3621
+No page_count in source      : 457
+Fetch errors                 : 0
+
+Cache responses              : 0
+Web responses                : 4078
+
+POLICY
+======
+
+Page count belongs to the physical edition.
+Each unique Open Library edition is fetched only once.
+A shared cross-language edition may enrich multiple source rows.
+Cross-language duplicate editions are recorded but not altered here.
+Existing reliable page_count values are preserved.
+No page count is inferred or invented.
+Missing Open Library values remain NULL.
+Original selected CSVs are not overwritten.
+No bundle modification.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/nl-fast-v2-selected-pagecount.csv
+data/audit/en-fast-v2-selected-pagecount.csv
+data/audit/fr-fast-v2-selected-pagecount.csv
+data/audit/page-count-enrichment-big3-unresolved.csv
+data/audit/page-count-enrichment-big3-edition-collisions.csv
+data/audit/page-count-enrichment-big3-report.txt
+
+STATUS : PASS

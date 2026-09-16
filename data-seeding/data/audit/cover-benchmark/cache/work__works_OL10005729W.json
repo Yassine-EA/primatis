@@ -1,0 +1,41 @@
+{
+  "title": "Les Jardins publics en province",
+  "key": "/works/OL10005729W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3971577A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Architecture des jardins",
+    "Jardins",
+    "Histoire",
+    "Parcs",
+    "Urbanisme",
+    "Ecologie humaine",
+    "Parks",
+    "History",
+    "Gardens",
+    "Landscape architecture",
+    "City planning",
+    "Human ecology"
+  ],
+  "latest_revision": 2,
+  "revision": 2,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:11.470855"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-08-07T08:28:10.321150"
+  }
+}

@@ -1,16 +1,39 @@
-.layout-shell {
-  min-height: 100vh;
+:host {
+  display: block;
 }
 
-.layout-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid var(--p-surface-200);
+.member-workspace {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  background: var(--primatis-ivory-50);
 }
 
-.layout-content {
-  padding: 2rem;
+.member-workspace-sidebar {
+  min-width: 0;
+  color: #fff;
+  background:
+    linear-gradient(rgba(3, 34, 54, 0.9), rgba(3, 34, 54, 0.97)),
+    url('/assets/member/shared/member-hero-768-mobile.webp') 82% 52% / cover;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.member-workspace-content {
+  min-width: 0;
+  background: var(--primatis-ivory-50);
+}
+
+@media (max-width: 1280px) {
+  .member-workspace {
+    display: block;
+  }
+
+  .member-workspace-sidebar {
+    position: relative;
+    z-index: 3;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--primatis-navy-900);
+  }
 }

@@ -1,0 +1,54 @@
+{
+  "subtitle": "Victor Hugo, dessins : Museo Thyssen-Bornemisza, Madrid, 2 juin 2000-10 septembre 2000 : Maison de Victor Hugo, Paris, 12 octobre 2000-7 janvier 2001",
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2019-07-31T16:04:03.340062"
+  },
+  "title": "Du chaos dans le pinceau--",
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T20:20:25.168304"
+  },
+  "subject_places": [
+    "France"
+  ],
+  "subjects": [
+    "Exhibitions",
+    "Authors as artists"
+  ],
+  "subject_people": [
+    "Victor Hugo (1802-1885)"
+  ],
+  "key": "/works/OL1063446W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL107571A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3141262A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3973922A"
+      }
+    }
+  ],
+  "latest_revision": 4,
+  "type": {
+    "key": "/type/work"
+  },
+  "revision": 4
+}

@@ -1,6 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, ParamMap, Router, convertToParamMap, provideRouter } from '@angular/router';
+import { By } from '@angular/platform-browser';
+import {
+  ActivatedRoute,
+  ParamMap,
+  Router,
+  convertToParamMap,
+  provideRouter,
+} from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
@@ -11,6 +18,7 @@ import { TagResponse } from '../../../../articles/models/tag-response';
 import { UpdateArticleRequest } from '../../../../articles/models/update-article-request';
 import { StaffArticleApiService } from '../../../../articles/services/staff-article-api.service';
 import { StaffTagApiService } from '../../../../articles/services/staff-tag-api.service';
+import { ArticleContentEditor } from '../../components/article-content-editor/article-content-editor';
 import { StaffArticleDetailPage } from './staff-article-detail-page';
 
 function buildTag(overrides: Partial<TagResponse> = {}): TagResponse {
@@ -38,7 +46,15 @@ function buildArticle(overrides: Partial<ArticleResponse> = {}): ArticleResponse
 function apiHttpError(status: number, code: string, message: string): HttpErrorResponse {
   return new HttpErrorResponse({
     status,
-    error: { timestamp: new Date().toISOString(), status, error: 'Error', code, message, path: '/api/v1/staff/articles/10', fieldErrors: [] },
+    error: {
+      timestamp: new Date().toISOString(),
+      status,
+      error: 'Error',
+      code,
+      message,
+      path: '/api/v1/staff/articles/10',
+      fieldErrors: [],
+    },
   });
 }
 
@@ -60,23 +76,37 @@ describe('StaffArticleDetailPage', () => {
   let paramMap$: BehaviorSubject<ParamMap>;
 
   function configure(rawId: string | null = '10'): void {
-    paramMap$ = new BehaviorSubject<ParamMap>(convertToParamMap(rawId === null ? {} : { id: rawId }));
+    paramMap$ = new BehaviorSubject<ParamMap>(
+      convertToParamMap(rawId === null ? {} : { id: rawId }),
+    );
 
     staffArticleApiServiceMock = {
       getStaffArticleById: vi.fn().mockReturnValue(of(buildArticle())),
       updateArticle: vi.fn().mockReturnValue(of(buildArticle())),
-      publishArticle: vi.fn().mockReturnValue(of(buildArticle({ articleStatus: 'PUBLISHED', publishedAt: '2026-08-01T10:00:00Z' }))),
-      archiveArticle: vi.fn().mockReturnValue(
-        of(buildArticle({ articleStatus: 'ARCHIVED', publishedAt: '2026-08-01T10:00:00Z' })),
-      ),
+      publishArticle: vi
+        .fn()
+        .mockReturnValue(
+          of(buildArticle({ articleStatus: 'PUBLISHED', publishedAt: '2026-08-01T10:00:00Z' })),
+        ),
+      archiveArticle: vi
+        .fn()
+        .mockReturnValue(
+          of(buildArticle({ articleStatus: 'ARCHIVED', publishedAt: '2026-08-01T10:00:00Z' })),
+        ),
       deleteArticle: vi.fn().mockReturnValue(of(undefined)),
-      updateArticleTags: vi.fn().mockReturnValue(of(buildArticle({ tags: [buildTag({ id: 2, code: 'X', label: 'X' })] }))),
+      updateArticleTags: vi
+        .fn()
+        .mockReturnValue(of(buildArticle({ tags: [buildTag({ id: 2, code: 'X', label: 'X' })] }))),
     };
     authServiceMock = { hasPermission: vi.fn().mockReturnValue(true) };
     messageServiceMock = { add: vi.fn() };
     confirmationServiceMock = { confirm: vi.fn() };
     const staffTagApiServiceMock = {
-      listTags: vi.fn().mockReturnValue(of({ content: [buildTag()], page: 0, size: 100, totalElements: 1, totalPages: 1 })),
+      listTags: vi
+        .fn()
+        .mockReturnValue(
+          of({ content: [buildTag()], page: 0, size: 100, totalElements: 1, totalPages: 1 }),
+        ),
     };
 
     TestBed.configureTestingModule({
@@ -119,6 +149,12 @@ describe('StaffArticleDetailPage', () => {
     expect(component.article()).toEqual(buildArticle());
   });
 
+  it('should set the document title to "<Titre> — PRIMATIS" (DEV-15.8)', () => {
+    createComponent();
+
+    expect(document.title).toBe('Nouvelle acquisition — PRIMATIS');
+  });
+
   it('should not call the API when the route id is not numeric', () => {
     configure('abc');
     createComponent();
@@ -128,21 +164,37 @@ describe('StaffArticleDetailPage', () => {
   });
 
   it('should load a DRAFT Article via the staff detail (tous statuts confondus, DEV-11.12A)', () => {
-    staffArticleApiServiceMock.getStaffArticleById.mockReturnValue(of(buildArticle({ articleStatus: 'DRAFT' })));
+    staffArticleApiServiceMock.getStaffArticleById.mockReturnValue(
+      of(buildArticle({ articleStatus: 'DRAFT' })),
+    );
     createComponent();
 
     expect(component.article()?.articleStatus).toBe('DRAFT');
   });
 
   it('should load an ARCHIVED Article via the staff detail', () => {
-    staffArticleApiServiceMock.getStaffArticleById.mockReturnValue(of(buildArticle({ articleStatus: 'ARCHIVED' })));
+    staffArticleApiServiceMock.getStaffArticleById.mockReturnValue(
+      of(buildArticle({ articleStatus: 'ARCHIVED' })),
+    );
     createComponent();
 
     expect(component.article()?.articleStatus).toBe('ARCHIVED');
   });
 
+  it('should display the French status label rather than the raw enum (DEV-15.10)', () => {
+    staffArticleApiServiceMock.getStaffArticleById.mockReturnValue(
+      of(buildArticle({ articleStatus: 'DRAFT' })),
+    );
+    createComponent();
+
+    expect(fixture.nativeElement.textContent).toContain('Brouillon');
+    expect(fixture.nativeElement.textContent).not.toContain('DRAFT');
+  });
+
   it('should show the error state on load failure, with a retry that reloads', () => {
-    staffArticleApiServiceMock.getStaffArticleById.mockReturnValue(throwError(() => apiHttpError(404, 'ARTICLE_NOT_FOUND', 'Aucun article.')));
+    staffArticleApiServiceMock.getStaffArticleById.mockReturnValue(
+      throwError(() => apiHttpError(404, 'ARTICLE_NOT_FOUND', 'Aucun article.')),
+    );
     createComponent();
 
     expect(component.articleError()?.message).toBe('Aucun article.');
@@ -166,15 +218,40 @@ describe('StaffArticleDetailPage', () => {
     expect(component.form.controls.summary.value).toBe('Résumé');
   });
 
+  it('should use the rich content editor (DEV-ARTICLES-EDITOR, DEV-DEC-0078), never a plain textarea', () => {
+    createComponent();
+
+    expect(fixture.debugElement.query(By.directive(ArticleContentEditor))).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('#detail-content textarea')).toBeNull();
+  });
+
   it('should build a sparse update request with only changed fields', () => {
     createComponent();
     component.form.controls.title.setValue('Titre édité');
 
     component.submitUpdate();
 
-    const [articleId, request] = staffArticleApiServiceMock.updateArticle.mock.calls[0] as [number, UpdateArticleRequest];
+    const [articleId, request] = staffArticleApiServiceMock.updateArticle.mock.calls[0] as [
+      number,
+      UpdateArticleRequest,
+    ];
     expect(articleId).toBe(10);
     expect(request).toEqual({ title: 'Titre édité' });
+  });
+
+  it('should build a sparse update request from a rich editor content change', () => {
+    createComponent();
+    const editor = fixture.debugElement.query(By.directive(ArticleContentEditor))
+      .componentInstance as ArticleContentEditor;
+
+    editor.contentChange.emit('<p>Contenu édité <strong>riche</strong>.</p>');
+    component.submitUpdate();
+
+    const [, request] = staffArticleApiServiceMock.updateArticle.mock.calls[0] as [
+      number,
+      UpdateArticleRequest,
+    ];
+    expect(request).toEqual({ content: '<p>Contenu édité <strong>riche</strong>.</p>' });
   });
 
   it('should send an explicit null summary when cleared (PATCH sparse)', () => {
@@ -183,7 +260,10 @@ describe('StaffArticleDetailPage', () => {
 
     component.submitUpdate();
 
-    const [, request] = staffArticleApiServiceMock.updateArticle.mock.calls[0] as [number, UpdateArticleRequest];
+    const [, request] = staffArticleApiServiceMock.updateArticle.mock.calls[0] as [
+      number,
+      UpdateArticleRequest,
+    ];
     expect(request).toEqual({ summary: null });
   });
 
@@ -193,7 +273,9 @@ describe('StaffArticleDetailPage', () => {
     component.submitUpdate();
 
     expect(staffArticleApiServiceMock.updateArticle).not.toHaveBeenCalled();
-    expect(messageServiceMock.add).toHaveBeenCalledWith(expect.objectContaining({ severity: 'info' }));
+    expect(messageServiceMock.add).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'info' }),
+    );
   });
 
   it('should replace local state with the server ArticleResponse after save', () => {
@@ -209,13 +291,25 @@ describe('StaffArticleDetailPage', () => {
   });
 
   it('should show the backend error message on update failure', () => {
-    staffArticleApiServiceMock.updateArticle.mockReturnValue(throwError(() => apiHttpError(409, 'ARTICLE_NOT_EDITABLE', 'Non modifiable.')));
+    staffArticleApiServiceMock.updateArticle.mockReturnValue(
+      throwError(() => apiHttpError(409, 'ARTICLE_NOT_EDITABLE', 'Non modifiable.')),
+    );
     createComponent();
     component.form.controls.title.setValue('Titre édité');
 
     component.submitUpdate();
 
     expect(component.updateErrorMessage()).toBe('Non modifiable.');
+  });
+
+
+  it('should expose the VISUAL-RESET-20 editorial sections, tags section and return action', () => {
+    createComponent();
+
+    expect(fixture.nativeElement.textContent).toContain('Informations éditoriales');
+    expect(fixture.nativeElement.textContent).toContain('Contenu de l’article');
+    expect(fixture.nativeElement.textContent).toContain('Tags');
+    expect(fixture.nativeElement.textContent).toContain('Retour aux articles');
   });
 
   // ---------------------------------------------------------------
@@ -243,7 +337,10 @@ describe('StaffArticleDetailPage', () => {
 
     component.submitUpdate();
 
-    const [, request] = staffArticleApiServiceMock.updateArticle.mock.calls[0] as [number, UpdateArticleRequest];
+    const [, request] = staffArticleApiServiceMock.updateArticle.mock.calls[0] as [
+      number,
+      UpdateArticleRequest,
+    ];
     expect(request).toEqual({ title: 'Titre édité' });
     expect(request).not.toHaveProperty('articleStatus');
     expect(request).not.toHaveProperty('publishedAt');
@@ -311,7 +408,9 @@ describe('StaffArticleDetailPage', () => {
 
     component.submitTags();
 
-    expect(staffArticleApiServiceMock.updateArticleTags).toHaveBeenCalledWith(10, { tagIds: [1, 2] });
+    expect(staffArticleApiServiceMock.updateArticleTags).toHaveBeenCalledWith(10, {
+      tagIds: [1, 2],
+    });
   });
 
   it('should send an empty tagIds array to dissociate all Tags', () => {
@@ -366,6 +465,9 @@ describe('StaffArticleDetailPage', () => {
     component.confirmPublish();
 
     expect(confirmationServiceMock.confirm).toHaveBeenCalledTimes(1);
+    expect(confirmationServiceMock.confirm).toHaveBeenCalledWith(
+      expect.objectContaining({ acceptLabel: 'Oui', rejectLabel: 'Non' }),
+    );
     expect(staffArticleApiServiceMock.publishArticle).not.toHaveBeenCalled();
   });
 
@@ -377,7 +479,9 @@ describe('StaffArticleDetailPage', () => {
 
     expect(staffArticleApiServiceMock.publishArticle).toHaveBeenCalledWith(10);
     expect(component.article()?.articleStatus).toBe('PUBLISHED');
-    expect(messageServiceMock.add).toHaveBeenCalledWith(expect.objectContaining({ severity: 'success' }));
+    expect(messageServiceMock.add).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'success' }),
+    );
   });
 
   it('should never call publish twice while a publish request is pending', () => {
@@ -478,13 +582,17 @@ describe('StaffArticleDetailPage', () => {
   });
 
   it('should show the backend error message on delete failure and not navigate', () => {
-    staffArticleApiServiceMock.deleteArticle.mockReturnValue(throwError(() => apiHttpError(409, 'ARTICLE_NOT_DELETABLE', 'Non supprimable.')));
+    staffArticleApiServiceMock.deleteArticle.mockReturnValue(
+      throwError(() => apiHttpError(409, 'ARTICLE_NOT_DELETABLE', 'Non supprimable.')),
+    );
     createComponent();
 
     component.confirmDelete();
     accept();
 
-    expect(messageServiceMock.add).toHaveBeenCalledWith(expect.objectContaining({ severity: 'error', detail: 'Non supprimable.' }));
+    expect(messageServiceMock.add).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'error', detail: 'Non supprimable.' }),
+    );
     expect(router.navigate).not.toHaveBeenCalled();
   });
 });

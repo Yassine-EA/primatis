@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1500" viewBox="0 0 1600 1500">
+  <defs>
+    <style>
+      .serif{font-family:Georgia,serif;fill:#082b40}.sans{font-family:Arial,sans-serif;fill:#405268}
+      .label{font-family:Arial,sans-serif;font-weight:700;fill:#082b40;font-size:22px}
+      .small{font-family:Arial,sans-serif;fill:#526276;font-size:17px}
+    </style>
+  </defs>
+  <rect width="1600" height="1500" fill="#faf9f6"/>
+  <text x="80" y="90" class="serif" font-size="52">PRIMATIS — Staff / Administration</text>
+  <text x="80" y="132" class="sans" font-size="22">ASSET-RESET-04 · planche de validation</text>
+
+  <text x="80" y="205" class="label">SHELL MUTUALISÉ</text>
+  <rect x="70" y="230" width="390" height="760" rx="20" fill="#082b40"/>
+  <text x="120" y="292" font-family="Georgia,serif" fill="#fff" font-size="31">✦ PRIMATIS</text>
+  <text x="120" y="324" font-family="Arial,sans-serif" fill="#d8e0e4" font-size="15">Administration</text>
+  <rect x="490" y="230" width="1040" height="760" rx="20" fill="#fff" stroke="#e2d8ca"/>
+  <text x="550" y="310" class="serif" font-size="42">Une base visuelle, sept ensembles d’écrans</text>
+  <text x="550" y="356" class="small">Le shell porte l’identité. Les données restent des composants réels.</text>
+  <g transform="translate(550 410)">
+    <rect width="430" height="150" rx="16" fill="#f7f2ea"/><text x="28" y="48" class="label">Navigation métier</text>
+    <text x="28" y="84" class="small">PrimeIcons + libellés visibles</text><text x="28" y="114" class="small">CRUD accessible et cohérent</text>
+  </g>
+  <g transform="translate(1020 410)">
+    <rect width="430" height="150" rx="16" fill="#f7f2ea"/><text x="28" y="48" class="label">Avatars</text>
+    <circle cx="355" cy="76" r="42" fill="#d7c3ff"/><text x="355" y="88" text-anchor="middle" font-family="Arial" font-size="30" fill="#542a8a">SL</text>
+    <text x="28" y="84" class="small">Initiales CSS uniquement</text><text x="28" y="114" class="small">Aucun faux portrait</text>
+  </g>
+  <g transform="translate(550 600)">
+    <rect width="900" height="310" rx="16" fill="#fff" stroke="#e2d8ca"/>
+    <text x="30" y="48" class="label">État vide partagé</text>
+    <text x="30" y="82" class="small">Illustration neutre · texte métier en HTML</text>
+  </g>
+
+  <text x="80" y="1070" class="label">PÉRIMÈTRE COUVERT</text>
+  <g font-family="Arial,sans-serif" font-size="18" fill="#082b40">
+    <rect x="70" y="1100" width="200" height="75" rx="14" fill="#fff" stroke="#e2d8ca"/><text x="170" y="1147" text-anchor="middle">Dashboard</text>
+    <rect x="285" y="1100" width="200" height="75" rx="14" fill="#fff" stroke="#e2d8ca"/><text x="385" y="1147" text-anchor="middle">Catalogue</text>
+    <rect x="500" y="1100" width="200" height="75" rx="14" fill="#fff" stroke="#e2d8ca"/><text x="600" y="1147" text-anchor="middle">Utilisateurs</text>
+    <rect x="715" y="1100" width="200" height="75" rx="14" fill="#fff" stroke="#e2d8ca"/><text x="815" y="1147" text-anchor="middle">Détail utilisateur</text>
+    <rect x="930" y="1100" width="200" height="75" rx="14" fill="#fff" stroke="#e2d8ca"/><text x="1030" y="1147" text-anchor="middle">Création</text>
+    <rect x="1145" y="1100" width="200" height="75" rx="14" fill="#fff" stroke="#e2d8ca"/><text x="1245" y="1147" text-anchor="middle">Copies / Articles</text>
+    <rect x="1360" y="1100" width="170" height="75" rx="14" fill="#fff" stroke="#e2d8ca"/><text x="1445" y="1135" text-anchor="middle">Management</text><text x="1445" y="1158" text-anchor="middle">overview</text>
+  </g>
+
+  <rect x="70" y="1235" width="1460" height="180" rx="18" fill="#f2ece2"/>
+  <text x="100" y="1280" class="label">Garde-fous</text>
+  <text x="100" y="1320" class="small">Pas de graphique statique · pas de portrait généré · pas de fonction absente du backend.</text>
+  <text x="100" y="1355" class="small">Logo clair et fallback compact : ASSET-RESET-01 · décor sidebar : 6 Ko runtime au total.</text>
+</svg>

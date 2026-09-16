@@ -7,8 +7,10 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { TagModule } from 'primeng/tag';
-import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Subject, debounceTime } from 'rxjs';
 
+import { AvailabilityStatus } from '../../../../catalogue/models/availability-status';
+import { CopyCondition } from '../../../../catalogue/models/copy-condition';
 import { CopyResponse } from '../../../../catalogue/models/copy-response';
 import { TitleResponse } from '../../../../catalogue/models/title-response';
 import { CopyApiService } from '../../../../catalogue/services/copy-api.service';
@@ -18,6 +20,11 @@ import { toAppError } from '../../../../core/errors/api-error.util';
 import { CreateLoanRequest } from '../../../../loans/models/create-loan-request';
 import { LoanResponse } from '../../../../loans/models/loan-response';
 import { LoanApiService } from '../../../../loans/services/loan-api.service';
+import {
+  copyAvailabilityStatusSeverity,
+  copyConditionSeverity as sharedCopyConditionSeverity,
+  StatusTagSeverity,
+} from '../../../../shared/status/status-severity';
 import { EmptyState } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorState } from '../../../../shared/ui/error-state/error-state';
 import { LoadingState } from '../../../../shared/ui/loading-state/loading-state';
@@ -109,12 +116,21 @@ export class LoanCreateDialog {
   private readonly titleSearchInput$ = new Subject<string>();
 
   constructor() {
+    // Jamais `distinctUntilChanged()` ici (DEV-15.7, bug réel détecté à la
+    // vérification manuelle) : ce Subject est créé une seule fois pour toute
+    // la durée de vie du dialog (jamais recréé à la fermeture/réouverture,
+    // seul l'état des Signals est réinitialisé via `resetState()`) — son
+    // dernier terme mémorisé aurait donc silencieusement supprimé une
+    // recherche identique à une session précédente (ex. rechercher deux
+    // fois le même Title pour deux emprunteurs différents), affichant à tort
+    // "Aucun titre trouvé". `debounceTime` seul suffit à limiter les appels
+    // HTTP pendant la frappe.
     this.borrowerSearchInput$
-      .pipe(debounceTime(SEARCH_DEBOUNCE_MS), distinctUntilChanged(), takeUntilDestroyed())
+      .pipe(debounceTime(SEARCH_DEBOUNCE_MS), takeUntilDestroyed())
       .subscribe((value) => this.runBorrowerSearch(value));
 
     this.titleSearchInput$
-      .pipe(debounceTime(SEARCH_DEBOUNCE_MS), distinctUntilChanged(), takeUntilDestroyed())
+      .pipe(debounceTime(SEARCH_DEBOUNCE_MS), takeUntilDestroyed())
       .subscribe((value) => this.runTitleSearch(value));
 
     // Réinitialise systématiquement à chaque (ré)ouverture : jamais de
@@ -176,6 +192,24 @@ export class LoanCreateDialog {
 
   selectCopy(copy: CopyResponse): void {
     this.selectedCopy.set(copy);
+  }
+
+  /**
+   * Délègue à shared/status/status-severity.ts (DEV-15.8, centralisation
+   * ID-19 — même mapping exact, désormais partagé avec
+   * `StaffTitleDetailPage`). Couleur uniquement (DEV-15.7 §10) : la valeur
+   * textuelle affichée (`copy.availabilityStatus`) reste l'enum brut,
+   * jamais traduite ici — `e2e/fixtures/loan-helpers.ts` vérifie
+   * littéralement "AVAILABLE" dans ce même item de liste (workflow E2E
+   * réel, `createLoanViaUi`), une traduction romprait ce contrat de test
+   * sans bénéfice proportionné.
+   */
+  copyAvailabilitySeverity(status: AvailabilityStatus): StatusTagSeverity {
+    return copyAvailabilityStatusSeverity(status);
+  }
+
+  copyConditionSeverity(condition: CopyCondition): StatusTagSeverity {
+    return sharedCopyConditionSeverity(condition);
   }
 
   retryCopies(): void {

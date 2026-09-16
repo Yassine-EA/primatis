@@ -11,6 +11,12 @@ import { ArticleUserResponse } from './article-user-response';
  * cet endpoint n'expose structurellement que des Articles `PUBLISHED`, et
  * `ck_article_published_at_consistency` (V001) garantit `published_at NOT
  * NULL` pour ce statut — jamais un simple raccourci de typage.
+ *
+ * `imageUrl` (DEV-ARTICLES-MEDIA-THUMBNAIL) : URL de la première image
+ * trouvée dans `content` (calculée backend, `ArticleThumbnailExtractor`),
+ * ou `null` si aucune image valide — `content` lui-même n'est jamais
+ * exposé ici. Jamais parsé côté Angular (mission §7) : la valeur reçue est
+ * utilisée telle quelle.
  */
 export interface ArticleSummaryResponse {
   id: number;
@@ -19,4 +25,5 @@ export interface ArticleSummaryResponse {
   slug: string;
   author: ArticleUserResponse;
   publishedAt: string;
+  imageUrl: string | null;
 }

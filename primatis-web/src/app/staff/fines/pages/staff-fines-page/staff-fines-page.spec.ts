@@ -102,6 +102,15 @@ describe('StaffFinesPage', () => {
     expect(fineApiServiceMock.listFines).toHaveBeenCalledWith(0, 20);
   });
 
+  it('should set the document title (DEV-15.8)', () => {
+    configure();
+    fineApiServiceMock.listFines.mockReturnValue(of(buildPage([buildFine()])));
+
+    createComponent();
+
+    expect(document.title).toBe('Amendes — PRIMATIS');
+  });
+
   it('should never call the self-service listOwnFines endpoint', () => {
     configure();
     fineApiServiceMock.listFines.mockReturnValue(of(buildPage([buildFine()])));

@@ -1,0 +1,43 @@
+DEV-16 RECONSTRUCTION — DE MATCHING
+===================================
+
+Editorial targets     : 113
+Preserved DE titles   : 468
+
+MATCH RESULTS
+=============
+
+EXACT_MATCH           : 2
+LIKELY_MATCH          : 0
+NO_MATCH / ACQUIRE    : 111
+
+BY CATEGORY
+===========
+CONTEMPORARY                   total= 15 exact=  0 likely=  0 acquire= 15
+GERMAN_LANGUAGE_CANON          total= 35 exact=  2 likely=  0 acquire= 33
+HISTORY_SOCIETY                total=  8 exact=  0 likely=  0 acquire=  8
+PHILOSOPHY_ESSAYS              total= 15 exact=  0 likely=  0 acquire= 15
+SCIENCE_CULTURE                total=  5 exact=  0 likely=  0 acquire=  5
+TWENTIETH_CENTURY              total= 30 exact=  0 likely=  0 acquire= 30
+YOUTH                          total=  5 exact=  0 likely=  0 acquire=  5
+
+POLICY
+======
+
+EXACT_MATCH is considered already represented.
+LIKELY_MATCH requires human confirmation before acquisition.
+NO_MATCH becomes an acquisition target.
+LIKELY_MATCH rows are excluded from acquisition search for now.
+German umlauts and ß are normalised only for matching.
+No Open Library request performed.
+No bundle modification.
+No database write.
+
+OUTPUTS
+=======
+
+data/audit/reconstruction-targets-DE-match.csv
+data/audit/reconstruction-targets-DE-likely-review.csv
+data/audit/reconstruction-acquisition-targets-DE.csv
+
+STATUS : PASS

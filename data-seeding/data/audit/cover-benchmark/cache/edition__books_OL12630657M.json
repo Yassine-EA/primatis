@@ -1,0 +1,50 @@
+{
+  "physical_format": "Hardcover",
+  "publishers": [
+    "Charles Corlet"
+  ],
+  "isbn_10": [
+    "2854806611"
+  ],
+  "number_of_pages": 61,
+  "isbn_13": [
+    "9782854806618"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publish_date": "January 1, 1999",
+  "key": "/books/OL12630657M",
+  "authors": [
+    {
+      "key": "/authors/OL3968680A"
+    }
+  ],
+  "title": "La cuisine des huîtres",
+  "works": [
+    {
+      "key": "/works/OL10003236W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "oclc_numbers": [
+    "48745772"
+  ],
+  "source_records": [
+    "marc:harvard_bibliographic_metadata/20220215_025.bib.mrc:332917634:1520"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-31T06:42:43.260315"
+  }
+}

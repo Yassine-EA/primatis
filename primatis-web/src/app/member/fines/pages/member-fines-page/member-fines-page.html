@@ -1,46 +1,209 @@
-<h1>Mes amendes</h1>
+<div class="member-fines-v3">
+  <header class="member-fines-v3-hero">
+    <picture aria-hidden="true">
+      <source
+        media="(max-width: 768px)"
+        srcset="/assets/member/shared/member-hero-768-mobile.webp"
+      />
+      <source media="(max-width: 1439px)" srcset="/assets/member/shared/member-hero-1280.webp" />
+      <img src="/assets/member/shared/member-hero-1920.webp" alt="" />
+    </picture>
+    <div class="member-fines-v3-hero-content">
+      <p class="member-fines-v3-kicker">Espace membre</p>
+      <h1>Mes amendes</h1>
+      <p>Un rappel pour continuer à explorer sans interruption.</p>
+    </div>
+  </header>
 
-@if (loading() && rows().length === 0 && !error()) {
-  <app-loading-state message="Chargement de vos amendes…" />
-} @else if (error(); as currentError) {
-  <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
-} @else if (rows().length === 0) {
-  <app-empty-state title="Aucune amende" message="Aucune amende à afficher." />
-} @else {
-  <p-table
-    [value]="rows()"
-    [lazy]="true"
-    [lazyLoadOnInit]="false"
-    [paginator]="true"
-    [rows]="20"
-    [first]="0"
-    [totalRecords]="totalRecords()"
-    [loading]="loading()"
-    (onLazyLoad)="onLazyLoad($event)"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th scope="col">Motif</th>
-        <th scope="col">Montant</th>
-        <th scope="col">Date d'émission</th>
-        <th scope="col">Exemplaire</th>
-        <th scope="col">Statut</th>
-        <th scope="col">Date de paiement</th>
-        <th scope="col">Date d'annulation</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-fine>
-      <tr>
-        <td>{{ fine.reason }}</td>
-        <td>{{ fine.amount | currency: 'EUR' }}</td>
-        <td>{{ fine.issuedAt }}</td>
-        <td>{{ fine.loan.copy.inventoryCode }}</td>
-        <td>
-          <p-tag [value]="fineStatusLabel(fine.fineStatus)" [severity]="fineStatusSeverity(fine.fineStatus)" />
-        </td>
-        <td>{{ fine.paidAt ?? '—' }}</td>
-        <td>{{ fine.cancelledAt ?? '—' }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-}
+  <div class="member-fines-v3-content">
+    @if (loading() && rows().length === 0 && !error()) {
+      <section class="member-fines-v3-state">
+        <app-loading-state message="Chargement de vos amendes…" />
+      </section>
+    } @else if (error(); as currentError) {
+      <section class="member-fines-v3-state">
+        <app-error-state [message]="currentError.message" [showRetry]="true" (retry)="retry()" />
+      </section>
+    } @else if (rows().length === 0) {
+      <section class="member-fines-v3-state">
+        <div class="member-fines-v3-state-content">
+          <img src="/assets/fallbacks/empty-states/fines.svg" alt="" aria-hidden="true" />
+          <app-empty-state title="Aucune amende" message="Vous n'avez aucune amende." />
+        </div>
+      </section>
+    } @else {
+      <section class="member-fines-v3-stats" aria-label="Synthèse des amendes affichées">
+        <article>
+          <span class="member-fines-v3-stat-icon"
+            ><i class="pi pi-receipt" aria-hidden="true"></i
+          ></span>
+          <div>
+            <h2>Amendes recensées</h2>
+            <strong>{{ totalRecords() }}</strong>
+            <p>dans votre historique</p>
+          </div>
+        </article>
+        <article [class.member-fines-v3-stat-alert]="unpaidCount() > 0">
+          <span class="member-fines-v3-stat-icon"
+            ><i class="pi pi-exclamation-circle" aria-hidden="true"></i
+          ></span>
+          <div>
+            <h2>À régler</h2>
+            <strong>{{ unpaidCount() }}</strong>
+            <p>{{ formatAmount(unpaidAmount()) }} sur cette page</p>
+          </div>
+        </article>
+        <article>
+          <span class="member-fines-v3-stat-icon"
+            ><i class="pi pi-check-circle" aria-hidden="true"></i
+          ></span>
+          <div>
+            <h2>Payées</h2>
+            <strong>{{ paidCount() }}</strong>
+            <p>sur cette page</p>
+          </div>
+        </article>
+        <article>
+          <span class="member-fines-v3-stat-icon"
+            ><i class="pi pi-ban" aria-hidden="true"></i
+          ></span>
+          <div>
+            <h2>Annulées</h2>
+            <strong>{{ cancelledCount() }}</strong>
+            <p>sur cette page</p>
+          </div>
+        </article>
+      </section>
+
+      <aside class="member-fines-v3-information">
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        <div>
+          <strong>Informations importantes</strong>
+          <ul>
+            <li>Une amende impayée empêche l’attribution d’un nouveau prêt.</li>
+            <li>Le règlement s’effectue hors de PRIMATIS puis est confirmé par la bibliothèque.</li>
+            <li>Le montant et le motif affichés sont ceux enregistrés par la bibliothèque.</li>
+          </ul>
+        </div>
+      </aside>
+
+      <section class="member-fines-v3-list" aria-labelledby="member-fines-list-title">
+        <div class="member-fines-v3-section-heading">
+          <div>
+            <p class="member-fines-v3-kicker">Votre historique</p>
+            <h2 id="member-fines-list-title">Détail des amendes</h2>
+          </div>
+          <span>{{ totalRecords() }} résultat{{ totalRecords() > 1 ? 's' : '' }}</span>
+        </div>
+
+        <div class="member-fines-v3-table">
+          <p-table
+            [value]="rows()"
+            [lazy]="true"
+            [lazyLoadOnInit]="false"
+            [paginator]="true"
+            [rows]="20"
+            [first]="0"
+            [totalRecords]="totalRecords()"
+            [loading]="loading()"
+            (onLazyLoad)="onLazyLoad($event)"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th scope="col">Exemplaire</th>
+                <th scope="col">Motif</th>
+                <th scope="col">Émise le</th>
+                <th scope="col">Montant</th>
+                <th scope="col">Statut</th>
+                <th scope="col">Clôturée le</th>
+                <th scope="col"><span class="visually-hidden">Notice</span></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-fine>
+              <tr>
+                <td>
+                  <div class="member-fines-v3-copy">
+                    <img src="/assets/fallbacks/cover-compact.svg" alt="" aria-hidden="true" />
+                    <div>
+                      <strong>{{ fine.loan.copy.inventoryCode }}</strong
+                      ><span>Exemplaire de bibliothèque</span>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ fine.reason }}</td>
+                <td>{{ formatDate(fine.issuedAt) }}</td>
+                <td [class.member-fines-v3-unpaid]="fine.fineStatus === 'UNPAID'">
+                  {{ formatAmount(fine.amount) }}
+                </td>
+                <td>
+                  <p-tag
+                    [value]="fineStatusLabel(fine.fineStatus)"
+                    [severity]="fineStatusSeverity(fine.fineStatus)"
+                  />
+                </td>
+                <td>{{ formatDate(fine.paidAt ?? fine.cancelledAt) }}</td>
+                <td>
+                  <a
+                    [routerLink]="['/catalogue', fine.loan.copy.titleId]"
+                    aria-label="Voir la notice associée à cette amende"
+                    ><i class="pi pi-arrow-right" aria-hidden="true"></i
+                  ></a>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+        <div class="member-fines-v3-cards">
+          @for (fine of rows(); track fine.id) {
+            <article [class.member-fines-v3-card-alert]="fine.fineStatus === 'UNPAID'">
+              <div class="member-fines-v3-card-heading">
+                <img src="/assets/fallbacks/cover-compact.svg" alt="" aria-hidden="true" />
+                <div>
+                  <h3>{{ fine.loan.copy.inventoryCode }}</h3>
+                  <p>{{ fine.reason }}</p>
+                </div>
+                <a
+                  [routerLink]="['/catalogue', fine.loan.copy.titleId]"
+                  aria-label="Voir la notice associée à cette amende"
+                  ><i class="pi pi-chevron-right" aria-hidden="true"></i
+                ></a>
+              </div>
+              <div class="member-fines-v3-card-details">
+                <div>
+                  <span>Émise le</span><strong>{{ formatDate(fine.issuedAt) }}</strong>
+                </div>
+                <div>
+                  <span>Montant</span
+                  ><strong [class.member-fines-v3-unpaid]="fine.fineStatus === 'UNPAID'">{{
+                    formatAmount(fine.amount)
+                  }}</strong>
+                </div>
+              </div>
+              <div class="member-fines-v3-card-footer">
+                <p-tag
+                  [value]="fineStatusLabel(fine.fineStatus)"
+                  [severity]="fineStatusSeverity(fine.fineStatus)"
+                />
+                @if (fine.paidAt ?? fine.cancelledAt; as closedAt) {
+                  <span>Clôturée le {{ formatDate(closedAt) }}</span>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+
+      <aside class="member-fines-v3-payment-note">
+        <span><i class="pi pi-credit-card" aria-hidden="true"></i></span>
+        <div>
+          <strong>Comment régler une amende&nbsp;?</strong>
+          <p>
+            Le règlement s’effectue directement auprès de la bibliothèque. Après confirmation par un
+            membre du personnel, le statut de l’amende est mis à jour.
+          </p>
+        </div>
+      </aside>
+    }
+  </div>
+</div>

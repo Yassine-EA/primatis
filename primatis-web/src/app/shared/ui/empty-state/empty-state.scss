@@ -1,12 +1,12 @@
 .empty-state {
   text-align: center;
-  padding: 2rem 1rem;
+  padding: var(--primatis-space-lg) var(--primatis-space-sm);
   color: var(--p-text-muted-color, #6b7280);
 }
 
 .empty-state-title {
-  margin: 0 0 0.5rem;
-  font-size: 1.1rem;
+  margin: 0 0 var(--primatis-space-2xs);
+  font-size: var(--primatis-text-card-title);
   font-weight: 600;
 }
 

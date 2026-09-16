@@ -1,0 +1,60 @@
+{
+  "identifiers": {
+    "goodreads": [
+      "5733397"
+    ]
+  },
+  "title": "I'm Too Big/Je Suis Trop Gros (I Can Read French)",
+  "authors": [
+    {
+      "key": "/authors/OL394475A"
+    },
+    {
+      "key": "/authors/OL457114A"
+    }
+  ],
+  "publish_date": "November 1998",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "weight": "5.6 ounces",
+  "publishers": [
+    "Barrons Educ Series Inc Audio"
+  ],
+  "isbn_13": [
+    "9780764171895"
+  ],
+  "edition_name": "Bk&Cassett edition",
+  "physical_format": "Paperback",
+  "isbn_10": [
+    "0764171895"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "General",
+    "Animals - Elephants",
+    "Juvenile Fiction",
+    "Children's 4-8",
+    "Audio: Juvenile"
+  ],
+  "physical_dimensions": "12.8 x 7.2 x 0.5 inches",
+  "source_records": [
+    "amazon:0764171895"
+  ],
+  "key": "/books/OL10931224M",
+  "number_of_pages": 28,
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-02-02T06:27:56.893034"
+  }
+}

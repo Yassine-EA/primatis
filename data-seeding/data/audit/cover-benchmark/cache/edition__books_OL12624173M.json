@@ -1,0 +1,52 @@
+{
+  "physical_format": "Paperback",
+  "title": "Un siecle de rugby a bayonne",
+  "isbn_10": [
+    "284394449X"
+  ],
+  "publishers": [
+    "Atlantica"
+  ],
+  "isbn_13": [
+    "9782843944499"
+  ],
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "publish_date": "December 12, 2001",
+  "key": "/books/OL12624173M",
+  "authors": [
+    {
+      "key": "/authors/OL3965723A"
+    }
+  ],
+  "works": [
+    {
+      "key": "/works/OL10000667W"
+    }
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "lccn": [
+    "2002542728"
+  ],
+  "lc_classifications": [
+    "GV945.9.F8 C27 2001"
+  ],
+  "source_records": [
+    "marc:marc_loc_2016/BooksAll.2016.part30.utf8:136146463:770"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T20:50:18.033121"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2020-12-07T18:56:02.028572"
+  }
+}

@@ -1,0 +1,34 @@
+/*
+ * Fondations responsive PRIMATIS (DEV-15.2 §12, complété DESIGN-V2-A
+ * pour couvrir le 4e seuil du Design System v2 — `wide` ≥ 1440px, jusque
+ * là absent : l'audit DEV-15.1 n'avait retenu que tablet/desktop, aucun
+ * écran n'exploitant encore un comportement propre ≥ 1440px).
+ *
+ * Convention de breakpoints unique du projet — seule source de vérité
+ * pour ne pas voir apparaître des seuils divergents au fil des écrans.
+ * Valeurs en SCSS (pas en custom properties CSS) car une media query ne
+ * peut pas lire une variable CSS — `@use` ce fichier depuis un `.scss`
+ * de composant.
+ */
+
+$primatis-bp-tablet: 768px;
+$primatis-bp-desktop: 1024px;
+$primatis-bp-wide: 1440px;
+
+@mixin from-tablet {
+  @media (min-width: $primatis-bp-tablet) {
+    @content;
+  }
+}
+
+@mixin from-desktop {
+  @media (min-width: $primatis-bp-desktop) {
+    @content;
+  }
+}
+
+@mixin from-wide {
+  @media (min-width: $primatis-bp-wide) {
+    @content;
+  }
+}

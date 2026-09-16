@@ -33,6 +33,39 @@ describe('Login', () => {
     component.form.setValue({ email, password });
   }
 
+  it('should expose one explicit page heading for the PRIMATIS access space', () => {
+    const headings = fixture.nativeElement.querySelectorAll('h1');
+
+    expect(headings).toHaveLength(1);
+    expect(headings[0].textContent.trim()).toBe('Accéder à votre espace PRIMATIS');
+  });
+
+  it('should use the approved responsive Login assets and identify the portrait as illustrated', () => {
+    const mobileBackground: HTMLSourceElement | null = fixture.nativeElement.querySelector(
+      '.login-v3-background source[media="(max-width: 768px)"]',
+    );
+    const portrait: HTMLImageElement | null =
+      fixture.nativeElement.querySelector('.login-v3-heritage img');
+
+    expect(mobileBackground?.getAttribute('srcset')).toBe(
+      '/assets/public/login/background/login-background-768-mobile.webp',
+    );
+    expect(portrait?.getAttribute('src')).toBe(
+      '/assets/public/login/portrait/georges-lemaitre-login-1024.webp',
+    );
+    expect(portrait?.alt).toContain('illustré');
+  });
+
+  it('should preserve credential autocomplete attributes and not expose a fake password recovery link', () => {
+    const email: HTMLInputElement | null = fixture.nativeElement.querySelector('#login-email');
+    const password: HTMLInputElement | null =
+      fixture.nativeElement.querySelector('#login-password');
+
+    expect(email?.autocomplete).toBe('username');
+    expect(password?.autocomplete).toBe('current-password');
+    expect(fixture.nativeElement.textContent).not.toContain('Mot de passe oublié');
+  });
+
   it('should not call AuthService.login when the form is invalid', () => {
     setFormValue('', '');
 
@@ -58,7 +91,10 @@ describe('Login', () => {
 
     component.submit();
 
-    expect(authServiceMock.login).toHaveBeenCalledWith('librarian@primatis.test', 'Correct-Password-2026!');
+    expect(authServiceMock.login).toHaveBeenCalledWith(
+      'librarian@primatis.test',
+      'Correct-Password-2026!',
+    );
   });
 
   it('should reflect a loading state while the login request is pending', () => {
@@ -93,11 +129,15 @@ describe('Login', () => {
 
     expect(component.errorMessage()).toBe('Adresse e-mail ou mot de passe incorrect.');
     expect(component.submitting()).toBe(false);
-    expect(fixture.nativeElement.textContent).toContain('Adresse e-mail ou mot de passe incorrect.');
+    expect(fixture.nativeElement.textContent).toContain(
+      'Adresse e-mail ou mot de passe incorrect.',
+    );
   });
 
   it('should display a user-facing message for ACCOUNT_TEMPORARILY_LOCKED', () => {
-    authServiceMock.login.mockReturnValue(throwError(() => httpError('ACCOUNT_TEMPORARILY_LOCKED', 401)));
+    authServiceMock.login.mockReturnValue(
+      throwError(() => httpError('ACCOUNT_TEMPORARILY_LOCKED', 401)),
+    );
     setFormValue('librarian@primatis.test', 'Wrong-Password');
 
     component.submit();
@@ -140,7 +180,10 @@ describe('Login returnUrl handling', () => {
     vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
     fixture.detectChanges();
 
-    component.form.setValue({ email: 'librarian@primatis.test', password: 'Correct-Password-2026!' });
+    component.form.setValue({
+      email: 'librarian@primatis.test',
+      password: 'Correct-Password-2026!',
+    });
 
     return { component, router };
   }

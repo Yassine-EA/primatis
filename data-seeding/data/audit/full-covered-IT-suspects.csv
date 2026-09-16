@@ -1,0 +1,35 @@
+source_key,title,subtitle,authors,author_count,isbn,publication_year,publisher,genres,duplicate_like_count,decision,reason,audit_flags
+/books/OL62359805M,For Love of Mother-Not,,Alan Dean Foster,1,,1984,Editrice Nord,Fiction | Science-fiction,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL12648442M,La réception des ecrits italiens en France a la renaissance,,Alfredo Perifano,1,9782900478233,1981,Ctre Rech. Renaissance,Histoire,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL4423974M,The discourses.,,Alissa Ardito | Henry Neville | Niccolò Machiavelli | Nathan Tarcov | Harvey C. Mansfield | Ninian Hill Thomson,6,9780140400144,1970,Penguin Books,Histoire | Philosophie | Politique | Sciences sociales,0,,,MULTI_AUTHOR_6 | TITLE_LANGUAGE_SUSPECT
+/books/OL14021472M,Manuale di storia dell'arte,,Anton Heinrich Springer,1,,1916,Istituto italiano d'arti grafiche,Arts | Histoire,0,,,SPECIALIZED_CONTENT
+/books/OL6504811M,...Politics and morals,,Benedetto Croce,1,,1946,G. Allen & Unwin ltd.,Politique,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL13434626M,I Colori del Divino,,Biblioteca Riccardiana,1,9788883042881,2001,Polistampa,,0,,,AUTHOR_ENTITY_SUSPECT
+/books/OL22348590M,"Told in confidence, and other stories",,Cesare Pavese,1,9780720603903,1971,Owen,Fiction,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL4991727M,"Domenico Bollani, Bishop of Brescia",devotion to church and state in the republic of Venice in the sixteenth century,Christopher Cairns,1,9789060043462,1976,De Graaf,Biographie,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL15539218M,Giacomo Leopardi e il pensiero scientifico,,"Convegno ""Leopardi e il pensiero scientifico"" (1998 Rome, Italy)",1,9788886095624,2001,Fahrenheit 451,,0,,,AUTHOR_ENTITY_SUSPECT
+/books/OL20483648M,Le Paradis du Dante,,Dante Alighieri,1,,1860,M. Lévy frères,,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL1010134M,The complete lyric poems of Dante Alighieri,,Dante Alighieri,1,9780773486942,1997,Edwin Mellen Press,Religion,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL901136M,Henry Moore,gli ultimi 10 anni.,Herbert Edward Read | J. Hedgecoe | David Sylvester | Alan Bowness | Henry Moore | Ann Garrould,6,9788881180127,1995,Skira,Arts | Biographie,0,,,MULTI_AUTHOR_6
+/books/OL22772638M,Veinte mil leguas de viaje submarino,,Jules Verne,1,,1971,Editorial Bruguera,Fiction | Jeunes adultes | Jeunesse | Science-fiction | Thriller,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL12849729M,"Studia Patristica. Vol. XIX -- Historica, Theologica, Gnostica, Biblica et Apocrypha.",,Livingstone E.A.,1,9789068312317,1989,Peeters,Histoire,0,,,SPECIALIZED_CONTENT
+/books/OL21926209M,Short stories,,Luigi Pirandello,1,9780192811608,1975,Oxford University Press,Fiction,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL4490777M,Six characters in search of an author,,Luigi Pirandello,1,9780413460301,1979,Eyre Methuen,Théâtre,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL2394887M,Tales of suicide,a selection from Luigi Pirandello's short stories for a year,Luigi Pirandello,1,9780937832318,1988,Dante University of America Press,Fiction,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL13533552M,The late Mattia Pascal,(Il fu Mattia Pascal),Luigi Pirandello,1,,1923,E. P. Dutton & Company,Biographie | Fiction,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL22441070M,Arrivano i Fortune! = The good fortunes gang,,Margaret Mahy,1,9788804415091,1997,Arnoldo Mondadori Editore,Fiction,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL21163116M,That bowling alley on the Tiber,tales of a director,Michelangelo Antonioni,1,9780195036763,1986,Oxford University Press,Fiction,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL23428050M,"Catalogo di alcune opere attinenti alle scienze, alle arti e ad altri bisogni dell'uomo, le ...",,Michele Colombo,1,,1812,Dalla Tipografia Mussi,Sciences,0,,,SPECIALIZED_CONTENT
+/books/OL13430633M,Matematica generale con il calcolatore (UNITEXT / La Matematica per il 3+2),,Michele Impedovo,1,9788847002586,2004,Springer,Technologie,0,,,SPECIALIZED_CONTENT
+/books/OL13431629M,Trieste,Raccolte Dei Civici Musei Di Storia Ed Arte E Rilievi Del Propileo 1,"Monika; Civici musei di storia ed arte di Trieste; Camuffo, Michela Verzar-Bass",1,9788871402468,2003,Quasar,,0,,,AUTHOR_ENTITY_SUSPECT
+/books/OL6459524M,Les essais de Michel de Montaigne.,,"Montaigne, Michel de",1,,1669,"L. Rondet, C. Iovrnel, et R. Chevillion",Histoire | Philosophie | Politique | Éducation,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL12850044M,Cura Aquarum in Campania Proceedings of the Ninth International Congress on the History of Water Management and Hydraulic Engineering in the Mediterra (Bulletin Antieke Beschaving),,Nathalie de Haan,1,9789068318449,1996,Stichting Babesch,Histoire,0,,,TITLE_LANGUAGE_SUSPECT | SPECIALIZED_CONTENT
+/books/OL5629164M,Nicholas Machiavel's Prince.,,Niccolò Machiavelli,1,,1968,Theatrum Orbis Terrarum,Politique,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL18636096M,The prince and other political writings,,Niccolò Machiavelli,1,9780460112802,1981,Dent,Politique,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL16857836M,The idea of a living spirit,poetic logic as a contemporary theory,Paul Colilli | Paul A. Colilli,2,9780802041005,1997,University of Toronto Press,Biographie | Poésie,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL21011362M,I principj della filosofia di Renato Des-Cartes,tradotti del Francese col confronto del Latino in cui l'autore gli scrisse,René Descartes,1,,1722,Per Gio. Francesco Mairesse,Philosophie | Sciences,0,,,TITLE_LANGUAGE_SUSPECT
+/books/OL52386277M,Discourses,,"Richardson, Brian | Niccolò Machiavelli | Ninian Hill Thomson | Bernard Crick | Leslie Walker",5,,1950,Yale University Press,Politique,0,,,MULTI_AUTHOR_5 | TITLE_LANGUAGE_SUSPECT
+/books/OL15304905M,Atti della prima Riunione degli scienziati italiani,tenuta in Pisa nell'ottobre del 1839.,"Riunione degli scienziati italiani (1st 1839 Pisa, Italy)",1,,1840,Tip. Nistri,Sciences,0,,,AUTHOR_ENTITY_SUSPECT
+/books/OL22708772M,Sol LeWitt,"wall drawing 1126 whirls and twirls 1, Reggio Emilia : invito a Luciano Fabro, Sol LeWitt, Eliseo Mattiacci, Robert Morris, Richard Serra",Shariann Lewitt,1,9788873361220,2004,Gli ori,,2,,,DUPLICATE_LIKE_2
+/books/OL17315420M,Sol LeWitt,"opere recenti : pyramids, complex forms e folding screens",Shariann Lewitt,1,9788843531745,1992,Electa Editori Umbri,,2,,,DUPLICATE_LIKE_2
+/books/OL13996792M,Bollettino della Società dei naturalisti in Napoli,,Società dei naturalisti in Napoli.,1,,1887,Giannini [etc.],Sciences,0,,,AUTHOR_ENTITY_SUSPECT | SPECIALIZED_CONTENT

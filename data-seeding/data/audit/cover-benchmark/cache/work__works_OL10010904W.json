@@ -1,0 +1,33 @@
+{
+  "title": "Le voyage en chine",
+  "key": "/works/OL10010904W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3977471A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Travel",
+    "Description and travel",
+    "Early works to 1800",
+    "Descriptions et voyages"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:58:57.594996"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-02-15T04:17:06.931322"
+  }
+}

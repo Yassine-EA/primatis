@@ -1,0 +1,48 @@
+{
+  "title": "Le Vicomte de Bragelonne",
+  "subtitle": "Tome III. Deuxième partie",
+  "authors": [
+    {
+      "key": "/authors/OL18236A"
+    }
+  ],
+  "publish_date": "October 30, 2000",
+  "languages": [
+    {
+      "key": "/languages/fre"
+    }
+  ],
+  "physical_format": "Paperback",
+  "weight": "1.1 pounds",
+  "publishers": [
+    "Adamant Media Corporation"
+  ],
+  "isbn_13": [
+    "9780543854544"
+  ],
+  "isbn_10": [
+    "054385454X"
+  ],
+  "type": {
+    "key": "/type/edition"
+  },
+  "subjects": [
+    "Fiction / Adventure"
+  ],
+  "physical_dimensions": "22 x 8.2 x 5.2 inches",
+  "source_records": [
+    "amazon:054385454X"
+  ],
+  "key": "/books/OL10502461M",
+  "number_of_pages": 352,
+  "latest_revision": 13,
+  "revision": 13,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2008-04-30T09:38:13.731961"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-12-27T04:34:37.555025"
+  }
+}

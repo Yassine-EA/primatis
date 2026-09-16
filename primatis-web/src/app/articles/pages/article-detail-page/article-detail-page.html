@@ -1,30 +1,60 @@
+<nav class="content-container article-detail-breadcrumb" aria-label="Fil d'Ariane">
+  <ol>
+    <li><a routerLink="/">Accueil</a></li>
+    <li><a routerLink="/articles">Articles</a></li>
+    @if (article(); as breadcrumbArticle) {
+      <li aria-current="page">{{ breadcrumbArticle.title }}</li>
+    }
+  </ol>
+</nav>
+
 @if (loading()) {
-  <app-loading-state message="Chargement de l’article…" />
+  <div class="content-container article-detail-state">
+    <app-loading-state message="Chargement de l'article…" />
+  </div>
 } @else if (error(); as currentError) {
-  <app-error-state [message]="currentError.message" />
+  <div class="content-container article-detail-state">
+    <app-error-state [message]="currentError.message" />
+  </div>
 } @else if (article(); as currentArticle) {
-  <article class="article-detail">
-    <h1>{{ currentArticle.title }}</h1>
+  <article class="content-container article-detail">
+    <header class="article-detail-hero">
+      <p class="article-detail-kicker">Article · Bibliothèque Georges Lemaître</p>
 
-    <p class="article-detail-meta">
-      {{ authorName(currentArticle) }}
-      @if (currentArticle.publishedAt) {
-        <span> — {{ currentArticle.publishedAt }}</span>
-      }
-    </p>
+      <h1 class="article-detail-title">{{ currentArticle.title }}</h1>
 
-    @if (currentArticle.tags.length > 0) {
-      <div class="article-detail-tags">
-        @for (tag of currentArticle.tags; track tag.id) {
-          <p-tag [value]="tag.label" />
+      <div class="article-detail-byline" aria-label="Informations de publication">
+        <span class="article-detail-author">{{ authorName(currentArticle) }}</span>
+        @if (currentArticle.publishedAt) {
+          <span class="article-detail-meta-separator" aria-hidden="true"></span>
+          <time [attr.datetime]="currentArticle.publishedAt">
+            {{ currentArticle.publishedAt | date: 'dd/MM/yyyy' }}
+          </time>
         }
       </div>
-    }
 
-    @if (currentArticle.summary) {
-      <p class="article-detail-summary">{{ currentArticle.summary }}</p>
-    }
+      @if (currentArticle.tags.length > 0) {
+        <div class="article-detail-tags" aria-label="Thématiques de l'article">
+          @for (tag of currentArticle.tags; track tag.id) {
+            <p-tag [value]="tag.label" severity="secondary" />
+          }
+        </div>
+      }
 
-    <div class="article-detail-content" [innerHTML]="currentArticle.content"></div>
+      @if (currentArticle.summary) {
+        <p class="article-detail-summary">{{ currentArticle.summary }}</p>
+      }
+    </header>
+
+    <div class="article-detail-reader">
+      <div class="article-detail-content" [innerHTML]="currentArticle.content"></div>
+
+      <footer class="article-detail-footer">
+        <a routerLink="/articles" class="article-detail-back-link">
+          <i class="pi pi-arrow-left" aria-hidden="true"></i>
+          Retour aux articles
+        </a>
+      </footer>
+    </div>
   </article>
 }

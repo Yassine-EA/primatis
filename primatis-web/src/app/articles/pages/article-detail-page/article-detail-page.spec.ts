@@ -118,14 +118,34 @@ describe('ArticleDetailPage', () => {
   // Rendu
   // ---------------------------------------------------------------
 
-  it('should render the title, author and publishedAt', () => {
+  it('should render the title, author and a French-formatted publishedAt', () => {
     configure();
     createComponent();
 
     const text: string = fixture.nativeElement.textContent;
     expect(text).toContain('Les horaires d’été');
     expect(text).toContain('Prénom Nom');
-    expect(text).toContain('2026-08-01T10:00:00Z');
+    expect(text).toContain('01/08/2026');
+    // Jamais le timestamp ISO brut sur le portail public (mission §11).
+    expect(text).not.toContain('2026-08-01T10:00:00Z');
+  });
+
+  it('should set the document title to "<Article> — PRIMATIS" once loaded (DESIGN-V2-B4)', () => {
+    configure();
+    createComponent();
+
+    expect(document.title).toBe('Les horaires d’été — PRIMATIS');
+  });
+
+  it('should render a breadcrumb with links to Home and to the Articles list', () => {
+    configure();
+    createComponent();
+
+    expect(fixture.nativeElement.querySelector('a[href="/"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('a[href="/articles"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('[aria-current="page"]')?.textContent?.trim()).toBe(
+      'Les horaires d’été',
+    );
   });
 
   it('should render the summary when present', () => {
@@ -174,6 +194,25 @@ describe('ArticleDetailPage', () => {
     // Si le HTML avait été échappé plutôt que rendu, ce marqueur littéral
     // apparaîtrait dans le texte affiché.
     expect(contentEl.textContent).not.toContain('<strong>');
+  });
+
+  it('should render rich editorial elements and an article image inside the content container', () => {
+    configure();
+    articleApiServiceMock.getPublishedArticleBySlug.mockReturnValue(
+      of(
+        buildArticle({
+          content:
+            '<h2>Un regard nouveau</h2><p>Texte</p><blockquote>Une citation</blockquote><img src="/media/articles/test.webp" alt="Illustration scientifique">',
+        }),
+      ),
+    );
+    createComponent();
+
+    const contentEl: HTMLElement = fixture.nativeElement.querySelector('.article-detail-content');
+    expect(contentEl.querySelector('h2')?.textContent).toBe('Un regard nouveau');
+    expect(contentEl.querySelector('blockquote')?.textContent).toBe('Une citation');
+    expect(contentEl.querySelector('img')?.getAttribute('src')).toBe('/media/articles/test.webp');
+    expect(contentEl.querySelector('img')?.getAttribute('alt')).toBe('Illustration scientifique');
   });
 
   it('should let Angular apply its own DOM sanitization on [innerHTML] (no bypass)', () => {

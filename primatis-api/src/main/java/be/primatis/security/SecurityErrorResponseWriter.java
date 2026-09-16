@@ -39,6 +39,14 @@ class SecurityErrorResponseWriter {
 
         response.setStatus(status.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        objectMapper.writeValue(response.getWriter(), body);
+        // DEV-16.6 : écrire via getOutputStream() (octets UTF-8 par défaut
+        // chez Jackson), jamais getWriter() — ce dernier encode selon le
+        // characterEncoding de la réponse, qui reste au défaut du conteneur
+        // Servlet (ISO-8859-1) tant qu'aucun setCharacterEncoding("UTF-8")
+        // explicite n'est posé avant l'obtention du Writer. Bug réel
+        // confirmé en conditions réelles : tout message d'erreur 401
+        // accentué ("expiré", "accéder") était corrompu (octet ISO-8859-1
+        // brut réinterprété comme UTF-8 par le client -> U+FFFD).
+        objectMapper.writeValue(response.getOutputStream(), body);
     }
 }

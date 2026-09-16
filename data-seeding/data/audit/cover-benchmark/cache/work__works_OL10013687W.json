@@ -1,0 +1,45 @@
+{
+  "title": "Mon pere",
+  "subject_places": [
+    "Palestine"
+  ],
+  "subjects": [
+    "Voyages and travels",
+    "Jews, Moroccan",
+    "Description and travel",
+    "Biography",
+    "History",
+    "Moroccan Jews",
+    "Jews"
+  ],
+  "subject_people": [
+    "Isaac A. Rosilio"
+  ],
+  "key": "/works/OL10013687W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL3980499A"
+      }
+    }
+  ],
+  "subject_times": [
+    "1917-1948"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T01:59:29.466453"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-13T22:24:47.354719"
+  }
+}

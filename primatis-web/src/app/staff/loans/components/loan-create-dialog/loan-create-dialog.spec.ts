@@ -232,6 +232,55 @@ describe('LoanCreateDialog', () => {
     expect(staffCatalogueApiServiceMock.searchTitles).toHaveBeenCalledWith({ q: 'misérables', page: 0, size: 20 });
   });
 
+  it('should re-run the exact same title search across two dialog sessions (DEV-15.7 regression)', () => {
+    // Bug réel détecté à la vérification manuelle : le dialog n'est jamais
+    // détruit entre deux ouvertures (seuls les Signals sont réinitialisés),
+    // un `distinctUntilChanged()` sur le Subject de recherche supprimait
+    // silencieusement une seconde recherche identique à la première —
+    // par exemple rechercher deux fois le même Title pour deux emprunteurs
+    // différents affichait à tort "Aucun titre trouvé".
+    createComponent();
+    component.onTitleSearchInput('Les Misérables');
+    vi.advanceTimersByTime(300);
+    expect(staffCatalogueApiServiceMock.searchTitles).toHaveBeenCalledTimes(1);
+
+    // Fermeture (le dialog reste monté) puis réouverture réelle : le
+    // `visible` input redevient `true`, `resetState()` vide le terme de
+    // recherche et les résultats, mais le Subject sous-jacent survit.
+    fixture.componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    staffCatalogueApiServiceMock.searchTitles.mockClear();
+
+    component.onTitleSearchInput('Les Misérables');
+    vi.advanceTimersByTime(300);
+
+    expect(staffCatalogueApiServiceMock.searchTitles).toHaveBeenCalledWith({
+      q: 'Les Misérables',
+      page: 0,
+      size: 20,
+    });
+  });
+
+  it('should re-run the exact same borrower search across two dialog sessions (DEV-15.7 regression)', () => {
+    createComponent();
+    component.onBorrowerSearchInput('M000000001');
+    vi.advanceTimersByTime(300);
+    expect(userApiServiceMock.listUsers).toHaveBeenCalledTimes(1);
+
+    fixture.componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    userApiServiceMock.listUsers.mockClear();
+
+    component.onBorrowerSearchInput('M000000001');
+    vi.advanceTimersByTime(300);
+
+    expect(userApiServiceMock.listUsers).toHaveBeenCalledWith(0, 20, 'M000000001');
+  });
+
   it('should load copies for the selected title via listCopies(titleId)', () => {
     createComponent();
 
@@ -261,6 +310,24 @@ describe('LoanCreateDialog', () => {
     fixture.detectChanges();
 
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('INV-000099');
+  });
+
+  it('should color-code copy availability without translating the displayed text (DEV-15.7)', () => {
+    createComponent();
+
+    expect(component.copyAvailabilitySeverity('AVAILABLE')).toBe('success');
+    expect(component.copyAvailabilitySeverity('ON_LOAN')).toBe('warn');
+    expect(component.copyAvailabilitySeverity('RESERVED')).toBe('warn');
+    expect(component.copyAvailabilitySeverity('UNAVAILABLE')).toBe('danger');
+  });
+
+  it('should color-code copy condition (DEV-15.7)', () => {
+    createComponent();
+
+    expect(component.copyConditionSeverity('GOOD')).toBe('success');
+    expect(component.copyConditionSeverity('DAMAGED')).toBe('warn');
+    expect(component.copyConditionSeverity('LOST')).toBe('danger');
+    expect(component.copyConditionSeverity('OUT_OF_SERVICE')).toBe('danger');
   });
 
   it('should select a copy and keep its real numeric id', () => {
