@@ -255,3 +255,60 @@ def assign_staff_roles(
         else user
         for user in users
     ]
+
+
+BLOCKED_REASON_DEMO = "Blocage administratif de démonstration : dossier d'adhésion à régulariser."
+
+
+def apply_member_states(
+    users: list[SyntheticUserRow],
+    *,
+    excluded_source_keys: frozenset[str],
+    reference_date: date,
+    blocked: int,
+    expired: int,
+    disabled: int,
+) -> list[SyntheticUserRow]:
+    """DEV-17.3 : quelques comptes BLOCKED / EXPIRED / DISABLED (hors staff et scénarios).
+
+    Sélection déterministe : parmi les `ROLE_MEMBER` hors `excluded_source_keys`,
+    triés par `source_key`, on prend la **fin** de liste (BLOCKED, puis EXPIRED,
+    puis DISABLED), ce qui laisse intacts les comptes de scénarios existants.
+
+    - BLOCKED : `member_status=BLOCKED`, `blocked_reason` renseigné ;
+    - EXPIRED : `member_status=EXPIRED`, `member_expiration_date` échue
+      (`reference_date - (10 + 20 i)` jours), choisi parmi des adhésions
+      antérieures d'au moins 120 jours (échéance postérieure à l'inscription) ;
+    - DISABLED : `account_status=DISABLED`, `member_status` inchangé (ACTIVE) —
+      AccountStatus et MemberStatus restent deux dimensions distinctes.
+    """
+    members = sorted(
+        (u for u in users if u.role_code == SYNTHETIC_ROLE_CODE
+         and u.source_key not in excluded_source_keys
+         and u.account_status == "ACTIVE" and u.member_status == "ACTIVE"),
+        key=lambda u: u.source_key,
+    )
+    if len(members) < blocked + expired + disabled:
+        raise ValueError("Not enough eligible members for BLOCKED/EXPIRED/DISABLED states.")
+
+    chosen: dict[str, SyntheticUserRow] = {}
+    pool = list(members)
+    for user in [pool.pop() for _ in range(blocked)]:
+        chosen[user.source_key] = replace(
+            user, member_status="BLOCKED", blocked_reason=BLOCKED_REASON_DEMO,
+        )
+    old_enough = date.fromordinal(reference_date.toordinal() - 120)
+    expired_pool = [u for u in pool if u.registration_date and u.registration_date <= old_enough]
+    if len(expired_pool) < expired:
+        raise ValueError("Not enough old memberships for EXPIRED members.")
+    for index in range(expired):
+        user = expired_pool.pop()
+        pool.remove(user)
+        chosen[user.source_key] = replace(
+            user, member_status="EXPIRED",
+            member_expiration_date=reference_date - timedelta(days=10 + 20 * index),
+        )
+    for user in [pool.pop() for _ in range(disabled)]:
+        chosen[user.source_key] = replace(user, account_status="DISABLED")
+
+    return [chosen.get(user.source_key, user) for user in users]

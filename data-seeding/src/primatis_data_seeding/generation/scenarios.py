@@ -28,6 +28,15 @@ class ScenarioCounts:
     returned_late_loans: int
     waiting_reservations: int
     ready_reservations: int
+    # DEV-17.3 — diversité (0 par défaut : les appels historiques sont inchangés).
+    returned_on_time_loans: int = 0
+    fulfilled_reservations: int = 0  # emprunteurs pris parmi les retours à temps
+    cancelled_reservations: int = 0  # moitié depuis WAITING, moitié depuis READY
+    expired_reservations: int = 0
+    damaged_available_copies: int = 0
+    damaged_unavailable_copies: int = 0
+    lost_copies: int = 0
+    out_of_service_copies: int = 0
 
 
 DEFAULT_FULL_SCENARIO_COUNTS = ScenarioCounts(
@@ -36,6 +45,23 @@ DEFAULT_FULL_SCENARIO_COUNTS = ScenarioCounts(
     returned_late_loans=60,
     waiting_reservations=40,
     ready_reservations=20,
+)
+
+# DEV-17.3 (HD-13) : profil `full_consolidated` = scénarios historiques + diversité.
+DEMO_TARGETED_SCENARIO_COUNTS = ScenarioCounts(
+    active_loans=80,
+    overdue_loans=20,
+    returned_late_loans=60,
+    waiting_reservations=40,
+    ready_reservations=20,
+    returned_on_time_loans=15,
+    fulfilled_reservations=6,
+    cancelled_reservations=6,
+    expired_reservations=6,
+    damaged_available_copies=4,
+    damaged_unavailable_copies=4,
+    lost_copies=3,
+    out_of_service_copies=3,
 )
 
 
@@ -96,6 +122,7 @@ class ScenarioNotificationRow:
 class ScenarioCopyStateRow:
     inventory_code: str
     availability_status: str
+    copy_condition: str = "GOOD"
 
 
 @dataclass
@@ -204,7 +231,13 @@ def generate_demo_scenarios(
         counts.returned_late_loans,
         counts.waiting_reservations,
         counts.ready_reservations,
+        counts.returned_on_time_loans,
+        # FULFILLED : l'emprunteur est celui d'un retour à temps (même utilisateur).
+        counts.cancelled_reservations,
+        counts.expired_reservations,
     ))
+    if counts.fulfilled_reservations > counts.returned_on_time_loans:
+        raise ValueError("fulfilled_reservations cannot exceed returned_on_time_loans.")
     if len(users) < required_users:
         raise ValueError(
             f"Not enough synthetic members: received={len(users)} required={required_users}."
@@ -448,14 +481,216 @@ def generate_demo_scenarios(
             created_at=ready_at, origin_type="reservation", origin_key=reservation.source_key,
         )
 
-    _validate_generated_scenarios(result, copies, settings)
+    _add_diversity_scenarios(
+        result, counts=counts, settings=settings, reference_datetime=reference_datetime,
+        ordered_users=ordered_users, user_cursor=user_cursor, all_copies=all_copies,
+        by_title=by_title, reserved_inventory=reserved_inventory,
+        used_history_inventory=used_history_inventory, open_loan_titles=open_loan_titles,
+    )
+
+    _validate_generated_scenarios(result, copies, settings, reference_datetime)
     return result
+
+
+def _add_diversity_scenarios(
+    result: ScenarioGenerationResult,
+    *,
+    counts: ScenarioCounts,
+    settings: ScenarioSettings,
+    reference_datetime: datetime,
+    ordered_users: list[SyntheticUserRow],
+    user_cursor: int,
+    all_copies: list[PrimatisCopyRow],
+    by_title: dict[str, list[PrimatisCopyRow]],
+    reserved_inventory: set[str],
+    used_history_inventory: set[str],
+    open_loan_titles: list[tuple[str, str]],
+) -> None:
+    """DEV-17.3 : retours à temps, réservations terminales, copies dégradées.
+
+    Toutes les dates sont relatives à `reference_datetime`. Les Copies utilisées
+    proviennent de l'ensemble « libre » (ni prêt ouvert, ni READY, ni historique) ;
+    aucune Fine n'est créée pour un retour à temps (règle §5 : Fine = retour tardif).
+    """
+    ref_date = reference_datetime.date()
+    tz = reference_datetime.tzinfo
+    hold = timedelta(hours=settings.reservation_ready_hold_hours)
+
+    free = [
+        copy for copy in all_copies
+        if copy.inventory_code not in reserved_inventory
+        and copy.inventory_code not in used_history_inventory
+    ]
+    free_cursor = 0
+    needed = (
+        counts.returned_on_time_loans + counts.expired_reservations
+        + counts.cancelled_reservations - counts.cancelled_reservations // 2
+    )
+    # Pas régulier dans la liste triée : évite de concentrer tous les cas sur les
+    # exemplaires consécutifs d'un même Title (déterministe).
+    stride = max(1, len(free) // (needed + 1)) if needed else 1
+
+    def take_free() -> PrimatisCopyRow:
+        nonlocal free_cursor
+        index = free_cursor * stride
+        if index >= len(free):
+            raise ValueError("Not enough free Copies for diversity scenarios.")
+        copy = free[index]
+        free_cursor += 1
+        used_history_inventory.add(copy.inventory_code)
+        return copy
+
+    def next_user() -> SyntheticUserRow:
+        nonlocal user_cursor
+        user = ordered_users[user_cursor]
+        user_cursor += 1
+        return user
+
+    # --- Retours à temps (+ Reservations FULFILLED sur les premiers) -----------
+    for index in range(counts.returned_on_time_loans):
+        user = next_user()
+        copy = take_free()
+        return_date = ref_date - timedelta(days=11 + index % 15)
+        due_date = return_date + timedelta(days=1 + index % 10)  # due <= ref - 1 j
+        loan_date = datetime.combine(
+            due_date - timedelta(days=settings.loan_duration_days), time(hour=9), tzinfo=tz,
+        )
+        loan = ScenarioLoanRow(
+            f"seed-loan-returned-ontime-{index + 1:05d}", user.source_key,
+            copy.inventory_code, loan_date, due_date, return_date, "RETURNED", None,
+        )
+        result.loans.append(loan)
+        returned_at = datetime.combine(return_date, time(hour=16), tzinfo=tz)
+        _add_notification(
+            result, recipient=user.source_key, notification_type="LOAN_RETURNED",
+            title="Retour enregistré", message="Le retour d'un exemplaire a été enregistré.",
+            created_at=returned_at, origin_type="loan", origin_key=loan.source_key,
+        )
+        if index < counts.fulfilled_reservations:
+            ready_at = loan_date - timedelta(hours=20)
+            reservation_date = ready_at - timedelta(days=3, minutes=index)
+            reservation = ScenarioReservationRow(
+                f"seed-reservation-fulfilled-{index + 1:05d}", user.source_key,
+                copy.title_source_key, copy.inventory_code, copy.inventory_code,
+                loan.source_key, reservation_date, ready_at + hold, "FULFILLED",
+            )
+            result.reservations.append(reservation)
+            _add_notification(
+                result, recipient=user.source_key, notification_type="RESERVATION_CREATED",
+                title="Réservation créée", message="Votre réservation a été enregistrée.",
+                created_at=reservation_date, origin_type="reservation",
+                origin_key=reservation.source_key,
+            )
+            _add_notification(
+                result, recipient=user.source_key, notification_type="RESERVATION_READY",
+                title="Réservation disponible",
+                message="Un exemplaire est disponible pour votre réservation.",
+                created_at=ready_at, origin_type="reservation", origin_key=reservation.source_key,
+            )
+
+    # --- Reservations CANCELLED : moitié depuis WAITING, moitié depuis READY ----
+    cancelled_from_waiting = counts.cancelled_reservations // 2
+    for index in range(counts.cancelled_reservations):
+        user = next_user()
+        if index < cancelled_from_waiting:
+            if not open_loan_titles:
+                raise ValueError("CANCELLED-from-WAITING scenarios require unavailable Titles.")
+            title_key, anchor = open_loan_titles[(index + 7) % len(open_loan_titles)]
+            assigned, expiration = None, None
+            reservation_date = reference_datetime - timedelta(days=6 + index, minutes=index)
+            ready_at = None
+            cancelled_at = reservation_date + timedelta(days=1)
+        else:
+            copy = take_free()
+            title_key, anchor, assigned = copy.title_source_key, copy.inventory_code, copy.inventory_code
+            reservation_date = reference_datetime - timedelta(days=9 + index, minutes=index)
+            ready_at = reservation_date + timedelta(days=1)
+            expiration = ready_at + hold  # conservée (READY -> CANCELLED, DEV-DEC-0038)
+            cancelled_at = ready_at + timedelta(hours=5)
+        reservation = ScenarioReservationRow(
+            f"seed-reservation-cancelled-{index + 1:05d}", user.source_key,
+            title_key, anchor, assigned, None, reservation_date, expiration, "CANCELLED",
+        )
+        result.reservations.append(reservation)
+        _add_notification(
+            result, recipient=user.source_key, notification_type="RESERVATION_CREATED",
+            title="Réservation créée", message="Votre réservation a été enregistrée.",
+            created_at=reservation_date, origin_type="reservation", origin_key=reservation.source_key,
+        )
+        if ready_at is not None:
+            _add_notification(
+                result, recipient=user.source_key, notification_type="RESERVATION_READY",
+                title="Réservation disponible",
+                message="Un exemplaire est disponible pour votre réservation.",
+                created_at=ready_at, origin_type="reservation", origin_key=reservation.source_key,
+            )
+        _add_notification(
+            result, recipient=user.source_key, notification_type="RESERVATION_CANCELLED",
+            title="Réservation annulée", message="Votre réservation a été annulée.",
+            created_at=cancelled_at, origin_type="reservation", origin_key=reservation.source_key,
+        )
+
+    # --- Reservations EXPIRED (anciennes READY dont la retenue est échue) -------
+    for index in range(counts.expired_reservations):
+        user = next_user()
+        copy = take_free()
+        reservation_date = reference_datetime - timedelta(days=12 + index, minutes=index)
+        ready_at = reservation_date + timedelta(days=1)
+        expiration = ready_at + hold
+        reservation = ScenarioReservationRow(
+            f"seed-reservation-expired-{index + 1:05d}", user.source_key,
+            copy.title_source_key, copy.inventory_code, copy.inventory_code,
+            None, reservation_date, expiration, "EXPIRED",
+        )
+        result.reservations.append(reservation)
+        _add_notification(
+            result, recipient=user.source_key, notification_type="RESERVATION_CREATED",
+            title="Réservation créée", message="Votre réservation a été enregistrée.",
+            created_at=reservation_date, origin_type="reservation", origin_key=reservation.source_key,
+        )
+        _add_notification(
+            result, recipient=user.source_key, notification_type="RESERVATION_READY",
+            title="Réservation disponible",
+            message="Un exemplaire est disponible pour votre réservation.",
+            created_at=ready_at, origin_type="reservation", origin_key=reservation.source_key,
+        )
+        _add_notification(
+            result, recipient=user.source_key, notification_type="RESERVATION_EXPIRED",
+            title="Réservation expirée",
+            message="Le délai de retrait de votre réservation est écoulé.",
+            created_at=expiration + timedelta(minutes=1), origin_type="reservation",
+            origin_key=reservation.source_key,
+        )
+
+    # --- Copies dégradées : un seul exemplaire par Title à >= 2 exemplaires ----
+    degraded_plan = (
+        [("DAMAGED", "AVAILABLE")] * counts.damaged_available_copies
+        + [("DAMAGED", "UNAVAILABLE")] * counts.damaged_unavailable_copies
+        + [("LOST", "UNAVAILABLE")] * counts.lost_copies
+        + [("OUT_OF_SERVICE", "UNAVAILABLE")] * counts.out_of_service_copies
+    )
+    if degraded_plan:
+        used = reserved_inventory | used_history_inventory
+        candidates = [
+            (title_key, group) for title_key, group in sorted(by_title.items())
+            if len(group) >= 2 and group[-1].inventory_code not in used
+            and any(other.inventory_code not in used for other in group[:-1])
+        ]
+        if len(candidates) < len(degraded_plan):
+            raise ValueError("Not enough multi-copy Titles for degraded Copy scenarios.")
+        stride = max(1, len(candidates) // len(degraded_plan))
+        for offset, (condition, availability) in enumerate(degraded_plan):
+            _, group = candidates[offset * stride]
+            result.copy_states.append(
+                ScenarioCopyStateRow(group[-1].inventory_code, availability, condition)
+            )
 
 
 def _validate_generated_scenarios(
     result: ScenarioGenerationResult,
     base_copies: list[PrimatisCopyRow],
     settings: ScenarioSettings,
+    reference_datetime: datetime | None = None,
 ) -> None:
     copy_title = {copy.inventory_code: copy.title_source_key for copy in base_copies}
 
@@ -538,3 +773,78 @@ def _validate_generated_scenarios(
     for reservation in result.reservations:
         if reservation.reservation_status == "READY" and final_states.get(reservation.assigned_inventory_code) != "RESERVED":
             raise AssertionError("READY Reservation requires Copy RESERVED.")
+
+    _validate_diversity_and_time(result, copy_title, reference_datetime)
+
+
+def _validate_diversity_and_time(
+    result: ScenarioGenerationResult,
+    copy_title: dict[str, str],
+    reference_datetime: datetime | None,
+) -> None:
+    """Invariants DEV-17.3 (états terminaux, copies dégradées, dates relatives)."""
+    codes = [row.inventory_code for row in result.copy_states]
+    if len(codes) != len(set(codes)):
+        raise AssertionError("Duplicate Copy state row.")
+    for row in result.copy_states:
+        if row.copy_condition in {"LOST", "OUT_OF_SERVICE"} and row.availability_status != "UNAVAILABLE":
+            raise AssertionError("LOST / OUT_OF_SERVICE Copy must be UNAVAILABLE.")
+        if row.copy_condition not in {"GOOD", "DAMAGED", "LOST", "OUT_OF_SERVICE"}:
+            raise AssertionError("Unknown copy_condition.")
+    degraded = {r.inventory_code for r in result.copy_states if r.copy_condition != "GOOD"}
+    busy = {l.inventory_code for l in result.loans if l.loan_status in {"ACTIVE", "OVERDUE"}}
+    busy |= {
+        r.assigned_inventory_code for r in result.reservations
+        if r.reservation_status == "READY"
+    }
+    if degraded & busy:
+        raise AssertionError("A degraded Copy cannot carry an open Loan or READY Reservation.")
+
+    loan_by_key = {loan.source_key: loan for loan in result.loans}
+    fine_loans = {fine.loan_source_key for fine in result.fines}
+    for loan in result.loans:
+        if loan.loan_status == "RETURNED":
+            if loan.return_date is None or loan.return_date < loan.loan_date.date():
+                raise AssertionError("RETURNED Loan chronology mismatch.")
+            if loan.return_date <= loan.due_date and loan.source_key in fine_loans:
+                raise AssertionError("On-time RETURNED Loan cannot carry a Fine.")
+    for reservation in result.reservations:
+        status = reservation.reservation_status
+        if status == "FULFILLED":
+            loan = loan_by_key.get(reservation.fulfilled_by_loan_source_key or "")
+            if loan is None or loan.user_source_key != reservation.user_source_key:
+                raise AssertionError("FULFILLED Reservation requires a Loan of the same member.")
+            if copy_title[loan.inventory_code] != reservation.title_source_key:
+                raise AssertionError("FULFILLED Reservation Loan must be on the reserved Title.")
+            if reservation.assigned_inventory_code != loan.inventory_code:
+                raise AssertionError("FULFILLED Reservation must keep the fulfilling Copy.")
+            if not reservation.reservation_date < loan.loan_date:
+                raise AssertionError("FULFILLED Reservation must precede its Loan.")
+        elif status in {"CANCELLED", "EXPIRED"}:
+            if reservation.fulfilled_by_loan_source_key is not None:
+                raise AssertionError("CANCELLED/EXPIRED Reservation cannot reference a Loan.")
+        if status == "EXPIRED" and (
+            reservation.expiration_date is None or reservation.assigned_inventory_code is None
+        ):
+            raise AssertionError("EXPIRED Reservation keeps its former READY Copy and expiration.")
+
+    if reference_datetime is None:
+        return
+    ref_date = reference_datetime.date()
+    for loan in result.loans:
+        if loan.loan_status == "ACTIVE" and not loan.due_date > ref_date:
+            raise AssertionError("ACTIVE Loan must be due after the reference date.")
+        if loan.loan_status == "OVERDUE" and not loan.due_date < ref_date:
+            raise AssertionError("OVERDUE Loan must be due before the reference date.")
+        if loan.loan_date > reference_datetime:
+            raise AssertionError("Loan cannot start after the reference datetime.")
+    for reservation in result.reservations:
+        if reservation.reservation_status == "READY" and not reservation.expiration_date > reference_datetime:
+            raise AssertionError("READY Reservation must expire after the reference datetime.")
+        if reservation.reservation_status == "EXPIRED" and not reservation.expiration_date < reference_datetime:
+            raise AssertionError("EXPIRED Reservation must have expired before the reference datetime.")
+        if reservation.reservation_date > reference_datetime:
+            raise AssertionError("Reservation cannot start after the reference datetime.")
+    for notification in result.notifications:
+        if notification.created_at > reference_datetime:
+            raise AssertionError("Notification cannot be created after the reference datetime.")

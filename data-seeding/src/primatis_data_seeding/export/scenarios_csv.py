@@ -97,8 +97,9 @@ def export_scenarios_csv(result: ScenarioGenerationResult, output_dir: Path) -> 
     )
     _write(
         paths.copy_states,
-        ("inventory_code","availability_status"),
-        [{"inventory_code": r.inventory_code, "availability_status": r.availability_status}
+        ("inventory_code","availability_status","copy_condition"),
+        [{"inventory_code": r.inventory_code, "availability_status": r.availability_status,
+          "copy_condition": r.copy_condition}
          for r in sorted(result.copy_states, key=lambda x: x.inventory_code)],
     )
     return paths

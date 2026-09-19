@@ -118,7 +118,8 @@ def _create_stage_tables(conn: Connection) -> None:
         ) ON COMMIT DROP""",
         """CREATE TEMP TABLE seed_copy_state_stage (
             inventory_code VARCHAR(50) PRIMARY KEY,
-            availability_status VARCHAR(20) NOT NULL
+            availability_status VARCHAR(20) NOT NULL,
+            copy_condition VARCHAR(20) NOT NULL DEFAULT 'GOOD'
         ) ON COMMIT DROP""",
     )
     with conn.cursor() as cur:
@@ -182,8 +183,11 @@ def _stage(conn: Connection, paths: UsersScenarioExportPaths) -> tuple[int, ...]
           _none(r["reservation_source_key"]),_none(r["fine_source_key"]),
           _none(r["article_source_key"]),r["notification_type"],r["title"],r["message"],
           r["notification_status"],r["created_at"],_none(r["read_at"])) for r in notifications))
-    _copy_rows(conn, "COPY seed_copy_state_stage(inventory_code,availability_status) FROM STDIN",
-               ((r["inventory_code"],r["availability_status"]) for r in copy_states))
+    # `copy_condition` (DEV-17.3) est facultative : les exports historiques (profil `full`)
+    # n'ont que `availability_status` et gardent la condition GOOD.
+    _copy_rows(conn, "COPY seed_copy_state_stage(inventory_code,availability_status,copy_condition) FROM STDIN",
+               ((r["inventory_code"],r["availability_status"],r.get("copy_condition") or "GOOD")
+                for r in copy_states))
     return (len(localities),len(users),len(addresses),len(residences),
             len(loans),len(reservations),len(fines),len(notifications))
 
@@ -226,6 +230,14 @@ def _validate_stage(conn: Connection) -> None:
                    OR (assigned.id IS NOT NULL AND assigned.title_id <> anchor.title_id)
                    OR (sr.reservation_status='READY' AND assigned.id IS NULL)""",
              (), "Unresolved or inconsistent Reservation Title/Copy."),
+            ("""SELECT COUNT(*) FROM seed_copy_state_stage s
+                LEFT JOIN copy c ON c.inventory_code=s.inventory_code
+                WHERE c.id IS NULL
+                   OR s.availability_status NOT IN ('AVAILABLE','ON_LOAN','RESERVED','UNAVAILABLE')
+                   OR s.copy_condition NOT IN ('GOOD','DAMAGED','LOST','OUT_OF_SERVICE')
+                   OR (s.copy_condition IN ('LOST','OUT_OF_SERVICE')
+                       AND s.availability_status <> 'UNAVAILABLE')""",
+             (), "Invalid Copy state (unknown Copy, enum or condition/availability pair)."),
             ("""SELECT COUNT(*) FROM seed_fine_stage sf
                 LEFT JOIN seed_loan_stage sl ON sl.source_key=sf.loan_source_key
                 WHERE sl.source_key IS NULL""", (), "Unresolved Fine Loan."),
@@ -291,6 +303,12 @@ def _teardown_previous_seed(conn: Connection) -> None:
         if int(cur.fetchone()[0]):
             raise ValueError("Non-seeded user has Reservation on seeded Title; teardown aborted.")
 
+        # Articles rédigés par un compte seedé (DEV-17.3) : FK RESTRICT -> échec fermé explicite.
+        cur.execute("""SELECT COUNT(*) FROM article a
+            JOIN old_seed_users u ON u.id IN (a.author_user_id,a.last_modified_by_user_id)""")
+        if int(cur.fetchone()[0]):
+            raise ValueError("Seeded user authored an Article; teardown aborted (reset the schema instead).")
+
         # Manual Article notification to a seeded recipient must not be silently deleted.
         cur.execute("""SELECT COUNT(*) FROM notification n
             JOIN old_seed_users u ON u.id=n.recipient_user_id
@@ -306,7 +324,10 @@ def _teardown_previous_seed(conn: Connection) -> None:
         cur.execute("DELETE FROM fine WHERE id IN (SELECT id FROM old_seed_fines)")
         cur.execute("DELETE FROM reservation WHERE id IN (SELECT id FROM old_seed_reservations)")
         cur.execute("DELETE FROM loan WHERE id IN (SELECT id FROM old_seed_loans)")
-        cur.execute("""UPDATE copy SET availability_status='AVAILABLE',updated_at=now()
+        # copy_condition remis à GOOD en même temps : une copie LOST/OUT_OF_SERVICE
+        # ne peut pas devenir AVAILABLE (ck_copy_condition_availability).
+        cur.execute("""UPDATE copy SET availability_status='AVAILABLE',copy_condition='GOOD',
+                   updated_at=now()
             WHERE inventory_code LIKE 'PRI-C-%'""")
         cur.execute("DELETE FROM user_role WHERE user_id IN (SELECT id FROM old_seed_users)")
         cur.execute("DELETE FROM residence WHERE user_id IN (SELECT id FROM old_seed_users)")
@@ -380,7 +401,8 @@ def _insert_scenarios(conn: Connection) -> None:
             JOIN seed_loan_stage sl ON sl.source_key=sf.loan_source_key
             ORDER BY sf.resolved_id""")
 
-        cur.execute("""UPDATE copy c SET availability_status=s.availability_status,updated_at=now()
+        cur.execute("""UPDATE copy c SET availability_status=s.availability_status,
+                   copy_condition=s.copy_condition,updated_at=now()
             FROM seed_copy_state_stage s WHERE c.inventory_code=s.inventory_code""")
 
         cur.execute("""INSERT INTO notification
