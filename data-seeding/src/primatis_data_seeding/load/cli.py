@@ -11,7 +11,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Validate or load a PRIMATIS catalogue export into PostgreSQL."
     )
-    parser.add_argument("--profile", required=True, choices=("small", "medium", "large", "full"))
+    parser.add_argument("--profile", required=True, choices=("small", "medium", "large", "full", "full_consolidated"))
     parser.add_argument("--export-dir", type=Path, required=True)
     parser.add_argument(
         "--database",

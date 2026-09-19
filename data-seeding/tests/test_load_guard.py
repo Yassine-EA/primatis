@@ -53,3 +53,15 @@ def test_check_mode_needs_no_confirmation() -> None:
         confirmation=None,
         database="primatis_preview",
     )
+
+
+def test_full_consolidated_targets_staging() -> None:
+    validate_requested_target("full_consolidated", "primatis_staging")
+    validate_live_database("full_consolidated", "primatis_staging", "primatis_staging")
+
+
+def test_full_consolidated_cannot_target_preview() -> None:
+    with pytest.raises(ValueError, match="must target"):
+        validate_requested_target("full_consolidated", "primatis_preview")
+    with pytest.raises(ValueError, match="must target"):
+        validate_requested_target("full", "primatis_staging")

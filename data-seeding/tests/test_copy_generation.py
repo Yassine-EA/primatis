@@ -56,6 +56,22 @@ def test_full_profile_matches_frozen_distribution_exactly() -> None:
     }
 
 
+def test_full_consolidated_profile_matches_human_decision() -> None:
+    distribution = PROFILE_COPY_DISTRIBUTIONS["full_consolidated"]
+    assert distribution.title_count == 14_600
+    assert distribution.copy_count == 24_000
+
+    result = generate_copies(titles(14_600), profile="full_consolidated")
+
+    assert len(result.copies) == 24_000
+    assert result.titles_by_copy_count == {
+        1: 8_300,
+        2: 4_220,
+        3: 1_570,
+        5: 510,
+    }
+
+
 def test_small_profile_generates_expected_volume() -> None:
     result = generate_copies(titles(100), profile="small")
 

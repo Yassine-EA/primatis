@@ -153,3 +153,64 @@ def test_rejects_empty_locality_reference() -> None:
             reference_date=date(2026, 8, 25),
             raw_password="DemoPassword!2026",
         )
+
+
+def test_assign_staff_roles_is_deterministic_and_keeps_total() -> None:
+    from primatis_data_seeding.generation.users import assign_staff_roles
+
+    localities = LOCALITIES
+    users = generate_synthetic_members(
+        localities, count=1500, seed=1651,
+        reference_date=date(2026, 9, 12), raw_password="not-a-real-password-1",
+    ).users
+    excluded = frozenset(user.source_key for user in users[:220])
+
+    first = assign_staff_roles(users, excluded_source_keys=excluded, librarians=5, admins=2)
+    second = assign_staff_roles(users, excluded_source_keys=excluded, librarians=5, admins=2)
+
+    assert first == second
+    assert len(first) == 1500
+    roles = [user.role_code for user in first]
+    assert roles.count("ROLE_MEMBER") == 1493
+    assert roles.count("ROLE_LIBRARIAN") == 5
+    assert roles.count("ROLE_ADMIN") == 2
+
+    staff = [user for user in first if user.role_code != "ROLE_MEMBER"]
+    assert not {user.source_key for user in staff} & excluded
+    assert all(
+        user.member_number is None and user.member_status is None
+        and user.registration_date is None and user.member_expiration_date is None
+        for user in staff
+    )
+    by_key = {user.source_key: user for user in users}
+    assert all(user.password_hash == by_key[user.source_key].password_hash for user in staff)
+
+
+def test_assign_staff_roles_rejects_insufficient_eligible_accounts() -> None:
+    from primatis_data_seeding.generation.users import assign_staff_roles
+
+    localities = LOCALITIES
+    users = generate_synthetic_members(
+        localities, count=10, seed=1, reference_date=date(2026, 9, 12),
+        raw_password="not-a-real-password-1",
+    ).users
+    with pytest.raises(ValueError, match="Not enough eligible"):
+        assign_staff_roles(
+            users, excluded_source_keys=frozenset(u.source_key for u in users[:5]),
+            librarians=5, admins=2,
+        )
+
+
+def test_historical_full_bundle_users_remain_all_members() -> None:
+    import csv
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "data" / "bundles" / "full" / "users.csv"
+    if not path.is_file():
+        pytest.skip("historical Full bundle not present")
+
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        roles = [row["role_code"] for row in csv.DictReader(handle)]
+
+    assert len(roles) == 1500
+    assert set(roles) == {"ROLE_MEMBER"}

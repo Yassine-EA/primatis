@@ -72,9 +72,9 @@ def _create_stage_tables(conn: Connection) -> None:
             source_key TEXT PRIMARY KEY, email VARCHAR(255) NOT NULL,
             password_hash VARCHAR(255) NOT NULL, first_name VARCHAR(100) NOT NULL,
             last_name VARCHAR(100) NOT NULL, phone_number VARCHAR(30),
-            account_status VARCHAR(20) NOT NULL, member_number VARCHAR(20) NOT NULL,
-            member_status VARCHAR(20) NOT NULL, registration_date DATE NOT NULL,
-            member_expiration_date DATE NOT NULL, blocked_reason VARCHAR(255),
+            account_status VARCHAR(20) NOT NULL, member_number VARCHAR(20),
+            member_status VARCHAR(20), registration_date DATE,
+            member_expiration_date DATE, blocked_reason VARCHAR(255),
             failed_login_count INTEGER NOT NULL, role_code VARCHAR(50) NOT NULL,
             resolved_id BIGINT
         ) ON COMMIT DROP""",
@@ -147,8 +147,8 @@ def _stage(conn: Connection, paths: UsersScenarioExportPaths) -> tuple[int, ...]
          member_number,member_status,registration_date,member_expiration_date,
          blocked_reason,failed_login_count,role_code) FROM STDIN""",
         ((r["source_key"],r["email"],r["password_hash"],r["first_name"],r["last_name"],
-          _none(r["phone_number"]),r["account_status"],r["member_number"],r["member_status"],
-          r["registration_date"],r["member_expiration_date"],_none(r["blocked_reason"]),
+          _none(r["phone_number"]),r["account_status"],_none(r["member_number"]),_none(r["member_status"]),
+          _none(r["registration_date"]),_none(r["member_expiration_date"]),_none(r["blocked_reason"]),
           int(r["failed_login_count"]),r["role_code"]) for r in users))
     _copy_rows(conn, """COPY seed_address_stage
         (source_key,postal_code,locality,street,street_number,box_number,additional_info)
@@ -192,8 +192,18 @@ def _validate_stage(conn: Connection) -> None:
     with conn.cursor() as cur:
         checks = [
             ("""SELECT COUNT(*) FROM seed_user_stage
-                WHERE email NOT LIKE %s OR member_number NOT LIKE %s OR role_code <> 'ROLE_MEMBER'""",
+                WHERE email NOT LIKE %s
+                   OR role_code NOT IN ('ROLE_MEMBER','ROLE_LIBRARIAN','ROLE_ADMIN')
+                   OR (role_code = 'ROLE_MEMBER' AND (member_number IS NULL OR member_number NOT LIKE %s
+                        OR member_status IS NULL OR registration_date IS NULL
+                        OR member_expiration_date IS NULL))
+                   OR (role_code <> 'ROLE_MEMBER' AND (member_number IS NOT NULL
+                        OR member_status IS NOT NULL OR registration_date IS NOT NULL
+                        OR member_expiration_date IS NOT NULL OR blocked_reason IS NOT NULL))""",
              (f"%{SEED_USER_EMAIL_SUFFIX}", f"{SEED_MEMBER_PREFIX}%"), "Synthetic User namespace violation."),
+            ("""SELECT COUNT(*) FROM seed_user_stage su
+                LEFT JOIN role r ON r.code = su.role_code
+                WHERE r.id IS NULL""", (), "Seed User role is missing from RBAC."),
             ("""SELECT COUNT(*) FROM seed_residence_stage sr
                 LEFT JOIN seed_user_stage su ON su.source_key=sr.user_source_key
                 LEFT JOIN seed_address_stage sa ON sa.source_key=sr.address_source_key
@@ -310,12 +320,6 @@ def _teardown_previous_seed(conn: Connection) -> None:
 
 def _insert_seed_users(conn: Connection) -> None:
     with conn.cursor() as cur:
-        cur.execute("SELECT id FROM role WHERE code='ROLE_MEMBER'")
-        row = cur.fetchone()
-        if row is None:
-            raise ValueError("ROLE_MEMBER is missing.")
-        role_id = int(row[0])
-
         cur.execute("UPDATE seed_user_stage SET resolved_id=nextval('app_user_seq')")
         cur.execute("""INSERT INTO app_user
             (id,email,password_hash,first_name,last_name,phone_number,account_status,
@@ -326,7 +330,8 @@ def _insert_seed_users(conn: Connection) -> None:
                    member_expiration_date,blocked_reason,failed_login_count,now(),now()
             FROM seed_user_stage ORDER BY source_key""")
         cur.execute("""INSERT INTO user_role(user_id,role_id,assigned_at,assigned_by)
-            SELECT resolved_id,%s,now(),NULL FROM seed_user_stage""",(role_id,))
+            SELECT su.resolved_id,r.id,now(),NULL
+            FROM seed_user_stage su JOIN role r ON r.code=su.role_code""")
 
         cur.execute("UPDATE seed_address_stage SET resolved_id=nextval('address_seq')")
         cur.execute("""INSERT INTO address

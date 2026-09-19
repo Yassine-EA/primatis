@@ -30,7 +30,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Validate or load a PRIMATIS Users + demo Scenarios export into PostgreSQL."
     )
-    parser.add_argument("--profile", required=True, choices=("full",))
+    parser.add_argument("--profile", required=True, choices=("full", "full_consolidated"))
     parser.add_argument("--export-dir", type=Path, required=True)
     parser.add_argument(
         "--database",

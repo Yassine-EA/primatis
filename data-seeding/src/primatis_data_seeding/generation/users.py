@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date, timedelta
 import os
 import random
@@ -62,10 +62,12 @@ class SyntheticUserRow:
     last_name: str
     phone_number: str | None
     account_status: str
-    member_number: str
-    member_status: str
-    registration_date: date
-    member_expiration_date: date
+    # Attributs d'adhésion : None pour un compte sans ROLE_MEMBER (staff/admin),
+    # comme le fait UserService à la création (memberNumber/memberStatus null).
+    member_number: str | None
+    member_status: str | None
+    registration_date: date | None
+    member_expiration_date: date | None
     blocked_reason: str | None
     failed_login_count: int
     role_code: str
@@ -203,3 +205,53 @@ def generate_synthetic_members(
         )
 
     return result
+
+
+LIBRARIAN_ROLE_CODE = "ROLE_LIBRARIAN"
+ADMIN_ROLE_CODE = "ROLE_ADMIN"
+
+
+def assign_staff_roles(
+    users: list[SyntheticUserRow],
+    *,
+    excluded_source_keys: frozenset[str],
+    librarians: int,
+    admins: int,
+) -> list[SyntheticUserRow]:
+    """Promeut des comptes seedés existants en ROLE_LIBRARIAN / ROLE_ADMIN.
+
+    Sélection déterministe : parmi les comptes hors `excluded_source_keys`
+    (ceux qui portent des scénarios de membre), triés par `source_key`, les
+    `librarians` premiers deviennent ROLE_LIBRARIAN puis les `admins`
+    suivants ROLE_ADMIN. Identité, e-mail, hash de mot de passe, adresse et
+    résidence sont conservés ; seuls le rôle et les attributs d'adhésion
+    (sans objet hors ROLE_MEMBER) changent. Le total d'utilisateurs est
+    inchangé.
+    """
+    candidates = sorted(
+        user.source_key for user in users if user.source_key not in excluded_source_keys
+    )
+    if len(candidates) < librarians + admins:
+        raise ValueError(
+            f"Not enough eligible accounts: eligible={len(candidates)} "
+            f"required={librarians + admins}."
+        )
+    role_by_key = {key: LIBRARIAN_ROLE_CODE for key in candidates[:librarians]}
+    role_by_key.update(
+        {key: ADMIN_ROLE_CODE for key in candidates[librarians : librarians + admins]}
+    )
+
+    return [
+        replace(
+            user,
+            role_code=role_by_key[user.source_key],
+            member_number=None,
+            member_status=None,
+            registration_date=None,
+            member_expiration_date=None,
+            blocked_reason=None,
+        )
+        if user.source_key in role_by_key
+        else user
+        for user in users
+    ]

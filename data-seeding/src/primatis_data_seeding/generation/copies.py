@@ -71,6 +71,9 @@ PROFILE_COPY_DISTRIBUTIONS: dict[str, CopyDistribution] = {
     "medium": CopyDistribution(599, 268, 100, 33),   # 1 000 / 1 600
     "large": CopyDistribution(3001, 1332, 500, 167), # 5 000 / 8 000
     "full": CopyDistribution(9000, 4000, 1500, 500), # 15 000 / 24 000
+    # Catalogue consolidé (DEV-16.G3.3R) : décision humaine, 14 600 Titles / 24 000 Copies.
+    # Profil distinct : la distribution "full" historique reste liée à 15 000 Titles.
+    "full_consolidated": CopyDistribution(8300, 4220, 1570, 510),
 }
 
 

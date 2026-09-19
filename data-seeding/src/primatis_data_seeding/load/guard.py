@@ -6,6 +6,7 @@ ALLOWED_PROFILE_DATABASES = {
     "medium": "primatis_dev",
     "large": "primatis_dev",
     "full": "primatis_preview",
+    "full_consolidated": "primatis_staging",
 }
 
 FORBIDDEN_DATABASES = {"primatis_test"}

@@ -22,3 +22,13 @@ title_target = 15000
 copy_target = 24000
 user_target = 1500
 include_demo_scenarios = true
+
+# Catalogue consolidé (DEV-16.G3.3R / G3.4) : 14 600 Titles / 24 000 Copies,
+# distribution 8300 / 4220 / 1570 / 510. Le profil "full" ci-dessus reste le
+# profil historique (15 000 Titles, base primatis_preview).
+[profiles.full_consolidated]
+database = "primatis_staging"
+title_target = 14600
+copy_target = 24000
+user_target = 1500
+include_demo_scenarios = true
